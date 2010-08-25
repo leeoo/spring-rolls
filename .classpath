@@ -42,7 +42,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/IKAnalyzer3.2.3Stable.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/google-collect-1.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/bonecp-0.6.6.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/hibernate-validator-4.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/lucene-core-3.0.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/cache/ehcache-core-2.2.0.jar"/>
@@ -67,5 +66,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-beanutils-1.8.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/bonecp-ow-0.6.7.2.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
