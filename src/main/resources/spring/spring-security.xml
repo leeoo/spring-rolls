@@ -43,7 +43,7 @@ default-lazy-init="true">
     </bean>
     
     
-    <bean id="securityMetadataSource" class="com.wisdom.core.security.resource.DynamicInvocationSecurityMetadataSource" depends-on="securityCacheInit"/>
+    <bean id="securityMetadataSource" class="com.wisdom.core.security.resource.StaticInvocationSecurityMetadataSource" depends-on="securityCacheInit"/>
     
     
 	<bean id="userService" class="com.wisdom.core.security.service.UserService">
