@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-lazy-init="true">
+
+	<description>系统日志记录配置</description>
+	
+	<bean id="loggerService" class="com.wisdom.example.service.logger.LoggerServiceImpl">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<bean id="loggerThreadService" class="com.wisdom.core.logger.LoggerThreadService">
+		<property name="loggerService" ref="loggerService"/>
+		<property name="allLoggerLever">
+			<map>
+				<entry key="添加行为" value="[insert][save][add][create][new]"/>
+				<entry key="修改行为" value="[update][modify][change][manage][alter][edit]"/>
+				<entry key="删除行为" value="[delete][remove][drop][kill][clear]"/>
+				<entry key="查看行为" value="[select][list][find][load][get][input][show][detail][search][download][report]"/>
+				<entry key="所有行为" value="**"/>
+				<entry key="关闭日志" value="!!"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="loggerInterceptor" class="com.wisdom.core.logger.LoggerInterceptor">
+		<property name="loggerThreadService" ref="loggerThreadService"/>
+		<property name="maxCacheValue" value="150"/>
+	</bean>
+	
+</beans>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd	http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-3.0.xsd	http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd	http://www.springframework.org/schema/jee	http://www.springframework.org/schema/jee/spring-jee-3.0.xsd"
+	default-lazy-init="true">
+
+	<context:component-scan base-package="com.wisdom"/>
+	
+	<context:property-placeholder location="classpath*:jdbc.properties"/>
+
+	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+		<property name="driverClass" value="${driverClassName}" />
+		<property name="jdbcUrl" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+        <property name="idleConnectionTestPeriod" value="${idleConnectionTestPeriod}"/>
+	   	<property name="idleMaxAge" value="${idleMaxAge}"/>
+	   	<property name="maxConnectionsPerPartition" value="${maxConnectionsPerPartition}"/>
+	   	<property name="minConnectionsPerPartition" value="${minConnectionsPerPartition}"/>
+	  	<property name="partitionCount" value="${partitionCount}"/>
+	   	<property name="acquireIncrement" value="${acquireIncrement}"/>
+	   	<property name="statementsCacheSize" value="${statementsCacheSize}"/>
+	   	<property name="releaseHelperThreads" value="${releaseHelperThreads}"/>
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean> 
+	<!-- proxy-target-class默认为false只能代理接口，true可以代理类 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+	<bean id="genericDaoFactory" class="com.wisdom.core.dao.GenericDaoFactory" lazy-init="false">
+		<property name="dbType" value="${dbType}"/>
+	</bean>
+	
+	<bean id="IDCreator" class="com.wisdom.core.dao.IDCreator" lazy-init="false" depends-on="genericDaoFactory">
+		<property name="idCacheMaxValue" value="${idCacheMaxValue}"/>
+		<property name="businessCode" value="${businessCode}"/>
+	</bean>
+	
+	<bean id="autoMappingSimpleEntitys" class="com.wisdom.core.orm.AutoMappingCreator" init-method="init" lazy-init="false" depends-on="genericDaoFactory">
+		<property name="dataSource" ref="dataSource" />
+		<property name="autoCreateTable" value="${isAutoCreateTable}"/>
+		<property name="simpleEntitys">
+			<list>
+				<value>com.wisdom.example.entity.search.News</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!--<bean id="dbui" class="com.wisdom.core.utils.HsqlUi" init-method="init" lazy-init="false">
+		<property name="dataSource" ref="dataSource" />
+	</bean> -->
+	
+</beans>

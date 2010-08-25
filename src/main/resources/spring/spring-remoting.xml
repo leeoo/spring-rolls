@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-lazy-init="true">
+
+	<description>Spring http invokers</description>
+	
+	<!-- 以下为发布服务端配置 -->
+	<bean id="testRemotingService" class="com.wisdom.example.service.remoting.impl.TestRemotingServiceImpl"/>
+
+	<bean name="remotingExporter" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+		<!-- 引入接口实现类实例 -->
+		<property name="service" ref="testRemotingService" />
+		<!-- 设置接口 -->
+		<property name="serviceInterface" value="com.wisdom.example.service.remoting.TestRemotingService" />
+	</bean>
+	
+	<bean id="httpServer" class="org.springframework.remoting.support.SimpleHttpServerFactoryBean">
+		<property name="contexts">
+			<props><!-- 映射服务地址 -->
+				<prop key="/remoting/service">remotingExporter</prop>
+			</props>
+		</property>
+		<property name="port" value="80" />
+	</bean>
+
+	<!-- 以下为远程端调用配置 -->
+	<bean id="httpInvokerProxy" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" value="http://127.0.0.1:80/remoting/service"/>
+		<property name="serviceInterface" value="com.wisdom.example.service.remoting.TestRemotingService"/>
+	</bean>
+	
+
+</beans>

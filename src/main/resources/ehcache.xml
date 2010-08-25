@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd"
+		updateCheck="true" monitoring="autodetect" dynamicConfig="true">
+	
+	<diskStore path="java.io.tmpdir/ehcache-wisdom" />
+	
+	<!-- 设置自身 -->
+	
+    <cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"  
+       properties="hostName=127.0.0.1,port=40001,socketTimeoutMillis=2000" /> 
+       
+	
+	<!-- |//192.168.1.其他集群服务器IP:40002/security_resource"/> -->
+	
+	<cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+                      properties="peerDiscovery=manual,
+                      rmiUrls=//127.0.0.1:40002/security_resource"/>
+                      
+	
+	<!-- <defaultCache maxElementsInMemory="内存对象数量" overflowToDisk="内存满后是否存磁盘" eternal="对象永不过期"
+		memoryStoreEvictionPolicy="LRU优先清除不经常使用的对象" maxElementsOnDisk="磁盘对象数量" diskExpiryThreadIntervalSeconds="访问磁盘线程活动时间"
+		timeToIdleSeconds="清理多少秒不使用的对象" timeToLiveSeconds="清理创建多少秒的对象" diskPersistent="重启内存对象持久化入磁盘" /> -->
+	
+	<defaultCache maxElementsInMemory="10000" overflowToDisk="true" eternal="false"
+		memoryStoreEvictionPolicy="LRU" maxElementsOnDisk="10000000" diskExpiryThreadIntervalSeconds="600"
+		timeToIdleSeconds="3600" timeToLiveSeconds="100000" diskPersistent="false">
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory" /> 	
+	</defaultCache>
+	
+	
+	<!-- replicateAsynchronously对象同步是否异步完成，默认为true。如果比较紧急就设为false。
+								在一致性时间性要求不强的时候，设为异步可大大提供性能，因为它是异步立即返回的，而且可以批量提交。
+		replicateUpdatesViaCopy 是否将对象变更复制到所有节点，还是只是发送一个失效信息，让对方该缓存失效，当对方需要该缓存时重新计算载入。
+								默认为true。鉴于对象复制的消耗挺大的，又有锁的问题，而且对方也未必需要该对象，所以此属性建议设为false。
+								如果业务上真的需要设为true时，就可考虑使用Terracotta了。
+		replicatePuts、replicateUpdates、replicateRemovals增删改是否同步，默认都为true。但因为我们前面选择了失效算法，
+					所以replicatePuts要设为false。 -->
+
+	<cache name="security_resource" maxElementsInMemory="500" eternal="true" overflowToDisk="true">  
+        <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory" 
+        properties="replicateAsynchronously=true,replicateUpdatesViaCopy=false,
+        			replicatePuts=false,replicateUpdates=false,replicateRemovals=false"/>  
+    </cache>
+
+	<cache name="task_scheduled" maxElementsInMemory="50" eternal="true" overflowToDisk="true"/>  
+
+	<cache name="logger_cache" maxElementsInMemory="1000" eternal="true" overflowToDisk="true"/>  
+	
+</ehcache>

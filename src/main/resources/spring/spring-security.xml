@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:security="http://www.springframework.org/schema/security"	xmlns="http://www.springframework.org/schema/beans"	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:schemaLocation="http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd	http://www.springframework.org/schema/security	http://www.springframework.org/schema/security/spring-security-3.1.xsd"
+default-lazy-init="true">
+	
+	<!--<security:global-method-security secured-annotations="enabled" jsr250-annotations="enabled"/>-->
+	<security:http pattern="/index.jsp" security="none"/>
+	<security:http pattern="/login.jsp**" security="none"/>
+	<security:http pattern="/common/**" security="none"/>
+	
+	<security:http auto-config="true" access-decision-manager-ref="accessDecisionManager" access-denied-page="/common/403.html" >
+		<security:custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="filterSecurityInterceptor"/>
+		<security:form-login authentication-failure-url="/login.jsp?error=1" login-page="/login.jsp" default-target-url="/example/index.htm"/>
+		<security:logout invalidate-session="true" logout-success-url="/login.jsp" />
+		<security:remember-me key="e37f4b31-0c45-11dd-bd0b-0800200c9a66"/>
+		<security:session-management invalid-session-url="/login.jsp?error=5" >
+			<security:concurrency-control error-if-maximum-exceeded="false" expired-url="/login.jsp?error=3" max-sessions="1"/>
+		</security:session-management>
+	</security:http>
+	
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider user-service-ref="userDetailsService">
+			<security:password-encoder hash="md5">
+				<security:salt-source user-property="username"/>
+			</security:password-encoder>
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">  
+        <property name="decisionVoters">  
+            <list>  
+                <bean class="org.springframework.security.access.vote.RoleVoter">
+                	<property name="rolePrefix" value="RES_"/>
+                </bean>  
+                <bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>  
+            </list>  
+        </property>  
+    </bean>
+    
+	<bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">  
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="accessDecisionManager" ref="accessDecisionManager" />
+		<property name="securityMetadataSource" ref="securityMetadataSource" />
+    </bean>
+    
+    
+    <bean id="securityMetadataSource" class="com.wisdom.core.security.resource.DynamicInvocationSecurityMetadataSource" depends-on="securityCacheInit"/>
+    
+    
+	<bean id="userService" class="com.wisdom.core.security.service.UserService">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+    
+	<bean id="userDetailsService" class="com.wisdom.core.security.service.UserDetailServiceImpl" >
+		<property name="userService" ref="userService"/>
+	</bean>
+	
+	<bean id="securityCacheInit" class="com.wisdom.core.security.resource.SecurityCacheInit" init-method="init" lazy-init="false">
+		<property name="userService" ref="userService" />
+	</bean>
+	
+</beans>
