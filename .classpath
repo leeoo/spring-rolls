@@ -41,8 +41,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/web/freemarker-2.3.16.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/jtds-1.2.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/log4j-1.2.16.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/slf4j-api-1.5.11.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/slf4j-log4j12-1.5.11.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/IKAnalyzer3.2.3Stable.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
@@ -67,5 +65,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-core-3.1.0.M1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-taglibs-3.1.0.M1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-web-3.1.0.M1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
