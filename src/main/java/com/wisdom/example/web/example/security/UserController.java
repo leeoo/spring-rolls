@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.wisdom.core.security.domain.User;
-import com.wisdom.core.security.service.UserService;
 import com.wisdom.core.utils.CollectionUtils;
 import com.wisdom.core.utils.Page;
+import com.wisdom.example.service.security.SecurityService;
 /**
  * 功能描述：账户管理
  * <br>代码作者：<b>CaoYang</b>
@@ -23,24 +23,24 @@ import com.wisdom.core.utils.Page;
 @RequestMapping("/example/user")
 public class UserController {
 	@Resource
-	private UserService userService;
+	private SecurityService securityService;
 	
 	@RequestMapping("/list/{no}")
 	public String list(@PathVariable int no,HttpServletRequest request,Page page){
 		page.setPageSize(5);
 		page.setPageNo(no);
-		request.setAttribute("page",userService.getAllUsers(page));
+		request.setAttribute("page",securityService.getAllUsers(page));
 		return "/example/user/list";
 	}
 	
 	@RequestMapping("/input/{id}")
 	public String input(@PathVariable Long id,HttpServletRequest request) throws Exception{
 		if(id!=null){
-			User user=userService.getUser(id);
-			user.setRoles(userService.getRolesByUserId(id));
+			User user=securityService.getUser(id);
+			user.setRoles(securityService.getRolesByUserId(id));
 			request.setAttribute("user",user);
 		}
-		request.setAttribute("roles", userService.getAllRoles());
+		request.setAttribute("roles", securityService.getAllRoles());
 		return "/example/user/input";
 	}
 	
@@ -48,9 +48,9 @@ public class UserController {
 	@RequestMapping(value="/save",method=RequestMethod.POST)
 	public String save(User user,Long[] roleIds) throws Exception{
 		if(user.getId()!=null){
-			userService.updateUser(user,CollectionUtils.arrayToList(roleIds));
+			securityService.updateUser(user,CollectionUtils.arrayToList(roleIds));
 		}else{
-			userService.saveUser(user,CollectionUtils.arrayToList(roleIds));
+			securityService.saveUser(user,CollectionUtils.arrayToList(roleIds));
 		}
 		return "redirect:/example/user/list/1.htm";
 	}
@@ -58,7 +58,7 @@ public class UserController {
 	@RequestMapping("/delete/{no}-{id}")
 	public String delete(@PathVariable int no,@PathVariable Long id) throws Exception{
 		if(id!=null){
-			userService.deleteUser(id);
+			securityService.deleteUser(id);
 		}
 		return "redirect:/example/user/list/"+no+".htm";
 	}
@@ -66,7 +66,7 @@ public class UserController {
 	@RequestMapping("/disabled/{no}-{id}")
 	public String disabled(@PathVariable int no,@PathVariable Long id) throws Exception{
 		if(id!=null){
-			userService.updateUserDisabled(id);
+			securityService.updateUserDisabled(id);
 		}
 		return "redirect:/example/user/list/"+no+".htm";
 	}
@@ -74,7 +74,7 @@ public class UserController {
 	@RequestMapping("/enabled/{no}-{id}")
 	public String enabled(@PathVariable int no,@PathVariable Long id) throws Exception{
 		if(id!=null){
-			userService.updateUserEnabled(id);
+			securityService.updateUserEnabled(id);
 		}
 		return "redirect:/example/user/list/"+no+".htm";
 	}
@@ -82,7 +82,7 @@ public class UserController {
 	@RequestMapping("/{id}/change_password")
 	public String changePassword(@PathVariable Long id,HttpServletRequest request) throws Exception{
 		if(id!=null){
-			User user=userService.getUser(id);
+			User user=securityService.getUser(id);
 			request.setAttribute("user",user);
 		}
 		return "/example/user/changepwd";
@@ -91,13 +91,9 @@ public class UserController {
 	@RequestMapping(value="/change_password",method=RequestMethod.POST)
 	public String changePassword(User user) throws Exception{
 		if(user!=null&&user.getPassword()!=null&&user.getId()!=null){
-			userService.updateUserPassword(user);
+			securityService.updateUserPassword(user);
 		}
 		return "redirect:/example/user/input/"+user.getId()+".htm";
 	}
 
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-	
 }

@@ -46,16 +46,16 @@ default-lazy-init="true">
     <bean id="securityMetadataSource" class="com.wisdom.core.security.resource.StaticInvocationSecurityMetadataSource" depends-on="securityCacheInit"/>
     
     
-	<bean id="userService" class="com.wisdom.core.security.service.UserService">
+	<bean id="securityService" class="com.wisdom.example.service.security.SecurityService">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
     
 	<bean id="userDetailsService" class="com.wisdom.core.security.service.UserDetailServiceImpl" >
-		<property name="userService" ref="userService"/>
+		<property name="userService" ref="securityService"/>
 	</bean>
 	
 	<bean id="securityCacheInit" class="com.wisdom.core.security.resource.SecurityCacheInit" init-method="init" lazy-init="false">
-		<property name="userService" ref="userService" />
+		<property name="userService" ref="securityService" />
 	</bean>
 	
 </beans>

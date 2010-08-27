@@ -164,6 +164,8 @@ public class TaskScheduledAutoExecutor implements Runnable,BeanFactoryAware{
 			currentDate=DateUtils.addMonths(currentDate, 1);
 		}else if(unit==TaskRunnable.RUNUNIT_YEAR){
 			currentDate=DateUtils.addYears(currentDate, 1);
+		}else if(unit==TaskRunnable.RUNUNIT_HOUR){
+			currentDate=DateUtils.addHours(currentDate, 1);
 		}
 		return currentDate;
 	}

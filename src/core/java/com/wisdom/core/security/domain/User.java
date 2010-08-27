@@ -1,6 +1,6 @@
 package com.wisdom.core.security.domain;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,9 +37,9 @@ public class User implements java.io.Serializable,UserDetails{
 
 	private boolean credentialsExpired = true;
 
-	private List<Role> roles;
+	private Collection<Role> roles;
 
-	private List<GrantedAuthority> authorities;
+	private Collection<GrantedAuthority> authorities;
 
 	public boolean isEnabled() {
 		return enabled;
@@ -105,15 +105,15 @@ public class User implements java.io.Serializable,UserDetails{
 		this.email = email;
 	}
 
-	public List<Role> getRoles() {
+	public Collection<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Collection<Role> roles) {
 		this.roles = roles;
 	}
 
-	public List<GrantedAuthority> getAuthorities() {
+	public Collection<GrantedAuthority> getAuthorities() {
 		return authorities;
 	}
 
@@ -129,7 +129,7 @@ public class User implements java.io.Serializable,UserDetails{
 		return isCredentialsExpired();
 	}
 
-	public void setAuthorities(List<GrantedAuthority> authorities) {
+	public void setAuthorities(Collection<GrantedAuthority> authorities) {
 		this.authorities = authorities;
 	}
 

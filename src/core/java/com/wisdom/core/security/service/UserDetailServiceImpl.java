@@ -1,6 +1,7 @@
 package com.wisdom.core.security.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -29,7 +30,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		}
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		GrantedAuthority ag=null;
-		List<Resource> ress=userService.getResourcesByUserName(userName);
+		Collection<Resource> ress=userService.getResourcesByUserName(userName);
 		for(Resource res:ress){
 			ag=new GrantedAuthorityImpl(res.getName());
 			authorities.add(ag);

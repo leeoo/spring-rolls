@@ -8,6 +8,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.springframework.util.Assert;
 
 import com.wisdom.core.dao.BaseJdbcTemplate;
+import com.wisdom.core.dao.CountSqlBuilder;
 import com.wisdom.core.utils.Page;
 /**
  * 功 能 描 述:<br>
@@ -41,7 +42,7 @@ public final class H2JdbcDao extends BaseJdbcTemplate{
 		String querySql=sql;
 		long count=0;
 		if (page.isAutoCount()) {
-			count=findLongByArray(getCountSql(querySql), arrayParameters);
+			count=findLongByArray(CountSqlBuilder.getCountSql(querySql), arrayParameters);
 			page.setTotalCount((int)count);
 		}
 		List list=null;
@@ -76,7 +77,7 @@ public final class H2JdbcDao extends BaseJdbcTemplate{
 		String querySql=sql;
 		long count=0;
 		if (page.isAutoCount()) {
-			count=findLongByArray(getCountSql(querySql), arrayParameters);
+			count=findLongByArray(CountSqlBuilder.getCountSql(querySql), arrayParameters);
 			page.setTotalCount((int)count);
 		}
 		List list=null;
@@ -98,29 +99,5 @@ public final class H2JdbcDao extends BaseJdbcTemplate{
 		return page;
 	}
 	
-	private static String getCountSql(String sql){
-		Assert.hasText(sql,"sql语句不正确!");
-		sql=sql.toUpperCase();
-		String[] froms=sql.split(" FROM ");
-		String tempSql="";
-		for(int i=0;i<froms.length;i++){
-			if(i!=froms.length-1){
-				tempSql=tempSql.concat(froms[i]+" FROM ");
-			}else{
-				tempSql=tempSql.concat(froms[i]);
-			}
-			int left=tempSql.split("\\(").length;
-			int right=tempSql.split("\\)").length;
-			if(left==right){
-				break;
-			}
-		}
-		tempSql=" FROM "+sql.substring(tempSql.length(),sql.length());
-		String withOutOrderBy=tempSql;
-		if(tempSql.indexOf(" ORDER BY ")>=0){
-			withOutOrderBy=tempSql.substring(0,tempSql.indexOf(" ORDER BY"));
-		}
-		return "SELECT COUNT(*) ".concat(withOutOrderBy);
-	}
 	
 }

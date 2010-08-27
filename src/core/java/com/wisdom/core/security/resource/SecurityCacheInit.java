@@ -1,6 +1,6 @@
 package com.wisdom.core.security.resource;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class SecurityCacheInit {
 	
 	public void init(){
 		logger.info("正在初始化权限缓存");
-		List<Resource> res=userService.getAllResources();
+		Collection<Resource> res=userService.getAllResources();
 		for(Resource r:res){
 			SecurityResourceCache.putCache(r);
 		}

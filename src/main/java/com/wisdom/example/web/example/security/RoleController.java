@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.wisdom.core.security.domain.Role;
-import com.wisdom.core.security.service.UserService;
 import com.wisdom.core.utils.CollectionUtils;
 import com.wisdom.core.utils.Page;
+import com.wisdom.example.service.security.SecurityService;
 /**
  * 功能描述：角色管理
  * <br>代码作者：<b>CaoYang</b>
@@ -23,24 +23,24 @@ import com.wisdom.core.utils.Page;
 @RequestMapping("/example/role")
 public class RoleController {
 	@Resource
-	private UserService userService;
+	private SecurityService securityService;
 	
 	@RequestMapping("/list/{no}")
 	public String list(@PathVariable int no,HttpServletRequest request,Page page){
 		page.setPageSize(5);
 		page.setPageNo(no);
-		request.setAttribute("page",userService.getAllRoles(page));
+		request.setAttribute("page",securityService.getAllRoles(page));
 		return "/example/role/list";
 	}
 	
 	@RequestMapping("/input/{id}")
 	public String input(@PathVariable Long id,HttpServletRequest request) throws Exception{
 		if(id!=null){
-			Role role=userService.getRole(id);
-			role.setResources(userService.getResourcesByRoleId(id));
+			Role role=securityService.getRole(id);
+			role.setResources(securityService.getResourcesByRoleId(id));
 			request.setAttribute("role",role);
 		}
-		request.setAttribute("resources", userService.getAllResources());
+		request.setAttribute("resources", securityService.getAllResources());
 		return "/example/role/input";
 	}
 	
@@ -49,9 +49,9 @@ public class RoleController {
 	public String save(Role role,Long[] resourceIds) throws Exception{
 		role.setName(role.getName().toUpperCase());
 		if(role.getId()!=null){
-			userService.updateRole(role,CollectionUtils.arrayToList(resourceIds));
+			securityService.updateRole(role,CollectionUtils.arrayToList(resourceIds));
 		}else{
-			userService.saveRole(role,CollectionUtils.arrayToList(resourceIds));
+			securityService.saveRole(role,CollectionUtils.arrayToList(resourceIds));
 		}
 		return "redirect:/example/role/list/1.htm";
 	}
@@ -59,13 +59,10 @@ public class RoleController {
 	@RequestMapping("/delete/{no}-{id}")
 	public String delete(@PathVariable int no,@PathVariable Long id) throws Exception{
 		if(id!=null){
-			userService.deleteRole(id);
+			securityService.deleteRole(id);
 		}
 		return "redirect:/example/role/list/"+no+".htm";
 	}
 	
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
 	
 }

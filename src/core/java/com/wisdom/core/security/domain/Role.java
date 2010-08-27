@@ -1,6 +1,6 @@
 package com.wisdom.core.security.domain;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * 功能描述：
@@ -20,7 +20,7 @@ public class Role implements java.io.Serializable {
 	
 	private String cnname;
 
-	private List<Resource> resources;
+	private Collection<Resource> resources;
 
 	public String getName() {
 		return name;
@@ -30,11 +30,11 @@ public class Role implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public List<Resource> getResources() {
+	public Collection<Resource> getResources() {
 		return resources;
 	}
 
-	public void setResources(List<Resource> resources) {
+	public void setResources(Collection<Resource> resources) {
 		this.resources = resources;
 	}
 

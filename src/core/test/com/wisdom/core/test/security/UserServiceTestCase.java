@@ -1,10 +1,5 @@
 package com.wisdom.core.test.security;
 
-import java.util.List;
-
-import com.wisdom.core.security.domain.Resource;
-import com.wisdom.core.security.domain.Role;
-import com.wisdom.core.security.domain.User;
 import com.wisdom.core.security.service.UserService;
 import com.wisdom.core.test.SpringTestCase;
 
@@ -14,7 +9,7 @@ public class UserServiceTestCase extends SpringTestCase{
 	private UserService userService;
 	
 	public void testSaveResource()throws Exception{
-		Resource resource=new Resource();
+		/*Resource resource=new Resource();
 		resource.setName("RES_EXAMPLE_USER");
 		resource.setCnname("账户管理");
 		resource.setPath("/example/user/**");
@@ -58,27 +53,27 @@ public class UserServiceTestCase extends SpringTestCase{
 		resourc9.setName("RES_EXAMPLE_INDEX");
 		resourc9.setCnname("演示首页");
 		resourc9.setPath("/example/index.htm");
-		userService.saveResource(resourc9);
+		userService.saveResource(resourc9);*/
 	}
 	
 	public void testSaveRole()throws Exception{
-		List<Resource> resources=userService.getAllResources();
+		/*List<Resource> resources=userService.getAllResources();
 		Role role=new Role();
 		role.setName("ADMIN");
 		role.setCnname("管理员");
 		role.setResources(resources);
-		userService.saveRole(role);
+		userService.saveRole(role);*/
 	}
 	
 	public void testSaveUser()throws Exception{
-		List<Role> roles=userService.getAllRoles();
+		/*List<Role> roles=userService.getAllRoles();
 		User user=new User();
 		user.setUsername("admin");
 		user.setPassword("admin");
 		user.setCnname("系统管理员");
 		user.setEmail("admin@ow.com");
 		user.setRoles(roles);
-		userService.saveUser(user);
+		userService.saveUser(user);*/
 	}
 	
 	public void testLookData()throws Exception{

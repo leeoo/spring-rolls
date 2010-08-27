@@ -63,6 +63,7 @@ public class TaskController {
 			request.setAttribute("task", task);
 		}
 		Map<Integer, String> units=new LinkedHashMap<Integer, String>();
+		units.put(TaskRunnable.RUNUNIT_HOUR, "每小时运行");
 		units.put(TaskRunnable.RUNUNIT_DAY, "每天运行");
 		units.put(TaskRunnable.RUNUNIT_WEEK, "每周运行");
 		units.put(TaskRunnable.RUNUNIT_MONTH, "每月运行");

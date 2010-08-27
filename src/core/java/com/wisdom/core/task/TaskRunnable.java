@@ -26,6 +26,12 @@ public interface TaskRunnable{
 	 * 年为运行单位
 	 */
 	public static final int RUNUNIT_YEAR = 5;
+
+	/**
+	 * 小时为运行单位
+	 */
+	public static final int RUNUNIT_HOUR = 12;
+	
 	/**
 	 * 状态为可用
 	 */
