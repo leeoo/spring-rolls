@@ -65,8 +65,10 @@ public class SecurityService extends JdbcGenericSupportDao implements UserServic
 		user.setPassword(psw);
 		long userId=jdbcDao.insertBeanGetGeneratedKey("t_system_user_info", "id", user);
 		user.setId(userId);
-		for(Role role:user.getRoles()){
-			jdbcDao.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",userId,role.getId());
+		if(user.getRoles()!=null){
+			for(Role role:user.getRoles()){
+				jdbcDao.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",userId,role.getId());
+			}
 		}
 	}
 	
@@ -74,8 +76,10 @@ public class SecurityService extends JdbcGenericSupportDao implements UserServic
 		String sql="UPDATE t_system_user_info SET cnname=:cnname, email=:email,mobile=:mobile, enabled=:enabled WHERE id=:id";
 		jdbcDao.executeBean(sql, user);
 		jdbcDao.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",user.getId());
-		for(long roleId:ids){
-			jdbcDao.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),roleId);
+		if(ids!=null){
+			for(long roleId:ids){
+				jdbcDao.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),roleId);
+			}
 		}
 	}
 
@@ -83,8 +87,10 @@ public class SecurityService extends JdbcGenericSupportDao implements UserServic
 		String sql="UPDATE t_system_user_info SET cnname=:cnname, email=:email,mobile=:mobile, enabled=:enabled WHERE id=:id";
 		jdbcDao.executeBean(sql, user);
 		jdbcDao.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",user.getId());
-		for(Role role:user.getRoles()){
-			jdbcDao.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),role.getId());
+		if(user.getRoles()!=null){
+			for(Role role:user.getRoles()){
+				jdbcDao.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),role.getId());
+			}
 		}
 	}
 	
@@ -148,24 +154,30 @@ public class SecurityService extends JdbcGenericSupportDao implements UserServic
 	public void saveRole(Role role,Collection<Long> ids) throws Exception {
 		long roleId=jdbcDao.insertBeanGetGeneratedKey("t_system_role_info", "id", role);
 		role.setId(roleId);
-		for(long resourceId:ids){
-			jdbcDao.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",roleId,resourceId);
+		if(ids!=null){
+			for(long resourceId:ids){
+				jdbcDao.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",roleId,resourceId);
+			}
 		}
 	}
 	
 	public void saveRole(Role role)throws Exception{
 		long roleId=jdbcDao.insertBeanGetGeneratedKey("t_system_role_info", "id", role);
 		role.setId(roleId);
-		for(Resource resource:role.getResources()){
-			jdbcDao.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",roleId,resource.getId());
+		if(role.getResources()!=null){
+			for(Resource resource:role.getResources()){
+				jdbcDao.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",roleId,resource.getId());
+			}
 		}
 	}
 	
 	public void updateRole(Role role,Collection<Long> ids) throws Exception {
 		jdbcDao.executeBean("UPDATE t_system_role_info SET name=:name, cnname=:cnname WHERE id=:id", role);
 		jdbcDao.executeArray("DELETE FROM t_system_role_resource WHERE role_id=?", role.getId());
-		for(long resourceId:ids){
-			jdbcDao.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",role.getId(),resourceId);
+		if(ids!=null){
+			for(long resourceId:ids){
+				jdbcDao.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",role.getId(),resourceId);
+			}
 		}
 	}
 
