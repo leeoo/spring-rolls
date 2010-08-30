@@ -120,7 +120,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 		validation();
 		String sql="INSERT INTO ".concat(tableName).concat(BeanUtils.getBuildInsertSql(beans[0]));
 		logger.info(sql);	
-		jdbcTemplate.executeBatchByBeans(sql, beans);
+		jdbcTemplate.executeBatchByArrayBeans(sql, beans);
 		if(isIndex){
 			for(T bean:beans){
 				SearchIndexCreator.createIndex(bean);
@@ -192,7 +192,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 				SearchIndexCreator.createIndex(bean);
 			}
 		}
-		jdbcTemplate.executeBatchByBeans(sql, beans);
+		jdbcTemplate.executeBatchByArrayBeans(sql, beans);
 	}
 	
 	/**

@@ -49,7 +49,7 @@ public class LoggerServiceImpl extends JdbcGenericSupportDao implements LoggerSe
 			}
 		}
 		if(!datas.isEmpty()){
-			jdbcDao.executeBatchByMaps(SQL_INSERT_LOGGER, datas);
+			jdbcDao.executeBatchByCollectionMaps(SQL_INSERT_LOGGER, datas);
 		}
 	}
 	
