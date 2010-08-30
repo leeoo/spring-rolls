@@ -221,7 +221,7 @@ public interface JdbcTemplate {
 	 * @param beanParameters bean数据集合
 	 * @throws Exception 
 	 */
-	public int[] executeBatchByBeans(final String sql,Collection<Object> beanParameters)throws Exception;
+	public int[] executeBatchByCollectionBeans(final String sql,Collection<Object> beanParameters)throws Exception;
 	
 	/**
 	 * 批量执行insert，update，delete等操作<br>
@@ -231,7 +231,7 @@ public interface JdbcTemplate {
 	 * @param beanParameters bean数据数组
 	 * @throws Exception 
 	 */
-	public int[] executeBatchByBeans(final String sql,Object... beanParameters)throws Exception;
+	public int[] executeBatchByArrayBeans(final String sql,Object... beanParameters)throws Exception;
 	
 	/**
 	 * 批量执行insert，update，delete等操作<br>
@@ -241,7 +241,7 @@ public interface JdbcTemplate {
 	 * @param mapParameters map数据集合
 	 * @throws Exception 
 	 */
-	public int[] executeBatchByMaps(final String sql,Collection<Map> mapParameters)throws Exception;
+	public int[] executeBatchByCollectionMaps(final String sql,Collection<Map> mapParameters)throws Exception;
 	
 	/**
 	 * 批量执行insert，update，delete等操作<br>
@@ -251,7 +251,7 @@ public interface JdbcTemplate {
 	 * @param mapParameters map数据数组
 	 * @throws Exception 
 	 */
-	public int[] executeBatchByMaps(final String sql,Map... mapParameters)throws Exception;
+	public int[] executeBatchByArrayMaps(final String sql,Map... mapParameters)throws Exception;
 	
 	/**
 	 * insert时返回主键值

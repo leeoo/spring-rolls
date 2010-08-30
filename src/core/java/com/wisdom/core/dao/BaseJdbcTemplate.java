@@ -315,7 +315,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 	}
 	
-	public int[] executeBatchByBeans(final String sql,Collection<Object> beans)throws Exception{
+	public int[] executeBatchByCollectionBeans(final String sql,Collection<Object> beans)throws Exception{
 		Assert.hasText(sql,"sql语句不正确!");
 		logger.info("SQL:"+sql);
 		if(beans!=null&&!beans.isEmpty()){
@@ -325,7 +325,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		return null;
 	}
 	
-	public int[] executeBatchByBeans(final String sql,Object... beans)throws Exception{
+	public int[] executeBatchByArrayBeans(final String sql,Object... beans)throws Exception{
 		Assert.hasText(sql,"sql语句不正确!");
 		logger.info("SQL:"+sql);
 		if(beans!=null&&beans.length>0){
@@ -335,7 +335,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		return null;
 	}
 
-	public int[] executeBatchByMaps(final String sql,Collection<Map> maps)throws Exception{
+	public int[] executeBatchByCollectionMaps(final String sql,Collection<Map> maps)throws Exception{
 		Assert.hasText(sql,"sql语句不正确!");
 		logger.info("SQL:"+sql);
 		if(maps!=null&&!maps.isEmpty()){
@@ -346,7 +346,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		return null;
 	}
 	
-	public int[] executeBatchByMaps(final String sql,Map... maps)throws Exception{
+	public int[] executeBatchByArrayMaps(final String sql,Map... maps)throws Exception{
 		Assert.hasText(sql,"sql语句不正确!");
 		logger.info("SQL:"+sql);
 		if(maps!=null&&maps.length>0){
