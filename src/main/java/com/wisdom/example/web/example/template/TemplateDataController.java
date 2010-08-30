@@ -91,19 +91,4 @@ public class TemplateDataController {
 		return "redirect:/example/template/"+templateId+"/data/list.htm";
 	}
 	
-	public TemplateDataService getTemplateDataService() {
-		return templateDataService;
-	}
-
-	public void setTemplateDataService(TemplateDataService templateDataService) {
-		this.templateDataService = templateDataService;
-	}
-
-	public TemplateService getTemplateService() {
-		return templateService;
-	}
-
-	public void setTemplateService(TemplateService templateService) {
-		this.templateService = templateService;
-	}
 }

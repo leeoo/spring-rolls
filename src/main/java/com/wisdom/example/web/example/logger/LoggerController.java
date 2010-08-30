@@ -67,22 +67,4 @@ public class LoggerController {
 		return "redirect:/example/logger/list/1.htm";
 	}
 
-	public LoggerService getLoggerService() {
-		return loggerService;
-	}
-
-	public void setLoggerService(LoggerService loggerService) {
-		this.loggerService = loggerService;
-	}
-
-	public LoggerThreadService getLoggerThreadService() {
-		return loggerThreadService;
-	}
-
-	public void setLoggerThreadService(LoggerThreadService loggerThreadService) {
-		this.loggerThreadService = loggerThreadService;
-	}
-	
-	
-	
 }

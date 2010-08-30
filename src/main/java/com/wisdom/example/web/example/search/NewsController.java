@@ -118,12 +118,4 @@ public class NewsController {
 		return mav;
 	}
 
-	public NewsService getNewsService() {
-		return newsService;
-	}
-
-	public void setNewsService(NewsService newsService) {
-		this.newsService = newsService;
-	}
-	
 }

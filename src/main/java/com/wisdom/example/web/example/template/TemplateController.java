@@ -110,20 +110,4 @@ public class TemplateController {
 		return "redirect:/example/template/list/1.htm";
 	}
 	
-	public TemplateService getTemplateService() {
-		return templateService;
-	}
-
-	public void setTemplateService(TemplateService templateService) {
-		this.templateService = templateService;
-	}
-
-	public TemplateThreadService getTemplateThreadService() {
-		return templateThreadService;
-	}
-
-	public void setTemplateThreadService(TemplateThreadService templateThreadService) {
-		this.templateThreadService = templateThreadService;
-	}
-
 }

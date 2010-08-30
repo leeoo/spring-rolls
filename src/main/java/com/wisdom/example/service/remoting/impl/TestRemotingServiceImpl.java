@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import com.wisdom.example.service.remoting.TestRemotingService;
 /**
@@ -19,6 +20,8 @@ public class TestRemotingServiceImpl implements TestRemotingService{
 	private static Collection<String> testDatas=new LinkedList<String>();
 
 	public void createTestData(String test) {
+		Assert.notNull(test);
+		Assert.hasText(test);
 		logger.info("远程创建测试数据<{}>",test);
 		testDatas.add(test);
 	}
@@ -29,6 +32,8 @@ public class TestRemotingServiceImpl implements TestRemotingService{
 	}
 
 	public void removeTestData(String test) {
+		Assert.notNull(test);
+		Assert.hasText(test);
 		logger.info("远程删除测试数据<{}>",test);
 		testDatas.remove(test);
 	}

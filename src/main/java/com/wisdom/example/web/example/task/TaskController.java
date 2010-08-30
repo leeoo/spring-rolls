@@ -175,21 +175,4 @@ public class TaskController {
 		return "redirect:/example/task/"+taskId+"/run_history/list/"+no+".htm";
 	}
 	
-	public TaskService getTaskService() {
-		return taskService;
-	}
-
-	public void setTaskService(TaskService taskService) {
-		this.taskService = taskService;
-	}
-
-	public TaskScheduledManualExecutor getTaskScheduledManualExecutor() {
-		return taskScheduledManualExecutor;
-	}
-
-	public void setTaskScheduledManualExecutor(
-			TaskScheduledManualExecutor taskScheduledManualExecutor) {
-		this.taskScheduledManualExecutor = taskScheduledManualExecutor;
-	}
-	
 }
