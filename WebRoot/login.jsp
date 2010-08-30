@@ -35,6 +35,7 @@
 		<form id="security" action="${base}/static/j_spring_security_check" method="post">
 			账号：<input type='text' name='j_username' style="width: 120px;"/><br/>
 			密码：<input type='password' name='j_password' style="width: 120px;"/><br/>
+			<input type="checkbox" name="_spring_security_remember_me"/>2周内记住我
 			<label><button type="submit">登 录</button></label>
 		</form>
 	</div>

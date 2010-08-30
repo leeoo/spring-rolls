@@ -76,7 +76,7 @@
 					<ul class="sidemenu">				
 						<li><a href="${base}/example/user/list/1.htm">账户管理</a>&nbsp;|&nbsp;<a href="${base}/example/role/list/1.htm">角色管理</a>&nbsp;|&nbsp;<a href="${base}/example/resource/list/1.htm">权限管理</a></li>
 						<li><a href="${base}/example/template/list/1.htm">模板管理</a>&nbsp;|&nbsp;<a href="${base}/example/task/list.htm">任务调度</a>&nbsp;|&nbsp;<a href="${base}/example/search/list/1.htm">搜索引擎</a></li>
-						<li><a href="${base}/example/logger/list/1.htm">日志管理</a>&nbsp;|&nbsp;<a href="${base}/example/report/pie.htm">报表统计</a></li>
+						<li><a href="${base}/example/logger/list/1.htm">日志管理</a>&nbsp;|&nbsp;<a href="${base}/example/report/pie.htm">报表统计</a>&nbsp;|&nbsp;<a href="${base}/example/remoting/list.htm">远程调用</a></li>
 					</ul>	
 						
 					<h2>成功案例</h2>
