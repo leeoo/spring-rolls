@@ -162,7 +162,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @param bean实体
 	 * @throws Exception
 	 */
-	public void update(T bean) throws Exception{
+	public int update(T bean) throws Exception{
 		validation();
 		String sql="UPDATE ".concat(tableName).concat(" SET ").concat(BeanUtils.getBuildUpdateSql(bean,pkPropertyName));
 		logger.info(sql);
@@ -172,7 +172,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 			SearchIndexCreator.removeIndex(oldBean);
 			SearchIndexCreator.createIndex(bean);
 		}
-		jdbcTemplate.executeBean(sql, bean);
+		return jdbcTemplate.executeBean(sql, bean);
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @param beans实体集合
 	 * @throws Exception
 	 */
-	public void updateAll(T... beans) throws Exception{
+	public int[] updateAll(T... beans) throws Exception{
 		validation();
 		String sql="UPDATE ".concat(tableName).concat(" SET ").concat(BeanUtils.getBuildUpdateSql(beans[0],pkPropertyName));
 		logger.info(sql);
@@ -192,7 +192,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 				SearchIndexCreator.createIndex(bean);
 			}
 		}
-		jdbcTemplate.executeBatchByArrayBeans(sql, beans);
+		return jdbcTemplate.executeBatchByArrayBeans(sql, beans);
 	}
 	
 	/**
@@ -200,7 +200,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @param pk
 	 * @throws Exception
 	 */
-	public void delete(PK pk)throws Exception{
+	public int delete(PK pk)throws Exception{
 		validation();
 		String sql="DELETE FROM ".concat(tableName).concat(" WHERE ".concat(pkFieldName).concat("=?"));
 		logger.info(sql);
@@ -208,7 +208,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 			T oldBean = get(pk);
 			SearchIndexCreator.removeIndex(oldBean);
 		}
-		jdbcTemplate.executeArray(sql, pk);
+		return jdbcTemplate.executeArray(sql, pk);
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @param 属性名或字段名
 	 * @throws Exception
 	 */
-	public void deleteByProperty(String name,Object value)throws Exception{
+	public int deleteByProperty(String name,Object value)throws Exception{
 		validation();
 		String fieldName = BeanUtils.getDbFieldName(name);
 		String sql="DELETE FROM ".concat(tableName).concat(" WHERE ".concat(fieldName).concat("=?"));
@@ -227,7 +227,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 				SearchIndexCreator.removeIndex(oldBean);
 			}
 		}
-		jdbcTemplate.executeArray(sql, value);
+		return jdbcTemplate.executeArray(sql, value);
 	}
 	
 	/**
@@ -235,7 +235,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @param pks
 	 * @throws Exception
 	 */
-	public void deleteAll(PK... pks)throws Exception{
+	public int deleteAll(PK... pks)throws Exception{
 		validation();
 		String sql="DELETE FROM ".concat(tableName).concat(" WHERE ".concat(pkFieldName).concat(" IN ("));
 		for(int i=0;i<pks.length;i++){
@@ -249,7 +249,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 				SearchIndexCreator.removeIndex(oldBean);
 			}
 		}
-		jdbcTemplate.executeArray(sql, (Object[])pks);
+		return jdbcTemplate.executeArray(sql, (Object[])pks);
 	}
 	
 	/**
