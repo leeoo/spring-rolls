@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import javax.sql.DataSource;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -143,18 +144,20 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 			}else{
 				gpk=IDCreator.getNextId(tableName,this.jdbcTemplate);
 			}
+			Number number = NumberUtils.createNumber(Long.toString(gpk));
+			BeanUtils.setFieldValue(bean, pkPropertyName, number);
 			String sql="INSERT INTO ".concat(tableName).concat(BeanUtils.getBuildInsertSql(bean));
 			logger.info(sql);
-			BeanUtils.setFieldValue(bean, pkPropertyName, gpk);
 			jdbcTemplate.executeBean(sql, bean);
 		}else{
 			gpk=jdbcTemplate.insertBeanGetGeneratedKey(tableName, pkFieldName, bean);
+			Number number = NumberUtils.createNumber(Long.toString(gpk));
+			BeanUtils.setFieldValue(bean, pkPropertyName, number);
 		}
 		if(isIndex){
-			BeanUtils.setFieldValue(bean, pkPropertyName, gpk);
 			SearchIndexCreator.createIndex(bean);
 		}
-		return (PK)Long.valueOf(gpk);
+		return (PK) BeanUtils.getFieldValue(bean, pkPropertyName);
 	}
 	
 	/**
