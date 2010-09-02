@@ -81,7 +81,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			jdbcCall=jdbcCall.returningResultSet("list_beans", resultBeanMapper(outBeansType));
 		}
 		List list = (List)(jdbcCall.execute(inParameters).get("list_beans"));
-		logger.info("影响条目:"+list.size());
+		logger.info("响应条目:"+list.size());
 		return list;
 	}
 
@@ -100,7 +100,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				list = jdbcTemplate.query(sql, resultBeanMapper(clazz));
 			}
-			logger.info("影响条目:"+list.size());
+			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
@@ -114,7 +114,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			Assert.notNull(clazz,"集合中对象类型不能为空!");
 			logger.info("SQL:"+sql);
 			List list = jdbcTemplate.query(sql, resultBeanMapper(clazz));
-			logger.info("影响条目:"+list.size());
+			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
@@ -133,7 +133,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				list = jdbcTemplate.query(sql, resultBeanMapper(clazz));
 			}
-			logger.info("影响条目:"+list.size());
+			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
@@ -152,7 +152,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				list = jdbcTemplate.query(sql, resultBeanMapper(clazz));
 			}
-			logger.info("影响条目:"+list.size());
+			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
@@ -278,7 +278,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				list = jdbcTemplate.queryForList(sql);
 			}
-			logger.info("影响条目:"+list.size());
+			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
@@ -296,7 +296,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				list = jdbcTemplate.queryForList(sql);
 			}
-			logger.info("影响条目:"+list.size());
+			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
@@ -313,7 +313,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}else{
 			affectCount = jdbcTemplate.update(sql);
 		}
-		logger.info("响应条目:"+affectCount);
+		logger.info("影响条目:"+affectCount);
 		return affectCount;
 	}
 
@@ -326,7 +326,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}else{
 			affectCount = jdbcTemplate.update(sql);
 		}
-		logger.info("响应条目:"+affectCount);
+		logger.info("影响条目:"+affectCount);
 		return affectCount;
 	}
 	
@@ -339,7 +339,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}else{
 			affectCount = jdbcTemplate.update(sql);
 		}
-		logger.info("响应条目:"+affectCount);
+		logger.info("影响条目:"+affectCount);
 		return affectCount;
 	}
 	
