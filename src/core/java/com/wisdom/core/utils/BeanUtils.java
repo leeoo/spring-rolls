@@ -21,6 +21,7 @@ import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -314,6 +315,42 @@ public class BeanUtils extends org.apache.commons.beanutils.BeanUtils{
 
 		try {
 			field.set(object, value);
+		} catch (IllegalAccessException e) {
+			logger.error("不可能抛出的异常:{}", e.getMessage());
+		}
+	}
+	
+	public static void setFieldNumberValue(final Object object, final String fieldName, final Object value) {
+		Field field = getDeclaredField(object, fieldName);
+
+		if (field == null) {
+			throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + object + "]");
+		}
+		makeAccessible(field);
+		try {
+			Class clazz =field.getType();
+			Number number = NumberUtils.createNumber(value.toString());
+			if(Long.class.equals(clazz)){
+				try{
+					field.setLong(object, new Long(number.longValue()));
+				}catch (IllegalArgumentException iar) {
+					field.set(object, new Long(number.longValue()));
+				}
+			}else if(Integer.class.equals(clazz)){
+				try{
+					field.setInt(object, number.intValue());
+				}catch (IllegalArgumentException iar) {
+					field.set(object, new Integer(number.intValue()));
+				}
+			}else if(Short.class.equals(clazz)){
+				try{
+					field.setShort(object, new Short(number.shortValue()));
+				}catch (IllegalArgumentException iar) {
+					field.set(object, number.shortValue());
+				}
+			}else{
+				field.set(object, value);
+			}
 		} catch (IllegalAccessException e) {
 			logger.error("不可能抛出的异常:{}", e.getMessage());
 		}

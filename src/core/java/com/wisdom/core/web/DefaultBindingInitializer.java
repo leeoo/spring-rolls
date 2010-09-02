@@ -31,6 +31,7 @@ public class DefaultBindingInitializer implements WebBindingInitializer{
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 		binder.registerCustomEditor(Integer.class,new CustomNumberEditor(Integer.class,true));
+		binder.registerCustomEditor(Long.class,new CustomNumberEditor(Long.class,true));
 		binder.registerCustomEditor(String.class,new CustomStringEditor(String.class));
 		binder.registerCustomEditor(Collection.class, new CustomCollectionEditor(Collection.class, true));
 		binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
