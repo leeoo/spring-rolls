@@ -80,7 +80,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(outBeansType!=null){
 			jdbcCall=jdbcCall.returningResultSet("list_beans", resultBeanMapper(outBeansType));
 		}
-		return (List)jdbcCall.execute(inParameters).get("list_beans");
+		List list = (List)(jdbcCall.execute(inParameters).get("list_beans"));
+		logger.info("影响条目:"+list.size());
+		return list;
 	}
 
 	public Connection getConnection() throws Exception{
@@ -92,11 +94,14 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			Assert.hasText(sql,"sql语句不正确!");
 			Assert.notNull(clazz,"集合中对象类型不能为空!");
 			logger.info("SQL:"+sql);
+			List list = null;
 			if(parameters!=null){
-				return jdbcTemplate.query(sql, resultBeanMapper(clazz),parameters);
+				list = jdbcTemplate.query(sql, resultBeanMapper(clazz),parameters);
 			}else{
-				return jdbcTemplate.query(sql, resultBeanMapper(clazz));
+				list = jdbcTemplate.query(sql, resultBeanMapper(clazz));
 			}
+			logger.info("影响条目:"+list.size());
+			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
 			return null;
@@ -108,7 +113,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			Assert.hasText(sql,"sql语句不正确!");
 			Assert.notNull(clazz,"集合中对象类型不能为空!");
 			logger.info("SQL:"+sql);
-			return jdbcTemplate.query(sql, resultBeanMapper(clazz));
+			List list = jdbcTemplate.query(sql, resultBeanMapper(clazz));
+			logger.info("影响条目:"+list.size());
+			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
 			return null;
@@ -120,11 +127,14 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			Assert.hasText(sql,"sql语句不正确!");
 			Assert.notNull(clazz,"集合中对象类型不能为空!");
 			logger.info("SQL:"+sql);
+			List list = null;
 			if(beanParameters!=null){
-				return jdbcTemplate.query(sql, resultBeanMapper(clazz),paramBeanMapper(beanParameters));
+				list = jdbcTemplate.query(sql, resultBeanMapper(clazz),paramBeanMapper(beanParameters));
 			}else{
-				return jdbcTemplate.query(sql, resultBeanMapper(clazz));
+				list = jdbcTemplate.query(sql, resultBeanMapper(clazz));
 			}
+			logger.info("影响条目:"+list.size());
+			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
 			return null;
@@ -136,11 +146,14 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			Assert.hasText(sql,"sql语句不正确!");
 			Assert.notNull(clazz,"集合中对象类型不能为空!");
 			logger.info("SQL:"+sql);
+			List list = null;
 			if(parameters!=null){
-				return jdbcTemplate.query(sql, resultBeanMapper(clazz),parameters);
+				list = jdbcTemplate.query(sql, resultBeanMapper(clazz),parameters);
 			}else{
-				return jdbcTemplate.query(sql, resultBeanMapper(clazz));
+				list = jdbcTemplate.query(sql, resultBeanMapper(clazz));
 			}
+			logger.info("影响条目:"+list.size());
+			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
 			return null;
@@ -259,11 +272,14 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		try{
 			Assert.hasText(sql,"sql语句不正确!");
 			logger.info("SQL:"+sql);
+			List<Map<String,Object>> list = null;
 			if(parameters!=null){
-				return jdbcTemplate.queryForList(sql, parameters);
+				list = jdbcTemplate.queryForList(sql, parameters);
 			}else{
-				return jdbcTemplate.queryForList(sql);
+				list = jdbcTemplate.queryForList(sql);
 			}
+			logger.info("影响条目:"+list.size());
+			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
 			return null;
@@ -274,11 +290,14 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		try{
 			Assert.hasText(sql,"sql语句不正确!");
 			logger.info("SQL:"+sql);
+			List<Map<String,Object>> list = null;
 			if(parameters!=null){
-				return jdbcTemplate.queryForList(sql, parameters);
+				list = jdbcTemplate.queryForList(sql, parameters);
 			}else{
-				return jdbcTemplate.queryForList(sql);
+				list = jdbcTemplate.queryForList(sql);
 			}
+			logger.info("影响条目:"+list.size());
+			return list;
 		}catch (Exception e) {
 			logger.error("not result!");
 			return null;
@@ -288,31 +307,40 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public int executeBean(final String sql,Object bean)throws Exception{
 		Assert.hasText(sql,"sql语句不正确!");
 		logger.info("SQL:"+sql);
+		int affectCount = 0;
 		if(bean!=null){
-			return jdbcTemplate.update(sql, paramBeanMapper(bean));
+			affectCount = jdbcTemplate.update(sql, paramBeanMapper(bean));
 		}else{
-			return jdbcTemplate.update(sql);
+			affectCount = jdbcTemplate.update(sql);
 		}
+		logger.info("响应条目:"+affectCount);
+		return affectCount;
 	}
 
 	public int executeMap(final String sql,Map parameters)throws Exception{
 		Assert.hasText(sql,"sql语句不正确!");
 		logger.info("SQL:"+sql);
+		int affectCount = 0;
 		if(parameters!=null){
-			return jdbcTemplate.update(sql, parameters);
+			affectCount = jdbcTemplate.update(sql, parameters);
 		}else{
-			return jdbcTemplate.update(sql);
+			affectCount = jdbcTemplate.update(sql);
 		}
+		logger.info("响应条目:"+affectCount);
+		return affectCount;
 	}
 	
 	public int executeArray(final String sql,Object... parameters)throws Exception{
 		Assert.hasText(sql,"sql语句不正确!");
 		logger.info("SQL:"+sql);
+		int affectCount = 0;
 		if(parameters!=null){
-			return jdbcTemplate.update(sql, parameters);
+			affectCount = jdbcTemplate.update(sql, parameters);
 		}else{
-			return jdbcTemplate.update(sql);
+			affectCount = jdbcTemplate.update(sql);
 		}
+		logger.info("响应条目:"+affectCount);
+		return affectCount;
 	}
 	
 	public int[] executeBatchByCollectionBeans(final String sql,Collection<Object> beans)throws Exception{
