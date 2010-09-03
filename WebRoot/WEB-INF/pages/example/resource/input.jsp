@@ -11,7 +11,7 @@
 		权限标示：<input name="name" value="${resource.name}"/><br/>
 		权限名称：<input name="cnname" value="${resource.cnname}"/><br/>
 		授权资源：<input name="path" value="${resource.path}"/><br/>
-		<button type="submit">提交</button>
+		<input type="submit" value="提交"/>
 	</form>
 </div>
 </body>

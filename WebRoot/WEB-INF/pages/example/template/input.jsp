@@ -13,7 +13,7 @@
 		模板路径：<input name="templatePath" value="${template.templatePath}"/><br/>
 		网页路径：<input name="htmlPath" value="${template.htmlPath}"/><br/>
 		模板描述：<textarea name="description">${template.description}</textarea><br/>
-		<button type="submit">提交</button>
+		<input type="submit" value="提交"/>
 	</form>
 </div>
 </body>

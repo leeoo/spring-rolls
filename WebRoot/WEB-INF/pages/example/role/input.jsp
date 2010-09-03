@@ -27,7 +27,7 @@
 			 		</c:if>
 				</c:if>
 			 </c:forEach><br>
-		<button type="submit">提交</button>
+		<input type="submit" value="提交"/>
 	</form>
 </div>
 </body>

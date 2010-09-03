@@ -11,7 +11,7 @@
 		<c:forEach items="${loggerLevers}" var="lever">
 			<input type="checkbox" name="levers" value="${lever.value}">${lever.key}&nbsp;
 		</c:forEach>
-		<button type="submit">提交</button>
+		<input type="submit" value="提交"/>
 	</form>
 </div>
 </body>

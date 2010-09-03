@@ -25,7 +25,7 @@
 				</c:if>
 				</select><br/>
 		数据描述：<textarea name="description" >${templateData.description}</textarea><br/>
-		<button type="submit">提交</button>
+		<input type="submit" value="提交"/>
 	</form>
 </div>
 </body>

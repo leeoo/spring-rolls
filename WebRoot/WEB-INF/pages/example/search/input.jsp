@@ -21,7 +21,7 @@
 		过期日期：<input name="durability" 
 				onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd',firstDayOfWeek:1});" 
 				value="<fmt:formatDate value="${news.durability}" pattern="yyyy-MM-dd"/>"/><br/>
-		<button type="submit">提交</button>
+		<input type="submit" value="提交"/>
 	</form>
 </div>
 </body>

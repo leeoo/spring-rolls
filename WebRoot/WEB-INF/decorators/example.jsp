@@ -68,7 +68,7 @@
 					<form action="${base}/example/search.htm" class="searchform" method="post">
 						<p>
 						<input name="text" class="textbox" type="text" value="${text}"/>
-						<input class="button" value="搜索" type="submit" />
+						<input type="submit" value="搜索"/>
 						</p>			
 					</form>	
 							

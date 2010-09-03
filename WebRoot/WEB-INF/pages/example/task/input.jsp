@@ -23,7 +23,7 @@
 				</select><br/>
 		程序实例：<input name="instanceName" value="${task.instanceName}"/><br/>
 		任务描述：<textarea name="description">${task.description}</textarea><br/>
-		<button type="submit">提交</button>
+		<input type="submit" value="提交"/>
 	</form>
 </div>
 </body>

@@ -11,7 +11,7 @@
 		<input type="hidden" name="id" value="${user.id}"/>
 		<input type="hidden" name="username" value="${user.username}"/>
 		新密码：<input type="password" name="password"/><br>
-		<button type="submit">提交</button>
+		<input type="submit" value="提交"/>
 	</form>
 </div>
 </body>
