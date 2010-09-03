@@ -14,7 +14,7 @@
 			<input name="publishDateEnd" 
 				onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd',firstDayOfWeek:1});" 
 				value="<fmt:formatDate value="${news.publishDateEnd}" pattern="yyyy-MM-dd"/>"/>	
-		<button type="submit">查询</button>		
+		<input type="submit" value="查询"/>	
 	</form>
 	<table>
 		<tr><th>标题</th><th>作者</th><th>内容简介</th><th>发布日期</th><th>状态</th><th>操作</th></tr>
