@@ -69,7 +69,7 @@ public class BeanUtils extends org.apache.commons.beanutils.BeanUtils{
 			if(fieldName.equals(pkName)){
 				pkPropertyName = propertyName;
 			}
-			if (!propertyName.equalsIgnoreCase("class")&&!propertyName.equalsIgnoreCase("insertDate")&&!propertyName.equalsIgnoreCase("businessCode")&&PropertyUtils.getReadMethod(descriptors[i]) != null&&!pkPropertyName.equals(pkName)&&!isNotMapping(bean.getClass(),propertyName)&&!isNotUpdate(bean.getClass(),propertyName)) {
+			if (!propertyName.equalsIgnoreCase("class")&&!propertyName.equalsIgnoreCase("insertDate")&&!propertyName.equalsIgnoreCase("businessCode")&&PropertyUtils.getReadMethod(descriptors[i]) != null&&!propertyName.equals(pkPropertyName)&&!isNotMapping(bean.getClass(),propertyName)&&!isNotUpdate(bean.getClass(),propertyName)) {
 				sql=sql.concat(fieldName).concat("=:").concat(propertyName).concat(",");
 			}
 		}
