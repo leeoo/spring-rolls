@@ -7,7 +7,7 @@
 <body>
 	<form name="news" action="${base}/example/remoting/save.htm" method="post">
 		<input name="remotingValue"/>
-		<button type="submit">添加</button>		
+		<input type="submit" value="添加"/>
 	</form>
 	<table>
 		<tr><th>远程服务传递信息</th><th>操作</th></tr>
@@ -19,7 +19,6 @@
 				</td>
 			</tr>
 		</c:forEach>
-		<tr>
 	</table>
 </body>
 </html>
