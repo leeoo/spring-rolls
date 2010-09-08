@@ -144,15 +144,29 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 				gpk=IDCreator.getNextId(tableName,this.jdbcTemplate);
 			}
 			BeanUtils.setFieldNumberValue(bean, pkPropertyName, gpk);
-			String sql="INSERT INTO ".concat(tableName).concat(BeanUtils.getBuildInsertSql(bean));
-			logger.info(sql);
-			jdbcTemplate.executeBean(sql, bean);
+			save(bean);
 		}else{
-			gpk=jdbcTemplate.insertBeanGetGeneratedKey(tableName, pkFieldName, bean);
-			BeanUtils.setFieldNumberValue(bean, pkPropertyName, gpk);
-		}
-		if(isIndex){
-			SearchIndexCreator.createIndex(bean);
+			if(GenericDaoFactory.type.equals("oracle")){
+				String seqName = "";
+				if(idName!=null&&!idName.trim().isEmpty()){
+					seqName = idName;
+				}else{
+					seqName = "seq_"+tableName;
+				}
+				long isSeqExist = jdbcTemplate.findLongByArray("SELECT COUNT(1) FROM user_sequences WHERE sequence_name = ?", seqName);
+				if(isSeqExist<1){
+					jdbcTemplate.executeArray("CREATE SEQUENCE "+seqName);
+				}
+				gpk = jdbcTemplate.findLongByArray("SELECT "+seqName+".NEXTVAL FROM DUAL");
+				BeanUtils.setFieldNumberValue(bean, pkPropertyName, gpk);
+				save(bean);
+			}else{
+				gpk=jdbcTemplate.insertBeanGetGeneratedKey(tableName, pkFieldName, bean);
+				BeanUtils.setFieldNumberValue(bean, pkPropertyName, gpk);
+				if(isIndex){
+					SearchIndexCreator.createIndex(bean);
+				}
+			}
 		}
 		return (PK) BeanUtils.getFieldValue(bean, pkPropertyName);
 	}
