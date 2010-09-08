@@ -275,10 +275,6 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	public T get(PK pk){
 		validation();
 		String sql=buildWhereSql("SELECT * "+getReferenceSql()+" FROM ",pk);
-		if(GenericDaoFactory.type.equals("oracle")){
-			sql = sql.replaceAll(" AS ", " ");
-			sql = sql.replaceFirst("SELECT ", "SELECT x.");
-		}
 		if(where!=null&&!where.isEmpty()){
 			sql=sql.concat(" AND ".concat(where));
 		}
@@ -293,11 +289,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public Page getAll(Page page){
 		validation();
-		String sql="SELECT * "+getReferenceSql()+" FROM ".concat(tableName+" AS x");
-		if(GenericDaoFactory.type.equals("oracle")){
-			sql = sql.replaceAll(" AS ", " ");
-			sql = sql.replaceFirst("SELECT ", "SELECT x.");
-		}
+		String sql="SELECT x.* "+getReferenceSql()+" FROM ".concat(tableName+" x");
 		if(where!=null&&!where.isEmpty()){
 			sql=sql.concat(" WHERE ".concat(where));
 		}
@@ -377,11 +369,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public Collection<T> getAll(){
 		validation();
-		String sql="SELECT * "+getReferenceSql()+" FROM ".concat(tableName+" AS x");
-		if(GenericDaoFactory.type.equals("oracle")){
-			sql = sql.replaceAll(" AS ", " ");
-			sql = sql.replaceFirst("SELECT ", "SELECT x.");
-		}
+		String sql="SELECT x.* "+getReferenceSql()+" FROM ".concat(tableName+" x");
 		if(where!=null&&!where.isEmpty()){
 			sql=sql.concat(" WHERE ".concat(where));
 		}
@@ -415,11 +403,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 		if(ids==null||ids.isEmpty()){
 			return null;
 		}
-		String sql="SELECT * "+getReferenceSql()+" FROM ".concat(tableName).concat(" AS x WHERE 1=1");
-		if(GenericDaoFactory.type.equals("oracle")){
-			sql = sql.replaceAll(" AS ", " ");
-			sql = sql.replaceFirst("SELECT ", "SELECT x.");
-		}
+		String sql="SELECT x.* "+getReferenceSql()+" FROM ".concat(tableName).concat(" x WHERE 1=1");
 		if(where!=null&&!where.isEmpty()){
 			sql=sql.concat(" AND ".concat(where));
 		}
@@ -455,7 +439,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @return 构建好的sql
 	 */
 	private String buildWhereSql(String sql,PK pk){
-		return sql.concat(tableName+" AS x").concat(" WHERE ".concat(pkFieldName).concat("=?"));
+		return sql.concat(tableName+" x").concat(" WHERE ".concat(pkFieldName).concat("=?"));
 	}
 	
 	/**
@@ -482,11 +466,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @return
 	 */
 	private String getFilterSql(T filterBean,Collection<Object> arrayParameters){
-		String sql="SELECT * "+getReferenceSql()+" FROM ".concat(tableName+" AS x");
-		if(GenericDaoFactory.type.equals("oracle")){
-			sql = sql.replaceAll(" AS ", " ");
-			sql = sql.replaceFirst("SELECT ", "SELECT x.");
-		}
+		String sql="SELECT x.* "+getReferenceSql()+" FROM ".concat(tableName+" x");
 		if(where!=null&&!where.isEmpty()){
 			sql=sql.concat(" WHERE ".concat(where));
 		}
@@ -523,11 +503,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	}
 	
 	private String getSqlByProperty(String name){
-		String sql="SELECT * "+getReferenceSql()+" FROM ".concat(tableName+" AS x");
-		if(GenericDaoFactory.type.equals("oracle")){
-			sql = sql.replaceAll(" AS ", " ");
-			sql = sql.replaceFirst("SELECT ", "SELECT x.");
-		}
+		String sql="SELECT x.* "+getReferenceSql()+" FROM ".concat(tableName+" x");
 		if(where!=null&&!where.isEmpty()){
 			sql=sql.concat(" WHERE ".concat(where));
 		}
@@ -559,8 +535,8 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 				String refPKName = BeanUtils.getDbFieldName(getReferencePKName(clazz,propertyName));
 				String fkName = BeanUtils.getDbFieldName(getReferenceFKName(clazz,propertyName));
 				String fieldName = BeanUtils.getDbFieldName(getReferenceViewName(clazz,propertyName));
-				sql = sql.concat(",(SELECT "+fieldName+" FROM "+refTableName+" AS y ");
-				sql = sql.concat("WHERE y."+refPKName+" = x."+fkName+" ) AS "+asFieldName);
+				sql = sql.concat(",(SELECT "+fieldName+" FROM "+refTableName+" y ");
+				sql = sql.concat("WHERE y."+refPKName+" = x."+fkName+" ) "+asFieldName);
 			}
 		}
 		return sql;
