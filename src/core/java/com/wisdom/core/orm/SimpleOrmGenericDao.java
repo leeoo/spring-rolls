@@ -151,8 +151,9 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 				if(idName!=null&&!idName.trim().isEmpty()){
 					seqName = idName;
 				}else{
-					seqName = "seq_"+tableName;
+					seqName = "SEQ_"+tableName;
 				}
+				seqName = seqName.toUpperCase();
 				long isSeqExist = jdbcTemplate.findLongByArray("SELECT COUNT(1) FROM user_sequences WHERE sequence_name = ?", seqName);
 				if(isSeqExist<1){
 					jdbcTemplate.executeArray("CREATE SEQUENCE "+seqName);
