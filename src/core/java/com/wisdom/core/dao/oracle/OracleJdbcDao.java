@@ -47,8 +47,8 @@ public final class OracleJdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String querySqlFirst="SELECT * FROM ( SELECT tempt.*,ROWNUM AS rn FROM ( ";
-			String querySqlLast=" ) AS tempt WHERE ROWNUM<=? ) WHERE rn>=?";
+			String querySqlFirst="SELECT * FROM ( SELECT tempt.*,ROWNUM rn FROM ( ";
+			String querySqlLast=" ) tempt WHERE ROWNUM<=? ) WHERE rn>=?";
 			String lastSql=querySqlFirst.concat(sql.concat(querySqlLast));
 			if(arrayParameters!=null){
 				Object[] obs=new Object[2];
@@ -83,8 +83,8 @@ public final class OracleJdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String querySqlFirst="SELECT * FROM ( SELECT tempt.*,ROWNUM AS rn FROM ( ";
-			String querySqlLast=" ) AS tempt WHERE ROWNUM<=? ) WHERE rn>=?";
+			String querySqlFirst="SELECT * FROM ( SELECT tempt.*,ROWNUM rn FROM ( ";
+			String querySqlLast=" ) tempt WHERE ROWNUM<=? ) WHERE rn>=?";
 			String lastSql=querySqlFirst.concat(sql.concat(querySqlLast));
 			if(arrayParameters!=null){
 				Object[] obs=new Object[2];
