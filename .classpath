@@ -67,5 +67,8 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-lang-2.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/bonecp-ow-0.6.7.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/db2jcc.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/postgresql.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
