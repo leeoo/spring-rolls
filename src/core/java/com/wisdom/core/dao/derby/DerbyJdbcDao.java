@@ -52,7 +52,10 @@ public final class DerbyJdbcDao extends BaseJdbcTemplate{
 			if(orderby>groupby){
 				groupby=sql.length();
 			}
-			String temp1 = sql.substring(sql.toUpperCase().indexOf("ORDER BY"), groupby);
+			String temp1 = "";
+			if(orderby>0){
+				temp1 = sql.substring(orderby, groupby);
+			}
 			String queryFristSql="SELECT * FROM (SELECT ROW_NUMBER() OVER ("+temp1+") AS row_number,temp_results.* FROM(";
 			String lastSql=queryFristSql.concat(sql.concat(queryLastSql));
 			if(arrayParameters!=null){
@@ -94,7 +97,10 @@ public final class DerbyJdbcDao extends BaseJdbcTemplate{
 			if(orderby>groupby){
 				groupby=sql.length();
 			}
-			String temp1 = sql.substring(sql.toUpperCase().indexOf("ORDER BY"), groupby);
+			String temp1 = "";
+			if(orderby>0){
+				temp1 = sql.substring(orderby, groupby);
+			}
 			String queryFristSql="SELECT * FROM (SELECT ROW_NUMBER() OVER ("+temp1+") AS row_number,temp_results.* FROM(";
 			String lastSql=queryFristSql.concat(sql.concat(queryLastSql));
 			if(arrayParameters!=null){
