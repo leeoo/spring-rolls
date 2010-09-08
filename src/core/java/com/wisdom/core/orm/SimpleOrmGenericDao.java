@@ -274,7 +274,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public T get(PK pk){
 		validation();
-		String sql=buildWhereSql("SELECT * "+getReferenceSql()+" FROM ",pk);
+		String sql=buildWhereSql("SELECT x.* "+getReferenceSql()+" FROM ",pk);
 		if(where!=null&&!where.isEmpty()){
 			sql=sql.concat(" AND ".concat(where));
 		}
