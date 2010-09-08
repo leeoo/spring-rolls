@@ -102,9 +102,8 @@ public class IDCreator {
 		init(idName,jdbcTemplate);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void init(String idName,JdbcTemplate jdbcTemplate){
-		long isExist=jdbcTemplate.findLongByArray("SELECT COUNT(0) FROM t_system_id WHERE table_name=?", idName);
+		long isExist = jdbcTemplate.findLongByArray("SELECT COUNT(0) FROM t_system_id WHERE table_name=?", idName);
 		if(isExist<1){//一个新表刚刚使用该方法
 			try {
 				jdbcTemplate.executeArray("INSERT INTO t_system_id(table_name,id_value) VALUES(?,?)", idName,idCacheMaxValue);
@@ -116,13 +115,12 @@ public class IDCreator {
 			maxIdMap.put(idName, Long.valueOf(idCacheMaxValue));
 		}else{
 			try {
-				Map<String,Object> object = jdbcTemplate.findUniqueMapByArray("SELECT id_value FROM t_system_id WHERE table_name=?", idName);
-				Integer value = (Integer)object.get("id_value");
-				long maxID=value.longValue()+idCacheMaxValue;
+				long  currentCount = jdbcTemplate.findLongByArray("SELECT id_value FROM t_system_id WHERE table_name=?", idName);
+				long maxID=currentCount+idCacheMaxValue;
 				jdbcTemplate.executeArray("UPDATE t_system_id SET id_value=? WHERE table_name=?",maxID, idName);
 				jdbcTemplate.getConnection().commit();
 				maxIdMap.put(idName, Long.valueOf(maxID));
-				idMap.put(idName, Long.valueOf(value));
+				idMap.put(idName, Long.valueOf(currentCount));
 			} catch (Exception e) {
 				logger.error("当修改ID名称"+idName+"时，出现错误!{}",e.getMessage());
 			}
