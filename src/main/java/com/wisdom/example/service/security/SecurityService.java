@@ -141,7 +141,7 @@ public class SecurityService extends JdbcGenericSupportDao implements UserServic
 	
 	@Transactional(readOnly=true)
 	public Collection<Role> getRolesByUserId(long userId) {
-		String sql="SELECT id, name, cnname FROM t_system_role_info WHERE id in(SELECT ur.role_id FROM t_system_user_role as ur WHERE ur.user_id=?)";
+		String sql="SELECT id, name, cnname FROM t_system_role_info WHERE id in(SELECT ur.role_id FROM t_system_user_role ur WHERE ur.user_id=?)";
 		return jdbcDao.findListBeanByArray(sql, Role.class,userId);
 	}
 
@@ -231,13 +231,13 @@ public class SecurityService extends JdbcGenericSupportDao implements UserServic
 	
 	@Transactional(readOnly=true)
 	public Collection<Resource> getResourcesByRoleId(long roleId){
-		String sql="SELECT id, name, path, cnname FROM t_system_resource_info WHERE id in(SElECT rr.resource_id FROM t_system_role_resource as rr WHERE rr.role_id =?)";
+		String sql="SELECT id, name, path, cnname FROM t_system_resource_info WHERE id in(SElECT rr.resource_id FROM t_system_role_resource rr WHERE rr.role_id =?)";
 		return jdbcDao.findListBeanByArray(sql, Resource.class,roleId);
 	}
 
 	@Transactional(readOnly=true)
 	public Collection<Resource> getResourcesByUserName(String loginName){
-		String sql="SELECT id, name, path, cnname FROM t_system_resource_info WHERE id in(SElECT rr.resource_id FROM t_system_role_resource AS rr WHERE rr.role_id in(SELECT ur.role_id FROM t_system_user_role AS ur WHERE ur.user_id in(SELECT u.id FROM t_system_user_info AS u WHERE u.username=?)))";
+		String sql="SELECT id, name, path, cnname FROM t_system_resource_info WHERE id in(SElECT rr.resource_id FROM t_system_role_resource rr WHERE rr.role_id in(SELECT ur.role_id FROM t_system_user_role ur WHERE ur.user_id in(SELECT u.id FROM t_system_user_info u WHERE u.username=?)))";
 		return jdbcDao.findListBeanByArray(sql, Resource.class,loginName);
 	}
 	
