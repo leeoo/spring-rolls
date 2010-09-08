@@ -8,5 +8,5 @@ create table t_template_info(id int not null auto_increment primary key,name var
 create table t_template_data(id int not null auto_increment primary key,data_name varchar(50) not null,sql_value varchar(1000) not null,is_unique_result int,description varchar(100),template_id int not null);
 create table t_task_info(id int not null auto_increment primary key,task_name varchar(50) not null,next_run_time datetime,run_unit int,enabled int,instance_name varchar(50) not null,description varchar(100));
 create table t_task_run_history(id int not null auto_increment primary key,task_id int not null,run_time datetime,run_state int,run_type int,error_info varchar(1000));
-create table t_news_info(id int not null auto_increment primary key,title varchar(100),auth varchar(50),context longtext);
+create table t_news_info(id int not null  primary key,title varchar(100),auth varchar(50),context longtext,enabled int,durability datetime,publish_date datetime,insert_date datetime,update_date datetime,operator_name varchar(50),operator_ip varchar(50),business_code varchar(10));
 create table t_logger_info(id int not null auto_increment primary key,log_info varchar(200),log_date datetime);
