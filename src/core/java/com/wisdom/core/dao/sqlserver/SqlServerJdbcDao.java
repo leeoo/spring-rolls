@@ -53,7 +53,7 @@ public final class SqlServerJdbcDao extends BaseJdbcTemplate{
 				i = i-(j-count);
 			}
 			String querySqlFirst = "SELECT * FROM ( SELECT TOP "+i+" * FROM ( SELECT TOP "+j+" ";
-			String querySqlLastTemp = " ORDER BY id ASC ) AS tempt1 ORDER BY id DESC ) as tempt2 ORDER BY id ASC";
+			String querySqlLastTemp = " ORDER BY id ASC ) tempt1 ORDER BY id DESC ) as tempt2 ORDER BY id ASC";
 			String querySqlLast = "";
 			if(finalSql.toUpperCase().indexOf("ORDER BY")<0){
 				querySqlLast = querySqlLastTemp;
@@ -97,7 +97,7 @@ public final class SqlServerJdbcDao extends BaseJdbcTemplate{
 						orderByDESC = orderByDESC.concat(tempOrderByDESC+" DESC"+dot);
 					}
 				}
-				querySqlLast = querySqlLast.concat(orderByASC2+" ) AS tempt1 ORDER BY ".concat(orderByDESC)+" ) AS tempt2 ORDER BY ".concat(orderByASC));
+				querySqlLast = querySqlLast.concat(orderByASC2+" ) tempt1 ORDER BY ".concat(orderByDESC)+" ) tempt2 ORDER BY ".concat(orderByASC));
 			}
 			String lastSql=querySqlFirst.concat(finalSql.trim().substring(6, finalSql.trim().length()).concat(querySqlLast));
 			list = findListBeanByArray(lastSql, clazz, arrayParameters);
@@ -132,7 +132,7 @@ public final class SqlServerJdbcDao extends BaseJdbcTemplate{
 				i = i-(j-count);
 			}
 			String querySqlFirst = "SELECT * FROM ( SELECT TOP "+i+" * FROM ( SELECT TOP "+j+" ";
-			String querySqlLastTemp = " ORDER BY id ASC ) AS tempt1 ORDER BY id DESC ) as tempt2 ORDER BY id ASC";
+			String querySqlLastTemp = " ORDER BY id ASC ) tempt1 ORDER BY id DESC ) as tempt2 ORDER BY id ASC";
 			String querySqlLast = "";
 			if(finalSql.toUpperCase().indexOf("ORDER BY")<0){
 				querySqlLast = querySqlLastTemp;
@@ -176,7 +176,7 @@ public final class SqlServerJdbcDao extends BaseJdbcTemplate{
 						orderByDESC = orderByDESC.concat(tempOrderByDESC+" DESC"+dot);
 					}
 				}
-				querySqlLast = querySqlLast.concat(orderByASC+" ) AS tempt1 ORDER BY ".concat(orderByDESC)+" ) AS tempt2 ORDER BY ".concat(orderByASC));
+				querySqlLast = querySqlLast.concat(orderByASC+" ) tempt1 ORDER BY ".concat(orderByDESC)+" ) tempt2 ORDER BY ".concat(orderByASC));
 			}
 			String lastSql=querySqlFirst.concat(finalSql.trim().substring(6, finalSql.trim().length()).concat(querySqlLast));
 			list = findListMapByArray(lastSql,arrayParameters);

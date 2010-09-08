@@ -46,7 +46,7 @@ public final class DerbyJdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String queryLastSql=")AS temp_results)AS final_results WHERE row_number > ? AND row_number <= ?";
+			String queryLastSql=") temp_results) final_results WHERE row_number > ? AND row_number <= ?";
 			int groupby=sql.toUpperCase().indexOf("GROUP BY");
 			int orderby=sql.toUpperCase().indexOf("ORDER BY");
 			if(orderby>groupby){
@@ -56,7 +56,7 @@ public final class DerbyJdbcDao extends BaseJdbcTemplate{
 			if(orderby>0){
 				temp1 = sql.substring(orderby, groupby);
 			}
-			String queryFristSql="SELECT * FROM (SELECT ROW_NUMBER() OVER ("+temp1+") AS row_number,temp_results.* FROM(";
+			String queryFristSql="SELECT * FROM (SELECT ROW_NUMBER() OVER ("+temp1+")  row_number,temp_results.* FROM(";
 			String lastSql=queryFristSql.concat(sql.concat(queryLastSql));
 			if(arrayParameters!=null){
 				Object[] obs=new Object[2];
@@ -91,7 +91,7 @@ public final class DerbyJdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String queryLastSql=")AS temp_results)AS final_results WHERE row_number > ? AND row_number <= ?";
+			String queryLastSql=") temp_results) final_results WHERE row_number > ? AND row_number <= ?";
 			int groupby=sql.toUpperCase().indexOf("GROUP BY");
 			int orderby=sql.toUpperCase().indexOf("ORDER BY");
 			if(orderby>groupby){
@@ -101,7 +101,7 @@ public final class DerbyJdbcDao extends BaseJdbcTemplate{
 			if(orderby>0){
 				temp1 = sql.substring(orderby, groupby);
 			}
-			String queryFristSql="SELECT * FROM (SELECT ROW_NUMBER() OVER ("+temp1+") AS row_number,temp_results.* FROM(";
+			String queryFristSql="SELECT * FROM (SELECT ROW_NUMBER() OVER ("+temp1+") row_number,temp_results.* FROM(";
 			String lastSql=queryFristSql.concat(sql.concat(queryLastSql));
 			if(arrayParameters!=null){
 				Object[] obs=new Object[2];

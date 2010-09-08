@@ -48,7 +48,7 @@ public final class Db2JdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String queryLastSql=")AS rs1) AS rs2 WHERE rn > ? AND rn <= ?";
+			String queryLastSql=") rs1) rs2 WHERE rn > ? AND rn <= ?";
 			int groupby=sql.toUpperCase().indexOf("GROUP BY");
 			int orderby=sql.toUpperCase().indexOf("ORDER BY");
 			if(orderby>groupby){
@@ -58,7 +58,7 @@ public final class Db2JdbcDao extends BaseJdbcTemplate{
 			if(orderby>0){
 				temp1 = sql.substring(orderby, groupby);
 			}
-			String queryFristSql="SELECT * FROM (SELECT rs1.*,ROWNUMBER() OVER("+temp1+") AS rn FROM(";
+			String queryFristSql="SELECT * FROM (SELECT rs1.*,ROWNUMBER() OVER("+temp1+") rn FROM(";
 			String lastSql=queryFristSql.concat(sql.concat(queryLastSql));
 			if(arrayParameters!=null){
 				Object[] obs=new Object[2];
@@ -94,7 +94,7 @@ public final class Db2JdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String queryLastSql=")AS rs1) AS rs2 WHERE rn > ? AND rn <= ?";
+			String queryLastSql=") rs1) rs2 WHERE rn > ? AND rn <= ?";
 			int groupby=sql.toUpperCase().indexOf("GROUP BY");
 			int orderby=sql.toUpperCase().indexOf("ORDER BY");
 			if(orderby>groupby){
@@ -104,7 +104,7 @@ public final class Db2JdbcDao extends BaseJdbcTemplate{
 			if(orderby>0){
 				temp1 = sql.substring(orderby, groupby);
 			}
-			String queryFristSql="SELECT * FROM (SELECT rs1.*,ROWNUMBER() OVER("+temp1+") AS rn FROM(";
+			String queryFristSql="SELECT * FROM (SELECT rs1.*,ROWNUMBER() OVER("+temp1+") rn FROM(";
 			String lastSql=queryFristSql.concat(sql.concat(queryLastSql));
 			if(arrayParameters!=null){
 				Object[] obs=new Object[2];
