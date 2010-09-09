@@ -86,11 +86,15 @@ public final class SqlServerJdbcDao extends BaseJdbcTemplate{
 					if(tempOrderBy.toUpperCase().indexOf("DESC")>=0){
 						orderByASC2 = orderByASC2.concat(tempOrderBy+dot);
 						orderByASC = orderByASC.concat(tempOrderByASC+dot);
-						orderByDESC = orderByDESC.concat(tempOrderByDESC.replaceAll("DESC", "ASC")+dot);
+						int start = tempOrderByDESC.toUpperCase().indexOf("DESC");
+						tempOrderByDESC = tempOrderByDESC.substring(0, start)+"ASC";
+						orderByDESC = orderByDESC.concat(tempOrderByDESC+dot);
 					}else if(tempOrderBy.toUpperCase().indexOf("ASC")>=0){
 						orderByASC2 = orderByASC2.concat(tempOrderBy+dot);
 						orderByASC = orderByASC.concat(tempOrderByASC+dot);
-						orderByDESC = orderByDESC.concat(tempOrderByDESC.replaceAll("ASC", "DESC")+dot);
+						int start = tempOrderByDESC.toUpperCase().indexOf("ASC");
+						tempOrderByDESC = tempOrderByDESC.substring(0, start)+"DESC";
+						orderByDESC = orderByDESC.concat(tempOrderByDESC+dot);
 					}else{
 						orderByASC2 = orderByASC2.concat(tempOrderBy+dot);
 						orderByASC = orderByASC.concat(tempOrderByASC+" ASC"+dot);
@@ -165,11 +169,15 @@ public final class SqlServerJdbcDao extends BaseJdbcTemplate{
 					if(tempOrderBy.toUpperCase().indexOf("DESC")>=0){
 						orderByASC2 = orderByASC2.concat(tempOrderBy+dot);
 						orderByASC = orderByASC.concat(tempOrderByASC+dot);
-						orderByDESC = orderByDESC.concat(tempOrderByDESC.replaceAll("DESC", "ASC")+dot);
+						int start = tempOrderByDESC.toUpperCase().indexOf("DESC");
+						tempOrderByDESC = tempOrderByDESC.substring(0, start)+"ASC";
+						orderByDESC = orderByDESC.concat(tempOrderByDESC+dot);
 					}else if(tempOrderBy.toUpperCase().indexOf("ASC")>=0){
 						orderByASC2 = orderByASC2.concat(tempOrderBy+dot);
 						orderByASC = orderByASC.concat(tempOrderByASC+dot);
-						orderByDESC = orderByDESC.concat(tempOrderByDESC.replaceAll("ASC", "DESC")+dot);
+						int start = tempOrderByDESC.toUpperCase().indexOf("ASC");
+						tempOrderByDESC = tempOrderByDESC.substring(0, start)+"DESC";
+						orderByDESC = orderByDESC.concat(tempOrderByDESC+dot);
 					}else{
 						orderByASC2 = orderByASC2.concat(tempOrderBy+dot);
 						orderByASC = orderByASC.concat(tempOrderByASC+" ASC"+dot);
