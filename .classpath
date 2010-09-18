@@ -39,7 +39,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/jtds-1.2.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/junit-4.8.2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/IKAnalyzer3.2.3Stable.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/google-collect-1.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/hibernate-validator-4.1.0.Final.jar"/>
@@ -70,5 +69,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/db2jcc.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/postgresql.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/IKAnalyzer3.2.5Stable.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
