@@ -50,8 +50,8 @@ public final class SqliteJdbcDao extends BaseJdbcTemplate{
 			querySql=querySql.concat(" LIMIT ? OFFSET ?");
 			if(arrayParameters!=null){
 				Object[] obs=new Object[2];
-				obs[0]=page.getFirst();
-				obs[1]=page.getPageSize();
+				obs[0]=page.getPageSize();
+				obs[1]=page.getFirst();
 				Object[] newprmts=ArrayUtils.addAll(arrayParameters, obs);
 				list= findListBeanByArray(querySql, clazz, newprmts);
 			}else{
@@ -85,8 +85,8 @@ public final class SqliteJdbcDao extends BaseJdbcTemplate{
 			querySql=querySql.concat(" LIMIT ? OFFSET ?");
 			if(arrayParameters!=null){
 				Object[] obs=new Object[2];
-				obs[0]=page.getFirst();
-				obs[1]=page.getPageSize();
+				obs[0]=page.getPageSize();
+				obs[1]=page.getFirst();
 				Object[] newprmts=ArrayUtils.addAll(arrayParameters, obs);
 				list= findListMapByArray(querySql,newprmts);
 			}else{
