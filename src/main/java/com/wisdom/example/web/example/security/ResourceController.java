@@ -1,6 +1,7 @@
 package com.wisdom.example.web.example.security;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.wisdom.core.security.domain.Resource;
 import com.wisdom.core.security.resource.SecurityResourceCache;
 import com.wisdom.core.utils.Page;
+import com.wisdom.example.commons.ValidationUtils;
 import com.wisdom.example.service.security.SecurityService;
 /**
  * 功能描述：资源权限管理
@@ -44,7 +46,12 @@ public class ResourceController {
 	}
 	
 	@RequestMapping(value="/save",method=RequestMethod.POST)
-	public String save(Resource resource,Long[] resourceIds) throws Exception{
+	public String save(Resource resource,Long[] resourceIds,HttpServletRequest request) throws Exception{
+		List<String> errors=ValidationUtils.validator(resource);
+		if(errors!=null){
+			request.setAttribute("errors", errors);
+			return "/errors/error";
+		}
 		resource.setName(resource.getName().toUpperCase());
 		if(resource.getId()!=null){
 			securityService.updateResource(resource);

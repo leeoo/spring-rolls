@@ -1,24 +1,17 @@
 package com.wisdom.example.web.example.search;
 
-import java.text.DateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletException;
 
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wisdom.core.utils.FormatConstants;
 import com.wisdom.core.utils.Page;
 import com.wisdom.example.commons.ValidationUtils;
 import com.wisdom.example.entity.search.News;
@@ -80,13 +73,6 @@ public class NewsController {
 		}
 		mav.setViewName("redirect:/example/search/list/1.htm");
 		return mav;
-	}
-	
-	@InitBinder
-	protected void initBinder(WebDataBinder binder)throws ServletException {
-		DateFormat dateFormat = FormatConstants.DATE_FORMAT;
-		dateFormat.setLenient(false);
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}
 	
 	@RequestMapping("/delete/{no}-{id}")

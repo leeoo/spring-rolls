@@ -5,21 +5,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -29,10 +23,10 @@ import com.wisdom.core.task.domain.RunHistory;
 import com.wisdom.core.task.domain.Task;
 import com.wisdom.core.task.service.TaskScheduledCache;
 import com.wisdom.core.task.service.TaskService;
-import com.wisdom.core.utils.FormatConstants;
 import com.wisdom.core.utils.Page;
 import com.wisdom.core.utils.ScheduledThreadUtils;
 import com.wisdom.example.commons.ExcelUtils;
+import com.wisdom.example.commons.ValidationUtils;
 import com.wisdom.example.commons.ZipUtils;
 /**
  * 功能描述：任务调度web控制器
@@ -74,6 +68,11 @@ public class TaskController {
 	
 	@RequestMapping("/save")
 	public String save(Task task,HttpServletRequest request)throws Exception{
+		List<String> errors=ValidationUtils.validator(task);
+		if(errors!=null){
+			request.setAttribute("errors", errors);
+			return "/errors/error";
+		}
 		if(task.getId()!=null){
 			taskService.updateTask(task);
 		}else{
@@ -81,13 +80,6 @@ public class TaskController {
 			taskService.saveTask(task);
 		}
 		return "redirect:/example/task/list.htm";
-	}
-	
-	@InitBinder
-	protected void initBinder(WebDataBinder binder)throws ServletException {
-		DateFormat dateFormat = FormatConstants.DATE_TIME_FORMAT;
-		dateFormat.setLenient(false);
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
 	}
 	
 	@RequestMapping("/delete/{id}")

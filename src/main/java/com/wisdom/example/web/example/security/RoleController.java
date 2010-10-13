@@ -1,5 +1,7 @@
 package com.wisdom.example.web.example.security;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.wisdom.core.security.domain.Role;
 import com.wisdom.core.utils.CollectionUtils;
 import com.wisdom.core.utils.Page;
+import com.wisdom.example.commons.ValidationUtils;
 import com.wisdom.example.service.security.SecurityService;
 /**
  * 功能描述：角色管理
@@ -46,7 +49,12 @@ public class RoleController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/save",method=RequestMethod.POST)
-	public String save(Role role,Long[] resourceIds) throws Exception{
+	public String save(Role role,Long[] resourceIds,HttpServletRequest request) throws Exception{
+		List<String> errors=ValidationUtils.validator(role);
+		if(errors!=null){
+			request.setAttribute("errors", errors);
+			return "/errors/error";
+		}
 		role.setName(role.getName().toUpperCase());
 		if(role.getId()!=null){
 			securityService.updateRole(role,CollectionUtils.arrayToList(resourceIds));

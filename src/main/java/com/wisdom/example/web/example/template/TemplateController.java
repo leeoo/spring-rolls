@@ -2,6 +2,7 @@ package com.wisdom.example.web.example.template;
 
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import com.wisdom.core.utils.Page;
 import com.wisdom.core.utils.ScheduledThreadUtils;
 import com.wisdom.example.commons.HtmlFileUtils;
+import com.wisdom.example.commons.ValidationUtils;
 import com.wisdom.example.entity.template.Template;
 import com.wisdom.example.service.template.TemplateService;
 import com.wisdom.example.service.template.TemplateThreadService;
@@ -58,6 +60,11 @@ public class TemplateController {
 	
 	@RequestMapping(value="/save",method=RequestMethod.POST)
 	public String save(Template template,HttpServletRequest request) throws Exception{
+		List<String> errors=ValidationUtils.validator(template);
+		if(errors!=null){
+			request.setAttribute("errors", errors);
+			return "/errors/error";
+		}
 		String webPath=request.getSession().getServletContext().getRealPath("");
 		if(template.getId()!=null){
 			templateService.updateTemplate(template,webPath);

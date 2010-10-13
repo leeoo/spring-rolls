@@ -1,5 +1,7 @@
 package com.wisdom.example.web.example.security;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.wisdom.core.security.domain.User;
 import com.wisdom.core.utils.CollectionUtils;
 import com.wisdom.core.utils.Page;
+import com.wisdom.example.commons.ValidationUtils;
 import com.wisdom.example.service.security.SecurityService;
 /**
  * 功能描述：账户管理
@@ -46,7 +49,12 @@ public class UserController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/save",method=RequestMethod.POST)
-	public String save(User user,Long[] roleIds) throws Exception{
+	public String save(User user,Long[] roleIds,HttpServletRequest request) throws Exception{
+		List<String> errors=ValidationUtils.validator(user);
+		if(errors!=null){
+			request.setAttribute("errors", errors);
+			return "/errors/error";
+		}
 		if(user.getId()!=null){
 			securityService.updateUser(user,CollectionUtils.arrayToList(roleIds));
 		}else{

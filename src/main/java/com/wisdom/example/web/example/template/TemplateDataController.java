@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.wisdom.core.utils.HtmlUtils;
+import com.wisdom.example.commons.ValidationUtils;
 import com.wisdom.example.entity.template.Template;
 import com.wisdom.example.entity.template.TemplateData;
 import com.wisdom.example.service.template.TemplateDataService;
@@ -72,6 +74,11 @@ public class TemplateDataController {
 	
 	@RequestMapping(value="/save",method=RequestMethod.POST)
 	public String save(@PathVariable Long templateId,TemplateData templateData,HttpServletRequest request) throws Exception{
+		List<String> errors=ValidationUtils.validator(templateData);
+		if(errors!=null){
+			request.setAttribute("errors", errors);
+			return "/errors/error";
+		}
 		templateData.setTemplateId(templateId);
 		if(templateData.getId()!=null){
 			templateDataService.updateTemplateData(templateData);
