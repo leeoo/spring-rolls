@@ -4,10 +4,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wisdom.example.dao.JdbcGenericSupportDao;
+import com.wisdom.core.orm.SimpleOrmGenericDao;
 import com.wisdom.example.dao.template.TemplateDataDao;
 import com.wisdom.example.entity.template.TemplateData;
 /**
@@ -20,15 +22,22 @@ import com.wisdom.example.entity.template.TemplateData;
  */
 @Service
 @Transactional
-public class TemplateDataService extends JdbcGenericSupportDao implements TemplateDataDao{
+public class TemplateDataService implements TemplateDataDao{
 
+	private SimpleOrmGenericDao<TemplateData, Long> templateDataDao;
+	
+	@javax.annotation.Resource
+	public void setDataSource(DataSource dataSource) {
+		templateDataDao = new SimpleOrmGenericDao<TemplateData, Long>(dataSource,TemplateData.class);
+	}
+	
 	/**
 	 * 功能描述：保存'填充模板用数据'信息
 	 * <br>@param templateData模板数据信息
 	 * <br>@throws Exception
 	 */
 	public void saveTemplateData(TemplateData templateData)throws Exception{
-		jdbcDao.executeBean(SQL_INSERT_DATA, templateData);
+		templateDataDao._save(templateData);
 	}
 	
 	/**
@@ -37,7 +46,7 @@ public class TemplateDataService extends JdbcGenericSupportDao implements Templa
 	 * <br>@throws Exception
 	 */
 	public void updateTemplateData(TemplateData templateData)throws Exception{
-		jdbcDao.executeBean(SQL_UPDATE_DATA, templateData);
+		templateDataDao.update(templateData);
 	}
 	
 	/**
@@ -46,7 +55,7 @@ public class TemplateDataService extends JdbcGenericSupportDao implements Templa
 	 * <br>@throws Exception
 	 */
 	public void deleteTemplateData(Long id)throws Exception{
-		jdbcDao.executeArray(SQL_DELETE_DATA, id);
+		templateDataDao.delete(id);
 	}
 	
 	/**
@@ -56,7 +65,7 @@ public class TemplateDataService extends JdbcGenericSupportDao implements Templa
 	 */
 	@Transactional(readOnly=true)
 	public TemplateData getTemplateDataById(Long id){
-		return (TemplateData)jdbcDao.findUniqueBeanByArray(SQL_SELECT_DATA_WHERE_ID, TemplateData.class, id);
+		return templateDataDao.get(id);
 	}
 	
 	/**
@@ -64,10 +73,9 @@ public class TemplateDataService extends JdbcGenericSupportDao implements Templa
 	 * <br>@param templateId模板主键
 	 * <br>@return '填充模板用数据'信息集合
 	 */
-	@SuppressWarnings("unchecked")
 	@Transactional(readOnly=true)
 	public List<TemplateData> getAllTemplateDataByTemplateId(Long templateId){
-		return jdbcDao.findListBeanByArray(SQL_SELECT_DATA_WHERE_TEMPLATEID, TemplateData.class,templateId);
+		return (List<TemplateData>) templateDataDao.getAllByProperty("templateId", templateId);
 	}
 	
 	/**
@@ -85,13 +93,14 @@ public class TemplateDataService extends JdbcGenericSupportDao implements Templa
 		Map<String,Object> temp=null;
 		for(TemplateData data:datas){
 			if(data.getIsUniqueResult()){
-				temp=jdbcDao.findUniqueMapByArray(data.getSqlValue());
+				temp=templateDataDao.jdbcTemplate.findUniqueMapByArray(data.getSqlValue());
 				map.put(data.getDataName(), temp);
 			}else{
-				temps=jdbcDao.findListMapByArray(data.getSqlValue());
+				temps=templateDataDao.jdbcTemplate.findListMapByArray(data.getSqlValue());
 				map.put(data.getDataName(), temps);
 			}
 		}
 		return map;
 	}
+	
 }

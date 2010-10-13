@@ -2,8 +2,15 @@ package com.wisdom.core.security.domain;
 
 import java.util.Collection;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
+import com.wisdom.core.annotation.NotMapping;
+import com.wisdom.core.annotation.NotUpdate;
+import com.wisdom.core.annotation.SimpleEntity;
+import com.wisdom.core.orm.domain.BaseEntity;
 
 /**
  * 功能描述：
@@ -13,33 +20,62 @@ import org.springframework.security.core.userdetails.UserDetails;
  * <br>创建时间：<b>下午05:50:46</b>
  * <br>文件结构：<b>spring:com.wisdom.core.security.domain/User.java</b>
  */
-public class User implements java.io.Serializable,UserDetails{
+@SimpleEntity(tableName="t_system_user_info",isUseIDCreator=true)
+public class User extends BaseEntity implements java.io.Serializable{
 
 	private static final long serialVersionUID = 533999380252969758L;
 
 	private Long id;
 	
+	@NotNull(message="登录用户名不能为空！")
+	@Size(min=3,max=20,message="登录用户名最少输入{min}个字符最多不超过{max}个字符")
+	@NotUpdate
 	private String username;
   
+	@NotNull(message="登录密码不能为空！")
+	@Size(min=6,max=40,message="登录密码最少输入{min}个字符最多不超过{max}个字符")
+	@NotUpdate
 	private String password;
 
+	@NotNull(message="姓名不能为空！")
+	@Size(min=2,max=20,message="姓名最少输入{min}个字符最多不超过{max}个字符")
 	private String cnname;
 	
+	@Size(min=5,max=20,message="移动电话最少输入{min}个字符最多不超过{max}个字符")
 	private String mobile;
 
+	@Size(min=5,max=50,message="电子邮箱最少输入{min}个字符最多不超过{max}个字符")
 	private String email;
 	
+	@NotMapping
+	private String organCode;//所属企业编码，暂时无用
+	
+	@NotUpdate
 	private boolean enabled = true;
 
+	@NotUpdate
 	private boolean accountExpired = true;
 
+	@NotUpdate
 	private boolean accountLocked = true;
 
+	@NotUpdate
 	private boolean credentialsExpired = true;
 
+	@NotMapping
 	private Collection<Role> roles;
 
+	@NotMapping
 	private Collection<GrantedAuthority> authorities;
+	
+	
+	public String getOrganCode() {
+		return organCode;
+	}
+
+	public void setOrganCode(String organCode) {
+		this.organCode = organCode;
+	}
 
 	public boolean isEnabled() {
 		return enabled;
@@ -115,22 +151,6 @@ public class User implements java.io.Serializable,UserDetails{
 
 	public Collection<GrantedAuthority> getAuthorities() {
 		return authorities;
-	}
-
-	public boolean isAccountNonExpired() {
-		return isAccountExpired();
-	}
-
-	public boolean isAccountNonLocked() {
-		return isAccountLocked();
-	}
-
-	public boolean isCredentialsNonExpired() {
-		return isCredentialsExpired();
-	}
-
-	public void setAuthorities(Collection<GrantedAuthority> authorities) {
-		this.authorities = authorities;
 	}
 
 	public Long getId() {

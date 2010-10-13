@@ -3,6 +3,9 @@ package com.wisdom.core.task.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.wisdom.core.annotation.NotMapping;
+import com.wisdom.core.annotation.SimpleEntity;
+import com.wisdom.core.orm.domain.BaseEntity;
 import com.wisdom.core.task.TaskRunnable;
 
 /**
@@ -12,7 +15,8 @@ import com.wisdom.core.task.TaskRunnable;
  * <br>创建时间：<b>上午11:21:39</b>
  * <br>文件结构：<b>spring:com.wisdom.core.task.domain/RunHistory.java</b>
  */
-public class RunHistory implements Serializable {
+@SimpleEntity(tableName="t_task_run_history",isUseIDCreator=true)
+public class RunHistory extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = -4913488329214911325L;
 	private Long id;
 	private Long taskId;
@@ -21,7 +25,9 @@ public class RunHistory implements Serializable {
 	private int runState = TaskRunnable.RUNSTATE_SUCCESS;
 	private int runType = TaskRunnable.RUNTYPE_AUTO;
 	private String errorInfo;
+	@NotMapping
 	private String runTypeName = getRunTypeName();
+	@NotMapping
 	private String runStateName = getRunStateName();
 
 	public Long getId() {

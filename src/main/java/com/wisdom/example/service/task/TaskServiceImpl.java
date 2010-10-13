@@ -2,15 +2,17 @@ package com.wisdom.example.service.task;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wisdom.core.orm.SimpleOrmGenericDao;
 import com.wisdom.core.task.domain.RunHistory;
 import com.wisdom.core.task.domain.Task;
 import com.wisdom.core.task.service.TaskScheduledCache;
 import com.wisdom.core.task.service.TaskService;
 import com.wisdom.core.utils.Page;
-import com.wisdom.example.dao.JdbcGenericSupportDao;
 import com.wisdom.example.dao.task.RunHistoryDao;
 import com.wisdom.example.dao.task.TaskDao;
 /**
@@ -23,7 +25,16 @@ import com.wisdom.example.dao.task.TaskDao;
  */
 @Service
 @Transactional
-public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskService,TaskDao,RunHistoryDao{
+public class TaskServiceImpl implements TaskService, TaskDao, RunHistoryDao{
+	
+	private SimpleOrmGenericDao<Task, Long> taskDao;
+	private SimpleOrmGenericDao<RunHistory, Long> runHistoryDao;
+	
+	@javax.annotation.Resource
+	public void setDataSource(DataSource dataSource) {
+		taskDao = new SimpleOrmGenericDao<Task, Long>(dataSource,Task.class);
+		runHistoryDao = new SimpleOrmGenericDao<RunHistory, Long>(dataSource,RunHistory.class);
+	}
 	
 	/**
 	 * 功能描述：保存任务
@@ -31,8 +42,7 @@ public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskServic
 	 * <br>@throws Exception
 	 */
 	public void saveTask(Task task)throws Exception{
-		Long id=jdbcDao.insertBeanGetGeneratedKey("t_task_info", "id", task);
-		task.setId(id);
+		taskDao._save(task);
 		TaskScheduledCache.putCache(task);
 	}
 	
@@ -42,7 +52,7 @@ public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskServic
 	 * <br>@throws Exception
 	 */
 	public void updateTask(Task task)throws Exception{
-		jdbcDao.executeBean(SQL_UPDATE_TASK, task);
+		taskDao.update(task);
 		TaskScheduledCache.removeCache(task.getId());
 		TaskScheduledCache.putCache(task);
 	}
@@ -53,7 +63,7 @@ public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskServic
 	 * <br>@throws Exception
 	 */
 	public void updateTaskNextRunTime(Task task)throws Exception{
-		jdbcDao.executeBean(SQL_UPDATE_TASK_RUNTIME, task);
+		taskDao.jdbcTemplate.executeBean(SQL_UPDATE_TASK_RUNTIME, task);
 		Task cacheTask=TaskScheduledCache.getCache(task.getId());
 		cacheTask.setNextRunTime(task.getNextRunTime());
 		TaskScheduledCache.removeCache(cacheTask.getId());
@@ -67,7 +77,7 @@ public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskServic
 	 * <br>@throws Exception
 	 */
 	public void updateTaskEnabled(Task task)throws Exception{
-		jdbcDao.executeBean(SQL_UPDATE_TASK_STATE, task);
+		taskDao.jdbcTemplate.executeBean(SQL_UPDATE_TASK_STATE, task);
 		Task cacheTask=TaskScheduledCache.getCache(task.getId());
 		cacheTask.setEnabled(task.isEnabled());
 		TaskScheduledCache.removeCache(cacheTask.getId());
@@ -80,8 +90,8 @@ public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskServic
 	 * <br>@throws Exception
 	 */
 	public void deleteTask(Long id)throws Exception{
-		jdbcDao.executeArray(SQL_DELETE_TASK, id);
-		jdbcDao.executeArray(SQL_DELETE_HISTORY_BYTASK, id);
+		taskDao.delete(id);
+		runHistoryDao.deleteByProperty("taskId", id);
 		TaskScheduledCache.removeCache(id);
 	}
 	
@@ -92,17 +102,16 @@ public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskServic
 	 */
 	@Transactional(readOnly=true)
 	public Task getTaskById(Long id){
-		return (Task)jdbcDao.findUniqueBeanByArray(SQL_SELECT_TASK_BYID, Task.class, id);
+		return taskDao.get(id);
 	}
 	
 	/**
 	 * 功能描述：返回所有任务列表
 	 * <br>@return 任务列表
 	 */
-	@SuppressWarnings("unchecked")
 	@Transactional(readOnly=true)
 	public List<Task> getAllTask(){
-		return jdbcDao.findListBean(SQL_SELECT_ALL_TASK, Task.class);
+		return (List<Task>) taskDao.getAll();
 	}
 	
 	/**
@@ -111,7 +120,7 @@ public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskServic
 	 * <br>@throws Exception
 	 */
 	public void saveRunHistory(RunHistory runHistory)throws Exception{
-		jdbcDao.executeBean(SQL_INSERT_HISTORY,runHistory);
+		runHistoryDao._save(runHistory);
 	}
 	
 	/**
@@ -120,7 +129,7 @@ public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskServic
 	 * <br>@throws Exception
 	 */
 	public void deleteRunHistory(Long id)throws Exception{
-		jdbcDao.executeArray(SQL_DELETE_HISTORY, id);
+		runHistoryDao.delete(id);
 	}
 	
 	/**
@@ -131,7 +140,7 @@ public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskServic
 	 */
 	@Transactional(readOnly=true)
 	public Page getAllRunHistoryByTaskId(Page page,Long taskId){
-		return jdbcDao.findPageListBean(SQL_SELECT_HISTORY_BYTASK, RunHistory.class, page,taskId);
+		return runHistoryDao.getAllByProperty(page, "taskId", taskId);
 	}
 
 	/**
@@ -139,10 +148,9 @@ public class TaskServiceImpl extends JdbcGenericSupportDao implements TaskServic
 	 * <br>@param taskId任务主键
 	 * <br>@return 执行历史信息
 	 */
-	@SuppressWarnings("unchecked")
 	@Transactional(readOnly=true)
 	public List<RunHistory> getAllRunHistoryByTaskId(Long taskId){
-		return jdbcDao.findListBeanByArray(SQL_SELECT_HISTORY_BYTASK, RunHistory.class,taskId);
+		return (List<RunHistory>) runHistoryDao.getAllByProperty("taskId", taskId);
 	}
 	
 }

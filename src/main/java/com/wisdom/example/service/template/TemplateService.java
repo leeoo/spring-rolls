@@ -4,15 +4,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wisdom.core.orm.SimpleOrmGenericDao;
 import com.wisdom.core.utils.Page;
 import com.wisdom.example.commons.FileUtils;
 import com.wisdom.example.commons.HtmlFileUtils;
-import com.wisdom.example.dao.JdbcGenericSupportDao;
 import com.wisdom.example.dao.template.TemplateDao;
 import com.wisdom.example.entity.template.Template;
+import com.wisdom.example.entity.template.TemplateData;
 /**
  * 功能描述：
  * 模板管理
@@ -23,7 +26,16 @@ import com.wisdom.example.entity.template.Template;
  */
 @Service
 @Transactional
-public class TemplateService extends JdbcGenericSupportDao implements TemplateDao{
+public class TemplateService implements TemplateDao{
+	
+	private SimpleOrmGenericDao<Template, Long> templateDao;
+	private SimpleOrmGenericDao<TemplateData, Long> templateDataDao;
+	
+	@javax.annotation.Resource
+	public void setDataSource(DataSource dataSource) {
+		templateDao = new SimpleOrmGenericDao<Template, Long>(dataSource,Template.class);
+		templateDataDao = new SimpleOrmGenericDao<TemplateData, Long>(dataSource,TemplateData.class);
+	}
 	
 	/**
 	 * 功能描述：保存模板信息
@@ -32,7 +44,7 @@ public class TemplateService extends JdbcGenericSupportDao implements TemplateDa
 	 * <br>@throws Exception
 	 */
 	public void saveTemplate(Template template,String webPath)throws Exception{
-		jdbcDao.executeBean(SQL_INSERT_TEMPLATE, template);
+		templateDao._save(template);
 		copy(template.getFile(), webPath+template.getTemplatePath(),null);
 	}
 	
@@ -44,7 +56,7 @@ public class TemplateService extends JdbcGenericSupportDao implements TemplateDa
 	 */
 	public void updateTemplate(Template template,String webPath)throws Exception{
 		Template templateOld=getTemplateById(template.getId());
-		jdbcDao.executeBean(SQL_UPDATE_TEMPLATE, template);
+		templateDao.update(template);
 		copy(template.getFile(), webPath+template.getTemplatePath(),webPath+templateOld.getTemplatePath());
 	}
 	
@@ -56,8 +68,8 @@ public class TemplateService extends JdbcGenericSupportDao implements TemplateDa
 	 */
 	public void deleteTemplate(Long id,String webPath)throws Exception{
 		Template template=getTemplateById(id);
-		jdbcDao.executeArray(SQL_DELETE_TEMPLATE, id);
-		jdbcDao.executeArray(SQL_DELETE_DATA_WHERE_TEMPLATEID, id);
+		templateDao.delete(id);
+		templateDataDao.deleteByProperty("templateId", id);
 		try{
 			FileUtils.forceDelete(new File(webPath+template.getTemplatePath()));
 		}catch (Exception e) {}
@@ -70,7 +82,7 @@ public class TemplateService extends JdbcGenericSupportDao implements TemplateDa
 	 */
 	@Transactional(readOnly=true)
 	public Template getTemplateById(Long id){
-		return (Template)jdbcDao.findUniqueBeanByArray(SQL_SELECT_WHERE_TEMPLATE, Template.class, id);
+		return templateDao.get(id);
 	}
 	
 	/**
@@ -78,9 +90,8 @@ public class TemplateService extends JdbcGenericSupportDao implements TemplateDa
 	 * <br>@return 模板信息集合
 	 */
 	@Transactional(readOnly=true)
-	@SuppressWarnings("unchecked")
 	public List<Template> getAllTemplate(){
-		return jdbcDao.findListBean(SQL_SELECT_ALL_TEMPLATE, Template.class);
+		return (List<Template>) templateDao.getAll();
 	}
 
 	/**
@@ -90,7 +101,7 @@ public class TemplateService extends JdbcGenericSupportDao implements TemplateDa
 	 */
 	@Transactional(readOnly=true)
 	public Page getAllTemplate(Page page){
-		return jdbcDao.findPageListBean(SQL_SELECT_ALL_TEMPLATE, Template.class, page);
+		return templateDao.getAll(page);
 	}
 	
 	/**

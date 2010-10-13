@@ -2,9 +2,12 @@ package com.wisdom.example.service.security;
 
 import java.util.Collection;
 
+import javax.sql.DataSource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wisdom.core.orm.SimpleOrmGenericDao;
 import com.wisdom.core.security.domain.Resource;
 import com.wisdom.core.security.domain.Role;
 import com.wisdom.core.security.domain.User;
@@ -12,7 +15,6 @@ import com.wisdom.core.security.resource.SecurityResourceCache;
 import com.wisdom.core.security.service.UserService;
 import com.wisdom.core.utils.EncodeUtils;
 import com.wisdom.core.utils.Page;
-import com.wisdom.example.dao.JdbcGenericSupportDao;
 
 /**
  * 功 能 描 述:<br>
@@ -24,72 +26,81 @@ import com.wisdom.example.dao.JdbcGenericSupportDao;
 @Service
 @Transactional
 @SuppressWarnings("unchecked")
-public class SecurityService extends JdbcGenericSupportDao implements UserService{
+public class SecurityService implements UserService{
+	
+	private SimpleOrmGenericDao<User, Long> userDao;
+	private SimpleOrmGenericDao<Role, Long> roleDao;
+	private SimpleOrmGenericDao<Resource, Long> resourceDao;
+	
+	@javax.annotation.Resource
+	public void setDataSource(DataSource dataSource) {
+		userDao = new SimpleOrmGenericDao<User, Long>(dataSource,User.class);
+		roleDao = new SimpleOrmGenericDao<Role, Long>(dataSource,Role.class);
+		resourceDao = new SimpleOrmGenericDao<Resource, Long>(dataSource,Resource.class);
+	}
 	
 	@Transactional(readOnly=true)
 	public User getUser(Long id) {
-		String sql="SELECT id, username, password, cnname, email,mobile, enabled, account_expired, account_locked, credentials_expired FROM t_system_user_info WHERE id=?";
-		return (User)jdbcDao.findUniqueBeanByArray(sql, User.class, id);
+		return userDao.get(id);
 	}
 	
 	@Transactional(readOnly=true)
 	public Collection<User> getAllUsers() {
-		String sql="SELECT id, username, password, cnname, email,mobile, enabled, account_expired, account_locked, credentials_expired FROM t_system_user_info";
-		return jdbcDao.findListBean(sql, User.class);
+		return userDao.getAll();
 	}
 	
 	@Transactional(readOnly=true)
 	public Page getAllUsers(Page page) {
-		String sql="SELECT id, username, password, cnname, email,mobile, enabled, account_expired, account_locked, credentials_expired FROM t_system_user_info";
-		return jdbcDao.findPageListBean(sql, User.class, page);
+		return userDao.getAll(page);
 	}
 	
 	@Transactional(readOnly=true)
 	public User getUserByLoginName(String loginName) {
-		String sql="SELECT id, username, password, cnname, email,mobile, enabled, account_expired, account_locked, credentials_expired FROM t_system_user_info WHERE username=?";
-		return (User)jdbcDao.findUniqueBeanByArray(sql, User.class, loginName);
+		try{
+			return userDao.getAllByProperty("username", loginName).iterator().next();
+		}catch (Exception e) {
+		}
+		return null;
 	}
 
 	public void saveUser(User user,Collection<Long> ids) throws Exception {
 		String psw=EncodeUtils.getMd5PasswordEncoder(user.getPassword(), user.getUsername());
 		user.setPassword(psw);
-		long userId=jdbcDao.insertBeanGetGeneratedKey("t_system_user_info", "id", user);
-		user.setId(userId);
+		userDao._save(user);
 		for(long roleId:ids){
-			jdbcDao.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",userId,roleId);
+			userDao.jdbcTemplate.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),roleId);
 		}
 	}
 
 	public void saveUser(User user) throws Exception {
 		String psw=EncodeUtils.getMd5PasswordEncoder(user.getPassword(), user.getUsername());
 		user.setPassword(psw);
-		long userId=jdbcDao.insertBeanGetGeneratedKey("t_system_user_info", "id", user);
-		user.setId(userId);
+		userDao._save(user);
 		if(user.getRoles()!=null){
 			for(Role role:user.getRoles()){
-				jdbcDao.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",userId,role.getId());
+				userDao.jdbcTemplate.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),role.getId());
 			}
 		}
 	}
 	
 	public void updateUser(User user,Collection<Long> ids) throws Exception {
-		String sql="UPDATE t_system_user_info SET cnname=:cnname, email=:email,mobile=:mobile, enabled=:enabled WHERE id=:id";
-		jdbcDao.executeBean(sql, user);
-		jdbcDao.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",user.getId());
+		String sql="UPDATE t_system_user_info SET cnname=:cnname, email=:email,mobile=:mobile WHERE id=:id";
+		userDao.jdbcTemplate.executeBean(sql, user);
+		userDao.jdbcTemplate.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",user.getId());
 		if(ids!=null){
 			for(long roleId:ids){
-				jdbcDao.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),roleId);
+				userDao.jdbcTemplate.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),roleId);
 			}
 		}
 	}
 
 	public void updateUser(User user) throws Exception {
-		String sql="UPDATE t_system_user_info SET cnname=:cnname, email=:email,mobile=:mobile, enabled=:enabled WHERE id=:id";
-		jdbcDao.executeBean(sql, user);
-		jdbcDao.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",user.getId());
+		String sql="UPDATE t_system_user_info SET cnname=:cnname, email=:email,mobile=:mobile WHERE id=:id";
+		userDao.jdbcTemplate.executeBean(sql, user);
+		userDao.jdbcTemplate.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",user.getId());
 		if(user.getRoles()!=null){
 			for(Role role:user.getRoles()){
-				jdbcDao.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),role.getId());
+				userDao.jdbcTemplate.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),role.getId());
 			}
 		}
 	}
@@ -98,17 +109,17 @@ public class SecurityService extends JdbcGenericSupportDao implements UserServic
 		String psw=EncodeUtils.getMd5PasswordEncoder(user.getPassword(), user.getUsername());
 		user.setPassword(psw);
 		String sql="UPDATE t_system_user_info SET password=:password WHERE id=:id";
-		jdbcDao.executeBean(sql, user);
+		userDao.jdbcTemplate.executeBean(sql, user);
 	}
 	
 	public void updateUserEnabled(Long id)throws Exception{
 		String sql="UPDATE t_system_user_info SET enabled=1 WHERE id=?";
-		jdbcDao.executeArray(sql, id);
+		userDao.jdbcTemplate.executeArray(sql, id);
 	}
 
 	public void updateUserDisabled(Long id)throws Exception{
 		String sql="UPDATE t_system_user_info SET enabled=0 WHERE id=?";
-		jdbcDao.executeArray(sql, id);
+		userDao.jdbcTemplate.executeArray(sql, id);
 	}
 
 	public void updateUserPassword(User user,String oldPwd)throws Exception{
@@ -120,125 +131,121 @@ public class SecurityService extends JdbcGenericSupportDao implements UserServic
 		String psw=EncodeUtils.getMd5PasswordEncoder(user.getPassword(), user.getUsername());
 		user.setPassword(psw);
 		String sql="UPDATE t_system_user_info SET password=:password WHERE id=:id";
-		jdbcDao.executeBean(sql, user);
+		userDao.jdbcTemplate.executeBean(sql, user);
 	}
 
 	public void deleteUser(Long id) throws Exception{
-		jdbcDao.executeArray("DELETE FROM t_system_user_info WHERE id=?",id);
-		jdbcDao.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",id);
+		userDao.delete(id);
+		userDao.jdbcTemplate.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",id);
 	}
 
 	@Transactional(readOnly=true)
 	public Collection<Role> getAllRoles() {
-		return jdbcDao.findListBean("SELECT id, name, cnname FROM t_system_role_info", Role.class);
+		return roleDao.getAll();
 	}
 	
 	@Transactional(readOnly=true)
 	public Page getAllRoles(Page page) {
-		String sql="SELECT id, name, cnname FROM t_system_role_info";
-		return jdbcDao.findPageListBean(sql, Role.class, page);
+		return roleDao.getAll(page);
 	}
 	
 	@Transactional(readOnly=true)
-	public Collection<Role> getRolesByUserId(long userId) {
+	public Collection<Role> getRolesByUserId(Long userId) {
 		String sql="SELECT id, name, cnname FROM t_system_role_info WHERE id in(SELECT ur.role_id FROM t_system_user_role ur WHERE ur.user_id=?)";
-		return jdbcDao.findListBeanByArray(sql, Role.class,userId);
+		return roleDao.jdbcTemplate.findListBeanByArray(sql, Role.class,userId);
 	}
 
 	@Transactional(readOnly=true)
 	public Role getRole(Long id) {
-		String sql="SELECT id, name, cnname FROM t_system_role_info WHERE id=?";
-		return (Role)jdbcDao.findUniqueBeanByArray(sql, Role.class, id);
+		return roleDao.get(id);
 	}
 
 	public void saveRole(Role role,Collection<Long> ids) throws Exception {
-		long roleId=jdbcDao.insertBeanGetGeneratedKey("t_system_role_info", "id", role);
-		role.setId(roleId);
+		roleDao._save(role);
 		if(ids!=null){
 			for(long resourceId:ids){
-				jdbcDao.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",roleId,resourceId);
+				roleDao.jdbcTemplate.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",role.getId(),resourceId);
 			}
 		}
 	}
 	
 	public void saveRole(Role role)throws Exception{
-		long roleId=jdbcDao.insertBeanGetGeneratedKey("t_system_role_info", "id", role);
-		role.setId(roleId);
+		roleDao._save(role);
 		if(role.getResources()!=null){
 			for(Resource resource:role.getResources()){
-				jdbcDao.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",roleId,resource.getId());
+				roleDao.jdbcTemplate.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",role.getId(),resource.getId());
 			}
 		}
 	}
 	
 	public void updateRole(Role role,Collection<Long> ids) throws Exception {
-		jdbcDao.executeBean("UPDATE t_system_role_info SET name=:name, cnname=:cnname WHERE id=:id", role);
-		jdbcDao.executeArray("DELETE FROM t_system_role_resource WHERE role_id=?", role.getId());
+		roleDao.update(role);
+		roleDao.jdbcTemplate.executeArray("DELETE FROM t_system_role_resource WHERE role_id=?", role.getId());
 		if(ids!=null){
 			for(long resourceId:ids){
-				jdbcDao.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",role.getId(),resourceId);
+				roleDao.jdbcTemplate.executeArray("INSERT INTO t_system_role_resource(role_id,resource_id) VALUES(?,?)",role.getId(),resourceId);
 			}
 		}
 	}
 
 	public void deleteRole(Long id) throws Exception {
-		jdbcDao.executeArray("DELETE FROM t_system_role_info WHERE id=?", id);
-		jdbcDao.executeArray("DELETE FROM t_system_user_role WHERE role_id=?", id);
-		jdbcDao.executeArray("DELETE FROM t_system_role_resource WHERE role_id=?", id);
+		roleDao.delete(id);
+		roleDao.jdbcTemplate.executeArray("DELETE FROM t_system_user_role WHERE role_id=?", id);
+		roleDao.jdbcTemplate.executeArray("DELETE FROM t_system_role_resource WHERE role_id=?", id);
 	}
 	
 	public void saveResource(Resource resource) throws Exception{
-		String sql="INSERT INTO t_system_resource_info(name, path,cnname) VALUES(:name,:path,:cnname)";
-		jdbcDao.executeBean(sql, resource);
+		resourceDao._save(resource);
 		SecurityResourceCache.putCache(resource);
 	}
 
 	public void updateResource(Resource resource)throws Exception{
-		String sql="UPDATE t_system_resource_info SET name=:name, path=:path,cnname=:cnname WHERE id=:id";
-		jdbcDao.executeBean(sql, resource);
+		resourceDao.update(resource);
 		SecurityResourceCache.removeCache(resource.getPath());
 		SecurityResourceCache.putCache(resource);
 	}
 
 	public void deleteResource(Long id)throws Exception{
 		String path=getResource(id).getPath();
-		jdbcDao.executeArray("DELETE FROM t_system_resource_info WHERE id=?", id);
-		jdbcDao.executeArray("DELETE FROM t_system_role_resource WHERE resource_id=?", id);
+		resourceDao.delete(id);
+		roleDao.jdbcTemplate.executeArray("DELETE FROM t_system_role_resource WHERE resource_id=?", id);
 		SecurityResourceCache.removeCache(path);
 	}
 
 	@Transactional(readOnly=true)
 	public Collection<Resource> getAllResources() {
-		return jdbcDao.findListBean("SELECT id, name, path, cnname FROM t_system_resource_info", Resource.class);
+		return resourceDao.getAll();
 	}
 	
 	@Transactional(readOnly=true)
 	public Page getAllResources(Page page) {
-		String sql="SELECT id, name, path, cnname FROM t_system_resource_info";
-		return jdbcDao.findPageListBean(sql, Resource.class, page);
+		return resourceDao.getAll(page);
 	}
 
 	@Transactional(readOnly=true)
 	public Resource getResource(Long id) {
-		String sql="SELECT id, name, path, cnname FROM t_system_resource_info WHERE id=?";
-		return (Resource)jdbcDao.findUniqueBeanByArray(sql, Resource.class,id);
+		return resourceDao.get(id);
 	}
 
 	@Transactional(readOnly=true)
 	public Resource getResource(String resPath) {
-		return (Resource)jdbcDao.findUniqueBeanByArray("SELECT id, name, path, cnname FROM t_system_resource_info WHERE path=?", Resource.class, resPath);
+		try{
+			return resourceDao.getAllByProperty("path", resPath).iterator().next();
+		}catch (Exception e) {
+		}
+		return null;
 	}
 	
 	@Transactional(readOnly=true)
 	public Collection<Resource> getResourcesByRoleId(long roleId){
 		String sql="SELECT id, name, path, cnname FROM t_system_resource_info WHERE id in(SElECT rr.resource_id FROM t_system_role_resource rr WHERE rr.role_id =?)";
-		return jdbcDao.findListBeanByArray(sql, Resource.class,roleId);
+		return resourceDao.jdbcTemplate.findListBeanByArray(sql, Resource.class,roleId);
 	}
 
 	@Transactional(readOnly=true)
 	public Collection<Resource> getResourcesByUserName(String loginName){
 		String sql="SELECT id, name, path, cnname FROM t_system_resource_info WHERE id in(SElECT rr.resource_id FROM t_system_role_resource rr WHERE rr.role_id in(SELECT ur.role_id FROM t_system_user_role ur WHERE ur.user_id in(SELECT u.id FROM t_system_user_info u WHERE u.username=?)))";
-		return jdbcDao.findListBeanByArray(sql, Resource.class,loginName);
+		return resourceDao.jdbcTemplate.findListBeanByArray(sql, Resource.class,loginName);
 	}
 	
 }
