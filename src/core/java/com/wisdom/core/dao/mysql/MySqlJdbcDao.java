@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.util.Assert;
 
 import com.wisdom.core.dao.BaseJdbcTemplate;
@@ -50,19 +49,9 @@ public final class MySqlJdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			querySql=querySql.concat(" LIMIT ?,?");
-			if(arrayParameters!=null){
-				Object[] obs=new Object[2];
-				obs[0]=page.getFirst();
-				obs[1]=page.getPageSize();
-				Object[] newprmts=ArrayUtils.addAll(arrayParameters, obs);
-				list= findListBeanByArray(querySql, clazz, newprmts);
-			}else{
-				list= findListBeanByArray(querySql, clazz, page.getFirst(),page.getPageSize());
-			}
-		}else{
-			list= findListBeanByArray(querySql, clazz, arrayParameters);
+			querySql=querySql.concat(" LIMIT "+page.getFirst()+","+page.getPageSize());
 		}
+		list= findListBeanByArray(querySql, clazz, arrayParameters);
 		page.setResult(list);
 		return page;
 	}
@@ -85,19 +74,9 @@ public final class MySqlJdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			querySql=querySql.concat(" LIMIT ?,?");
-			if(arrayParameters!=null){
-				Object[] obs=new Object[2];
-				obs[0]=page.getFirst();
-				obs[1]=page.getPageSize();
-				Object[] newprmts=ArrayUtils.addAll(arrayParameters, obs);
-				list= findListMapByArray(querySql,newprmts);
-			}else{
-				list= findListMapByArray(querySql,page.getFirst(),page.getPageSize());
-			}
-		}else{
-			list= findListMapByArray(querySql, arrayParameters);
+			querySql=querySql.concat(" LIMIT "+page.getFirst()+","+page.getPageSize());
 		}
+		list= findListMapByArray(querySql,arrayParameters);
 		page.setResult(list);
 		return page;
 	}

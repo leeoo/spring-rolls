@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.util.Assert;
 
 import com.wisdom.core.dao.BaseJdbcTemplate;
@@ -47,19 +46,9 @@ public final class SqliteJdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			querySql=querySql.concat(" LIMIT ? OFFSET ?");
-			if(arrayParameters!=null){
-				Object[] obs=new Object[2];
-				obs[0]=page.getPageSize();
-				obs[1]=page.getFirst();
-				Object[] newprmts=ArrayUtils.addAll(arrayParameters, obs);
-				list= findListBeanByArray(querySql, clazz, newprmts);
-			}else{
-				list= findListBeanByArray(querySql, clazz, page.getPageSize(),page.getFirst());
-			}
-		}else{
-			list= findListBeanByArray(querySql, clazz, arrayParameters);
+			querySql=querySql.concat(" LIMIT "+page.getPageSize()+" OFFSET "+page.getFirst());
 		}
+		list= findListBeanByArray(querySql, clazz, arrayParameters);
 		page.setResult(list);
 		return page;
 	}
@@ -82,19 +71,9 @@ public final class SqliteJdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			querySql=querySql.concat(" LIMIT ? OFFSET ?");
-			if(arrayParameters!=null){
-				Object[] obs=new Object[2];
-				obs[0]=page.getPageSize();
-				obs[1]=page.getFirst();
-				Object[] newprmts=ArrayUtils.addAll(arrayParameters, obs);
-				list= findListMapByArray(querySql,newprmts);
-			}else{
-				list= findListMapByArray(querySql,page.getPageSize(),page.getFirst());
-			}
-		}else{
-			list= findListMapByArray(querySql, arrayParameters);
+			querySql=querySql.concat(" LIMIT "+page.getPageSize()+" OFFSET "+page.getFirst());
 		}
+		list= findListMapByArray(querySql, arrayParameters);
 		page.setResult(list);
 		return page;
 	}

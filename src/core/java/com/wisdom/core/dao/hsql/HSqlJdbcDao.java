@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.util.Assert;
 
 import com.wisdom.core.dao.BaseJdbcTemplate;
@@ -47,15 +46,7 @@ public final class HSqlJdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			if(arrayParameters!=null){
-				Object[] obs=new Object[2];
-				obs[0]=page.getFirst();
-				obs[1]=page.getPageSize();
-				Object[] newprmts=ArrayUtils.addAll(obs,arrayParameters);
-				list= findListBeanByArray("SELECT LIMIT ? ? "+sql.substring(7,sql.length()), clazz, newprmts);
-			}else{
-				list= findListBeanByArray("SELECT LIMIT ? ? "+sql.toString().substring(7,sql.length()), clazz, page.getFirst(),page.getPageSize());
-			}
+			list= findListBeanByArray("SELECT LIMIT "+page.getFirst()+" "+page.getPageSize()+" "+sql.substring(7,sql.length()), clazz, arrayParameters);
 		}else{
 			list= findListBeanByArray(sql, clazz, arrayParameters);
 		}
@@ -80,15 +71,7 @@ public final class HSqlJdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			if(arrayParameters!=null){
-				Object[] obs=new Object[2];
-				obs[0]=page.getFirst();
-				obs[1]=page.getPageSize();
-				Object[] newprmts=ArrayUtils.addAll(obs,arrayParameters);
-				list= findListMapByArray("SELECT LIMIT ? ? "+sql.substring(7,sql.length()),newprmts);
-			}else{
-				list= findListMapByArray("SELECT LIMIT ? ? "+sql.substring(7,sql.length()),page.getFirst(),page.getPageSize());
-			}
+			list= findListMapByArray("SELECT LIMIT "+page.getFirst()+" "+page.getPageSize()+" "+sql.substring(7,sql.length()),arrayParameters);
 		}else{
 			list= findListMapByArray(sql, arrayParameters);
 		}

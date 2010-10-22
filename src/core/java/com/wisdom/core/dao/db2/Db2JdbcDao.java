@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.util.Assert;
 
 import com.wisdom.core.dao.BaseJdbcTemplate;
@@ -48,7 +47,7 @@ public final class Db2JdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String queryLastSql=") rs1) rs2 WHERE rn > ? AND rn <= ?";
+			String queryLastSql=") rs1) rs2 WHERE rn > "+page.getFirst()+" AND rn <= "+page.getFirst()+page.getPageSize();
 			int groupby=sql.toUpperCase().indexOf("GROUP BY");
 			int orderby=sql.toUpperCase().indexOf("ORDER BY");
 			if(orderby>groupby){
@@ -60,15 +59,7 @@ public final class Db2JdbcDao extends BaseJdbcTemplate{
 			}
 			String queryFristSql="SELECT * FROM (SELECT rs1.*,ROWNUMBER() OVER("+temp1+") rn FROM(";
 			String lastSql=queryFristSql.concat(sql.concat(queryLastSql));
-			if(arrayParameters!=null){
-				Object[] obs=new Object[2];
-				obs[0]=page.getFirst();
-				obs[1]=page.getFirst()+page.getPageSize();
-				Object[] newprmts=ArrayUtils.addAll(arrayParameters, obs);
-				list= findListBeanByArray(lastSql, clazz, newprmts);
-			}else{
-				list= findListBeanByArray(lastSql, clazz, page.getFirst(),page.getFirst()+page.getPageSize());
-			}
+			list= findListBeanByArray(lastSql, clazz, arrayParameters);
 		}else{
 			list= findListBeanByArray(sql, clazz, arrayParameters);
 		}
@@ -94,7 +85,7 @@ public final class Db2JdbcDao extends BaseJdbcTemplate{
 		}
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String queryLastSql=") rs1) rs2 WHERE rn > ? AND rn <= ?";
+			String queryLastSql=") rs1) rs2 WHERE rn > "+page.getFirst()+" AND rn <= "+page.getFirst()+page.getPageSize();
 			int groupby=sql.toUpperCase().indexOf("GROUP BY");
 			int orderby=sql.toUpperCase().indexOf("ORDER BY");
 			if(orderby>groupby){
@@ -106,15 +97,7 @@ public final class Db2JdbcDao extends BaseJdbcTemplate{
 			}
 			String queryFristSql="SELECT * FROM (SELECT rs1.*,ROWNUMBER() OVER("+temp1+") rn FROM(";
 			String lastSql=queryFristSql.concat(sql.concat(queryLastSql));
-			if(arrayParameters!=null){
-				Object[] obs=new Object[2];
-				obs[0]=page.getFirst();
-				obs[1]=page.getFirst()+page.getPageSize();
-				Object[] newprmts=ArrayUtils.addAll(arrayParameters, obs);
-				list= findListMapByArray(lastSql, newprmts);
-			}else{
-				list= findListMapByArray(lastSql,page.getFirst(),page.getFirst()+page.getPageSize());
-			}
+			list= findListMapByArray(lastSql, arrayParameters);
 		}else{
 			list= findListMapByArray(sql,arrayParameters);
 		}

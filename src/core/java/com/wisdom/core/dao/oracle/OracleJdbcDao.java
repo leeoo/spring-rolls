@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.util.Assert;
 
 import com.wisdom.core.dao.BaseJdbcTemplate;
@@ -48,17 +47,9 @@ public final class OracleJdbcDao extends BaseJdbcTemplate{
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
 			String querySqlFirst="SELECT * FROM ( SELECT tempt.*,ROWNUM rn FROM ( ";
-			String querySqlLast=" ) tempt WHERE ROWNUM<=? ) WHERE rn>?";
+			String querySqlLast=" ) tempt WHERE ROWNUM<="+page.getFirst()+page.getPageSize()+" ) WHERE rn>"+page.getFirst();
 			String lastSql=querySqlFirst.concat(sql.concat(querySqlLast));
-			if(arrayParameters!=null){
-				Object[] obs=new Object[2];
-				obs[0]=page.getFirst()+page.getPageSize();
-				obs[1]=page.getFirst();
-				Object[] newprmts=ArrayUtils.addAll(arrayParameters, obs);
-				list= findListBeanByArray(lastSql, clazz, newprmts);
-			}else{
-				list= findListBeanByArray(lastSql, clazz, page.getFirst()+page.getPageSize(),page.getFirst());
-			}
+			list= findListBeanByArray(lastSql, clazz, arrayParameters);
 		}else{
 			list= findListBeanByArray(sql, clazz, arrayParameters);
 		}
@@ -84,17 +75,9 @@ public final class OracleJdbcDao extends BaseJdbcTemplate{
 		List list=null;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
 			String querySqlFirst="SELECT * FROM ( SELECT tempt.*,ROWNUM rn FROM ( ";
-			String querySqlLast=" ) tempt WHERE ROWNUM<=? ) WHERE rn>?";
+			String querySqlLast=" ) tempt WHERE ROWNUM<="+page.getFirst()+page.getPageSize()+" ) WHERE rn>"+page.getFirst();
 			String lastSql=querySqlFirst.concat(sql.concat(querySqlLast));
-			if(arrayParameters!=null){
-				Object[] obs=new Object[2];
-				obs[0]=page.getFirst()+page.getPageSize();
-				obs[1]=page.getFirst();
-				Object[] newprmts=ArrayUtils.addAll(arrayParameters, obs);
-				list= findListMapByArray(lastSql, newprmts);
-			}else{
-				list= findListMapByArray(lastSql,page.getFirst()+page.getPageSize(),page.getFirst());
-			}
+			list= findListMapByArray(lastSql, arrayParameters);
 		}else{
 			list= findListMapByArray(sql, arrayParameters);
 		}
