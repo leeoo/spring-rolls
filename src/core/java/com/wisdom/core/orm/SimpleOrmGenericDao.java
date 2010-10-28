@@ -16,6 +16,7 @@ import com.wisdom.core.annotation.DynamicWhere;
 import com.wisdom.core.annotation.Index;
 import com.wisdom.core.annotation.Reference;
 import com.wisdom.core.annotation.SimpleEntity;
+import com.wisdom.core.dao.CountSqlBuilder;
 import com.wisdom.core.dao.GenericDaoFactory;
 import com.wisdom.core.dao.IDCreator;
 import com.wisdom.core.dao.JdbcTemplate;
@@ -362,6 +363,25 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 		logger.info(sql);
 		return jdbcTemplate.findListBeanByArray(sql, clazz, value);
 	}
+	
+	/**
+	 * 根据某个实体的属性值判断是否存在
+	 * @param name属性名或字段名
+	 * @param value所载值
+	 * @return 是否存在(true为存在)
+	 */
+	public boolean isExist(String name,Object value){
+		validation();
+		Assert.notNull(name,"属性名或字段名不能为空！");
+		Assert.notNull(value,"属性值或字段值不能为空！");
+		String sql=getSqlByProperty(name);
+		long count=jdbcTemplate.findLongByArray(CountSqlBuilder.getCountSql(sql), value);
+		if(count>0){
+			return true;
+		}
+		return false;
+	}
+	
 	
 	/**
 	 * 返回所有实体集合
