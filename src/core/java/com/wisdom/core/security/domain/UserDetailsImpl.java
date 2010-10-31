@@ -1,0 +1,61 @@
+package com.wisdom.core.security.domain;
+
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+/**
+ * 功能描述(Description):<br><b>
+ * 实现UserDetails
+ * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
+ * <br>建立日期(Create Date): <b>2010-10-31下午04:25:01</b>
+ * <br>项目名称(Project Name): <b>wisdom.3.0</b>
+ * <br>包及类名(Package Class): <b>com.wisdom.core.security.domain.UserDetailsImpl.java</b>
+ */
+public class UserDetailsImpl extends User implements UserDetails{
+	
+	private static final long serialVersionUID = 9068370464939309858L;
+	
+	public UserDetailsImpl(User user,Collection<GrantedAuthority> authorities){
+		setId(user.getId());
+		setUsername(user.getUsername());
+		setCnname(user.getCnname());
+		setPassword(user.getPassword());
+		setMobile(user.getMobile());
+		setEmail(user.getEmail());
+		setOrganCode(user.getOrganCode());
+		setBusinessCode(user.getBusinessCode());
+		setInsertDate(user.getInsertDate());
+		setUpdateDate(user.getUpdateDate());
+		setOperatorIp(user.getOperatorIp());
+		setOperatorName(user.getOperatorName());
+		setAccountExpired(user.isAccountExpired());
+		setAccountLocked(user.isAccountLocked());
+		setCredentialsExpired(user.isCredentialsExpired());
+		setEnabled(user.isEnabled());
+		this.authorities = authorities;
+	}
+	
+	private Collection<GrantedAuthority> authorities;
+
+	public Collection<GrantedAuthority> getAuthorities() {
+		return authorities;
+	}
+
+	public boolean isAccountNonExpired() {
+		return isAccountExpired();
+	}
+
+	public boolean isAccountNonLocked() {
+		return isAccountLocked();
+	}
+
+	public boolean isCredentialsNonExpired() {
+		return isCredentialsExpired();
+	}
+
+	public void setAuthorities(Collection<GrantedAuthority> authorities) {
+		this.authorities = authorities;
+	}
+
+}
