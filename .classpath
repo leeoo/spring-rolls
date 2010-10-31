@@ -44,18 +44,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/hibernate-validator-4.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/lucene-core-3.0.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/cache/ehcache-core-2.2.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/org.springframework.test-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.aop-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.asm-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.beans-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.context-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.context.support-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.core-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.expression-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.jdbc-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.transaction-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web-3.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web.servlet-3.0.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-config-3.1.0.M1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-core-3.1.0.M1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-taglibs-3.1.0.M1.jar"/>
@@ -70,5 +58,17 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/postgresql.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/IKAnalyzer3.2.5Stable.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/bonecp-ow-0.7.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/org.springframework.test-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.aop-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.asm-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.beans-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.context-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.context.support-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.core-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.expression-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.jdbc-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.transaction-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
