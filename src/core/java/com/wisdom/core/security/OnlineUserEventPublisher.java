@@ -2,9 +2,9 @@ package com.wisdom.core.security;
 
 import javax.servlet.http.HttpSessionEvent;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
-import com.wisdom.core.security.domain.User;
 import com.wisdom.core.security.resource.SecurityUtils;
 /**
  * 功 能 描 述:<br>
@@ -16,7 +16,7 @@ import com.wisdom.core.security.resource.SecurityUtils;
 public class OnlineUserEventPublisher extends HttpSessionEventPublisher{
 	
 	public void sessionCreated(HttpSessionEvent event) {
-		User user=SecurityUtils.getCurrentUser();
+		UserDetails user=SecurityUtils.getCurrentUser();
 		if(user!=null){
 			OnlineUserCache.put(user);
 		}
@@ -24,7 +24,7 @@ public class OnlineUserEventPublisher extends HttpSessionEventPublisher{
 	}
 
 	public void sessionDestroyed(HttpSessionEvent event) {
-		User user=SecurityUtils.getCurrentUser();
+		UserDetails user=SecurityUtils.getCurrentUser();
 		if(user!=null){
 			OnlineUserCache.remove(user);
 		}

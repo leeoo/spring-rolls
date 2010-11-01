@@ -6,8 +6,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.wisdom.core.security.domain.User;
+import org.springframework.security.core.userdetails.UserDetails;
 /**
  * 功 能 描 述:<br>
  * 在线用户缓存
@@ -17,21 +16,21 @@ import com.wisdom.core.security.domain.User;
  */
 public class OnlineUserCache {
 	
-	private static ConcurrentMap<String, User> onlineUsers = new ConcurrentHashMap<String, User>();
+	private static ConcurrentMap<String, UserDetails> onlineUsers = new ConcurrentHashMap<String, UserDetails>();
 	private static Logger logger = LoggerFactory.getLogger(OnlineUserCache.class);
 	
-	public static void put(User user){
+	public static void put(UserDetails user){
 		if(user!=null&&user.getUsername()!=null){
 			onlineUsers.put(user.getUsername(), user);
 			logger.info("{}已经登录!",user.getUsername());
 		}
 	}
 	
-	public static Collection<User> getOnlineUsers(){
+	public static Collection<UserDetails> getOnlineUsers(){
 		return onlineUsers.values();
 	}
 	
-	public static void remove(User user){
+	public static void remove(UserDetails user){
 		if(user!=null&&user.getUsername()!=null){
 			onlineUsers.remove(user.getUsername());
 			logger.info("{}退出登录!",user.getUsername());

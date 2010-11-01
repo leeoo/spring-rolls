@@ -24,7 +24,7 @@ public class IndexController {
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mav=new ModelAndView();
-		mav.addObject("username", SecurityUtils.getCurrentUser().getCnname());
+		mav.addObject("username", SecurityUtils.getCurrentUser().getUsername());
 		return mav;
 	} 
 

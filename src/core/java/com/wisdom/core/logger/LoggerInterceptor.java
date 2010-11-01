@@ -5,9 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.wisdom.core.security.domain.User;
 import com.wisdom.core.security.resource.SecurityUtils;
 import com.wisdom.core.utils.DateUtils;
 import com.wisdom.core.utils.ScheduledThreadUtils;
@@ -41,9 +41,9 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 		}
 		String ip=request.getRemoteAddr();
 		String log=DateUtils.getCurrentDateTime().getTime()+SEPARATOR;
-		User user=SecurityUtils.getCurrentUser();
+		UserDetails user=SecurityUtils.getCurrentUser();
 		if(user!=null){
-			log=log.concat("登录名:".concat(user.getUsername()).concat(" 姓名:".concat(user.getCnname())).concat(" IP:".concat(ip)).concat(" 访问了:".concat(url)));
+			log=log.concat("登录名:".concat(user.getUsername()).concat(" IP:".concat(ip)).concat(" 访问了:".concat(url)));
 		}else{
 			log=log.concat("IP:".concat(ip).concat(" 访问了:".concat(url)));
 		}

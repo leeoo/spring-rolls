@@ -12,8 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
-import com.wisdom.core.security.domain.User;
-
 /**
  * 功能描述：
  * 登录安全信息工具
@@ -28,11 +26,11 @@ public class SecurityUtils {
 	 * 取得当前用户, 返回值为SpringSecurity的User类或其子类, 如果当前用户未登录则返回null.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends User> T getCurrentUser() {
+	public static <T extends UserDetails> T getCurrentUser() {
 		Authentication authentication = getAuthentication();
 		if (authentication != null) {
 			Object principal = authentication.getPrincipal();
-			if (principal instanceof User) {
+			if (principal instanceof UserDetails) {
 				return (T) principal;
 			}
 		}
