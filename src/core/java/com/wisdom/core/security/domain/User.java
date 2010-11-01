@@ -28,12 +28,12 @@ public class User extends BaseEntity implements java.io.Serializable{
 	private Long id;
 	
 	@NotNull(message="登录用户名不能为空！")
-	@Size(min=3,max=20,message="登录用户名最少输入{min}个字符最多不超过{max}个字符")
+	@Size(min=2,max=20,message="登录用户名最少输入{min}个字符最多不超过{max}个字符")
 	@NotUpdate
 	private String username;
   
 	@NotNull(message="登录密码不能为空！")
-	@Size(min=6,max=40,message="登录密码最少输入{min}个字符最多不超过{max}个字符")
+	@Size(min=2,max=40,message="登录密码最少输入{min}个字符最多不超过{max}个字符")
 	@NotUpdate
 	private String password;
 
