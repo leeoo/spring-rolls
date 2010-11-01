@@ -77,7 +77,7 @@
 	</listener>
 	
 	<listener>
-		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+		<listener-class>com.wisdom.core.security.OnlineUserEventPublisher</listener-class>
 	</listener>
 	
 	<servlet>
