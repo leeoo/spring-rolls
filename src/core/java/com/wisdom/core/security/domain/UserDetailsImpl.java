@@ -24,6 +24,7 @@ public class UserDetailsImpl extends User implements UserDetails{
 		setMobile(user.getMobile());
 		setEmail(user.getEmail());
 		setOrganCode(user.getOrganCode());
+		setOrganName(user.getOrganName());
 		setBusinessCode(user.getBusinessCode());
 		setInsertDate(user.getInsertDate());
 		setUpdateDate(user.getUpdateDate());
