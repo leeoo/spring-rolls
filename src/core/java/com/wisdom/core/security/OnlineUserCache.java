@@ -1,5 +1,6 @@
 package com.wisdom.core.security;
 
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -26,8 +27,8 @@ public class OnlineUserCache {
 		}
 	}
 	
-	public static ConcurrentMap<String, User> getOnlineUsers(){
-		return onlineUsers;
+	public static Collection<User> getOnlineUsers(){
+		return onlineUsers.values();
 	}
 	
 	public static void remove(User user){
