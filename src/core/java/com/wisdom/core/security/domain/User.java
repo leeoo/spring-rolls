@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import com.wisdom.core.annotation.NotMapping;
 import com.wisdom.core.annotation.NotUpdate;
+import com.wisdom.core.annotation.Reference;
 import com.wisdom.core.annotation.SimpleEntity;
 import com.wisdom.core.orm.domain.BaseEntity;
 
@@ -47,8 +48,11 @@ public class User extends BaseEntity implements java.io.Serializable{
 	@Size(min=5,max=50,message="电子邮箱最少输入{min}个字符最多不超过{max}个字符")
 	private String email;
 	
-	@NotMapping
 	private String organCode;//所属企业编码，暂时无用
+
+	@NotMapping
+	@Reference(refTableName = "t_organ", FKFieldName = "organ_code", refViewFieldName = "organ_name", refPKFieldName = "organ_code")
+	private String organName;//所属企业编码，暂时无用
 	
 	@NotUpdate
 	private boolean enabled = true;
@@ -68,6 +72,13 @@ public class User extends BaseEntity implements java.io.Serializable{
 	@NotMapping
 	private Collection<GrantedAuthority> authorities;
 	
+	public String getOrganName() {
+		return organName;
+	}
+
+	public void setOrganName(String organName) {
+		this.organName = organName;
+	}
 	
 	public String getOrganCode() {
 		return organCode;
