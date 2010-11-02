@@ -37,11 +37,4 @@ public class OnlineUserCache {
 		}
 	}
 
-	public static void remove(String username){
-		if(username!=null){
-			onlineUsers.remove(username);
-			logger.info("{}退出登录!",username);
-		}
-	}
-	
 }
