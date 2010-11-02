@@ -19,6 +19,7 @@ public class StringView extends AbstractView {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = null;
 		out = response.getWriter();
 		out.write(getHtmlFromMap(model));
