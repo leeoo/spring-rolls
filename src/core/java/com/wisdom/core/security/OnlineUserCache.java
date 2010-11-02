@@ -25,6 +25,13 @@ public class OnlineUserCache {
 			logger.info("{}已经登录!",user.getUsername());
 		}
 	}
+
+	public static UserDetails get(String username){
+		if(username!=null){
+			return onlineUsers.get(username);
+		}
+		return null;
+	}
 	
 	public static Collection<UserDetails> getOnlineUsers(){
 		return onlineUsers.values();
