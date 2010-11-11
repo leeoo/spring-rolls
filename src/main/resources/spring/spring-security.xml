@@ -25,13 +25,23 @@ default-lazy-init="true">
 		</security:authentication-provider>
 	</security:authentication-manager>
 	
-	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">  
+	<!-- AffirmativeBased一票通过,UnanimousBased一票否决,ConsensusBased多数服从 -->
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">  
         <property name="decisionVoters">  
             <list>  
                 <bean class="org.springframework.security.access.vote.RoleVoter">
                 	<property name="rolePrefix" value="RES_"/>
                 </bean>  
                 <bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>  
+                <bean class="com.wisdom.core.security.IpAddressVoter">
+                	<property name="ipAddressExclude" value="false"/><!-- true为只拦截IP列表中的IP地址;false为拦截IP列表之外的IP地址-->
+                	<property name="ipAddressList">
+                		<list>
+                			<value>127.0.0.1</value>
+                			<value>192.168.71.185-190</value>
+                		</list>
+                	</property>
+                </bean>
             </list>  
         </property>  
     </bean>
@@ -43,7 +53,7 @@ default-lazy-init="true">
     </bean>
     
     
-    <bean id="securityMetadataSource" class="com.wisdom.core.security.resource.StaticInvocationSecurityMetadataSource" depends-on="securityCacheInit"/>
+    <bean id="securityMetadataSource" class="com.wisdom.core.security.resource.DynamicInvocationSecurityMetadataSource" depends-on="securityCacheInit"/>
     
     
 	<bean id="securityService" class="com.wisdom.example.service.security.SecurityService">
