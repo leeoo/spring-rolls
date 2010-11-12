@@ -79,7 +79,7 @@ public class IpAddressVoter implements AccessDecisionVoter{
 	
 	private static int vote(String currentIp){
 		if(IPAddressUtil.isIPv6LiteralAddress(currentIp)){
-			return ACCESS_ABSTAIN;//弃权
+			return ACCESS_ABSTAIN;//如果是IPV6则弃权
 		}
 		for(String ip:ipAddressList){
 			if(currentIp.equals(ip)){
@@ -104,7 +104,7 @@ public class IpAddressVoter implements AccessDecisionVoter{
 						return ipAddressExclude?ACCESS_DENIED:ACCESS_GRANTED;
 					}
 				}catch (Exception e) {
-					return ACCESS_ABSTAIN;//弃权
+					return ACCESS_ABSTAIN;//登录ip验证发生意外错误则弃权
 				}
 			}
 		}
