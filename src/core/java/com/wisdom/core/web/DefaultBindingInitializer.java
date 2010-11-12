@@ -27,7 +27,7 @@ public class DefaultBindingInitializer implements WebBindingInitializer{
 
 	@Override
 	public void initBinder(WebDataBinder binder, WebRequest request) {
-		DateFormat dateFormat = FormatConstants.DATE_FORMAT;
+		DateFormat dateFormat = FormatConstants.DATE_TIME_FORMAT;
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 		binder.registerCustomEditor(Integer.class,new CustomNumberEditor(Integer.class,true));
