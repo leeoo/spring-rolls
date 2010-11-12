@@ -7,6 +7,8 @@ import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.core.Authentication;
 
+import sun.net.util.IPAddressUtil;
+
 import com.wisdom.core.security.resource.SecurityUtils;
 
 /**
@@ -72,30 +74,37 @@ public class IpAddressVoter implements AccessDecisionVoter{
 				return vote(remoteIpAddress);
 			}	
 		}
-		return ACCESS_ABSTAIN;
+		return ACCESS_ABSTAIN;//弃权
 	}
 	
 	private static int vote(String currentIp){
+		if(IPAddressUtil.isIPv6LiteralAddress(currentIp)){
+			return ACCESS_ABSTAIN;//弃权
+		}
 		for(String ip:ipAddressList){
 			if(currentIp.equals(ip)){
 				return ipAddressExclude?ACCESS_DENIED:ACCESS_GRANTED;
 			}else if(ip.indexOf("-")>-1){
-				String[] ipBlocks = ip.split("\\.");
-				String[] currentIpBlocks = currentIp.split("\\.");
-				boolean isMeet = true;//是否符合IP段匹配
-				for(int i =0;i<ipBlocks.length;i++){
-					if(ipBlocks[i].indexOf("-")>-1){
-						String[] ipNumbers = ipBlocks[i].split("\\-");
-						int start = Integer.parseInt(ipNumbers[0]);
-						int end = Integer.parseInt(ipNumbers[1]);
-						int currentNumber = Integer.parseInt(currentIpBlocks[i]);
-						if(currentNumber>end||currentNumber<start){
-							isMeet = false;
+				try{
+					String[] ipBlocks = ip.split("\\.");
+					String[] currentIpBlocks = currentIp.split("\\.");
+					boolean isMeet = true;//是否符合IP段匹配
+					for(int i =0;i<ipBlocks.length;i++){
+						if(ipBlocks[i].indexOf("-")>-1){
+							String[] ipNumbers = ipBlocks[i].split("\\-");
+							int start = Integer.parseInt(ipNumbers[0]);
+							int end = Integer.parseInt(ipNumbers[1]);
+							int currentNumber = Integer.parseInt(currentIpBlocks[i]);
+							if(currentNumber>end||currentNumber<start){
+								isMeet = false;
+							}
 						}
 					}
-				}
-				if(isMeet){
-					return ipAddressExclude?ACCESS_DENIED:ACCESS_GRANTED;
+					if(isMeet){
+						return ipAddressExclude?ACCESS_DENIED:ACCESS_GRANTED;
+					}
+				}catch (Exception e) {
+					return ACCESS_ABSTAIN;//弃权
 				}
 			}
 		}
