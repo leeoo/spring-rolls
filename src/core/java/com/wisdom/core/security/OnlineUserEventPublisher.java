@@ -23,7 +23,7 @@ public class OnlineUserEventPublisher extends HttpSessionEventPublisher{
 	 * @see UserDetailServiceImpl
 	 */
 	public void sessionCreated(HttpSessionEvent event) {
-		/*UserDetails user=SecurityUtils.getCurrentUser();
+		/*UserDetails user=SecurityUtils.getCurrentUserDetails();
 		if(user!=null){
 			OnlineUserCache.put(user);
 		}*/
@@ -31,7 +31,7 @@ public class OnlineUserEventPublisher extends HttpSessionEventPublisher{
 	}
 
 	public void sessionDestroyed(HttpSessionEvent event) {
-		UserDetails user=SecurityUtils.getCurrentUser();
+		UserDetails user=SecurityUtils.getCurrentUserDetails();
 		if(user!=null){
 			OnlineUserCache.remove(user.getUsername());
 		}

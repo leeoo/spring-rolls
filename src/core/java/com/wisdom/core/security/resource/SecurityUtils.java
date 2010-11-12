@@ -29,7 +29,7 @@ public class SecurityUtils {
 	 * 取得当前用户, 返回值为SpringSecurity的User类或其子类, 如果当前用户未登录则返回null.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends UserDetails> T getCurrentUser() {
+	public static <T extends UserDetails> T getCurrentUserDetails() {
 		Authentication authentication = getAuthentication();
 		if (authentication != null) {
 			Object principal = authentication.getPrincipal();
@@ -47,7 +47,7 @@ public class SecurityUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends User> T getCurrentUser() {
-		UserDetails ud = getCurrentUser();
+		UserDetails ud = getCurrentUserDetails();
 		if(ud!=null){
 			User user = OnlineUserCache.get(ud.getUsername());
 			if(user!=null){
