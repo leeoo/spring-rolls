@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wisdom.core.security.domain.User;
 import com.wisdom.core.security.resource.SecurityUtils;
 import com.wisdom.core.web.SystemMemoryInterceptor;
 /**
@@ -24,7 +25,8 @@ public class IndexController {
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mav=new ModelAndView();
-		mav.addObject("username", SecurityUtils.getCurrentUser().getUsername());
+		User user = SecurityUtils.getCurrentUser();
+		mav.addObject("username", user.getCnname());
 		return mav;
 	} 
 

@@ -15,18 +15,25 @@ import com.wisdom.core.security.resource.SecurityUtils;
  */
 public class OnlineUserEventPublisher extends HttpSessionEventPublisher{
 	
+	/**
+	 * 此处只有选择rememberMe才会获得用户登录信息。
+	 * 因为登录成功后，security会将session销毁，并重新创建session，用户线程断开无法获取。
+	 * 目前用户登录UserDetailServiceImpl采用返回userDetail方式，所以支持并发session，但无法使用rememberMe，所以可以忽略此处。
+	 * 担如果返回userDetail子类User详细信息时，并发无效，rememberMe则可用。
+	 * @see UserDetailServiceImpl
+	 */
 	public void sessionCreated(HttpSessionEvent event) {
-		UserDetails user=SecurityUtils.getCurrentUser();
+		/*UserDetails user=SecurityUtils.getCurrentUser();
 		if(user!=null){
 			OnlineUserCache.put(user);
-		}
+		}*/
 		super.sessionCreated(event);
 	}
 
 	public void sessionDestroyed(HttpSessionEvent event) {
 		UserDetails user=SecurityUtils.getCurrentUser();
 		if(user!=null){
-			OnlineUserCache.remove(user);
+			OnlineUserCache.remove(user.getUsername());
 		}
 		super.sessionDestroyed(event);
 	}
