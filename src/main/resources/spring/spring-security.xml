@@ -11,7 +11,7 @@ default-lazy-init="true">
 		<security:custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="filterSecurityInterceptor"/>
 		<security:form-login authentication-failure-url="/login.jsp?error=1" login-page="/login.jsp" default-target-url="/example/index.htm"/>
 		<security:logout invalidate-session="true" logout-success-url="/login.jsp" />
-		<security:remember-me key="e37f4b31-0c45-11dd-bd0b-0800200c9a66"/>
+		<!-- <security:remember-me key="e37f4b31-0c45-11dd-bd0b-0800200c9a66"/> -->
 		<security:session-management invalid-session-url="/login.jsp?error=5" >
 			<security:concurrency-control error-if-maximum-exceeded="false" expired-url="/login.jsp?error=3" max-sessions="1"/>
 		</security:session-management>
