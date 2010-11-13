@@ -53,4 +53,21 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>-->
 	
+	<bean id="jdbcLoggerConfig" class="net.sourceforge.jdbclogger.spring.JdbcLoggerBeanPostProcessor">
+	    <property name="enabled" value="true"/>
+	    <property name="dataSourceConfigurations">
+	        <list>
+	            <bean class="net.sourceforge.jdbclogger.spring.JdbcLoggerDataSourceConfiguration">
+	                <property name="dataSourceBeanName" value="dataSource"/>
+	                <property name="driverClassNamePropertyName" value="driverClass"/>
+	            </bean>
+	        </list>
+	    </property>
+	    <property name="targetDriverClassNames">    
+	        <list>
+	            <value>${driverClassName}</value>
+	        </list>
+	    </property>
+	</bean>
+	
 </beans>
