@@ -20,7 +20,7 @@ import com.wisdom.core.utils.Page;
 import com.wisdom.core.utils.ScheduledThreadUtils;
 import com.wisdom.example.commons.ValidationUtils;
 import com.wisdom.example.service.logger.LoggerServiceImpl;
-import com.wisdom.example.service.logger.MatchService;
+import com.wisdom.example.service.logger.MatchServiceImpl;
 
 /**
  * <b>业务说明</b>:日志管理控制类<br>
@@ -41,7 +41,7 @@ public class LoggerController {
 	private LoggerThreadService loggerThreadService;
 
 	@Resource
-	private MatchService matchService;
+	private MatchServiceImpl matchService;
 	
 	@RequestMapping("/list/{no}")
 	public String list(@PathVariable int no,HttpServletRequest request,Page page){

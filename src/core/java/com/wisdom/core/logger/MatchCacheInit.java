@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.wisdom.core.logger.domain.LoggerSomething;
 import com.wisdom.core.logger.domain.LoggerSomewhere;
-import com.wisdom.example.service.logger.MatchService;
+
 /**
  * 功 能 描 述:<br>
  * 日志匹配缓存初始化

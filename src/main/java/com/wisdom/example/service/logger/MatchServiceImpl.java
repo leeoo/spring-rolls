@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wisdom.core.logger.LoggerMatch;
+import com.wisdom.core.logger.MatchService;
 import com.wisdom.core.logger.domain.LoggerSomething;
 import com.wisdom.core.logger.domain.LoggerSomewhere;
 import com.wisdom.core.orm.SimpleOrmGenericDao;
@@ -16,11 +17,11 @@ import com.wisdom.core.orm.SimpleOrmGenericDao;
  * url地址关键字匹配
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2010-11-16上午09:42:04
- * <br>项 目 信 息:wisdom.3.0:com.wisdom.example.service.logger.MatchService.java
+ * <br>项 目 信 息:wisdom.3.0:com.wisdom.example.service.logger.MatchServiceImpl.java
  */
 @Service
 @Transactional
-public class MatchService {
+public class MatchServiceImpl implements MatchService{
 
 	private SimpleOrmGenericDao<LoggerSomething, String> somethingDao;
 	private SimpleOrmGenericDao<LoggerSomewhere, String> somewhereDao;

@@ -23,7 +23,7 @@
 		<property name="matchService" ref="matchService" />
 	</bean>
 	
-	<bean id="matchService" class="com.wisdom.example.service.logger.MatchService">
+	<bean id="matchService" class="com.wisdom.example.service.logger.MatchServiceImpl">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
