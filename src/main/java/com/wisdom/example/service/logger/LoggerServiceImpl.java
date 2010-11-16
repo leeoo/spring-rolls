@@ -39,7 +39,7 @@ public class LoggerServiceImpl implements LoggerService{
 	 * @throws Exception
 	 */
 	public void saveLoggers(Collection<Logger> loggers) throws Exception{
-		Logger[] loggerArray = (Logger[]) loggers.toArray();
+		Logger[] loggerArray=loggers.toArray(new Logger[loggers.size()]);
 		ormDao.saveAll(loggerArray);
 	}
 	

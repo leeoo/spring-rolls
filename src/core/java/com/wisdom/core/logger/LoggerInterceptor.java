@@ -52,8 +52,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 		logger.setUrl(url);
 		for(AbstractMatch match : matchs){
 			if(sign>1){
-				LoggerCache.putCache(logger);
-				return;
+				break;
 			}else if(url.indexOf(match.getKeyword())>-1){
 				if(match instanceof LoggerSomewhere){
 					logger.setSomewhere(match.getName());
@@ -63,6 +62,9 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 					sign++;
 				}
 			}
+		}
+		if(sign>1){
+			LoggerCache.putCache(logger);
 		}
 	}
 	
