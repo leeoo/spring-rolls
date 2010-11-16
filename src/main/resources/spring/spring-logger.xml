@@ -19,7 +19,7 @@
 		<property name="enabled" value="true"/>
 	</bean>
 	
-	<bean id="securityCacheInit" class="com.wisdom.core.logger.MatchCacheInit" init-method="init" lazy-init="false">
+	<bean id="matchCacheInit" class="com.wisdom.core.logger.MatchCacheInit" init-method="init" lazy-init="false" depends-on="matchService">
 		<property name="matchService" ref="matchService" />
 	</bean>
 	

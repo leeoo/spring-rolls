@@ -41,7 +41,7 @@
 		<property name="taskService" ref="taskService"/>
 	</bean>
 
-	<bean id="taskCacheInit" class="com.wisdom.core.task.service.TaskCacheInit" init-method="init" lazy-init="false">
+	<bean id="taskCacheInit" class="com.wisdom.core.task.service.TaskCacheInit" init-method="init" lazy-init="false" depends-on="taskService">
 		<property name="taskService" ref="taskService" />
 	</bean>
 	

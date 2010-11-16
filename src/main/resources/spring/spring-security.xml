@@ -64,7 +64,7 @@ default-lazy-init="true">
 		<property name="userService" ref="securityService"/>
 	</bean>
 	
-	<bean id="securityCacheInit" class="com.wisdom.core.security.resource.SecurityCacheInit" init-method="init" lazy-init="false">
+	<bean id="securityCacheInit" class="com.wisdom.core.security.resource.SecurityCacheInit" init-method="init" lazy-init="false" depends-on="securityService">
 		<property name="userService" ref="securityService" />
 	</bean>
 	
