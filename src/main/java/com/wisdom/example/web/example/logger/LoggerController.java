@@ -84,8 +84,8 @@ public class LoggerController {
 	}
 	
 	@RequestMapping(value="/inputSomewhere")
-	public ModelAndView inputSomewhere(ModelAndView mav){
-		String keyword = (String) mav.getModel().get("keyword");
+	public ModelAndView inputSomewhere(ModelAndView mav,HttpServletRequest request){
+		String keyword = request.getParameter("keyword");
 		if(keyword!=null){
 			LoggerSomewhere somewhere = matchService.getLoggerSomewhere(keyword);
 			mav.addObject("somewhere", somewhere);
@@ -110,23 +110,24 @@ public class LoggerController {
 			}
 		}catch (Exception e) {
 		}
-		mav.setViewName("redirect:/example/logger/somewheres");
+		mav.setViewName("redirect:/example/logger/somewheres.htm");
 		return mav;
 	}
 	
-	@RequestMapping(value="/deleteSomewhere/{keyword}")
-	public ModelAndView deleteSomewhere(@PathVariable String keyword,ModelAndView mav){
+	@RequestMapping(value="/deleteSomewhere}")
+	public ModelAndView deleteSomewhere(ModelAndView mav,HttpServletRequest request){
 		try{
+			String keyword = request.getParameter("keyword");
 			matchService.deleteLoggerSomewhere(keyword);
 		}catch (Exception e) {
 		}
-		mav.setViewName("redirect:/example/logger/somewheres");
+		mav.setViewName("redirect:/example/logger/somewheres.htm");
 		return mav;
 	}
 	
 	@RequestMapping(value="/inputSomething")
-	public ModelAndView inputSomething(ModelAndView mav){
-		String keyword = (String) mav.getModel().get("keyword");
+	public ModelAndView inputSomething(ModelAndView mav,HttpServletRequest request){
+		String keyword = request.getParameter("keyword");
 		if(keyword!=null){
 			LoggerSomething something = matchService.getLoggerSomething(keyword);
 			mav.addObject("something", something);
@@ -151,18 +152,19 @@ public class LoggerController {
 			}
 		}catch (Exception e) {
 		}
-		mav.setViewName("redirect:/example/logger/something");
+		mav.setViewName("redirect:/example/logger/somethings.htm");
 		return mav;
 	}
 
 
-	@RequestMapping(value="/deleteSomething/{keyword}")
-	public ModelAndView deleteSomething(@PathVariable String keyword,ModelAndView mav){
+	@RequestMapping(value="/deleteSomething")
+	public ModelAndView deleteSomething(ModelAndView mav,HttpServletRequest request){
 		try{
+			String keyword = request.getParameter("keyword");
 			matchService.deleteLoggerSomething(keyword);
 		}catch (Exception e) {
 		}
-		mav.setViewName("redirect:/example/logger/something");
+		mav.setViewName("redirect:/example/logger/somethings.htm");
 		return mav;
 	}
 

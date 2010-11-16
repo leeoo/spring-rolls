@@ -14,7 +14,7 @@
 				<td>${something.enabled}</td>
 				<td>
 					<a href="${base}/example/logger/inputSomething.htm?keyword=${something.keyword}">修改</a>
-					<a href="${base}/example/logger/deleteSomething.htm">删除</a>
+					<a href="${base}/example/logger/deleteSomething.htm?keyword=${something.keyword}">删除</a>
 				</td>
 			</tr>
 		</c:forEach>

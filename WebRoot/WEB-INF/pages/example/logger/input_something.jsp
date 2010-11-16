@@ -7,7 +7,7 @@
 <body>
 <div align="left">
 	<form name="something" action="${base}/example/logger/saveSomething.htm" method="post">
-		行为关键字：<input name="keyword" value="${something.keyword}"/><br/>
+		行为关键字：<input name="keyword" value="${something.keyword}" <c:if test="${something!=null}">readonly="readonly"</c:if>/><br/>
 		行为含义：<input name="name" value="${something.name}"/><br/>
 		是否有效：<c:if test="${something!=null}">
 					<c:if test="${something.enabled==true}">
