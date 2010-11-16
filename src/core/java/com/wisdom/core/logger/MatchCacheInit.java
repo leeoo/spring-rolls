@@ -25,11 +25,15 @@ public class MatchCacheInit {
 		logger.info("正在初始化日志匹配缓存");
 		Collection<LoggerSomething> somethings = matchService.getAllLoggerSomething();
 		Collection<LoggerSomewhere> somewheres = matchService.getAllLoggerSomewhere();
-		for(LoggerSomething match:somethings){
-			LoggerMatch.put(match);
+		if(somethings!=null&&!somethings.isEmpty()){
+			for(LoggerSomething match:somethings){
+				LoggerMatch.put(match);
+			}
 		}
-		for(LoggerSomewhere match:somewheres){
-			LoggerMatch.put(match);
+		if(somewheres!=null&&!somewheres.isEmpty()){
+			for(LoggerSomewhere match:somewheres){
+				LoggerMatch.put(match);
+			}
 		}
 		logger.info("日志匹配缓存初始化结束");
 	}

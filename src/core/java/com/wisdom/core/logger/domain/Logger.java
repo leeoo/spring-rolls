@@ -21,11 +21,11 @@ public class Logger {
 	
 	private String username = SecurityUtils.getCurrentUserName();
 	
-	private String cnname = SecurityUtils.getCurrentUser().getCnname();
+	private String cnname = SecurityUtils.getCurrentUser()!=null?SecurityUtils.getCurrentUser().getCnname():"";
 	
 	private String ip = SecurityUtils.getCurrentUserIp();
 	
-	private String organName = SecurityUtils.getCurrentUser().getOrganName();
+	private String organName = SecurityUtils.getCurrentUser()!=null?SecurityUtils.getCurrentUser().getOrganName():"";
 	
 	private String url;
 	
