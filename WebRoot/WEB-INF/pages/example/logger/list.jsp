@@ -6,17 +6,22 @@
 </head>
 <body>
 	<table>
-		<tr><th>日志信息</th><th nowrap="nowrap">操作</th></tr>
+		<tr><th>日志时间</th><th>用户名</th><th>所属机构</th><th>IP</th><th>访问模块</th><th>行为</th><th nowrap="nowrap">操作</th></tr>
 		<c:forEach var="logger" items="${page.result}">
 			<tr>
-				<td><font color="red"><fmt:formatDate value="${logger.logDate}" pattern="yyyy年MM月dd日HH时mm分ss秒"/></font> ${logger.logInfo}</td>
+				<td><fmt:formatDate value="${logger.logDate}" pattern="yyyy年MM月dd日HH时mm分ss秒"/></td>
+				<td>${logger.cnname}(${logger.username})</td>
+				<td>${logger.organName}</td>
+				<td>${logger.ip}</td>
+				<td>${logger.somewhere}</td>
+				<td>${logger.something}</td>
 				<td>
 					<a href="${base}/example/logger/delete/${page.pageNo}-${logger.id}.htm">删除</a>
 				</td>
 			</tr>
 		</c:forEach>
 		<tr>
-		<td colspan="2" align="left">
+		<td colspan="7" align="left">
 			第${page.pageNo}页, 共${page.totalPages}页 
 			<c:set var="actionName" value="${base}/example/logger/list"></c:set>
 			<a href="${actionName}/1.htm">首页</a>
@@ -48,7 +53,8 @@
 				...&nbsp;
 			</c:if>
 			<a href="${actionName}/${page.totalPages}.htm">末页</a>&nbsp;|&nbsp;
-			<a href="${base}/example/logger/input.htm">配置日志级别</a>
+			<a href="${base}/example/logger/somewheres.htm">配置日志模块</a>
+			<a href="${base}/example/logger/somethings.htm">配置日志行为</a>
 			<a href="${base}/example/logger/load.htm">手动装载日志</a>
 		</td>
 		</tr>

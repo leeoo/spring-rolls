@@ -1,19 +1,17 @@
 package com.wisdom.example.service.logger;
 
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wisdom.core.logger.LoggerInterceptor;
 import com.wisdom.core.logger.LoggerService;
+import com.wisdom.core.logger.domain.Logger;
+import com.wisdom.core.logger.domain.LoggerSql;
+import com.wisdom.core.orm.SimpleOrmGenericDao;
 import com.wisdom.core.utils.Page;
-import com.wisdom.example.dao.JdbcGenericSupportDao;
-import com.wisdom.example.dao.logger.LoggerDao;
 
 /**
  * <b>业务说明</b>:<br>
@@ -24,33 +22,25 @@ import com.wisdom.example.dao.logger.LoggerDao;
  * <b>项目名称</b>: spring<br>
  * <b>包及类名</b>: com.wisdom.core.logger.serviceLoggerService.java<br>
  */
-@Service
+@Service("loggerService")
 @Transactional
-public class LoggerServiceImpl extends JdbcGenericSupportDao implements LoggerService,LoggerDao{
+public class LoggerServiceImpl implements LoggerService{
+	
+	private SimpleOrmGenericDao<Logger, Long> ormDao;
+	
+	@javax.annotation.Resource
+	public void setDataSource(DataSource dataSource) {
+		ormDao = new SimpleOrmGenericDao<Logger, Long>(dataSource,Logger.class);
+	}
 	
 	/**
 	 * 批量保存日志信息
 	 * @param loggers
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	public void saveLoggers(Collection<String> loggers) throws Exception{
-		Collection<Map> datas=new LinkedList<Map>();
-		Map data=null;
-		Date date=null;
-		for(String log:loggers){
-			String[] logs=log.split(LoggerInterceptor.SEPARATOR);
-			if(logs!=null&&logs.length==2){
-				data=new HashMap();
-				date=new Date(Long.valueOf((logs[0])));
-				data.put("logDate",date);
-				data.put("logInfo", logs[1]);
-				datas.add(data);
-			}
-		}
-		if(!datas.isEmpty()){
-			jdbcDao.executeBatchByCollectionMaps(SQL_INSERT_LOGGER, datas);
-		}
+	public void saveLoggers(Collection<Logger> loggers) throws Exception{
+		Logger[] loggerArray = (Logger[]) loggers.toArray();
+		ormDao.saveAll(loggerArray);
 	}
 	
 	/**
@@ -59,7 +49,7 @@ public class LoggerServiceImpl extends JdbcGenericSupportDao implements LoggerSe
 	 * @throws Exception
 	 */
 	public void deleteLogger(Long id)throws Exception{
-		jdbcDao.executeArray(SQL_DELETE_LOGGER, id);
+		ormDao.delete(id);
 	}
 	
 	/**
@@ -69,7 +59,11 @@ public class LoggerServiceImpl extends JdbcGenericSupportDao implements LoggerSe
 	 */
 	@Transactional(readOnly=true)
 	public Page getAllLoggers(Page page){
-		return jdbcDao.findPageListMap(SQL_SELECT_ALL_LOGGER, page);
+		return ormDao.getAll(page);
+	}
+
+	public void saveLoggerSQLs(Collection<LoggerSql> loggers) throws Exception {
+		//待实现
 	}
 	
 	

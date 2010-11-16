@@ -6,6 +6,8 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+import com.wisdom.core.logger.domain.Logger;
+
 /**
  * <b>业务说明</b>:
  * 日志缓存<br>
@@ -18,35 +20,15 @@ import net.sf.ehcache.Element;
 public class LoggerCache {
 	private final static String SECURITY_CACHE_NAME="logger_cache";
 	private static Cache cache=CacheManager.getInstance().getCache(SECURITY_CACHE_NAME);
-	public static String currentLoggerLever="!!";
+	public static int maxCacheValue=150;
 	
-	/**
-	 * 设置缓存级别
-	 * @param levers
-	 */
-	public static void setLoggerLever(String[] levers){
-		if(levers==null||levers.length==0){
-			return;
-		}
-		currentLoggerLever="";
-		for(String lever:levers){
-			currentLoggerLever=currentLoggerLever.concat(lever);
-		}
-		if(currentLoggerLever.indexOf("!!")!=-1){
-			currentLoggerLever="!!";
-			return;
-		}else if(currentLoggerLever.indexOf("**")!=-1){
-			currentLoggerLever="**";
-			return;
-		}
-	}
 	
 	/**
 	 * 将日志放入缓存
 	 * @param logger
 	 */
-	public synchronized static void putCache(String logger){
-		Element element=new Element(logger, null);
+	public synchronized static void putCache(Logger logger){
+		Element element=new Element(logger,null);
 		cache.put(element);
 	}
 	
@@ -54,7 +36,7 @@ public class LoggerCache {
 	 * 从缓存中移除日志
 	 * @param logger
 	 */
-	public synchronized static void removeCache(String logger){
+	public synchronized static void removeCache(Logger logger){
 		cache.remove(logger);
 	}
 
@@ -63,7 +45,7 @@ public class LoggerCache {
 	 * @return
 	 */
 	public synchronized static boolean isFull(){
-		if(cache.getKeys().size()>LoggerInterceptor.maxCacheValue){
+		if(cache.getKeys().size()>maxCacheValue){
 			return true;
 		}
 		return false;
@@ -83,7 +65,7 @@ public class LoggerCache {
 	 * @return 日志信息
 	 */
 	@SuppressWarnings("unchecked")
-	public synchronized static Collection<String> getAllCache(){
+	public synchronized static Collection<Logger> getAllCache(){
 		return cache.getKeys();
 	}
 	

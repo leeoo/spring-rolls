@@ -12,21 +12,11 @@
 
 	<bean id="loggerThreadService" class="com.wisdom.core.logger.LoggerThreadService">
 		<property name="loggerService" ref="loggerService"/>
-		<property name="allLoggerLever">
-			<map>
-				<entry key="添加行为" value="[insert][save][add][create][new]"/>
-				<entry key="修改行为" value="[update][modify][change][manage][alter][edit]"/>
-				<entry key="删除行为" value="[delete][remove][drop][kill][clear]"/>
-				<entry key="查看行为" value="[select][list][find][load][get][input][show][detail][search][download][report]"/>
-				<entry key="所有行为" value="**"/>
-				<entry key="关闭日志" value="!!"/>
-			</map>
-		</property>
 	</bean>
 	
 	<bean id="loggerInterceptor" class="com.wisdom.core.logger.LoggerInterceptor">
 		<property name="loggerThreadService" ref="loggerThreadService"/>
-		<property name="maxCacheValue" value="150"/>
+		<property name="enabled" value="true"/>
 	</bean>
 	
 </beans>

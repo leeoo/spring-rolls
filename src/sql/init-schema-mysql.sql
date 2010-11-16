@@ -9,6 +9,7 @@ create table t_template_data(id int not null  primary key,data_name varchar(50) 
 create table t_task_info(id int not null  primary key,task_name varchar(50) not null,next_run_time datetime,run_unit int,enabled int,instance_name varchar(50) not null,description varchar(100),insert_date datetime,update_date datetime,operator_name varchar(50),operator_ip varchar(50),business_code varchar(10));
 create table t_task_run_history(id int not null  primary key,task_id int not null,run_time datetime,end_time datetime,run_state int,run_type int,error_info varchar(1000),insert_date datetime,update_date datetime,operator_name varchar(50),operator_ip varchar(50),business_code varchar(10));
 create table t_news_info(id int not null  primary key,title varchar(100),auth varchar(50),context longtext,enabled int,durability datetime,publish_date datetime,insert_date datetime,update_date datetime,operator_name varchar(50),operator_ip varchar(50),business_code varchar(10));
-create table t_logger_info(id int not null  primary key,log_date datetime,operator_username varchar(50),operator_cnname varchar(50),operator_ip varchar(50),organ_name varchar(50),url varchar(200),somewhere varchar(100),something varchar(100));
-create table t_logger_config(url varchar(100) primary key,name varchar(100),enabled int,type int);
-create table t_logger_sql(id int not null  primary key,log_date datetime,sql_value varchar(2000),logger_id int);
+create table t_logger_info(id int not null  primary key AUTO_INCREMENT,username varchar(50),cnname varchar(50),ip varchar(50),organ_name varchar(50),log_date datetime,url varchar(200),somewhere varchar(100),something varchar(100));
+create table t_logger_somewhere(keyword varchar(100) primary key,name varchar(100),enabled int);
+create table t_logger_something(keyword varchar(100) primary key,name varchar(100),enabled int);
+create table t_logger_sql(id int not null  primary key AUTO_INCREMENT,log_date datetime,sql_value varchar(2000),logger_id int,sql_type varchar(10));

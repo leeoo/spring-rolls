@@ -2,7 +2,8 @@ package com.wisdom.core.logger;
 
 import java.util.Collection;
 
-import com.wisdom.core.utils.Page;
+import com.wisdom.core.logger.domain.Logger;
+import com.wisdom.core.logger.domain.LoggerSql;
 /**
  * <b>业务说明</b>:<br>
  * 日志操作业务类
@@ -15,24 +16,17 @@ import com.wisdom.core.utils.Page;
 public interface LoggerService {
 	
 	/**
-	 * 批量保存日志信息
+	 * 批量保存web请求日志信息
 	 * @param loggers
 	 * @throws Exception
 	 */
-	public void saveLoggers(Collection<String> loggers) throws Exception;
-	
+	public void saveLoggers(Collection<Logger> loggers) throws Exception;
+
 	/**
-	 * 删除日志信息
-	 * @param id
+	 * 批量保存数据库日志信息
+	 * @param loggers
 	 * @throws Exception
 	 */
-	public void deleteLogger(Long id) throws Exception;
-	
-	/**
-	 * 获得所有分页的日志信息
-	 * @param page
-	 * @return
-	 */
-	public Page getAllLoggers(Page page);
+	public void saveLoggerSQLs(Collection<LoggerSql> loggers) throws Exception;
 	
 }

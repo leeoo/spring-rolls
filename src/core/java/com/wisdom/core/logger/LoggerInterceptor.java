@@ -1,15 +1,16 @@
 package com.wisdom.core.logger;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.wisdom.core.security.domain.User;
-import com.wisdom.core.security.resource.SecurityUtils;
-import com.wisdom.core.utils.DateUtils;
+import com.wisdom.core.logger.domain.AbstractMatch;
+import com.wisdom.core.logger.domain.Logger;
+import com.wisdom.core.logger.domain.LoggerSomething;
+import com.wisdom.core.logger.domain.LoggerSomewhere;
 import com.wisdom.core.utils.ScheduledThreadUtils;
 /**
  * <b>业务说明</b>:<br>
@@ -21,12 +22,7 @@ import com.wisdom.core.utils.ScheduledThreadUtils;
  * <b>包及类名</b>: com.wisdom.core.logger.LoggerInterceptor.java<br>
  *//*implements WebArgumentResolver*/ 
 public class LoggerInterceptor extends HandlerInterceptorAdapter{
-	
-	private static Logger logger = LoggerFactory.getLogger(LoggerInterceptor.class);
-	
-	public static final String SEPARATOR="##";
-	
-	public static int maxCacheValue=150;
+	private static boolean enabled;
 	
 	private LoggerThreadService loggerThreadService;
 	
@@ -35,20 +31,10 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 	 */
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
 		String url=request.getRequestURL().toString();
-		String[] keywords=getKeyword(url).split("/");
-		if(!isCurrentLogger(keywords)){
+		if(!enabled){
 			return super.preHandle(request, response, handler);
 		}
-		String ip=request.getRemoteAddr();
-		String log=DateUtils.getCurrentDateTime().getTime()+SEPARATOR;
-		User user=SecurityUtils.getCurrentUser();
-		if(user!=null){
-			log=log.concat("登录名:".concat(user.getUsername()).concat(" IP:".concat(ip)).concat(" 访问了:".concat(url)));
-		}else{
-			log=log.concat("IP:".concat(ip).concat(" 访问了:".concat(url)));
-		}
-		LoggerCache.putCache(log);
-		logger.info(log);
+		analysisUrl(url);
 		if(LoggerCache.isFull()){
 			ScheduledThreadUtils.start(loggerThreadService);
 		}
@@ -56,28 +42,28 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 	}
 	
 	/**
-	 * 判断当前关键字是不是被允许
-	 * @param keywords关键字集
-	 * @return 是否允许
+	 * 分析当前地址是否计入日志
+	 * @param url地址
 	 */
-	private static boolean isCurrentLogger(String... keywords){
-		if(LoggerCache.currentLoggerLever.equals("!!")){
-			return false;
-		}else if(LoggerCache.currentLoggerLever.equals("**")){
-			return true;
-		}
-		if(keywords!=null&&keywords.length>0){
-			for(int i=4;i<keywords.length;i++){
-				if(LoggerCache.currentLoggerLever.indexOf(keywords[i])!=-1){
-					return true;
+	private static void analysisUrl(String url){
+		Collection<AbstractMatch> matchs = LoggerMatch.getAll();
+		int sign = 0;
+		Logger logger = new Logger();
+		logger.setUrl(url);
+		for(AbstractMatch match : matchs){
+			if(sign>1){
+				LoggerCache.putCache(logger);
+				return;
+			}else if(url.indexOf(match.getKeyword())>-1){
+				if(match instanceof LoggerSomewhere){
+					logger.setSomewhere(match.getName());
+					sign++;
+				}else if(match instanceof LoggerSomething){
+					logger.setSomething(match.getName());
+					sign++;
 				}
 			}
 		}
-		return false;
-	}
-	
-	private static String getKeyword(String url){
-		return url.replace(".htm", "");
 	}
 	
 	public LoggerThreadService getLoggerThreadService() {
@@ -87,9 +73,13 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 	public void setLoggerThreadService(LoggerThreadService loggerThreadService) {
 		this.loggerThreadService = loggerThreadService;
 	}
-
-	public void setMaxCacheValue(int maxCacheValue) {
-		LoggerInterceptor.maxCacheValue = maxCacheValue;
-	}
 	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		LoggerInterceptor.enabled = enabled;
+	}
+
 }

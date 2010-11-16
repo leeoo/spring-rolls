@@ -1,7 +1,6 @@
 package com.wisdom.core.logger;
 
 import java.util.Collection;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +21,11 @@ public class LoggerThreadService implements Runnable{
 	
 	private LoggerService loggerService;
 	
-	public static Map<String,String> allLoggerLever;
-	
 	/**
 	 * 异步执行任务入口
 	 */
 	public void run(){
-		Collection<String> loggers=LoggerCache.getAllCache();
+		Collection<com.wisdom.core.logger.domain.Logger> loggers=LoggerCache.getAllCache();
 		if(loggers==null||loggers.isEmpty()){
 			return;
 		}
@@ -47,10 +44,6 @@ public class LoggerThreadService implements Runnable{
 
 	public void setLoggerService(LoggerService loggerService) {
 		this.loggerService = loggerService;
-	}
-
-	public void setAllLoggerLever(Map<String, String> allLoggerLever) {
-		LoggerThreadService.allLoggerLever = allLoggerLever;
 	}
 	
 }

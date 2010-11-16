@@ -1,18 +1,26 @@
 package com.wisdom.example.web.example.logger;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.wisdom.core.logger.LoggerCache;
-import com.wisdom.core.logger.LoggerService;
+import com.wisdom.core.logger.LoggerMatch;
 import com.wisdom.core.logger.LoggerThreadService;
+import com.wisdom.core.logger.domain.LoggerSomething;
+import com.wisdom.core.logger.domain.LoggerSomewhere;
 import com.wisdom.core.utils.Page;
 import com.wisdom.core.utils.ScheduledThreadUtils;
+import com.wisdom.example.commons.ValidationUtils;
+import com.wisdom.example.service.logger.LoggerServiceImpl;
+import com.wisdom.example.service.logger.MatchService;
 
 /**
  * <b>业务说明</b>:日志管理控制类<br>
@@ -27,16 +35,24 @@ import com.wisdom.core.utils.ScheduledThreadUtils;
 public class LoggerController {
 	
 	@Resource
-	private LoggerService loggerService;
+	private LoggerServiceImpl loggerService;
 	
 	@Resource
 	private LoggerThreadService loggerThreadService;
+
+	@Resource
+	private MatchService matchService;
 	
 	@RequestMapping("/list/{no}")
 	public String list(@PathVariable int no,HttpServletRequest request,Page page){
 		page.setPageSize(5);
 		page.setPageNo(no);
-		page=loggerService.getAllLoggers(page);
+		try{
+			page=loggerService.getAllLoggers(page);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		request.setAttribute("page", page);
 		return "/example/logger/list";
 	}
@@ -55,16 +71,99 @@ public class LoggerController {
 		return "redirect:/example/logger/list/1.htm";
 	}
 
-	@RequestMapping("/input")
-	public String input(HttpServletRequest request){
-		request.setAttribute("loggerLevers",LoggerThreadService.allLoggerLever);
-		return "/example/logger/input";
+	@RequestMapping("/somewheres")
+	public String somewheres(HttpServletRequest request){
+		request.setAttribute("somewheres",matchService.getAllLoggerSomewhere());
+		return "/example/logger/somewheres";
 	}
 
-	@RequestMapping(value="/save",method=RequestMethod.POST)
-	public String save(String[] levers){
-		LoggerCache.setLoggerLever(levers);
-		return "redirect:/example/logger/list/1.htm";
+	@RequestMapping("/somethings")
+	public String somethings(HttpServletRequest request){
+		request.setAttribute("somethings",matchService.getAllLoggerSomething());
+		return "/example/logger/somethings";
+	}
+	
+	@RequestMapping(value="/inputSomewhere")
+	public ModelAndView inputSomewhere(ModelAndView mav){
+		String keyword = (String) mav.getModel().get("keyword");
+		if(keyword!=null){
+			LoggerSomewhere somewhere = matchService.getLoggerSomewhere(keyword);
+			mav.addObject("somewhere", somewhere);
+		}
+		mav.setViewName("/example/logger/input_somewhere");
+		return mav;
+	}
+
+	@RequestMapping(value="/saveSomewhere",method=RequestMethod.POST)
+	public ModelAndView saveSomewhere(@ModelAttribute(value="somewhere")LoggerSomewhere somewhere,ModelAndView mav){
+		List<String> errors=ValidationUtils.validator(somewhere);
+		if(errors!=null){
+			mav.addObject("errors",errors);
+			mav.setViewName("/errors/error");
+			return mav;
+		}
+		try{
+			if(LoggerMatch.get(somewhere.getKeyword())!=null){
+				matchService.updateLoggerSomewhere(somewhere);
+			}else{
+				matchService.saveLoggerSomewhere(somewhere);
+			}
+		}catch (Exception e) {
+		}
+		mav.setViewName("redirect:/example/logger/somewheres");
+		return mav;
+	}
+	
+	@RequestMapping(value="/deleteSomewhere/{keyword}")
+	public ModelAndView deleteSomewhere(@PathVariable String keyword,ModelAndView mav){
+		try{
+			matchService.deleteLoggerSomewhere(keyword);
+		}catch (Exception e) {
+		}
+		mav.setViewName("redirect:/example/logger/somewheres");
+		return mav;
+	}
+	
+	@RequestMapping(value="/inputSomething")
+	public ModelAndView inputSomething(ModelAndView mav){
+		String keyword = (String) mav.getModel().get("keyword");
+		if(keyword!=null){
+			LoggerSomething something = matchService.getLoggerSomething(keyword);
+			mav.addObject("something", something);
+		}
+		mav.setViewName("/example/logger/input_something");
+		return mav;
+	}
+
+	@RequestMapping(value="/saveSomething",method=RequestMethod.POST)
+	public ModelAndView saveSomething(@ModelAttribute(value="something")LoggerSomething something,ModelAndView mav){
+		List<String> errors=ValidationUtils.validator(something);
+		if(errors!=null){
+			mav.addObject("errors",errors);
+			mav.setViewName("/errors/error");
+			return mav;
+		}
+		try{
+			if(LoggerMatch.get(something.getKeyword())!=null){
+				matchService.updateLoggerSomething(something);
+			}else{
+				matchService.saveLoggerSomething(something);
+			}
+		}catch (Exception e) {
+		}
+		mav.setViewName("redirect:/example/logger/something");
+		return mav;
+	}
+
+
+	@RequestMapping(value="/deleteSomething/{keyword}")
+	public ModelAndView deleteSomething(@PathVariable String keyword,ModelAndView mav){
+		try{
+			matchService.deleteLoggerSomething(keyword);
+		}catch (Exception e) {
+		}
+		mav.setViewName("redirect:/example/logger/something");
+		return mav;
 	}
 
 }
