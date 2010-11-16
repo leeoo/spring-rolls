@@ -7,7 +7,7 @@
 <body>
 	<table>
 		<tr><th>行为关键字</th><th nowrap="nowrap">行为含义</th><th nowrap="nowrap">是否有效</th><th nowrap="nowrap">操作</th></tr>
-		<c:forEach var="something" items="${sometings}">
+		<c:forEach var="something" items="${somethings}">
 			<tr>
 				<td>${something.keyword}</td>
 				<td>${something.name}</td>
