@@ -6,19 +6,20 @@
 </head>
 <body>
 	<table>
-		<tr><th>日志时间</th><th>SQL语句</th><th>SQL类别</th><th nowrap="nowrap">操作</th></tr>
+		<tr><th>日志时间</th><th>SQL语句</th><th>SQL类别</th><th>SQL调用信息</th><th nowrap="nowrap">操作</th></tr>
 		<c:forEach var="logger" items="${page.result}">
 			<tr>
 				<td><fmt:formatDate value="${logger.logDate}" pattern="yyyy年MM月dd日HH时mm分ss秒"/></td>
 				<td>${logger.sqlValue}</td>
 				<td>${logger.sqlType}</td>
+				<td>${logger.callDetails}</td>
 				<td>
 					<a href="${base}/example/logger/sqldelete/${page.pageNo}-${logger.id}.htm">删除</a>
 				</td>
 			</tr>
 		</c:forEach>
 		<tr>
-		<td colspan="4" align="left">
+		<td colspan="5" align="left">
 			第${page.pageNo}页, 共${page.totalPages}页 
 			<c:set var="actionName" value="${base}/example/logger/sqllist"></c:set>
 			<a href="${actionName}/1.htm">首页</a>
