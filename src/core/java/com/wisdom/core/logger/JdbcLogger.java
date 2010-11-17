@@ -16,6 +16,16 @@ public class JdbcLogger {
 	
 	private static Logger logger = LoggerFactory.getLogger(JdbcLogger.class);
 	
+	public static boolean enabled;
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		JdbcLogger.enabled = enabled;
+	}
+	
 	public void setJdbcThreadService(JdbcThreadService jdbcThreadService) {
 		JdbcLogger.jdbcThreadService = jdbcThreadService;
 	}
@@ -24,6 +34,9 @@ public class JdbcLogger {
 	
 	public static void putSql(String sql){
 		logger.info("原生SQL语句：{}",sql);
+		if(!enabled){
+			return;
+		}
 		if(sql.indexOf("t_logger_sql")>-1){
 			return;//如果是本表操作不做记录
 		}
