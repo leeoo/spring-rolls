@@ -16,7 +16,40 @@ public class JdbcLogger {
 	
 	private static Logger logger = LoggerFactory.getLogger(JdbcLogger.class);
 	
+	private static String sqlType;
+	
 	public static boolean enabled;
+	
+	private static JdbcThreadService jdbcThreadService;
+	
+	public static void putSql(String sql){
+		logger.info("原生SQL语句：{}",sql);
+		if(!enabled){
+			return;
+		}
+		if(sql.indexOf("t_logger_sql")>-1){
+			return;//如果是本表操作不做记录
+		}
+		String currentSqlType = sql.substring(0, 6).toUpperCase();
+		if(sqlType.indexOf(currentSqlType)<0){
+			return;//如果不是预先设定的SQL语句类型则不做记录
+		}
+		LoggerSql loggerSql = new LoggerSql();
+		loggerSql.setSqlType(currentSqlType);
+		loggerSql.setSqlValue(sql);
+		JdbcCache.putCache(loggerSql);
+		if(LoggerCache.isFull()){
+			ScheduledThreadUtils.start(jdbcThreadService);
+		}
+	}
+	
+	public String getSqlType() {
+		return sqlType;
+	}
+
+	public void setSqlType(String sqlType) {
+		JdbcLogger.sqlType = sqlType.toUpperCase();
+	}
 	
 	public boolean isEnabled() {
 		return enabled;
@@ -28,25 +61,6 @@ public class JdbcLogger {
 	
 	public void setJdbcThreadService(JdbcThreadService jdbcThreadService) {
 		JdbcLogger.jdbcThreadService = jdbcThreadService;
-	}
-
-	private static JdbcThreadService jdbcThreadService;
-	
-	public static void putSql(String sql){
-		logger.info("原生SQL语句：{}",sql);
-		if(!enabled){
-			return;
-		}
-		if(sql.indexOf("t_logger_sql")>-1){
-			return;//如果是本表操作不做记录
-		}
-		LoggerSql loggerSql = new LoggerSql();
-		loggerSql.setSqlType(sql.substring(0, 6));
-		loggerSql.setSqlValue(sql);
-		JdbcCache.putCache(loggerSql);
-		if(LoggerCache.isFull()){
-			ScheduledThreadUtils.start(jdbcThreadService);
-		}
 	}
 	
 }
