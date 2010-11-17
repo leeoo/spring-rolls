@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wisdom.core.logger.LoggerMatch;
+import com.wisdom.core.logger.MatchCache;
 import com.wisdom.core.logger.MatchService;
 import com.wisdom.core.logger.domain.LoggerSomething;
 import com.wisdom.core.logger.domain.LoggerSomewhere;
@@ -34,23 +34,23 @@ public class MatchServiceImpl implements MatchService{
 	
 	public void saveLoggerSomething(LoggerSomething something)throws Exception{
 		somethingDao.save(something);
-		LoggerMatch.put(something);
+		MatchCache.put(something);
 	}
 	
 	public void updateLoggerSomething(LoggerSomething something)throws Exception{
 		somethingDao.update(something);
-		LoggerMatch.remove(something.getKeyword());
-		LoggerMatch.put(something);
+		MatchCache.remove(something.getKeyword());
+		MatchCache.put(something);
 	}
 	
 	public void deleteLoggerSomething(String keyword)throws Exception{
 		somethingDao.delete(keyword);
-		LoggerMatch.remove(keyword);
+		MatchCache.remove(keyword);
 	}
 	
 	@Transactional(readOnly=true)
 	public LoggerSomething getLoggerSomething(String keyword){
-		return (LoggerSomething) LoggerMatch.get(keyword);
+		return (LoggerSomething) MatchCache.get(keyword);
 	}
 	
 	@Transactional(readOnly=true)
@@ -64,18 +64,18 @@ public class MatchServiceImpl implements MatchService{
 	
 	public void updateLoggerSomewhere(LoggerSomewhere somewhere)throws Exception{
 		somewhereDao.update(somewhere);
-		LoggerMatch.remove(somewhere.getKeyword());
-		LoggerMatch.put(somewhere);
+		MatchCache.remove(somewhere.getKeyword());
+		MatchCache.put(somewhere);
 	}
 	
 	public void deleteLoggerSomewhere(String keyword)throws Exception{
 		somewhereDao.delete(keyword);
-		LoggerMatch.remove(keyword);
+		MatchCache.remove(keyword);
 	}
 
 	@Transactional(readOnly=true)
 	public LoggerSomewhere getLoggerSomewhere(String keyword){
-		return (LoggerSomewhere) LoggerMatch.get(keyword);
+		return (LoggerSomewhere) MatchCache.get(keyword);
 	}
 	
 	@Transactional(readOnly=true)

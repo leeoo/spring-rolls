@@ -46,7 +46,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 	 * @param url地址
 	 */
 	private static void analysisUrl(String url){
-		Collection<AbstractMatch> matchs = LoggerMatch.getAll();
+		Collection<AbstractMatch> matchs = MatchCache.getAll();
 		int sign = 0;
 		Logger logger = new Logger();
 		logger.setUrl(url);

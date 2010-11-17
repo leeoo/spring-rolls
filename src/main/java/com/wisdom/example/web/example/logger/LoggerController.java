@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wisdom.core.logger.JdbcThreadService;
-import com.wisdom.core.logger.LoggerMatch;
 import com.wisdom.core.logger.LoggerThreadService;
+import com.wisdom.core.logger.MatchCache;
 import com.wisdom.core.logger.domain.LoggerSomething;
 import com.wisdom.core.logger.domain.LoggerSomewhere;
 import com.wisdom.core.utils.Page;
@@ -130,7 +130,7 @@ public class LoggerController {
 			return mav;
 		}
 		try{
-			if(LoggerMatch.get(somewhere.getKeyword())!=null){
+			if(MatchCache.get(somewhere.getKeyword())!=null){
 				matchService.updateLoggerSomewhere(somewhere);
 			}else{
 				matchService.saveLoggerSomewhere(somewhere);
@@ -172,7 +172,7 @@ public class LoggerController {
 			return mav;
 		}
 		try{
-			if(LoggerMatch.get(something.getKeyword())!=null){
+			if(MatchCache.get(something.getKeyword())!=null){
 				matchService.updateLoggerSomething(something);
 			}else{
 				matchService.saveLoggerSomething(something);
