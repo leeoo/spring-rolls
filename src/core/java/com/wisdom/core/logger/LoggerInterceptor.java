@@ -22,7 +22,7 @@ import com.wisdom.core.utils.ScheduledThreadUtils;
  * <b>包及类名</b>: com.wisdom.core.logger.LoggerInterceptor.java<br>
  *//*implements WebArgumentResolver*/ 
 public class LoggerInterceptor extends HandlerInterceptorAdapter{
-	private static boolean enabled;
+	public static boolean enabled;
 	
 	private LoggerThreadService loggerThreadService;
 	

@@ -20,11 +20,12 @@
 
 	<bean id="jdbcLogger" class="com.wisdom.core.logger.JdbcLogger">
 		<property name="jdbcThreadService" ref="jdbcThreadService"/>
+		<property name="enabled" value="false"/>
 	</bean>
 	
 	<bean id="loggerInterceptor" class="com.wisdom.core.logger.LoggerInterceptor">
 		<property name="loggerThreadService" ref="loggerThreadService"/>
-		<property name="enabled" value="true"/>
+		<property name="enabled" value="false"/>
 	</bean>
 	
 	<bean id="matchCacheInit" class="com.wisdom.core.logger.MatchCacheInit" init-method="init" lazy-init="false" depends-on="matchService">
