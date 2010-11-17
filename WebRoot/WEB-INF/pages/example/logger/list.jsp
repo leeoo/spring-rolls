@@ -56,7 +56,7 @@
 			<a href="${base}/example/logger/somewheres.htm">模块配置</a>
 			<a href="${base}/example/logger/somethings.htm">行为配置</a>
 			<a href="${base}/example/logger/load.htm">手动装载</a>
-			<a href="${base}/example/logger/sqllist.htm">SQL日志</a>
+			<a href="${base}/example/logger/sqllist/1.htm">SQL日志</a>
 		</td>
 		</tr>
 	</table>
