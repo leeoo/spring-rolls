@@ -5,7 +5,7 @@ import java.util.Date;
 import com.wisdom.core.annotation.SimpleEntity;
 import com.wisdom.core.utils.DateUtils;
 
-@SimpleEntity(tableName = "t_logger_somewhere", orderBy = "log_date DESC")
+@SimpleEntity(tableName = "t_logger_sql", orderBy = "log_date DESC")
 public class LoggerSql {
 	private Long id;
 	private String sqlType;

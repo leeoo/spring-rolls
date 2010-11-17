@@ -24,6 +24,9 @@ public class JdbcLogger {
 	
 	public static void putSql(String sql){
 		logger.info("原生SQL语句：{}",sql);
+		if(sql.indexOf("t_logger_sql")>-1){
+			return;//如果是本表操作不做记录
+		}
 		LoggerSql loggerSql = new LoggerSql();
 		loggerSql.setSqlType(sql.substring(0, 6));
 		loggerSql.setSqlValue(sql);
