@@ -36,7 +36,7 @@
 		replicatePuts、replicateUpdates、replicateRemovals增删改是否同步，默认都为true。但因为我们前面选择了失效算法，
 					所以replicatePuts要设为false。 -->
 
-	<cache name="security_resource" maxElementsInMemory="500" eternal="true" overflowToDisk="true">  
+	<cache name="security_resource" maxElementsInMemory="200" eternal="true" overflowToDisk="true">  
         <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory" 
         properties="replicateAsynchronously=true,replicateUpdatesViaCopy=false,
         			replicatePuts=false,replicateUpdates=false,replicateRemovals=false"/>  
@@ -44,10 +44,12 @@
 
 	<cache name="task_scheduled" maxElementsInMemory="50" eternal="true" overflowToDisk="true"/>  
 
-	<cache name="logger_cache" maxElementsInMemory="1000" eternal="true" overflowToDisk="true"/>  
+	<cache name="logger_cache" maxElementsInMemory="200" eternal="true" overflowToDisk="true"/>  
 
-	<cache name="jdbc_cache" maxElementsInMemory="1000" eternal="true" overflowToDisk="true"/>  
+	<cache name="jdbc_cache" maxElementsInMemory="200" eternal="true" overflowToDisk="true"/> 
 
-	<cache name="online_user_cache" maxElementsInMemory="200" eternal="true" overflowToDisk="true"/>  
+	<cache name="match_cache" maxElementsInMemory="200" eternal="true" overflowToDisk="true"/> 
+
+	<cache name="online_user_cache" maxElementsInMemory="100" eternal="true" overflowToDisk="true"/>  
 	
 </ehcache>

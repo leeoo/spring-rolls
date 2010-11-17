@@ -1,8 +1,14 @@
 package com.wisdom.core.logger;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheException;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
+import org.springframework.dao.DataRetrievalFailureException;
 
 import com.wisdom.core.logger.domain.AbstractMatch;
 /**
@@ -14,26 +20,54 @@ import com.wisdom.core.logger.domain.AbstractMatch;
  */
 public class MatchCache {
 	
-	public static ConcurrentMap<String,AbstractMatch> urlMatch = new ConcurrentHashMap<String, AbstractMatch>();
+	private final static String SECURITY_CACHE_NAME = "match_cache";
+	private static Cache cache = CacheManager.getInstance().getCache(SECURITY_CACHE_NAME);
 	
 	public static void put(AbstractMatch match){
-		urlMatch.put(match.getKeyword(), match);
+		Element element=new Element(match.getKeyword(),match);
+		cache.put(element);
 	}
 	
 	public static AbstractMatch get(String keyword){
-		return urlMatch.get(keyword);
+		Element element = null;
+		try {
+			element = cache.get(keyword);
+		} catch (CacheException cacheException) {
+			throw new DataRetrievalFailureException("MatchCache failure: " + cacheException.getMessage(), cacheException);
+		}
+		if (element == null) {
+			return null;
+		} else {
+			return (AbstractMatch) element.getValue();
+		}
 	}
 	
 	public static void remove(String keyword){
-		urlMatch.remove(keyword);
+		cache.remove(keyword);
 	}
 	
 	public static void removeAll(){
-		urlMatch.clear();
+		cache.removeAll();
+		cache.clearStatistics();
+		cache.flush();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Collection<AbstractMatch> getAll(){
-		return urlMatch.values();
+		Collection<String> keywords;
+		Collection<AbstractMatch> matchs = new ArrayList<AbstractMatch>();
+		try {
+			keywords = cache.getKeys();
+		} catch (IllegalStateException e) {
+			throw new IllegalStateException(e.getMessage(), e);
+		} catch (CacheException e) {
+			throw new UnsupportedOperationException(e.getMessage(), e);
+		}
+		for (String keyword:keywords) {
+			AbstractMatch match = get(keyword);
+			matchs.add(match);
+		}
+		return matchs;
 	}
 	
 }
