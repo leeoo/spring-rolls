@@ -10,6 +10,7 @@ public class LoggerSql {
 	private Long id;
 	private String sqlType;
 	private String sqlValue;
+	private String callDetails;
 	private Date logDate = DateUtils.getCurrentDateTime();
 
 	public Long getId() {
@@ -30,6 +31,14 @@ public class LoggerSql {
 
 	public String getSqlValue() {
 		return sqlValue;
+	}
+
+	public String getCallDetails() {
+		return callDetails;
+	}
+
+	public void setCallDetails(String callDetails) {
+		this.callDetails = callDetails;
 	}
 
 	public void setSqlValue(String sqlValue) {

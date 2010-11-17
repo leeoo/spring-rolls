@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wisdom.core.logger.domain.LoggerSql;
+import com.wisdom.core.security.resource.SecurityUtils;
 import com.wisdom.core.utils.ScheduledThreadUtils;
 /**
  * 功 能 描 述:<br>
@@ -37,6 +38,13 @@ public class JdbcLogger {
 		LoggerSql loggerSql = new LoggerSql();
 		loggerSql.setSqlType(currentSqlType);
 		loggerSql.setSqlValue(sql);
+		String username = SecurityUtils.getCurrentUserName();
+		String ip = SecurityUtils.getCurrentUserIp();
+		if(username.isEmpty()&&ip.isEmpty()){
+			loggerSql.setCallDetails("系统内部调用");
+		}else{
+			loggerSql.setCallDetails(username+"("+ip+")");
+		}
 		JdbcCache.putCache(loggerSql);
 		if(LoggerCache.isFull()){
 			ScheduledThreadUtils.start(jdbcThreadService);
