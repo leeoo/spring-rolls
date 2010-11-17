@@ -60,6 +60,28 @@ public class LoggerController {
 		request.setAttribute("page", page);
 		return "/example/logger/list";
 	}
+
+	@RequestMapping("/sqllist/{no}")
+	public String sqllist(@PathVariable int no,HttpServletRequest request,Page page){
+		page.setPageSize(5);
+		page.setPageNo(no);
+		try{
+			page=loggerService.getAllSqlLoggers(page);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		request.setAttribute("page", page);
+		return "/example/logger/sqllist";
+	}
+	
+	@RequestMapping("/sqldelete/{no}-{id}")
+	public String sqldelete(@PathVariable int no,@PathVariable Long id) throws Exception{
+		if(id!=null){
+			loggerService.deleteSqlLogger(id);
+		}
+		return "redirect:/example/logger/sqllist/"+no+".htm";
+	}
 	
 	@RequestMapping("/delete/{no}-{id}")
 	public String delete(@PathVariable int no,@PathVariable Long id) throws Exception{

@@ -65,6 +65,25 @@ public class LoggerServiceImpl implements LoggerService{
 	}
 
 	/**
+	 * 获得所有分页的日志信息
+	 * @param page
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public Page getAllSqlLoggers(Page page){
+		return jdbcLoggerDao.getAll(page);
+	}
+	
+	/**
+	 * 删除日志信息
+	 * @param id
+	 * @throws Exception
+	 */
+	public void deleteSqlLogger(Long id)throws Exception{
+		jdbcLoggerDao.delete(id);
+	}
+
+	/**
 	 * 存储sql
 	 */
 	public void saveLoggerSQLs(Collection<LoggerSql> loggers) throws Exception {
