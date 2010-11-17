@@ -27,10 +27,12 @@ import com.wisdom.core.utils.Page;
 public class LoggerServiceImpl implements LoggerService{
 	
 	private SimpleOrmGenericDao<Logger, Long> ormDao;
+	private SimpleOrmGenericDao<LoggerSql, Long> jdbcLoggerDao;
 	
 	@javax.annotation.Resource
 	public void setDataSource(DataSource dataSource) {
 		ormDao = new SimpleOrmGenericDao<Logger, Long>(dataSource,Logger.class);
+		jdbcLoggerDao = new SimpleOrmGenericDao<LoggerSql, Long>(dataSource,LoggerSql.class);
 	}
 	
 	/**
@@ -62,8 +64,12 @@ public class LoggerServiceImpl implements LoggerService{
 		return ormDao.getAll(page);
 	}
 
+	/**
+	 * 存储sql
+	 */
 	public void saveLoggerSQLs(Collection<LoggerSql> loggers) throws Exception {
-		//待实现
+		LoggerSql[] loggerArray=loggers.toArray(new LoggerSql[loggers.size()]);
+		jdbcLoggerDao.saveAll(loggerArray);
 	}
 	
 	

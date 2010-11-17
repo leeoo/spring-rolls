@@ -46,6 +46,8 @@
 
 	<cache name="logger_cache" maxElementsInMemory="1000" eternal="true" overflowToDisk="true"/>  
 
+	<cache name="jdbc_cache" maxElementsInMemory="1000" eternal="true" overflowToDisk="true"/>  
+
 	<cache name="online_user_cache" maxElementsInMemory="200" eternal="true" overflowToDisk="true"/>  
 	
 </ehcache>

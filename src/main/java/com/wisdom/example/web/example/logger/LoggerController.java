@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wisdom.core.logger.JdbcThreadService;
 import com.wisdom.core.logger.LoggerMatch;
 import com.wisdom.core.logger.LoggerThreadService;
 import com.wisdom.core.logger.domain.LoggerSomething;
@@ -41,6 +42,9 @@ public class LoggerController {
 	private LoggerThreadService loggerThreadService;
 
 	@Resource
+	private JdbcThreadService jdbcThreadService;
+
+	@Resource
 	private MatchServiceImpl matchService;
 	
 	@RequestMapping("/list/{no}")
@@ -68,6 +72,7 @@ public class LoggerController {
 	@RequestMapping("/load")
 	public String load(){
 		ScheduledThreadUtils.start(loggerThreadService);
+		ScheduledThreadUtils.start(jdbcThreadService);
 		return "redirect:/example/logger/list/1.htm";
 	}
 

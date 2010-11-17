@@ -12,4 +12,4 @@ create table t_news_info(id int not null  primary key,title varchar(100),auth va
 create table t_logger_info(id int not null  primary key AUTO_INCREMENT,username varchar(50),cnname varchar(50),ip varchar(50),organ_name varchar(50),log_date datetime,url varchar(200),somewhere varchar(100),something varchar(100));
 create table t_logger_somewhere(keyword varchar(100) primary key,name varchar(100),enabled int);
 create table t_logger_something(keyword varchar(100) primary key,name varchar(100),enabled int);
-create table t_logger_sql(id int not null  primary key AUTO_INCREMENT,log_date datetime,sql_value varchar(2000),logger_id int,sql_type varchar(10));
+create table t_logger_sql(id int not null  primary key AUTO_INCREMENT,log_date datetime,sql_value varchar(2000),sql_type varchar(10));

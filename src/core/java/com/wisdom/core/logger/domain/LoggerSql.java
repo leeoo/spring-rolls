@@ -11,7 +11,6 @@ public class LoggerSql {
 	private String sqlType;
 	private String sqlValue;
 	private Date logDate = DateUtils.getCurrentDateTime();
-	private Long loggerId;
 
 	public Long getId() {
 		return id;
@@ -45,11 +44,4 @@ public class LoggerSql {
 		this.logDate = logDate;
 	}
 
-	public Long getLoggerId() {
-		return loggerId;
-	}
-
-	public void setLoggerId(Long loggerId) {
-		this.loggerId = loggerId;
-	}
 }

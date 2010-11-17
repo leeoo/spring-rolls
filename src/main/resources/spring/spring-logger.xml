@@ -13,6 +13,14 @@
 	<bean id="loggerThreadService" class="com.wisdom.core.logger.LoggerThreadService">
 		<property name="loggerService" ref="loggerService"/>
 	</bean>
+
+	<bean id="jdbcThreadService" class="com.wisdom.core.logger.JdbcThreadService">
+		<property name="loggerService" ref="loggerService"/>
+	</bean>
+
+	<bean id="jdbcLogger" class="com.wisdom.core.logger.JdbcLogger">
+		<property name="jdbcThreadService" ref="jdbcThreadService"/>
+	</bean>
 	
 	<bean id="loggerInterceptor" class="com.wisdom.core.logger.LoggerInterceptor">
 		<property name="loggerThreadService" ref="loggerThreadService"/>
