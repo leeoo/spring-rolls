@@ -70,6 +70,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/cache/ehcache-core-2.3.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/jdbclogger-0.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/jdbclogger-ow-0.6.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
