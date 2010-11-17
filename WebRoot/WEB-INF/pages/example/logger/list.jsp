@@ -53,9 +53,10 @@
 				...&nbsp;
 			</c:if>
 			<a href="${actionName}/${page.totalPages}.htm">末页</a>&nbsp;|&nbsp;
-			<a href="${base}/example/logger/somewheres.htm">配置日志模块</a>
-			<a href="${base}/example/logger/somethings.htm">配置日志行为</a>
-			<a href="${base}/example/logger/load.htm">手动装载日志</a>
+			<a href="${base}/example/logger/somewheres.htm">模块配置</a>
+			<a href="${base}/example/logger/somethings.htm">行为配置</a>
+			<a href="${base}/example/logger/load.htm">手动装载</a>
+			<a href="${base}/example/logger/sqllist.htm">SQL日志</a>
 		</td>
 		</tr>
 	</table>
