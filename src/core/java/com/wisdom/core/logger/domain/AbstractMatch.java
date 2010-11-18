@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * <br>开 发 日 期:2010-11-15下午05:21:59
  * <br>项 目 信 息:wisdom.3.0:com.wisdom.core.logger.domain.AbstractMatch.java
  */
-public abstract class AbstractMatch {
+public abstract class AbstractMatch{
 
 	@NotNull(message="关键字不能为空")
 	private String keyword;
