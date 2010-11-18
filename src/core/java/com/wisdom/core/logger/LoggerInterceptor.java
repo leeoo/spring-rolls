@@ -34,7 +34,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 		if(!enabled){
 			return super.preHandle(request, response, handler);
 		}
-		analysisUrl(url);
+		analysisUrl(url,request.getMethod());
 		if(LoggerCache.isFull()){
 			ScheduledThreadUtils.start(loggerThreadService);
 		}
@@ -45,7 +45,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 	 * 分析当前地址是否计入日志
 	 * @param url地址
 	 */
-	private static void analysisUrl(String url){
+	private static void analysisUrl(String url,String method){
 		Collection<AbstractMatch> matchs = MatchCache.getAll();
 		int sign = 0;
 		Logger logger = new Logger();
@@ -53,7 +53,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 		for(AbstractMatch match : matchs){
 			if(sign>1){
 				break;
-			}else if(url.indexOf(match.getKeyword())>-1){
+			}else if(url.indexOf(match.getKeyword())>-1||match.getKeyword().equalsIgnoreCase(method)){
 				if(match instanceof LoggerSomewhere){
 					logger.setSomewhere(match.getName());
 					sign++;
