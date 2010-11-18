@@ -1,5 +1,6 @@
 package com.wisdom.core.logger.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.wisdom.core.annotation.SimpleEntity;
@@ -14,7 +15,10 @@ import com.wisdom.core.utils.DateUtils;
  */
 
 @SimpleEntity(tableName="t_logger_info",orderBy="log_date DESC")
-public class Logger {
+public class Logger implements Serializable{
+	
+	private static final long serialVersionUID = 5409618497838653983L;
+
 	private Long id;
 	
 	private Date logDate = DateUtils.getCurrentDateTime();
