@@ -53,7 +53,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 		for(AbstractMatch match : matchs){
 			if(sign>1){
 				break;
-			}else if(url.indexOf(match.getKeyword())>-1||match.getKeyword().equalsIgnoreCase(method)){
+			}else if(url.indexOf(match.getKeyword())>-1){
 				if(match instanceof LoggerSomewhere){
 					logger.setSomewhere(match.getName());
 					sign++;
@@ -61,6 +61,9 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 					logger.setSomething(match.getName());
 					sign++;
 				}
+			}else if(match.getKeyword().equalsIgnoreCase(method)){
+				logger.setSomething(match.getName());
+				sign++;
 			}
 		}
 		if(sign>1){
