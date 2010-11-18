@@ -30,7 +30,7 @@ public class JdbcLogger {
 		if(format){
 			logger.info("原生SQL语句：{}",BasicFormatter.format(sql));
 		}else{
-			logger.info("原生SQL格式化语句：{}",sql);
+			logger.info("原生SQL语句：{}",sql);
 		}
 		if(!enabled){
 			return;
