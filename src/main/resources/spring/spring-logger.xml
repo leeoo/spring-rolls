@@ -21,6 +21,7 @@
 	<bean id="jdbcLogger" class="com.wisdom.core.logger.JdbcLogger" lazy-init="false" depends-on="jdbcThreadService">
 		<property name="jdbcThreadService" ref="jdbcThreadService"/>
 		<property name="enabled" value="true"/>
+		<property name="format" value="true"/>
 		<property name="sqlType" value="INSERT,UPDATE,DELETE"/>
 	</bean>
 	

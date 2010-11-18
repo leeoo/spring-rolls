@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wisdom.core.logger.domain.LoggerSql;
+import com.wisdom.core.logger.format.BasicFormatter;
 import com.wisdom.core.security.resource.SecurityUtils;
 import com.wisdom.core.utils.ScheduledThreadUtils;
 /**
@@ -20,11 +21,17 @@ public class JdbcLogger {
 	private static String sqlType;
 	
 	public static boolean enabled;
+
+	public static boolean format;
 	
 	private static JdbcThreadService jdbcThreadService;
 	
 	public static void putSql(String sql){
-		logger.info("原生SQL语句：{}",sql);
+		if(format){
+			logger.info("原生SQL语句：{}",BasicFormatter.format(sql));
+		}else{
+			logger.info("原生SQL格式化语句：{}",sql);
+		}
 		if(!enabled){
 			return;
 		}
@@ -49,6 +56,14 @@ public class JdbcLogger {
 		if(LoggerCache.isFull()){
 			ScheduledThreadUtils.start(jdbcThreadService);
 		}
+	}
+	
+	public static boolean isFormat() {
+		return format;
+	}
+
+	public static void setFormat(boolean format) {
+		JdbcLogger.format = format;
 	}
 	
 	public String getSqlType() {
