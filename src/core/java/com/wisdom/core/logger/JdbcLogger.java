@@ -58,11 +58,11 @@ public class JdbcLogger {
 		}
 	}
 	
-	public static boolean isFormat() {
+	public boolean isFormat() {
 		return format;
 	}
 
-	public static void setFormat(boolean format) {
+	public void setFormat(boolean format) {
 		JdbcLogger.format = format;
 	}
 	
