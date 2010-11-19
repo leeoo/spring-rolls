@@ -49,6 +49,8 @@ public class User extends BaseEntity implements java.io.Serializable{
 	private String email;
 	
 	private String organCode;//所属企业编码，暂时无用
+	
+	private String pyname;
 
 	@NotMapping
 	@Reference(refTableName = "t_organ", FKFieldName = "organ_code", refViewFieldName = "organ_name", refPKFieldName = "organ_code")
@@ -178,6 +180,14 @@ public class User extends BaseEntity implements java.io.Serializable{
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getPyname() {
+		return pyname;
+	}
+
+	public void setPyname(String pyname) {
+		this.pyname = pyname;
 	}
 
 }
