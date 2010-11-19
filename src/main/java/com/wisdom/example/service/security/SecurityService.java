@@ -15,6 +15,7 @@ import com.wisdom.core.security.resource.SecurityResourceCache;
 import com.wisdom.core.security.service.UserService;
 import com.wisdom.core.utils.EncodeUtils;
 import com.wisdom.core.utils.Page;
+import com.wisdom.core.utils.PinYinUtils;
 
 /**
  * 功 能 描 述:<br>
@@ -66,6 +67,10 @@ public class SecurityService implements UserService{
 	public void saveUser(User user,Collection<Long> ids) throws Exception {
 		String psw=EncodeUtils.getMd5PasswordEncoder(user.getPassword(), user.getUsername());
 		user.setPassword(psw);
+		Collection<String> pinyins = PinYinUtils.getPinyin(user.getCnname());
+		if(pinyins!=null&&!pinyins.isEmpty()){
+			user.setPyname(pinyins.iterator().next());
+		}
 		userDao._save(user);
 		for(long roleId:ids){
 			userDao.jdbcTemplate.executeArray("INSERT INTO t_system_user_role(user_id,role_id) VALUES(?,?)",user.getId(),roleId);
@@ -75,6 +80,10 @@ public class SecurityService implements UserService{
 	public void saveUser(User user) throws Exception {
 		String psw=EncodeUtils.getMd5PasswordEncoder(user.getPassword(), user.getUsername());
 		user.setPassword(psw);
+		Collection<String> pinyins = PinYinUtils.getPinyin(user.getCnname());
+		if(pinyins!=null&&!pinyins.isEmpty()){
+			user.setPyname(pinyins.iterator().next());
+		}
 		userDao._save(user);
 		if(user.getRoles()!=null){
 			for(Role role:user.getRoles()){
