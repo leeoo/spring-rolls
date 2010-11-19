@@ -93,7 +93,7 @@ public class SecurityService implements UserService{
 	}
 	
 	public void updateUser(User user,Collection<Long> ids) throws Exception {
-		String sql="UPDATE t_system_user_info SET cnname=:cnname, email=:email,mobile=:mobile WHERE id=:id";
+		String sql="UPDATE t_system_user_info SET cnname=:cnname, pyname=:pyname, email=:email,mobile=:mobile WHERE id=:id";
 		userDao.jdbcTemplate.executeBean(sql, user);
 		userDao.jdbcTemplate.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",user.getId());
 		if(ids!=null){
@@ -104,7 +104,7 @@ public class SecurityService implements UserService{
 	}
 
 	public void updateUser(User user) throws Exception {
-		String sql="UPDATE t_system_user_info SET cnname=:cnname, email=:email,mobile=:mobile WHERE id=:id";
+		String sql="UPDATE t_system_user_info SET cnname=:cnname, pyname=:pyname, email=:email,mobile=:mobile WHERE id=:id";
 		userDao.jdbcTemplate.executeBean(sql, user);
 		userDao.jdbcTemplate.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",user.getId());
 		if(user.getRoles()!=null){
