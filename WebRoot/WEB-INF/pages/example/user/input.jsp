@@ -11,10 +11,9 @@
 		账号：<input name="username" value="${user.username}"/>
 			<c:if test="${user!=null && user.id!=null}">
 				<a href="${base}/example/user/${user.id}/change_password.htm">修改密码</a><br/>
-				<input name="pyname" value="${user.pyname}"/><br/>
+				拼音：<input name="pyname" value="${user.pyname}"/><br/>
 				<input type="hidden" name="password" value="********"/>
 			</c:if>
-		<br/>
 		<c:if test="${user==null || user.id==null}">
 			密码：<input type="password" name="password" value="${user.password}"/><br/>
 		</c:if>
