@@ -3,6 +3,8 @@ package com.wisdom.core.logger.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.wisdom.core.annotation.DynamicWhere;
+import com.wisdom.core.annotation.NotMapping;
 import com.wisdom.core.annotation.SimpleEntity;
 import com.wisdom.core.utils.DateUtils;
 
@@ -15,6 +17,30 @@ public class LoggerSql implements Serializable{
 	private String sqlValue;
 	private String callDetails;
 	private Date logDate = DateUtils.getCurrentDateTime();
+	
+	@NotMapping
+	@DynamicWhere(comparison=">=",comparisonField="log_date")
+	private Date beginDate;
+	
+	@NotMapping
+	@DynamicWhere(comparison="<=",comparisonField="log_date")
+	private Date endDate;
+
+	public Date getBeginDate() {
+		return beginDate;
+	}
+
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 
 	public Long getId() {
 		return id;
