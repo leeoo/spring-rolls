@@ -20,19 +20,19 @@ import com.wisdom.core.security.resource.SecurityUtils;
  */
 public class IpAddressVoter implements AccessDecisionVoter{
 
-	public static Collection<String> ipAddressList = new ArrayList<String>();
+	private static Collection<String> ipAddressList = new ArrayList<String>();
 	
-	public static boolean ipAddressExclude = false;//是否按照排除方法
+	private static boolean ipAddressExclude = false;//是否按照排除方法
 	
-	public void put(String ip){
+	public static void put(String ip){
 		ipAddressList.add(ip);
 	}
 	
-	public void remove(String ip){
+	public static void remove(String ip){
 		ipAddressList.remove(ip);
 	}
 
-	public void removeAll(){
+	public static void removeAll(){
 		ipAddressList.clear();
 	}
 	
