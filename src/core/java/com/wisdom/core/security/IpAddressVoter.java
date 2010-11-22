@@ -20,9 +20,9 @@ import com.wisdom.core.security.resource.SecurityUtils;
  */
 public class IpAddressVoter implements AccessDecisionVoter{
 
-	private static Collection<String> ipAddressList = new ArrayList<String>();
+	public static Collection<String> ipAddressList = new ArrayList<String>();
 	
-	private static boolean ipAddressExclude = false;//是否按照排除方法
+	public static boolean ipAddressExclude = false;//是否按照排除方法
 	
 	public void put(String ip){
 		ipAddressList.add(ip);
