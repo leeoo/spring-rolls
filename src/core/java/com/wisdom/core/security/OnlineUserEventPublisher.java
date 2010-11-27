@@ -2,10 +2,11 @@ package com.wisdom.core.security;
 
 import javax.servlet.http.HttpSessionEvent;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
+import com.wisdom.core.security.domain.User;
 import com.wisdom.core.security.resource.SecurityUtils;
+import com.wisdom.core.security.service.UserDetailServiceImpl;
 /**
  * 功 能 描 述:<br>
  * 通过继承HttpSessionEventPublisher重写相关方法获取在线用户信息
@@ -23,15 +24,15 @@ public class OnlineUserEventPublisher extends HttpSessionEventPublisher{
 	 * @see UserDetailServiceImpl
 	 */
 	public void sessionCreated(HttpSessionEvent event) {
-		/*UserDetails user=SecurityUtils.getCurrentUserDetails();
+		User user=SecurityUtils.getCurrentUser();
 		if(user!=null){
 			OnlineUserCache.put(user);
-		}*/
+		}
 		super.sessionCreated(event);
 	}
 
 	public void sessionDestroyed(HttpSessionEvent event) {
-		UserDetails user=SecurityUtils.getCurrentUserDetails();
+		User user=SecurityUtils.getCurrentUser();
 		if(user!=null){
 			OnlineUserCache.remove(user.getUsername());
 		}

@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
-import com.wisdom.core.security.OnlineUserCache;
 import com.wisdom.core.security.domain.User;
+import com.wisdom.core.security.domain.UserDetailsImpl;
 
 /**
  * 功能描述：
@@ -29,34 +29,18 @@ public class SecurityUtils {
 	 * 取得当前用户, 返回值为SpringSecurity的User类或其子类, 如果当前用户未登录则返回null.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends UserDetails> T getCurrentUserDetails() {
+	public static <T extends User> T getCurrentUser() {
 		Authentication authentication = getAuthentication();
 		if (authentication != null) {
 			Object principal = authentication.getPrincipal();
-			if (principal instanceof UserDetails) {
+			if (principal instanceof UserDetailsImpl) {
 				return (T) principal;
 			}
 		}
 		return null;
 	}
 
-	/**
-	 * 获取当前用户详细信息
-	 * @param <T>
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends User> T getCurrentUser() {
-		UserDetails ud = getCurrentUserDetails();
-		if(ud!=null){
-			User user = OnlineUserCache.get(ud.getUsername());
-			if(user!=null){
-				return (T)user;
-			}
-		}
-		return null;
-	}
-
+	
 	/**
 	 * 取得当前用户的登录名, 如果当前用户未登录则返回空字符串.
 	 */

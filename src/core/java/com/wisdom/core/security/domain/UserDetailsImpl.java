@@ -2,6 +2,7 @@ package com.wisdom.core.security.domain;
 
 import java.util.Collection;
 
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 /**
@@ -12,9 +13,29 @@ import org.springframework.security.core.userdetails.UserDetails;
  * <br>项目名称(Project Name): <b>wisdom.3.0</b>
  * <br>包及类名(Package Class): <b>com.wisdom.core.security.domain.UserDetailsImpl.java</b>
  */
-public class UserDetailsImpl extends User implements UserDetails{
+public class UserDetailsImpl extends User implements UserDetails,CredentialsContainer{
 	
 	private static final long serialVersionUID = 9068370464939309858L;
+
+	/**
+	 * 获取当前登录用户详细信息必须重写次方法
+	 */
+	public int hashCode() {
+		return getUsername().hashCode();
+	}
+	
+	/**
+	 * 获取当前登录用户详细信息必须重写次方法
+	 */
+	public boolean equals(Object obj) {
+		if(obj instanceof UserDetails){
+			UserDetails ud = (UserDetails)obj;
+			if(ud.getUsername().equals(this.getUsername())){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public UserDetailsImpl(User user,Collection<GrantedAuthority> authorities){
 		setId(user.getId());
@@ -25,6 +46,7 @@ public class UserDetailsImpl extends User implements UserDetails{
 		setEmail(user.getEmail());
 		setOrganCode(user.getOrganCode());
 		setOrganName(user.getOrganName());
+		setPyname(user.getPyname());
 		setBusinessCode(user.getBusinessCode());
 		setInsertDate(user.getInsertDate());
 		setUpdateDate(user.getUpdateDate());
@@ -57,6 +79,13 @@ public class UserDetailsImpl extends User implements UserDetails{
 
 	public void setAuthorities(Collection<GrantedAuthority> authorities) {
 		this.authorities = authorities;
+	}
+
+	/**
+	 * 用于清除敏感数据
+	 */
+	public void eraseCredentials() {
+		setPassword(null);
 	}
 
 }
