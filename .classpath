@@ -10,7 +10,6 @@
 	<classpathentry kind="lib" path="server/lib/catalina-optional.jar"/>
 	<classpathentry kind="lib" path="server/lib/catalina.jar"/>
 	<classpathentry kind="lib" path="server/lib/commons-el.jar"/>
-	<classpathentry kind="lib" path="server/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="server/lib/commons-modeler-2.0.1.jar"/>
 	<classpathentry kind="lib" path="server/lib/jasper-compiler-jdt.jar"/>
 	<classpathentry kind="lib" path="server/lib/jasper-compiler.jar"/>
