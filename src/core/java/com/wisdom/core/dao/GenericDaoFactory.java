@@ -9,6 +9,7 @@ import com.wisdom.core.dao.db2.Db2JdbcDao;
 import com.wisdom.core.dao.derby.DerbyJdbcDao;
 import com.wisdom.core.dao.h2.H2JdbcDao;
 import com.wisdom.core.dao.hsql.HSqlJdbcDao;
+import com.wisdom.core.dao.informix.InformixJdbcDao;
 import com.wisdom.core.dao.mysql.MySqlJdbcDao;
 import com.wisdom.core.dao.oracle.OracleJdbcDao;
 import com.wisdom.core.dao.postgresql.PostgreSqlJdbcDao;
@@ -49,6 +50,8 @@ public class GenericDaoFactory {
 			return new SqlServer2005JdbcDao(dataSource);
 		}else if(type.equals("db2")){
 			return new Db2JdbcDao(dataSource);
+		}else if(type.equals("informix")){
+			return new InformixJdbcDao(dataSource);
 		}
 		return null;
 	}
