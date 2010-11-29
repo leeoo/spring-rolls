@@ -27,13 +27,13 @@ public class JdbcLogger {
 	private static JdbcThreadService jdbcThreadService;
 	
 	public static void putSql(String sql){
+		if(!enabled){
+			return;
+		}
 		if(format){
 			logger.info("原生SQL语句：{}",BasicFormatter.format(sql));
 		}else{
 			logger.info("原生SQL语句：{}",sql);
-		}
-		if(!enabled){
-			return;
 		}
 		if(sql.indexOf("t_logger_sql")>-1){
 			return;//如果是本表操作不做记录
