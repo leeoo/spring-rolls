@@ -1,6 +1,7 @@
 package com.wisdom.core.security.domain;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -49,6 +50,8 @@ public class User extends BaseEntity implements java.io.Serializable{
 	private String email;
 	
 	private String organCode;//所属企业编码，暂时无用
+	
+	private Date lastLoginDate;//最后登录时间，如果没登陆就是null
 	
 	private String pyname;
 
@@ -188,6 +191,14 @@ public class User extends BaseEntity implements java.io.Serializable{
 
 	public void setPyname(String pyname) {
 		this.pyname = pyname;
+	}
+
+	public Date getLastLoginDate() {
+		return lastLoginDate;
+	}
+
+	public void setLastLoginDate(Date lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
 	}
 
 }

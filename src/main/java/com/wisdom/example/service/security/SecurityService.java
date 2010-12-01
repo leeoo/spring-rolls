@@ -1,6 +1,7 @@
 package com.wisdom.example.service.security;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.sql.DataSource;
 
@@ -124,6 +125,11 @@ public class SecurityService implements UserService{
 	public void updateUserEnabled(Long id)throws Exception{
 		String sql="UPDATE t_system_user_info SET enabled=1 WHERE id=?";
 		userDao.jdbcTemplate.executeArray(sql, id);
+	}
+	
+	public void updateLastLoginDate(Date date, String loginName) throws Exception{
+		String sql="UPDATE t_system_user_info SET last_login_date=? WHERE username=?";
+		userDao.jdbcTemplate.executeArray(sql, date,loginName);
 	}
 
 	public void updateUserDisabled(Long id)throws Exception{
@@ -256,5 +262,5 @@ public class SecurityService implements UserService{
 		String sql="SELECT id, name, path, cnname FROM t_system_resource_info WHERE id in(SElECT rr.resource_id FROM t_system_role_resource rr WHERE rr.role_id in(SELECT ur.role_id FROM t_system_user_role ur WHERE ur.user_id in(SELECT u.id FROM t_system_user_info u WHERE u.username=?)))";
 		return resourceDao.jdbcTemplate.findListBeanByArray(sql, Resource.class,loginName);
 	}
-	
+
 }

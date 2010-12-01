@@ -46,6 +46,7 @@ public class UserDetailsImpl extends User implements UserDetails,CredentialsCont
 		setEmail(user.getEmail());
 		setOrganCode(user.getOrganCode());
 		setOrganName(user.getOrganName());
+		setLastLoginDate(user.getLastLoginDate());
 		setPyname(user.getPyname());
 		setBusinessCode(user.getBusinessCode());
 		setInsertDate(user.getInsertDate());

@@ -2,6 +2,7 @@ package com.wisdom.core.security.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import com.wisdom.core.security.OnlineUserCache;
 import com.wisdom.core.security.domain.Resource;
 import com.wisdom.core.security.domain.User;
 import com.wisdom.core.security.domain.UserDetailsImpl;
+import com.wisdom.core.utils.DateUtils;
 
 /**
  * 实现SpringSecurity的UserDetailsService接口,获取用户Detail信息.
@@ -35,6 +37,12 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		for(Resource res:ress){
 			ag=new GrantedAuthorityImpl(res.getName());
 			authorities.add(ag);
+		}
+		try{
+			Date lastLoginDate = DateUtils.getCurrentDateTime();
+			userService.updateLastLoginDate(lastLoginDate, user.getUsername());
+			user.setLastLoginDate(lastLoginDate);
+		}catch (Exception e) {
 		}
 		UserDetails userDetails = new UserDetailsImpl(user, authorities);
 		//用以上方法会使Session并发控制失效，但可以不操作数据库的情况下获得非常全面的用户信息。
