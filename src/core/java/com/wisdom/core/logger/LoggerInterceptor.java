@@ -53,6 +53,8 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 		for(AbstractMatch match : matchs){
 			if(sign>1){
 				break;
+			}else if(!match.isEnabled()){
+				break;
 			}else if(url.indexOf(match.getKeyword())>-1){
 				if(match instanceof LoggerSomewhere){
 					logger.setSomewhere(match.getName());
