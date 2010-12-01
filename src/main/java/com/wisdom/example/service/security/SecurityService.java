@@ -150,6 +150,10 @@ public class SecurityService implements UserService{
 	}
 
 	public void deleteUser(Long id) throws Exception{
+		User user = getUser(id);
+		if(user!=null&&user.getLastLoginDate()!=null){
+			throw new Exception("该用户已经登录过，不能删除！");
+		}
 		userDao.delete(id);
 		userDao.jdbcTemplate.executeArray("DELETE FROM t_system_user_role WHERE user_id=?",id);
 	}
