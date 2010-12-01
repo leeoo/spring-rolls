@@ -60,6 +60,7 @@ public class MatchServiceImpl implements MatchService{
 	
 	public void saveLoggerSomewhere(LoggerSomewhere somewhere)throws Exception{
 		somewhereDao.save(somewhere);
+		MatchCache.put(somewhere);
 	}
 	
 	public void updateLoggerSomewhere(LoggerSomewhere somewhere)throws Exception{
