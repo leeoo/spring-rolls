@@ -37,10 +37,11 @@ public class OnlineUserEventPublisher extends HttpSessionEventPublisher{
 		User user=SecurityUtils.getCurrentUser();
 		if(user!=null){
 			OnlineUserCache.remove(user.getUsername());
-		}
-		String username = (String)event.getSession().getAttribute(LOGIN_USERNAME);
-		if(username!=null){
-			OnlineUserCache.remove(username);
+		}else{
+			String username = (String)event.getSession().getAttribute(LOGIN_USERNAME);
+			if(username!=null){
+				OnlineUserCache.remove(username);
+			}
 		}
 		super.sessionDestroyed(event);
 	}
