@@ -2,7 +2,6 @@ package com.wisdom.core.security;
 
 import javax.servlet.http.HttpSessionEvent;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.wisdom.core.security.domain.User;
@@ -16,6 +15,7 @@ import com.wisdom.core.security.service.UserDetailServiceImpl;
  * <br>项 目 信 息:wisdom.3.0:com.wisdom.core.security.OnlineUserEventPublisher.java
  */
 public class OnlineUserEventPublisher extends HttpSessionEventPublisher{
+	public final static String LOGIN_USERNAME = "LOGIN_USERNAME";
 	
 	/**
 	 * 此处只有选择rememberMe才会获得用户登录信息。
@@ -28,14 +28,19 @@ public class OnlineUserEventPublisher extends HttpSessionEventPublisher{
 		User user=SecurityUtils.getCurrentUser();
 		if(user!=null){
 			OnlineUserCache.put(user);
+			event.getSession().setAttribute(LOGIN_USERNAME,user.getUsername());
 		}
 		super.sessionCreated(event);
 	}
 
 	public void sessionDestroyed(HttpSessionEvent event) {
-		UserDetails user=SecurityUtils.getCurrentUserDetails();
+		User user=SecurityUtils.getCurrentUser();
 		if(user!=null){
 			OnlineUserCache.remove(user.getUsername());
+		}
+		String username = (String)event.getSession().getAttribute(LOGIN_USERNAME);
+		if(username!=null){
+			OnlineUserCache.remove(username);
 		}
 		super.sessionDestroyed(event);
 	}

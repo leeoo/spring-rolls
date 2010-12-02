@@ -11,6 +11,9 @@ import com.wisdom.core.logger.domain.AbstractMatch;
 import com.wisdom.core.logger.domain.Logger;
 import com.wisdom.core.logger.domain.LoggerSomething;
 import com.wisdom.core.logger.domain.LoggerSomewhere;
+import com.wisdom.core.security.OnlineUserEventPublisher;
+import com.wisdom.core.security.domain.User;
+import com.wisdom.core.security.resource.SecurityUtils;
 import com.wisdom.core.utils.ScheduledThreadUtils;
 /**
  * <b>业务说明</b>:<br>
@@ -30,6 +33,13 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 	 * 拦截请求信息
 	 */
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
+		String username = (String) request.getSession().getAttribute(OnlineUserEventPublisher.LOGIN_USERNAME);
+		if(username == null){
+			User user = SecurityUtils.getCurrentUser();
+			if(user!=null){
+				request.getSession().setAttribute(OnlineUserEventPublisher.LOGIN_USERNAME, user.getUsername());
+			}
+		}
 		String url=request.getRequestURL().toString();
 		if(!enabled){
 			return super.preHandle(request, response, handler);
