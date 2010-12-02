@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.wisdom.core.security.OnlineUserCache;
 import com.wisdom.core.security.domain.Resource;
 import com.wisdom.core.security.domain.User;
-import com.wisdom.core.security.domain.UserDetailsImpl;
 import com.wisdom.core.utils.DateUtils;
 
 /**
@@ -44,9 +43,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
 			user.setLastLoginDate(lastLoginDate);
 		}catch (Exception e) {
 		}
-		UserDetails userDetails = new UserDetailsImpl(user, authorities);
+		//UserDetails userDetails = new UserDetailsImpl(user, authorities);
 		//用以上方法会使Session并发控制失效，但可以不操作数据库的情况下获得非常全面的用户信息。
-		//UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),user.isEnabled(),user.isAccountExpired(),user.isCredentialsExpired(),user.isAccountLocked(),authorities);
+		UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),user.isEnabled(),user.isAccountExpired(),user.isCredentialsExpired(),user.isAccountLocked(),authorities);
 		OnlineUserCache.put(user);
 		return userDetails;
 	}

@@ -2,6 +2,7 @@ package com.wisdom.core.security;
 
 import javax.servlet.http.HttpSessionEvent;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.wisdom.core.security.domain.User;
@@ -32,7 +33,7 @@ public class OnlineUserEventPublisher extends HttpSessionEventPublisher{
 	}
 
 	public void sessionDestroyed(HttpSessionEvent event) {
-		User user=SecurityUtils.getCurrentUser();
+		UserDetails user=SecurityUtils.getCurrentUserDetails();
 		if(user!=null){
 			OnlineUserCache.remove(user.getUsername());
 		}

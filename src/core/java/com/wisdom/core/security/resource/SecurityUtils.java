@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
+import com.wisdom.core.security.OnlineUserCache;
 import com.wisdom.core.security.domain.User;
 import com.wisdom.core.security.domain.UserDetailsImpl;
 
@@ -33,7 +34,21 @@ public class SecurityUtils {
 		Authentication authentication = getAuthentication();
 		if (authentication != null) {
 			Object principal = authentication.getPrincipal();
-			if (principal instanceof UserDetailsImpl) {
+			if (principal instanceof UserDetailsImpl || principal instanceof User) {
+				return (T) principal;
+			}else{
+				return (T) OnlineUserCache.get(getCurrentUserDetails().getUsername());
+			}
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends UserDetails> T getCurrentUserDetails() {
+		Authentication authentication = getAuthentication();
+		if (authentication != null) {
+			Object principal = authentication.getPrincipal();
+			if (principal instanceof UserDetails) {
 				return (T) principal;
 			}
 		}
