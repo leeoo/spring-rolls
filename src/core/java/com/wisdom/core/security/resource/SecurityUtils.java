@@ -31,26 +31,32 @@ public class SecurityUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends User> T getCurrentUser() {
-		Authentication authentication = getAuthentication();
-		if (authentication != null) {
-			Object principal = authentication.getPrincipal();
-			if (principal instanceof UserDetailsImpl || principal instanceof User) {
-				return (T) principal;
-			}else{
-				return (T) OnlineUserCache.get(getCurrentUserDetails().getUsername());
+		try{
+			Authentication authentication = getAuthentication();
+			if (authentication != null) {
+				Object principal = authentication.getPrincipal();
+				if (principal instanceof UserDetailsImpl || principal instanceof User) {
+					return (T) principal;
+				}else if (principal instanceof UserDetails){
+					return (T) OnlineUserCache.get(getCurrentUserDetails().getUsername());
+				}
 			}
+		}catch (Exception e) {
 		}
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T extends UserDetails> T getCurrentUserDetails() {
-		Authentication authentication = getAuthentication();
-		if (authentication != null) {
-			Object principal = authentication.getPrincipal();
-			if (principal instanceof UserDetails) {
-				return (T) principal;
+		try{
+			Authentication authentication = getAuthentication();
+			if (authentication != null) {
+				Object principal = authentication.getPrincipal();
+				if (principal instanceof UserDetails) {
+					return (T) principal;
+				}
 			}
+		}catch (Exception e) {
 		}
 		return null;
 	}
@@ -60,9 +66,12 @@ public class SecurityUtils {
 	 * 取得当前用户的登录名, 如果当前用户未登录则返回空字符串.
 	 */
 	public static String getCurrentUserName() {
-		Authentication authentication = getAuthentication();
-		if (authentication != null && authentication.getPrincipal() != null) {
-			return authentication.getName();
+		try{
+			Authentication authentication = getAuthentication();
+			if (authentication != null && authentication.getPrincipal() != null) {
+				return authentication.getName();
+			}
+		}catch (Exception e) {
 		}
 		return "";
 	}
@@ -71,13 +80,16 @@ public class SecurityUtils {
 	 * 取得当前用户登录IP, 如果当前用户未登录则返回空字符串.
 	 */
 	public static String getCurrentUserIp() {
-		Authentication authentication = getAuthentication();
-		if (authentication != null) {
-			Object details = authentication.getDetails();
-			if (details instanceof WebAuthenticationDetails) {
-				WebAuthenticationDetails webDetails = (WebAuthenticationDetails) details;
-				return webDetails.getRemoteAddress();
+		try{
+			Authentication authentication = getAuthentication();
+			if (authentication != null) {
+				Object details = authentication.getDetails();
+				if (details instanceof WebAuthenticationDetails) {
+					WebAuthenticationDetails webDetails = (WebAuthenticationDetails) details;
+					return webDetails.getRemoteAddress();
+				}
 			}
+		}catch (Exception e) {
 		}
 		return "";
 	}
@@ -86,14 +98,17 @@ public class SecurityUtils {
 	 * 判断用户是否拥有角色, 如果用户拥有参数中的任意一个角色则返回true.
 	 */
 	public static boolean hasAnyRole(String[] roles) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Collection<GrantedAuthority> granteds = authentication.getAuthorities();
-		for (String role : roles) {
-			for (GrantedAuthority authority : granteds) {
-				if (role.equals(authority.getAuthority())) {
-					return true;
+		try{
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			Collection<GrantedAuthority> granteds = authentication.getAuthorities();
+			for (String role : roles) {
+				for (GrantedAuthority authority : granteds) {
+					if (role.equals(authority.getAuthority())) {
+						return true;
+					}
 				}
 			}
+		}catch (Exception e) {
 		}
 		return false;
 	}
@@ -105,19 +120,25 @@ public class SecurityUtils {
 	 * @param request 用于获取用户IP地址信息.
 	 */
 	public static void saveUserDetailsToContext(UserDetails userDetails, HttpServletRequest request) {
-		PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userDetails,
-				userDetails.getPassword(), userDetails.getAuthorities());
-		authentication.setDetails(new WebAuthenticationDetails(request));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		try{
+			PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userDetails,
+					userDetails.getPassword(), userDetails.getAuthorities());
+			authentication.setDetails(new WebAuthenticationDetails(request));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}catch (Exception e) {
+		}
 	}
 
 	/**
 	 * 取得Authentication, 如当前SecurityContext为空时返回null.
 	 */
 	private static Authentication getAuthentication() {
-		SecurityContext context = SecurityContextHolder.getContext();
-		if (context != null) {
-			return context.getAuthentication();
+		try{
+			SecurityContext context = SecurityContextHolder.getContext();
+			if (context != null) {
+				return context.getAuthentication();
+			}
+		}catch (Exception e) {
 		}
 		return null;
 	}

@@ -97,18 +97,26 @@ public class IpAddressVoter implements AccessDecisionVoter{
 							int currentNumber = Integer.parseInt(currentIpBlocks[i]);
 							if(currentNumber>end||currentNumber<start){
 								isMeet = false;
+								break;
+							}
+						}else{
+							if(!currentIpBlocks[i].equals(ipBlocks[i])){
+								isMeet = false;
+								break;
 							}
 						}
 					}
-					if(isMeet){
-						return ipAddressExclude?ACCESS_DENIED:ACCESS_GRANTED;
+					if(ipAddressExclude){//true为只拦截IP列表中的IP地址;false为拦截IP列表之外的IP地址
+						return isMeet?ACCESS_DENIED:ACCESS_GRANTED;
+					}else{
+						return isMeet?ACCESS_GRANTED:ACCESS_DENIED;
 					}
 				}catch (Exception e) {
 					return ACCESS_DENIED;//登录ip验证发生意外错误则弃权
 				}
 			}
 		}
-		return ipAddressExclude?ACCESS_GRANTED:ACCESS_DENIED;
+		return ACCESS_DENIED;//登录ip验证发生意外错误则弃权
 	}
 	
 }
