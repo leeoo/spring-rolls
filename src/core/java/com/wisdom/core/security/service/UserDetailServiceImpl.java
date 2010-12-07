@@ -42,6 +42,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		user.setAuthorities(authorities);
 		Collection<Role> roles=userService.getRolesByUserName(userName);
 		user.setRoles(roles);
+		user.setOperatorIp(null);
 		try{
 			Date lastLoginDate = DateUtils.getCurrentDateTime();
 			userService.updateLastLoginDate(lastLoginDate, user.getUsername());

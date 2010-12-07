@@ -5,14 +5,17 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.wisdom.core.logger.domain.AbstractMatch;
 import com.wisdom.core.logger.domain.Logger;
 import com.wisdom.core.logger.domain.LoggerSomething;
 import com.wisdom.core.logger.domain.LoggerSomewhere;
+import com.wisdom.core.security.OnlineUserCache;
 import com.wisdom.core.security.OnlineUserEventPublisher;
 import com.wisdom.core.security.domain.User;
+import com.wisdom.core.security.domain.UserDetailsImpl;
 import com.wisdom.core.security.resource.SecurityUtils;
 import com.wisdom.core.utils.ScheduledThreadUtils;
 /**
@@ -38,6 +41,13 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 			User user = SecurityUtils.getCurrentUser();
 			if(user!=null){
 				request.getSession().setAttribute(OnlineUserEventPublisher.LOGIN_USERNAME, user.getUsername());
+				if(user.getOperatorIp()!=null){
+					user.setOperatorIp(user.getOperatorIp());
+					UserDetails userDetails = new UserDetailsImpl(user);
+					OnlineUserCache.remove(userDetails.getUsername());
+					OnlineUserCache.put(user);
+					SecurityUtils.saveUserDetailsToContext(userDetails, request);
+				}
 			}
 		}
 		String url=request.getRequestURL().toString();
