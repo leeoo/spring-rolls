@@ -16,7 +16,6 @@ import com.wisdom.core.security.domain.Resource;
 import com.wisdom.core.security.domain.Role;
 import com.wisdom.core.security.domain.User;
 import com.wisdom.core.security.domain.UserDetailsImpl;
-import com.wisdom.core.security.resource.SecurityUtils;
 import com.wisdom.core.utils.DateUtils;
 
 /**
@@ -43,7 +42,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		user.setAuthorities(authorities);
 		Collection<Role> roles=userService.getRolesByUserName(userName);
 		user.setRoles(roles);
-		user.setOperatorIp(SecurityUtils.getCurrentUserIp());
 		try{
 			Date lastLoginDate = DateUtils.getCurrentDateTime();
 			userService.updateLastLoginDate(lastLoginDate, user.getUsername());
