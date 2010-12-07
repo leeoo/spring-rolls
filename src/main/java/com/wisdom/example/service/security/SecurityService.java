@@ -175,6 +175,12 @@ public class SecurityService implements UserService{
 	}
 
 	@Transactional(readOnly=true)
+	public Collection<Role> getRolesByUserName(String loginName) {
+		String sql="SELECT id, name, cnname FROM t_system_role_info WHERE id in(SELECT ur.role_id FROM t_system_user_role ur WHERE ur.username=?)";
+		return roleDao.jdbcTemplate.findListBeanByArray(sql, Role.class,loginName);
+	}
+
+	@Transactional(readOnly=true)
 	public Role getRole(Long id) {
 		return roleDao.get(id);
 	}

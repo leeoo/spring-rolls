@@ -37,7 +37,7 @@ public class UserDetailsImpl extends User implements UserDetails,CredentialsCont
 		return false;
 	}
 	
-	public UserDetailsImpl(User user,Collection<GrantedAuthority> authorities){
+	public UserDetailsImpl(User user){
 		setId(user.getId());
 		setUsername(user.getUsername());
 		setCnname(user.getCnname());
@@ -57,13 +57,18 @@ public class UserDetailsImpl extends User implements UserDetails,CredentialsCont
 		setAccountLocked(user.isAccountLocked());
 		setCredentialsExpired(user.isCredentialsExpired());
 		setEnabled(user.isEnabled());
-		this.authorities = authorities;
+		setAuthorities(user.getAuthorities());
+		setRoles(user.getRoles());
 	}
 	
 	private Collection<GrantedAuthority> authorities;
 
 	public Collection<GrantedAuthority> getAuthorities() {
 		return authorities;
+	}
+	
+	public void setAuthorities(Collection<GrantedAuthority> authorities) {
+		this.authorities = authorities;
 	}
 
 	public boolean isAccountNonExpired() {
@@ -76,10 +81,6 @@ public class UserDetailsImpl extends User implements UserDetails,CredentialsCont
 
 	public boolean isCredentialsNonExpired() {
 		return isCredentialsExpired();
-	}
-
-	public void setAuthorities(Collection<GrantedAuthority> authorities) {
-		this.authorities = authorities;
 	}
 
 	/**

@@ -201,4 +201,8 @@ public class User extends BaseEntity implements java.io.Serializable{
 		this.lastLoginDate = lastLoginDate;
 	}
 
+	public void setAuthorities(Collection<GrantedAuthority> authorities) {
+		this.authorities = authorities;
+	}
+
 }

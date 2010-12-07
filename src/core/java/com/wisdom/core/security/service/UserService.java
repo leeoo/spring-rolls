@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import com.wisdom.core.security.domain.Resource;
+import com.wisdom.core.security.domain.Role;
 import com.wisdom.core.security.domain.User;
 
 
@@ -22,6 +23,8 @@ public interface UserService{
 	public void updateLastLoginDate(Date date,String loginName)throws Exception;
 	
 	public Collection<Resource> getResourcesByUserName(String loginName);
+
+	public Collection<Role> getRolesByUserName(String loginName);
 	
 	public Collection<Resource> getAllResources();
 	
