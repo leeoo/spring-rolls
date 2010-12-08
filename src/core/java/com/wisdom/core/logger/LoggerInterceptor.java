@@ -69,6 +69,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 		Collection<AbstractMatch> matchs = MatchCache.getAll();
 		int sign = 0;
 		Logger logger = new Logger();
+		String methodName = null;
 		logger.setUrl(url);
 		for(AbstractMatch match : matchs){
 			if(sign>1){
@@ -82,11 +83,14 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 				}else if(match instanceof LoggerSomething){
 					logger.setSomething(match.getName());
 					sign++;
+				}else if(match.getKeyword().equalsIgnoreCase(method)){
+					methodName = match.getName();
 				}
-			}else if(match.getKeyword().equalsIgnoreCase(method)){
-				logger.setSomething(match.getName());
-				sign++;
 			}
+		}
+		if(logger.getSomething()==null||logger.getSomething().isEmpty()){
+			logger.setSomething(methodName);
+			sign++;
 		}
 		if(sign>1){
 			LoggerCache.putCache(logger);
