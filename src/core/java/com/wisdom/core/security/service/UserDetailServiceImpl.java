@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.wisdom.core.security.OnlineUserCache;
 import com.wisdom.core.security.domain.Resource;
 import com.wisdom.core.security.domain.Role;
 import com.wisdom.core.security.domain.User;
