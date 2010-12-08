@@ -52,7 +52,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		UserDetails userDetails = new UserDetailsImpl(user);
 		//用以上方法会使Session并发控制失效，但可以不操作数据库的情况下获得非常全面的用户信息。
 		//UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),user.isEnabled(),user.isAccountExpired(),user.isCredentialsExpired(),user.isAccountLocked(),authorities);
-		OnlineUserCache.put(user);
+		//OnlineUserCache.put(user);一旦密码验证错误也会放入在线用户中
 		return userDetails;
 	}
 
