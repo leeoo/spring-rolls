@@ -83,12 +83,12 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 				}else if(match instanceof LoggerSomething){
 					logger.setSomething(match.getName());
 					sign++;
-				}else if(match.getKeyword().equalsIgnoreCase(method)){
-					methodName = match.getName();
 				}
+			}else if(match.getKeyword().equalsIgnoreCase(method)){
+				methodName = match.getName();
 			}
 		}
-		if(logger.getSomething()==null||logger.getSomething().isEmpty()){
+		if(methodName!=null&&logger.getSomething()==null){
 			logger.setSomething(methodName);
 			sign++;
 		}
