@@ -192,6 +192,24 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	}
 
 	/**
+	 * 修改一个实体，如果某属性值为空NULL，则不参加更新操作.
+	 * @param bean实体
+	 * @throws Exception
+	 */
+	public int updateNotNull(T bean) throws Exception{
+		validation();
+		String sql="UPDATE ".concat(tableName).concat(" SET ").concat(BeanUtils.getBuildUpdateSqlNotNull(bean,pkPropertyName));
+		logger.info(sql);
+		if(isIndex){
+			PK pk=(PK)BeanUtils.getFieldValue(bean, pkPropertyName);
+			T oldBean = get(pk);
+			SearchIndexCreator.removeIndex(oldBean);
+			SearchIndexCreator.createIndex(bean);
+		}
+		return jdbcTemplate.executeBean(sql, bean);
+	}
+
+	/**
 	 * 修改一系列实体集合.
 	 * @param beans实体集合
 	 * @throws Exception

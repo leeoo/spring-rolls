@@ -77,6 +77,37 @@ public class BeanUtils extends org.apache.commons.beanutils.BeanUtils{
 		sql=sql.substring(0, sql.length()-1).concat(" WHERE ").concat(fieldNameName).concat("=:").concat(pkPropertyName);
 		return sql;
 	}
+
+	/**
+	 * 构建simpleEntity实体的update部分语句(非空属性值)
+	 * @param bean
+	 * @param pkName
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 */
+	public static String getBuildUpdateSqlNotNull(Object bean,String pkName)throws IllegalAccessException,InvocationTargetException, NoSuchMethodException {
+		String sql="";
+		if (bean == null) {
+			return null;
+		}
+		String pkPropertyName = pkName;
+		PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(bean);
+		for (int i = 0; i < descriptors.length; i++) {
+			String propertyName = descriptors[i].getName();
+			String fieldName = getDbFieldName(propertyName);
+			if(fieldName.equals(pkName)){
+				pkPropertyName = propertyName;
+			}
+			if (descriptors[i].getValue(propertyName)!=null&&!propertyName.equalsIgnoreCase("class")&&!propertyName.equalsIgnoreCase("insertDate")&&!propertyName.equalsIgnoreCase("businessCode")&&PropertyUtils.getReadMethod(descriptors[i]) != null&&!propertyName.equals(pkPropertyName)&&!isNotMapping(bean.getClass(),propertyName)&&!isNotUpdate(bean.getClass(),propertyName)) {
+				sql=sql.concat(fieldName).concat("=:").concat(propertyName).concat(",");
+			}
+		}
+		String fieldNameName=getDbFieldName(pkName).toLowerCase();
+		sql=sql.substring(0, sql.length()-1).concat(" WHERE ").concat(fieldNameName).concat("=:").concat(pkPropertyName);
+		return sql;
+	}
 	
 	/**
 	 * 构建simpleEntity实体的insert部分语句
