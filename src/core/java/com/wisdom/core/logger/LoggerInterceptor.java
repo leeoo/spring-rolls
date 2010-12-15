@@ -76,7 +76,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 			if(sign>1){
 				break;
 			}else if(!match.isEnabled()){
-				break;
+				continue;
 			}else if(url.indexOf(match.getKeyword())>-1){
 				if(match instanceof LoggerSomewhere){
 					logger.setSomewhere(match.getName());
