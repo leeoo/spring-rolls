@@ -45,7 +45,6 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 			if(user.getOperatorIp()==null){
 				user.setOperatorIp(SecurityUtils.getCurrentUserIp());
 				UserDetails userDetails = new UserDetailsImpl(user);
-				OnlineUserCache.remove(userDetails.getUsername());
 				OnlineUserCache.put(user);
 				SecurityUtils.saveUserDetailsToContext(userDetails, request);
 			}
