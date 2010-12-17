@@ -36,21 +36,20 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter{
 	 * 拦截请求信息
 	 */
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
-			User user = SecurityUtils.getCurrentUser();
-			String username = (String) request.getSession().getAttribute(OnlineUserEventPublisher.LOGIN_USERNAME);
-			if(user!=null){
-				if(username == null){
-					request.getSession().setAttribute(OnlineUserEventPublisher.LOGIN_USERNAME, user.getUsername());
-				}
-				if(user.getOperatorIp()==null){
-					user.setOperatorIp(SecurityUtils.getCurrentUserIp());
-					UserDetails userDetails = new UserDetailsImpl(user);
-					OnlineUserCache.remove(userDetails.getUsername());
-					OnlineUserCache.put(user);
-					SecurityUtils.saveUserDetailsToContext(userDetails, request);
-				}
+		User user = SecurityUtils.getCurrentUser();
+		String username = (String) request.getSession().getAttribute(OnlineUserEventPublisher.LOGIN_USERNAME);
+		if(user!=null){
+			if(username == null){
+				request.getSession().setAttribute(OnlineUserEventPublisher.LOGIN_USERNAME, user.getUsername());
 			}
-		
+			if(user.getOperatorIp()==null){
+				user.setOperatorIp(SecurityUtils.getCurrentUserIp());
+				UserDetails userDetails = new UserDetailsImpl(user);
+				OnlineUserCache.remove(userDetails.getUsername());
+				OnlineUserCache.put(user);
+				SecurityUtils.saveUserDetailsToContext(userDetails, request);
+			}
+		}
 		String url=request.getRequestURL().toString();
 		if(!enabled){
 			return super.preHandle(request, response, handler);
