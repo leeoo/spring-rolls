@@ -52,17 +52,18 @@ public class Page extends QueryParameter {
 	 * 根据pageNo和pageSize计算当前页第一条记录在总结果集中的位置,序号从0开始.
 	 */
 	public int getFirst() {
-		if (pageNo < 1 || pageSize < 1)
+		if (getPageNo() < 1 || getPageSize() < 1){
 			return -1;
-		else
-			return ((pageNo - 1) * pageSize);
+		}else{
+			return ((getPageNo() - 1) * getPageSize());
+		}
 	}
 
 	/**
 	 * 是否已设置第一条记录记录在总结果集中的位置.
 	 */
 	public boolean isFirstSetted() {
-		return (pageNo > 0 && pageSize > 0);
+		return (getPageNo() > 0 && getPageSize() > 0);
 	}
 
 	/**
