@@ -38,7 +38,7 @@ public class Page extends QueryParameter {
 	 * 获得当前页的页号,序号从1开始,默认为1.
 	 */
 	public int getPageNo() {
-		if(getTotalPages()<=pageNo){
+		if(getTotalPages()!=-1&&getTotalPages()<=pageNo){
 			return getTotalPages();
 		}
 		return pageNo;
