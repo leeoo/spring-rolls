@@ -103,7 +103,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return null;
 		}
 	}
@@ -117,7 +117,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return null;
 		}
 	}
@@ -136,7 +136,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return null;
 		}
 	}
@@ -155,7 +155,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return null;
 		}
 	}
@@ -171,7 +171,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 				return jdbcTemplate.queryForLong(sql, resultBeanMapper(clazz));
 			}
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return null;
 		}
 	}
@@ -187,7 +187,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 				return jdbcTemplate.queryForLong(sql, resultBeanMapper(clazz));
 			}
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return null;
 		}
 	}
@@ -202,7 +202,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 				return jdbcTemplate.queryForLong(sql);
 			}
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return 0;
 		}
 	}
@@ -217,7 +217,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 				return jdbcTemplate.queryForLong(sql);
 			}
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return 0;
 		}
 	}
@@ -233,7 +233,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 				return jdbcTemplate.queryForLong(sql);
 			}
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return 0;
 		}
 	}
@@ -248,7 +248,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 				return jdbcTemplate.queryForMap(sql);
 			}
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return null;
 		}
 	}
@@ -263,7 +263,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 				return jdbcTemplate.queryForMap(sql);
 			}
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return null;
 		}
 	}
@@ -281,7 +281,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return null;
 		}
 	}
@@ -299,7 +299,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			logger.info("响应条目:"+list.size());
 			return list;
 		}catch (Exception e) {
-			logger.error("not result!");
+			logger.error("not result!{}",e.getMessage());
 			return null;
 		}
 	}
