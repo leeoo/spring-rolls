@@ -36,6 +36,9 @@ public abstract class CountSqlBuilder {
 		if(tempSql.indexOf(" ORDER BY ")>=0){
 			withOutOrderBy=tempSql.substring(0,tempSql.indexOf(" ORDER BY"));
 		}
+		if(sql.indexOf("DISTINCT(")>=0||withOutOrderBy.indexOf(" GROUP BY ")>=0){
+			return "SELECT "+countSQL+" FROM ("+sql+") TEMP_COUNT_TABLE";
+		}
 		return "SELECT "+countSQL+" ".concat(withOutOrderBy);
 	}
 	
