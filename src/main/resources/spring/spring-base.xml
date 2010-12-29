@@ -9,19 +9,17 @@
 	
 	<context:property-placeholder location="classpath*:jdbc.properties"/>
 
-	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
-		<property name="driverClass" value="${driverClassName}" />
-		<property name="jdbcUrl" value="${url}" />
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="url" value="${url}" />
 		<property name="username" value="${username}" />
 		<property name="password" value="${password}" />
-        <property name="idleConnectionTestPeriod" value="${idleConnectionTestPeriod}"/>
-	   	<property name="idleMaxAge" value="${idleMaxAge}"/>
-	   	<property name="maxConnectionsPerPartition" value="${maxConnectionsPerPartition}"/>
-	   	<property name="minConnectionsPerPartition" value="${minConnectionsPerPartition}"/>
-	  	<property name="partitionCount" value="${partitionCount}"/>
-	   	<property name="acquireIncrement" value="${acquireIncrement}"/>
-	   	<property name="statementsCacheSize" value="${statementsCacheSize}"/>
-	   	<property name="releaseHelperThreads" value="${releaseHelperThreads}"/>
+        <property name="initialSize" value="${initialSize}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="maxIdle" value="${maxIdle}" />
+		<property name="maxWait" value="${maxWait}" />
+		<property name="poolPreparedStatements" value="${poolPreparedStatements}" />
+		<property name="defaultAutoCommit" value="${defaultAutoCommit}" />
 	</bean>
 	
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -59,7 +57,7 @@
 	        <list>
 	            <bean class="net.sourceforge.jdbclogger.spring.JdbcLoggerDataSourceConfiguration">
 	                <property name="dataSourceBeanName" value="dataSource"/>
-	                <property name="driverClassNamePropertyName" value="driverClass"/>
+	                <property name="driverClassNamePropertyName" value="driverClassName"/>
 	            </bean>
 	        </list>
 	    </property>

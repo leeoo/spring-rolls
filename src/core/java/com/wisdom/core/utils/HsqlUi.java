@@ -16,8 +16,8 @@ public class HsqlUi {
 	private DataSource dataSource;
 
 	public void init() throws Exception {
-		com.jolbox.bonecp.BoneCPDataSource basicDataSource = (com.jolbox.bonecp.BoneCPDataSource) getDataSource();
-		String[] args = new String[] { "--url", basicDataSource.getJdbcUrl(), "--noexit" };
+		org.apache.commons.dbcp.BasicDataSource basicDataSource = (org.apache.commons.dbcp.BasicDataSource) getDataSource();
+		String[] args = new String[] { "--url", basicDataSource.getUrl(), "--noexit" };
 		DatabaseManagerSwing.main(args);
 	}
 
