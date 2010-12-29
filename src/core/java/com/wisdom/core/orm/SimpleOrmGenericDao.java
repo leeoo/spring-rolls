@@ -140,9 +140,9 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 		long gpk = -1;
 		if(isUseIDCreator){
 			if(idName!=null&&!idName.trim().isEmpty()){
-				gpk=IDCreator.getNextId(idName,this.jdbcTemplate);
+				gpk=IDCreator.getNextId(tableName);
 			}else{
-				gpk=IDCreator.getNextId(tableName,this.jdbcTemplate);
+				gpk=IDCreator.getNextId(tableName);
 			}
 			BeanUtils.setFieldNumberValue(bean, pkPropertyName, gpk);
 			save(bean);

@@ -32,9 +32,10 @@
 		<property name="dbType" value="${dbType}"/>
 	</bean>
 	
-	<bean id="IDCreator" class="com.wisdom.core.dao.IDCreator" lazy-init="false" depends-on="genericDaoFactory">
+	<bean id="IDCreator" class="com.wisdom.core.dao.IDCreator" lazy-init="false" depends-on="dataSource">
 		<property name="idCacheMaxValue" value="${idCacheMaxValue}"/>
 		<property name="businessCode" value="${businessCode}"/>
+		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
 	<bean id="autoMappingSimpleEntitys" class="com.wisdom.core.orm.AutoMappingCreator" init-method="init" lazy-init="false" depends-on="genericDaoFactory">
