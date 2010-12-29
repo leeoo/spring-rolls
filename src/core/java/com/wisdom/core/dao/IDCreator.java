@@ -1,7 +1,7 @@
 package com.wisdom.core.dao;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.sql.DataSource;
 
@@ -18,8 +18,8 @@ import org.springframework.util.Assert;
  */
 public class IDCreator {
 	private static final Logger logger = LoggerFactory.getLogger(IDCreator.class);
-	private static Map<String,Long> idMap=new HashMap<String,Long>();
-	private static Map<String,Long> maxIdMap=new HashMap<String,Long>();
+	private static ConcurrentMap<String,Long> idMap=new ConcurrentHashMap<String,Long>();
+	private static ConcurrentMap<String,Long> maxIdMap=new ConcurrentHashMap<String,Long>();
 	public static long idCacheMaxValue = 500;
 	public static String businessCode;
 
@@ -31,7 +31,7 @@ public class IDCreator {
 	public synchronized static long getNextId(String idName,JdbcTemplate jdbcTemplate){
 		validationidName(idName);
 		validationNull(jdbcTemplate);
-		synchronized (idName) {
+		synchronized (jdbcTemplate) {
 			Long currentId=idMap.get(idName);
 			Long maxId=maxIdMap.get(idName);
 			if(currentId==null||maxId==null||currentId.longValue()>=maxId.longValue()){
@@ -54,7 +54,7 @@ public class IDCreator {
 	public synchronized static long getNextId(String idName,DataSource dataSource){
 		validationidName(idName);
 		validationNull(dataSource);
-		synchronized (idName) {
+		synchronized (dataSource) {
 			Long currentId=idMap.get(idName);
 			Long maxId=maxIdMap.get(idName);
 			if(currentId==null||maxId==null||currentId.longValue()>=maxId.longValue()){
