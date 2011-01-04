@@ -77,8 +77,8 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @param clazz实体类型
 	 */
 	public SimpleOrmGenericDao(JdbcTemplate jdbcTemplate,Class<T> clazz) {
-		this.clazz=clazz;
-		this.jdbcTemplate =jdbcTemplate;
+		this.clazz = clazz;
+		this.jdbcTemplate = jdbcTemplate;
 		SimpleEntity simpleEntity=this.clazz.getAnnotation(SimpleEntity.class);
 		try{
 			Index index = this.clazz.getAnnotation(Index.class);
@@ -88,13 +88,13 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 		}catch (Exception e) {
 			this.isIndex=false;
 		}
-		tableName=simpleEntity.tableName();
-		pkPropertyName=simpleEntity.pkPropertyName();
-		pkFieldName=BeanUtils.getDbFieldName(pkPropertyName);
-		where=simpleEntity.where();
-		orderBy=simpleEntity.orderBy();
+		tableName = simpleEntity.tableName();
+		pkPropertyName = simpleEntity.pkPropertyName();
+		pkFieldName = BeanUtils.getDbFieldName(pkPropertyName);
+		where = simpleEntity.where();
+		orderBy = simpleEntity.orderBy();
 		idName = simpleEntity.IDName();
-		isUseIDCreator=simpleEntity.isUseIDCreator();
+		isUseIDCreator = simpleEntity.isUseIDCreator();
 	}
 	
 	/**
@@ -104,9 +104,10 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public void save(T bean) throws Exception{
 		validation();
-		String sql="INSERT INTO ".concat(tableName).concat(BeanUtils.getBuildInsertSql(bean));
-		logger.info(sql);
-		jdbcTemplate.executeBean(sql, bean);
+		StringBuffer sql = new StringBuffer();
+		sql.append("INSERT INTO ").append(tableName).append(BeanUtils.getBuildInsertSql(bean));
+		logger.info(sql.toString());
+		jdbcTemplate.executeBean(sql.toString(), bean);
 		if(isIndex){
 			SearchIndexCreator.createIndex(bean);
 		}
@@ -119,9 +120,10 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public void saveAll(T... beans) throws Exception{
 		validation();
-		String sql="INSERT INTO ".concat(tableName).concat(BeanUtils.getBuildInsertSql(beans[0]));
-		logger.info(sql);	
-		jdbcTemplate.executeBatchByArrayBeans(sql, beans);
+		StringBuffer sql = new StringBuffer();
+		sql.append("INSERT INTO ").append(tableName).append(BeanUtils.getBuildInsertSql(beans[0]));
+		logger.info(sql.toString());	
+		jdbcTemplate.executeBatchByArrayBeans(sql.toString(), beans);
 		if(isIndex){
 			for(T bean:beans){
 				SearchIndexCreator.createIndex(bean);
@@ -180,15 +182,16 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public int update(T bean) throws Exception{
 		validation();
-		String sql="UPDATE ".concat(tableName).concat(" SET ").concat(BeanUtils.getBuildUpdateSql(bean,pkPropertyName));
-		logger.info(sql);
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE ").append(tableName).append(" SET ").append(BeanUtils.getBuildUpdateSql(bean,pkPropertyName));
+		logger.info(sql.toString());
 		if(isIndex){
 			PK pk=(PK)BeanUtils.getFieldValue(bean, pkPropertyName);
 			T oldBean = get(pk);
 			SearchIndexCreator.removeIndex(oldBean);
 			SearchIndexCreator.createIndex(bean);
 		}
-		return jdbcTemplate.executeBean(sql, bean);
+		return jdbcTemplate.executeBean(sql.toString(), bean);
 	}
 
 	/**
@@ -198,15 +201,16 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public int updateNotNull(T bean) throws Exception{
 		validation();
-		String sql="UPDATE ".concat(tableName).concat(" SET ").concat(BeanUtils.getBuildUpdateSqlNotNull(bean,pkPropertyName));
-		logger.info(sql);
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE ").append(tableName).append(" SET ").append(BeanUtils.getBuildUpdateSqlNotNull(bean,pkPropertyName));
+		logger.info(sql.toString());
 		if(isIndex){
 			PK pk=(PK)BeanUtils.getFieldValue(bean, pkPropertyName);
 			T oldBean = get(pk);
 			SearchIndexCreator.removeIndex(oldBean);
 			SearchIndexCreator.createIndex(bean);
 		}
-		return jdbcTemplate.executeBean(sql, bean);
+		return jdbcTemplate.executeBean(sql.toString(), bean);
 	}
 
 	/**
@@ -216,8 +220,9 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public int[] updateAll(T... beans) throws Exception{
 		validation();
-		String sql="UPDATE ".concat(tableName).concat(" SET ").concat(BeanUtils.getBuildUpdateSql(beans[0],pkPropertyName));
-		logger.info(sql);
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE ").append(tableName).append(" SET ").append(BeanUtils.getBuildUpdateSql(beans[0],pkPropertyName));
+		logger.info(sql.toString());
 		if(isIndex){
 			for(T bean:beans){
 				PK pk=(PK)BeanUtils.getFieldValue(bean, pkPropertyName);
@@ -226,7 +231,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 				SearchIndexCreator.createIndex(bean);
 			}
 		}
-		return jdbcTemplate.executeBatchByArrayBeans(sql, beans);
+		return jdbcTemplate.executeBatchByArrayBeans(sql.toString(), beans);
 	}
 	
 	/**
@@ -236,13 +241,14 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public int delete(PK pk)throws Exception{
 		validation();
-		String sql="DELETE FROM ".concat(tableName).concat(" WHERE ".concat(pkFieldName).concat("=?"));
-		logger.info(sql);
+		StringBuffer sql = new StringBuffer();
+		sql.append("DELETE FROM ").append(tableName).append(" WHERE ").append(pkFieldName).append("=?");
+		logger.info(sql.toString());
 		if(isIndex){
 			T oldBean = get(pk);
 			SearchIndexCreator.removeIndex(oldBean);
 		}
-		return jdbcTemplate.executeArray(sql, pk);
+		return jdbcTemplate.executeArray(sql.toString(), pk);
 	}
 
 	/**
@@ -253,15 +259,16 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	public int deleteByProperty(String name,Object value)throws Exception{
 		validation();
 		String fieldName = BeanUtils.getDbFieldName(name);
-		String sql="DELETE FROM ".concat(tableName).concat(" WHERE ".concat(fieldName).concat("=?"));
-		logger.info(sql);
+		StringBuffer sql = new StringBuffer();
+		sql.append("DELETE FROM ").append(tableName).append(" WHERE ").append(fieldName).append("=?");
+		logger.info(sql.toString());
 		if(isIndex){
 			Collection<T> oldBeans = getAllByProperty(name, value);
 			for(T oldBean : oldBeans){
 				SearchIndexCreator.removeIndex(oldBean);
 			}
 		}
-		return jdbcTemplate.executeArray(sql, value);
+		return jdbcTemplate.executeArray(sql.toString(), value);
 	}
 	
 	/**
@@ -271,19 +278,20 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public int deleteAll(PK... pks)throws Exception{
 		validation();
-		String sql="DELETE FROM ".concat(tableName).concat(" WHERE ".concat(pkFieldName).concat(" IN ("));
+		StringBuffer sql = new StringBuffer();
+		sql.append("DELETE FROM ").append(tableName).append(" WHERE ").append(pkFieldName).append(" IN (");
 		for(int i=0;i<pks.length;i++){
-			sql=sql.concat("?,");
+			sql.append("?,");
 		}
-		sql=sql.substring(0,sql.length()-1).concat(")");
-		logger.info(sql);
+		sql.delete(sql.length()-1, sql.length()).append(")");
+		logger.info(sql.toString());
 		if(isIndex){
 			for(PK pk : pks){
 				T oldBean = get(pk);
 				SearchIndexCreator.removeIndex(oldBean);
 			}
 		}
-		return jdbcTemplate.executeArray(sql, (Object[])pks);
+		return jdbcTemplate.executeArray(sql.toString(), (Object[])pks);
 	}
 	
 	/**
@@ -293,12 +301,13 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public T get(PK pk){
 		validation();
-		String sql=buildWhereSql("SELECT x.* "+getReferenceSql()+" FROM ",pk);
+		StringBuffer sql = new StringBuffer();
+		sql.append(buildWhereSql("SELECT x.* "+getReferenceSql()+" FROM ",pk));
 		if(where!=null&&!where.isEmpty()){
-			sql=sql.concat(" AND ".concat(where));
+			sql.append(" AND ").append(where);
 		}
-		logger.info(sql);
-		return (T)jdbcTemplate.findUniqueBeanByArray(sql,clazz,pk);
+		logger.info(sql.toString());
+		return (T)jdbcTemplate.findUniqueBeanByArray(sql.toString(),clazz,pk);
 	}
 	
 	/**
@@ -308,15 +317,16 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public Page getAll(Page page){
 		validation();
-		String sql="SELECT x.* "+getReferenceSql()+" FROM ".concat(tableName+" x");
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT x.* ").append(getReferenceSql()).append(" FROM ").append(tableName).append(" x");
 		if(where!=null&&!where.isEmpty()){
-			sql=sql.concat(" WHERE ".concat(where));
+			sql.append(" WHERE ").append(where);
 		}
 		if(orderBy!=null&&!orderBy.isEmpty()){
-			sql=sql.concat(" ORDER BY ".concat(orderBy));
+			sql.append(" ORDER BY ").append(orderBy);
 		}
-		logger.info(sql);
-		return jdbcTemplate.findPageListBean(sql, clazz, page);
+		logger.info(sql.toString());
+		return jdbcTemplate.findPageListBean(sql.toString(), clazz, page);
 	}
 	
 	/**
@@ -407,15 +417,16 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public Collection<T> getAll(){
 		validation();
-		String sql="SELECT x.* "+getReferenceSql()+" FROM ".concat(tableName+" x");
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT x.* ").append(getReferenceSql()).append(" FROM ").append(tableName).append(" x");
 		if(where!=null&&!where.isEmpty()){
-			sql=sql.concat(" WHERE ".concat(where));
+			sql.append(" WHERE ").append(where);
 		}
 		if(orderBy!=null&&!orderBy.isEmpty()){
-			sql=sql.concat(" ORDER BY ".concat(orderBy));
+			sql.append(" ORDER BY ").append(orderBy);
 		}
-		logger.info(sql);
-		return jdbcTemplate.findListBean(sql, clazz);
+		logger.info(sql.toString());
+		return jdbcTemplate.findListBean(sql.toString(), clazz);
 	}
 	
 	/**
@@ -441,22 +452,23 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 		if(ids==null||ids.isEmpty()){
 			return null;
 		}
-		String sql="SELECT x.* "+getReferenceSql()+" FROM ".concat(tableName).concat(" x WHERE 1=1");
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT x.* ").append(getReferenceSql()).append(" FROM ").append(tableName).append(" x WHERE 1=1");
 		if(where!=null&&!where.isEmpty()){
-			sql=sql.concat(" AND ".concat(where));
+			sql.append(" AND ").append(where);
 		}
 		if(ids!=null&&!ids.isEmpty()){
-			sql=sql.concat(" AND ".concat(pkFieldName).concat(" IN("));
+			sql.append(" AND ").append(pkFieldName).append(" IN(");
 			for(int i=0 ; i<ids.size();i++){
-				sql=sql.concat("?,");
+				sql.append("?,");
 			}
-			sql=sql.substring(0,sql.length()-1).concat(")");
+			sql.delete(sql.length()-1, sql.length()).append(")");
 		}
 		if(orderBy!=null&&!orderBy.isEmpty()){
-			sql=sql.concat(" ORDER BY ".concat(orderBy));
+			sql.append(" ORDER BY ").append(orderBy);
 		}
-		logger.info(sql);
-		return jdbcTemplate.findListBeanByArray(sql, clazz,ids.toArray());
+		logger.info(sql.toString());
+		return jdbcTemplate.findListBeanByArray(sql.toString(), clazz,ids.toArray());
 	}
 	
 	/**
@@ -477,7 +489,9 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @return 构建好的sql
 	 */
 	private String buildWhereSql(String sql,PK pk){
-		return sql.concat(tableName+" x").concat(" WHERE ".concat(pkFieldName).concat("=?"));
+		StringBuffer _sql = new StringBuffer();
+		_sql.append(sql).append(tableName).append(" x").append(" WHERE ").append(pkFieldName).append("=?");
+		return _sql.toString();
 	}
 	
 	/**
@@ -504,13 +518,14 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @return
 	 */
 	private String getFilterSql(T filterBean,Collection<Object> arrayParameters){
-		String sql="SELECT x.* "+getReferenceSql()+" FROM ".concat(tableName+" x");
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT x.* ").append(getReferenceSql()).append(" FROM ").append(tableName).append(" x");
 		if(where!=null&&!where.isEmpty()){
-			sql=sql.concat(" WHERE ".concat(where));
+			sql.append(" WHERE ").append(where);
 		}
 		if(filterBean!=null){
 			if(where==null||where.isEmpty()){
-				sql=sql.concat(" WHERE 1=1 ");
+				sql.append(" WHERE 1=1 ");
 			}
 			PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(filterBean);
     		for (int i = 0; i < descriptors.length; i++) {
@@ -529,33 +544,34 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
     				}else{
     					comparisonField = BeanUtils.getDbFieldName(comparisonField);
     				}
-    				sql=sql.concat(" "+logical+" "+comparisonField+comparison+"?");
+    				sql.append(" ").append(logical).append(" ").append(comparisonField).append(comparison).append("?");
     				arrayParameters.add(propertyValue);
     			}
     		}
 		}
 		if(orderBy!=null&&!orderBy.isEmpty()){
-			sql=sql.concat(" ORDER BY ".concat(orderBy));
+			sql.append(" ORDER BY ").append(orderBy);
 		}
-		return sql;
+		return sql.toString();
 	}
 	
 	private String getSqlByProperty(String name){
-		String sql="SELECT x.* "+getReferenceSql()+" FROM ".concat(tableName+" x");
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT x.* ").append(getReferenceSql()).append(" FROM ").append(tableName).append(" x");
 		if(where!=null&&!where.isEmpty()){
-			sql=sql.concat(" WHERE ".concat(where));
+			sql.append(" WHERE ").append(where);
 		}
 		if(name!=null&&!name.trim().equals("")){
 			if(where==null||where.isEmpty()){
-				sql = sql.concat(" WHERE 1=1 ");
+				sql.append(" WHERE 1=1 ");
 			}
 			String fieldName = BeanUtils.getDbFieldName(name);
-			sql = sql.concat(" AND "+fieldName+"=? ");
+			sql.append(" AND ").append(fieldName).append("=? ");
 		}
 		if(orderBy!=null&&!orderBy.isEmpty()){
-			sql=sql.concat(" ORDER BY ".concat(orderBy));
+			sql.append(" ORDER BY ").append(orderBy);
 		}
-		return sql;
+		return sql.toString();
 	}
 	
 	/**
@@ -563,7 +579,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @return
 	 */
 	private String getReferenceSql(){
-		String sql = "";
+		StringBuffer sql = new StringBuffer();
 		PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(clazz);
 		for (int i = 0; i < descriptors.length; i++) {
 			String propertyName = descriptors[i].getName();
@@ -573,11 +589,11 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 				String refPKName = BeanUtils.getDbFieldName(getReferencePKName(clazz,propertyName));
 				String fkName = BeanUtils.getDbFieldName(getReferenceFKName(clazz,propertyName));
 				String fieldName = BeanUtils.getDbFieldName(getReferenceViewName(clazz,propertyName));
-				sql = sql.concat(",(SELECT "+fieldName+" FROM "+refTableName+" y ");
-				sql = sql.concat("WHERE y."+refPKName+" = x."+fkName+" ) "+asFieldName);
+				sql.append(",(SELECT ").append(fieldName).append(" FROM ").append(refTableName).append(" y ");
+				sql.append("WHERE y.").append(refPKName).append(" = x.").append(fkName).append(" ) ").append(asFieldName);
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 	
 	/**

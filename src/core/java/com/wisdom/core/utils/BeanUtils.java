@@ -57,7 +57,7 @@ public class BeanUtils extends org.apache.commons.beanutils.BeanUtils{
 	 * @throws NoSuchMethodException
 	 */
 	public static String getBuildUpdateSql(Object bean,String pkName)throws IllegalAccessException,InvocationTargetException, NoSuchMethodException {
-		String sql="";
+		StringBuffer sql= new StringBuffer();
 		if (bean == null) {
 			return null;
 		}
@@ -70,12 +70,12 @@ public class BeanUtils extends org.apache.commons.beanutils.BeanUtils{
 				pkPropertyName = propertyName;
 			}
 			if (!propertyName.equalsIgnoreCase("class")&&!propertyName.equalsIgnoreCase("insertDate")&&!propertyName.equalsIgnoreCase("businessCode")&&PropertyUtils.getReadMethod(descriptors[i]) != null&&!propertyName.equals(pkPropertyName)&&!isNotMapping(bean.getClass(),propertyName)&&!isNotUpdate(bean.getClass(),propertyName)) {
-				sql=sql.concat(fieldName).concat("=:").concat(propertyName).concat(",");
+				sql.append(fieldName).append("=:").append(propertyName).append(",");
 			}
 		}
 		String fieldNameName=getDbFieldName(pkName).toLowerCase();
-		sql=sql.substring(0, sql.length()-1).concat(" WHERE ").concat(fieldNameName).concat("=:").concat(pkPropertyName);
-		return sql;
+		sql.delete(sql.length()-1, sql.length()).append(" WHERE ").append(fieldNameName).append("=:").append(pkPropertyName);
+		return sql.toString();
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class BeanUtils extends org.apache.commons.beanutils.BeanUtils{
 	 * @throws NoSuchMethodException
 	 */
 	public static String getBuildUpdateSqlNotNull(Object bean,String pkName)throws IllegalAccessException,InvocationTargetException, NoSuchMethodException {
-		String sql="";
+		StringBuffer sql= new StringBuffer();
 		if (bean == null) {
 			return null;
 		}
@@ -103,13 +103,13 @@ public class BeanUtils extends org.apache.commons.beanutils.BeanUtils{
 			if (!propertyName.equalsIgnoreCase("class")&&!propertyName.equalsIgnoreCase("insertDate")&&!propertyName.equalsIgnoreCase("businessCode")&&PropertyUtils.getReadMethod(descriptors[i]) != null&&!propertyName.equals(pkPropertyName)&&!isNotMapping(bean.getClass(),propertyName)&&!isNotUpdate(bean.getClass(),propertyName)) {
 				Object propertyValue = getFieldValue(bean, propertyName);
 				if(propertyValue!=null){
-					sql=sql.concat(fieldName).concat("=:").concat(propertyName).concat(",");
+					sql.append(fieldName).append("=:").append(propertyName).append(",");
 				}
 			}
 		}
 		String fieldNameName=getDbFieldName(pkName).toLowerCase();
-		sql=sql.substring(0, sql.length()-1).concat(" WHERE ").concat(fieldNameName).concat("=:").concat(pkPropertyName);
-		return sql;
+		sql.delete(sql.length()-1, sql.length()).append(" WHERE ").append(fieldNameName).append("=:").append(pkPropertyName);
+		return sql.toString();
 	}
 	
 	/**
@@ -121,8 +121,8 @@ public class BeanUtils extends org.apache.commons.beanutils.BeanUtils{
 	 * @throws NoSuchMethodException
 	 */
 	public static String getBuildInsertSql(Object bean)throws IllegalAccessException,InvocationTargetException, NoSuchMethodException {
-		String sql1=" (";
-		String sql2=" VALUES (";
+		StringBuffer sql1 = new StringBuffer(" (");
+		StringBuffer sql2 = new StringBuffer(" VALUES (");
 		if (bean == null) {
 			return null;
 		}
@@ -131,11 +131,12 @@ public class BeanUtils extends org.apache.commons.beanutils.BeanUtils{
 			String propertyName = descriptors[i].getName();
 			String fieldName = getDbFieldName(propertyName);
 			if (!propertyName.equalsIgnoreCase("class")&&PropertyUtils.getReadMethod(descriptors[i]) != null&&!isNotMapping(bean.getClass(),propertyName)) {
-				sql1=sql1.concat(fieldName).concat(",");
-				sql2=sql2.concat(":".concat(propertyName)).concat(",");
+				sql1.append(fieldName).append(",");
+				sql2.append(":").append(propertyName).append(",");
 			}
 		}
-		return sql1.substring(0, sql1.length()-1).concat(")").concat(sql2.substring(0, sql2.length()-1).concat(")"));
+		sql1.delete(sql1.length()-1, sql1.length()).append(")").append(sql2.delete(sql2.length()-1, sql2.length()).append(")"));
+		return sql1.toString();
 	}
 	
 	/**
