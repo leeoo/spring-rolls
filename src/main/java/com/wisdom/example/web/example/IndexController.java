@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wisdom.core.security.OnlineUserCache;
 import com.wisdom.core.security.domain.User;
 import com.wisdom.core.security.resource.SecurityUtils;
 import com.wisdom.core.web.SystemMemoryInterceptor;
@@ -27,6 +28,7 @@ public class IndexController {
 		ModelAndView mav=new ModelAndView();
 		User user = SecurityUtils.getCurrentUser();
 		mav.addObject("username", user.getCnname());
+		mav.addObject("onlineUsers", OnlineUserCache.getOnlineUsers());
 		return mav;
 	} 
 

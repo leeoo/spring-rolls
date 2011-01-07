@@ -45,10 +45,11 @@ default-lazy-init="true">
         </property>  
     </bean>
     
-	<bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">  
+	<bean id="filterSecurityInterceptor" class="com.wisdom.core.security.filter.FilterSecurityInterceptor">  
         <property name="authenticationManager" ref="authenticationManager" />
         <property name="accessDecisionManager" ref="accessDecisionManager" />
 		<property name="securityMetadataSource" ref="securityMetadataSource" />
+		<property name="onlineUser" value="true" />
     </bean>
     
     

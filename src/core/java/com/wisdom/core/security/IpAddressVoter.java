@@ -18,7 +18,7 @@ import com.wisdom.core.security.resource.SecurityUtils;
  * <br>开 发 日 期:2010-11-11上午11:16:10
  * <br>项 目 信 息:wisdom.3.0:com.wisdom.core.security.IpAddressVoter.java
  */
-public class IpAddressVoter implements AccessDecisionVoter{
+public class IpAddressVoter implements AccessDecisionVoter<Object>{
 
 	private static Collection<String> ipAddressList = new ArrayList<String>();
 	
@@ -34,12 +34,10 @@ public class IpAddressVoter implements AccessDecisionVoter{
 		ipAddressList.clear();
 	}
 	
-	@Override
 	public boolean supports(ConfigAttribute configAttribute) {
 		return true;
 	}
 
-	@Override
 	public boolean supports(Class<?> clazz) {
 		return true;
 	}
@@ -56,7 +54,6 @@ public class IpAddressVoter implements AccessDecisionVoter{
 		IpAddressVoter.ipAddressList = ipAddressList;
 	}
 
-	@Override
 	public int vote(Authentication authentication, Object object,Collection<ConfigAttribute> configAttributes) {
 		if(enabled()){
 			String remoteIpAddress = SecurityUtils.getCurrentUserIp();

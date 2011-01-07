@@ -10,10 +10,18 @@
 <div>
 <h3>Wisdom3版本信息</h3>
 <h3>
-&nbsp;&nbsp;&nbsp;&nbsp;Wisdom 3.0.0.RC2 Copyright © 2004-2009 ShenYang Oriental Wisdom Information Technology Co,Ltd. Author List:CaoYang,XieLei,Douzhi,ZhangDi.<br><br>
-&nbsp;&nbsp;&nbsp;&nbsp;This examples can be used within the company(OW), as well as other teams(OW).<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Wisdom 3.0.0.RC2 Copyright © 2004-2009 沈阳东方般若信息技术有限公司。作者列表:曹阳、谢雷、窦志、张迪.<br><br>
-&nbsp;&nbsp;&nbsp;&nbsp;这套开发架构可以在般若公司内部使用，以及内部其他团队。<br>
+<div id="onlineUser" class="ui-corner-bottom ui-helper-clearfix ui-widget-content content">
+	<c:forEach items="${onlineUsers}" var="user">
+		<span style="width: 120px;height: 200px;">
+			<div style="border: 1px solid #777;">
+			<center><b>${user.username}</b></center>
+			<center><b>${user.operatorIp}</b></center>
+			<center><b><fmt:formatDate value="${user.lastLoginDate}" pattern="MM月dd日HH:mm"/>登录</b></center>
+			<center><b><c:if test="${user.lastLoginDate!=null}"><fmt:formatDate value="${user.lastLoginDate}" pattern="MM月dd日HH:mm"/>最后一次登录</b></c:if></center>
+			</div>
+		</span>
+	</c:forEach>
+</div>
 </h3>
 
 </div>

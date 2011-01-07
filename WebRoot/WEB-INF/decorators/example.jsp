@@ -21,7 +21,7 @@
 				<div id="header-links">
 					<p>
 					当前用户:<security:authentication property="name"/> | 
-					<a href="${base}/example/index.htm">版本</a> | <a href="#">修改密码</a> | 
+					<a href="${base}/example/index.htm">在线用户</a> | <a href="#">修改密码</a> | 
 					<a href="${base}/j_spring_security_logout">退出</a>			
 					</p>
 					<p>

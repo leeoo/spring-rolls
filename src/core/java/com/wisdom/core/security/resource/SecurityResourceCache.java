@@ -10,7 +10,7 @@ import net.sf.ehcache.Element;
 
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.wisdom.core.security.domain.Resource;
 /**
@@ -72,7 +72,7 @@ public class SecurityResourceCache {
 	}
 	
 	public synchronized static GrantedAuthority[] getAuthoritysInCache(String path){
-		GrantedAuthority[] gas={new GrantedAuthorityImpl(getCache(path).getName())};
+		GrantedAuthority[] gas={new SimpleGrantedAuthority(getCache(path).getName())};
 		return gas;
 	}
 	

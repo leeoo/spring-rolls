@@ -19,8 +19,7 @@ import com.wisdom.core.security.domain.Resource;
  * <b>项目名称</b>: wisdom.3.0RC2<br>
  * <b>包及类名</b>: com.wisdom.core.security.resourceStaticInvocationSecurityMetadataSource.java<br>
  */
-@SuppressWarnings("unchecked")
-public class StaticInvocationSecurityMetadataSource implements FactoryBean {
+public class StaticInvocationSecurityMetadataSource implements FactoryBean<Object> {
 
 	/**
 	 * 手动构造DefaultFilterInvocationSecurityMetadataSource，避免破坏源代码.
@@ -31,7 +30,7 @@ public class StaticInvocationSecurityMetadataSource implements FactoryBean {
 		return definitionSource;
 	}
 
-	public Class getObjectType() {
+	public Class<?> getObjectType() {
 		return DefaultFilterInvocationSecurityMetadataSource.class;
 	}
 

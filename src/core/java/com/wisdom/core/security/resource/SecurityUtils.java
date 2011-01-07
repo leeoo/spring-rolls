@@ -28,14 +28,13 @@ public class SecurityUtils {
 	/**
 	 * 取得当前用户, 返回值为SpringSecurity的User类或其子类, 如果当前用户未登录则返回null.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T extends User> T getCurrentUser() {
 		try{
 			Authentication authentication = getAuthentication();
 			if (authentication != null) {
 				Object principal = authentication.getPrincipal();
 				if (principal instanceof UserDetailsImpl || principal instanceof User) {
-					return (T) principal;
+					return extracted(principal);
 				}
 			}
 		}catch (Exception e) {
@@ -44,13 +43,17 @@ public class SecurityUtils {
 	}
 
 	@SuppressWarnings("unchecked")
+	private static <T> T extracted(Object principal) {
+		return (T) principal;
+	}
+
 	public static <T extends UserDetails> T getCurrentUserDetails() {
 		try{
 			Authentication authentication = getAuthentication();
 			if (authentication != null) {
 				Object principal = authentication.getPrincipal();
 				if (principal instanceof UserDetails) {
-					return (T) principal;
+					return extracted(principal);
 				}
 			}
 		}catch (Exception e) {
@@ -94,10 +97,12 @@ public class SecurityUtils {
 	/**
 	 * 判断用户是否拥有角色, 如果用户拥有参数中的任意一个角色则返回true.
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean hasAnyRole(String[] roles) {
 		try{
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			Collection<GrantedAuthority> granteds = authentication.getAuthorities();
+			Collection authorities = authentication.getAuthorities();
+			Collection<GrantedAuthority> granteds = authorities;
 			for (String role : roles) {
 				for (GrantedAuthority authority : granteds) {
 					if (role.equals(authority.getAuthority())) {

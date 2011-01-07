@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,7 +35,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		GrantedAuthority ag=null;
 		Collection<Resource> ress=userService.getResourcesByUserName(userName);
 		for(Resource res:ress){
-			ag=new GrantedAuthorityImpl(res.getName());
+			ag=new SimpleGrantedAuthority(res.getName());
 			authorities.add(ag);
 		}
 		user.setAuthorities(authorities);
