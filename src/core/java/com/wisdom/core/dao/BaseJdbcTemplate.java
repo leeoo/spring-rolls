@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -102,6 +103,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}
 			logger.info("响应条目:"+list.size());
 			return list;
+		}catch (EmptyResultDataAccessException ere) {
+			return null;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return null;
@@ -116,6 +119,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			List list = jdbcTemplate.query(sql, resultBeanMapper(clazz));
 			logger.info("响应条目:"+list.size());
 			return list;
+		}catch (EmptyResultDataAccessException ere) {
+			return null;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return null;
@@ -135,6 +140,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}
 			logger.info("响应条目:"+list.size());
 			return list;
+		}catch (EmptyResultDataAccessException ere) {
+			return null;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return null;
@@ -154,6 +161,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}
 			logger.info("响应条目:"+list.size());
 			return list;
+		}catch (EmptyResultDataAccessException ere) {
+			return null;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return null;
@@ -170,6 +179,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				return jdbcTemplate.queryForLong(sql, resultBeanMapper(clazz));
 			}
+		}catch (EmptyResultDataAccessException ere) {
+			return null;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return null;
@@ -186,6 +197,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				return jdbcTemplate.queryForLong(sql, resultBeanMapper(clazz));
 			}
+		}catch (EmptyResultDataAccessException ere) {
+			return null;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return null;
@@ -201,6 +214,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				return jdbcTemplate.queryForLong(sql);
 			}
+		}catch (EmptyResultDataAccessException ere) {
+			return 0;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return 0;
@@ -216,6 +231,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				return jdbcTemplate.queryForLong(sql);
 			}
+		}catch (EmptyResultDataAccessException ere) {
+			return 0;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return 0;
@@ -232,6 +249,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				return jdbcTemplate.queryForLong(sql);
 			}
+		}catch (EmptyResultDataAccessException ere) {
+			return 0;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return 0;
@@ -247,6 +266,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				return jdbcTemplate.queryForMap(sql);
 			}
+		}catch (EmptyResultDataAccessException ere) {
+			return null;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return null;
@@ -262,6 +283,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}else{
 				return jdbcTemplate.queryForMap(sql);
 			}
+		}catch (EmptyResultDataAccessException ere) {
+			return null;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return null;
@@ -280,6 +303,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}
 			logger.info("响应条目:"+list.size());
 			return list;
+		}catch (EmptyResultDataAccessException ere) {
+			return null;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return null;
@@ -298,6 +323,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}
 			logger.info("响应条目:"+list.size());
 			return list;
+		}catch (EmptyResultDataAccessException ere) {
+			return null;
 		}catch (Exception e) {
 			logger.error("not result!{}",e);
 			return null;
