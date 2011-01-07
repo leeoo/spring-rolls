@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
-import com.wisdom.core.security.OnlineUserCache;
 import com.wisdom.core.security.domain.User;
 import com.wisdom.core.security.domain.UserDetailsImpl;
 
@@ -37,8 +36,6 @@ public class SecurityUtils {
 				Object principal = authentication.getPrincipal();
 				if (principal instanceof UserDetailsImpl || principal instanceof User) {
 					return (T) principal;
-				}else if (principal instanceof UserDetails){
-					return (T) OnlineUserCache.get(getCurrentUserDetails().getUsername());
 				}
 			}
 		}catch (Exception e) {
