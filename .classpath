@@ -37,7 +37,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/report/jxl-2.6.12.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/hibernate-validator-4.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/org.springframework.test-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/validation-api-1.0.0.GA.jar"/>
@@ -54,9 +53,9 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-pool-1.5.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-config-3.1.0.M2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-core-3.1.0.M2.jar" sourcepath="WebRoot/WEB-INF/lib/security/spring-security-core-3.1.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-core-3.1.0.M2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-taglibs-3.1.0.M2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-web-3.1.0.M2.jar" sourcepath="WebRoot/WEB-INF/lib/security/spring-security-web-3.1.0.M2-sources.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-web-3.1.0.M2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/cglib-nodep-2.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.aop-3.0.5.RELEASE.jar"/>
@@ -70,5 +69,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.transaction-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/hibernate-validator-4.2.0.Beta1.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
