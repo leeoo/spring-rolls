@@ -37,7 +37,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/logger/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/report/jxl-2.6.12.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/org.springframework.test-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/validation-api-1.0.0.GA.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/web/freemarker-2.3.16.jar"/>
@@ -70,5 +69,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/hibernate-validator-4.2.0.Beta1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/junit-4.9b1.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
