@@ -47,8 +47,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-codec-1.4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-dbcp-1.4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-fileupload-1.2.2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-io-1.4.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-lang-2.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-pool-1.5.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-config-3.1.0.M2.jar"/>
@@ -70,5 +68,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/hibernate-validator-4.2.0.Beta1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/junit-4.9b1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-lang3-3.0-beta.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

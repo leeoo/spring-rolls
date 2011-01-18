@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
  * <b>建立日期</b>: May 14, 2008<br>
  * <b>建立时间</b>: 2:49:51 PM<br>
  */
-public abstract class DateUtils extends org.apache.commons.lang.time.DateUtils {
+public abstract class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     
 	/**
 	 * 返回当前时间
