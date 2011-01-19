@@ -118,17 +118,32 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 * @param beans实体集合
 	 * @throws Exception
 	 */
-	public void saveAll(T... beans) throws Exception{
+	public int[] saveAll(T... beans) throws Exception{
 		validation();
+		if(beans==null||beans.length<1){
+			return null;
+		}
 		StringBuffer sql = new StringBuffer();
 		sql.append("INSERT INTO ").append(tableName).append(BeanUtils.getBuildInsertSql(beans[0]));
-		logger.info(sql.toString());	
-		jdbcTemplate.executeBatchByArrayBeans(sql.toString(), beans);
+		logger.info(sql.toString());
+		if(isUseIDCreator){
+			for(T bean:beans){
+				long gpk = -1;
+				if(idName!=null&&!idName.trim().isEmpty()){
+					gpk=IDCreator.getNextId(idName);
+				}else{
+					gpk=IDCreator.getNextId(tableName);
+				}
+				BeanUtils.setFieldNumberValue(bean, pkPropertyName, gpk);
+			}
+		}
+		int[] infos = jdbcTemplate.executeBatchByArrayBeans(sql.toString(), beans);
 		if(isIndex){
 			for(T bean:beans){
 				SearchIndexCreator.createIndex(bean);
 			}
 		}
+		return infos;
 	}
 	
 	/**
@@ -142,7 +157,7 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 		long gpk = -1;
 		if(isUseIDCreator){
 			if(idName!=null&&!idName.trim().isEmpty()){
-				gpk=IDCreator.getNextId(tableName);
+				gpk=IDCreator.getNextId(idName);
 			}else{
 				gpk=IDCreator.getNextId(tableName);
 			}
@@ -220,6 +235,9 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	 */
 	public int[] updateAll(T... beans) throws Exception{
 		validation();
+		if(beans==null||beans.length<1){
+			return null;
+		}
 		StringBuffer sql = new StringBuffer();
 		sql.append("UPDATE ").append(tableName).append(" SET ").append(BeanUtils.getBuildUpdateSql(beans[0],pkPropertyName));
 		logger.info(sql.toString());

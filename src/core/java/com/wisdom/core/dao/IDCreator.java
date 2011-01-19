@@ -51,6 +51,20 @@ public class IDCreator {
 			return currentId.longValue();
 		}
 	}
+	
+	/**
+	 * 获取新主键IDS值数组
+	 * @param idName
+	 * @return 新主键值数组
+	 */
+	public synchronized static long[] getNextIds(String idName,int idCount){
+		Assert.isTrue(0>=idCount, "获得ID数组不能小于1");
+		long[] ids = new long[idCount];
+		for(int id = 0 ; id < idCount ; id++){
+			ids[id] = getNextId(idName);
+		}
+		return ids;
+	}
 
 	/**
 	 * 获取当前主键值
