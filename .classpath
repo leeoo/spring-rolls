@@ -22,12 +22,10 @@
 	<classpathentry kind="lib" path="server/lib/tomcat-coyote.jar"/>
 	<classpathentry kind="lib" path="server/lib/tomcat-http.jar"/>
 	<classpathentry kind="lib" path="server/lib/tomcat-util.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/cache/ehcache-core-2.3.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/db2jcc.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/hsqldb.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/IKAnalyzer3.2.5Stable.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/jtds-1.2.5.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/lucene-core-3.0.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/pinyin4j-2.5.0.jar"/>
@@ -70,5 +68,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/junit-4.9b1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-lang3-3.0-beta.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/cache/ehcache-core-2.3.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/lucene-core-3.0.3.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
