@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50149
 File Encoding         : 65001
 
-Date: 2010-11-17 17:41:42
+Date: 2011-01-20 15:22:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -49,7 +49,6 @@ INSERT INTO `t_logger_info` VALUES ('13', 'admin', '系统管理员', '127.0.0.1
 INSERT INTO `t_logger_info` VALUES ('14', 'admin', '系统管理员', '127.0.0.1', null, '2010-11-17 13:43:24', 'http://localhost/example/logger/list/1.htm', '日志管理', '查看列表');
 INSERT INTO `t_logger_info` VALUES ('15', 'admin', '系统管理员', '127.0.0.1', null, '2010-11-17 13:42:28', 'http://localhost/example/logger/list/1.htm', '日志管理', '查看列表');
 INSERT INTO `t_logger_info` VALUES ('16', 'admin', '系统管理员', '127.0.0.1', null, '2010-11-17 13:50:38', 'http://localhost//example/logger/sqllist/1.htm', '日志管理', '查看列表');
-INSERT INTO `t_logger_info` VALUES ('19', 'admin', '系统管理员', '127.0.0.1', null, '2010-11-17 13:50:37', 'http://localhost/example/logger/list/1.htm', '日志管理', '查看列表');
 INSERT INTO `t_logger_info` VALUES ('20', 'admin', '系统管理员', '127.0.0.1', null, '2010-11-17 13:49:38', 'http://localhost/example/logger/list/1.htm', '日志管理', '查看列表');
 INSERT INTO `t_logger_info` VALUES ('21', 'admin', '系统管理员', '127.0.0.1', null, '2010-11-17 13:51:00', 'http://localhost/example/logger/sqllist/1.htm', '日志管理', '查看列表');
 INSERT INTO `t_logger_info` VALUES ('22', 'admin', '系统管理员', '127.0.0.1', null, '2010-11-17 13:50:46', 'http://localhost//example/logger/sqllist/1.htm', '日志管理', '查看列表');
@@ -99,13 +98,14 @@ CREATE TABLE `t_logger_sql` (
   `sql_type` varchar(10) DEFAULT NULL,
   `call_details` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_logger_sql
 -- ----------------------------
 INSERT INTO `t_logger_sql` VALUES ('1', '2010-11-17 15:12:59', 'DELETE FROM t_logger_info WHERE id=\'26\'', 'DELETE', 'admin(127.0.0.1)');
 INSERT INTO `t_logger_sql` VALUES ('2', '2010-11-17 15:13:01', 'DELETE FROM t_logger_info WHERE id=\'25\'', 'DELETE', 'admin(127.0.0.1)');
+INSERT INTO `t_logger_sql` VALUES ('3', '2010-11-18 10:32:00', 'DELETE FROM t_logger_info WHERE id=\'19\'', 'DELETE', 'admin(127.0.0.1)');
 
 -- ----------------------------
 -- Table structure for `t_news_info`
@@ -185,8 +185,8 @@ CREATE TABLE `t_system_id` (
 -- ----------------------------
 INSERT INTO `t_system_id` VALUES ('t_news_info', '1000');
 INSERT INTO `t_system_id` VALUES ('t_system_resource_info', '1000');
-INSERT INTO `t_system_id` VALUES ('t_system_role_info', '500');
-INSERT INTO `t_system_id` VALUES ('t_system_user_info', '500');
+INSERT INTO `t_system_id` VALUES ('t_system_role_info', '1000');
+INSERT INTO `t_system_id` VALUES ('t_system_user_info', '1500');
 INSERT INTO `t_system_id` VALUES ('t_task_info', '2500');
 INSERT INTO `t_system_id` VALUES ('t_task_run_history', '1000');
 
@@ -259,7 +259,9 @@ CREATE TABLE `t_system_user_info` (
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `cnname` varchar(50) DEFAULT NULL,
+  `pyname` varchar(50) DEFAULT NULL,
   `organ_code` varchar(20) DEFAULT NULL,
+  `last_login_date` datetime DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `enabled` int(11) DEFAULT NULL,
   `mobile` varchar(50) DEFAULT NULL,
@@ -278,7 +280,8 @@ CREATE TABLE `t_system_user_info` (
 -- ----------------------------
 -- Records of t_system_user_info
 -- ----------------------------
-INSERT INTO `t_system_user_info` VALUES ('1', 'admin', 'ceb4f32325eda6142bd65215f4c0f371', '系统管理员', null, 'admin@ow.com', '1', null, '1', '1', '1', '2010-11-16 17:23:48', '2010-11-16 17:23:48', '', '', 'spring');
+INSERT INTO `t_system_user_info` VALUES ('1', 'admin', 'ceb4f32325eda6142bd65215f4c0f371', '系统管理员', null, null, '2011-01-20 15:20:35', 'admin@ow.com', '1', null, '1', '1', '1', '2010-11-16 17:23:48', '2010-11-16 17:23:48', '', '', 'spring');
+INSERT INTO `t_system_user_info` VALUES ('501', 'caoyang', '8caddd773172975a1e093dac8c18e249', '曹阳', 'caoyang', null, '2011-01-07 17:20:40', 'caoyang@126.com', '1', null, '1', '1', '1', '2010-11-19 14:41:40', '2010-11-19 14:41:40', 'admin', '127.0.0.1', 'spring');
 
 -- ----------------------------
 -- Table structure for `t_system_user_role`
@@ -293,6 +296,7 @@ CREATE TABLE `t_system_user_role` (
 -- Records of t_system_user_role
 -- ----------------------------
 INSERT INTO `t_system_user_role` VALUES ('1', '1');
+INSERT INTO `t_system_user_role` VALUES ('501', '1');
 
 -- ----------------------------
 -- Table structure for `t_task_info`
@@ -312,7 +316,7 @@ CREATE TABLE `t_task_info` (
   `operator_ip` varchar(50) DEFAULT NULL,
   `business_code` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2002 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_task_info
@@ -336,7 +340,7 @@ CREATE TABLE `t_task_run_history` (
   `operator_ip` varchar(50) DEFAULT NULL,
   `business_code` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=502 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_task_run_history
