@@ -8,7 +8,7 @@
 <div align="left">
 	<form name="user" action="${base}/example/user/save.htm" method="post">
 		<input type="hidden" name="id" value="${user.id}"/>
-		账号：<input name="username" value="${user.username}"/>
+		账号：<input name="username" value="${user.username}"/><br/>
 			<c:if test="${user!=null && user.id!=null}">
 				<a href="${base}/example/user/${user.id}/change_password.htm">修改密码</a><br/>
 				拼音：<input name="pyname" value="${user.pyname}"/><br/>
