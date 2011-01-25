@@ -14,6 +14,7 @@ import java.lang.annotation.Target;
  * <b>项目名称</b>: wisdom.3.0RC2<br>
  * <b>包及类名</b>: com.wisdom.core.annotation.Id.java<br>
  */
+@Deprecated
 @Documented   
 @Retention(RetentionPolicy.RUNTIME)    
 @Target(ElementType.FIELD)
