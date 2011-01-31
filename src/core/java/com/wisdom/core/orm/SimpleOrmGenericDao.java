@@ -47,13 +47,47 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 	private boolean isIndex = false;
 	
 	/**
+	 * 为sharding提供
+	 * @param tableName
+	 */
+	public void setTableName(String tableName){
+		this.tableName = tableName;
+	}
+	
+	/**
+	 * 为sharding提供
+	 * @return
+	 */
+	public String getTableName(){
+		return this.tableName;
+	}
+	
+	/**
 	 * 构建简单JDBC通用DAO
 	 * @param dataSource数据源实例
 	 * @param clazz实体类型
 	 */
 	public SimpleOrmGenericDao(DataSource dataSource,Class<T> clazz) {
-		this.clazz = clazz;
 		jdbcTemplate = GenericDaoFactory.getJdbcTemplate(dataSource);
+		this.clazz = clazz;
+		init();
+	}
+	
+	/**
+	 * 构建简单JDBC通用DAO
+	 * @param jdbcTemplate
+	 * @param clazz实体类型
+	 */
+	public SimpleOrmGenericDao(JdbcTemplate jdbcTemplate,Class<T> clazz) {
+		this.jdbcTemplate = jdbcTemplate;
+		this.clazz = clazz;
+		init();
+	}
+	
+	/**
+	 * 初始化方法
+	 */
+	private void init(){
 		SimpleEntity simpleEntity = this.clazz.getAnnotation(SimpleEntity.class);
 		try{
 			Index index = this.clazz.getAnnotation(Index.class);
@@ -62,31 +96,6 @@ public class SimpleOrmGenericDao <T, PK extends Serializable>{
 			}
 		}catch (Exception e) {
 			this.isIndex = false;
-		}
-		tableName = simpleEntity.tableName();
-		pkPropertyName = simpleEntity.pkPropertyName();
-		pkFieldName = BeanUtils.getDbFieldName(pkPropertyName);
-		where = simpleEntity.where();
-		orderBy = simpleEntity.orderBy();
-		idName = simpleEntity.IDName();
-		isUseIDCreator = simpleEntity.isUseIDCreator();
-	}
-	/**
-	 * 构建简单JDBC通用DAO
-	 * @param jdbcTemplate
-	 * @param clazz实体类型
-	 */
-	public SimpleOrmGenericDao(JdbcTemplate jdbcTemplate,Class<T> clazz) {
-		this.clazz = clazz;
-		this.jdbcTemplate = jdbcTemplate;
-		SimpleEntity simpleEntity=this.clazz.getAnnotation(SimpleEntity.class);
-		try{
-			Index index = this.clazz.getAnnotation(Index.class);
-			if(index!=null){
-				this.isIndex=true;
-			}
-		}catch (Exception e) {
-			this.isIndex=false;
 		}
 		tableName = simpleEntity.tableName();
 		pkPropertyName = simpleEntity.pkPropertyName();
