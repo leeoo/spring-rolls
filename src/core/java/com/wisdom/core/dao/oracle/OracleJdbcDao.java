@@ -1,6 +1,7 @@
 package com.wisdom.core.dao.oracle;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -29,13 +30,6 @@ public final class OracleJdbcDao extends BaseJdbcTemplate{
 	}
 	
 	
-	/**
-	 * oracle用分页方法,page对象中返回结果为bean集合
-	 * @param sql语句，不用写分页函数、排序，只需要写获取数据的内容，如：select * from tb_table where id=? and user_name like :?
-	 * @param arrayParameters参数集合
-	 * @param page分页对象
-	 * @return
-	 */
 	public Page findPageListBean(final String sql,Class clazz,Page page,Object... arrayParameters){
 		Assert.notNull(page,"分页信息不能为空");
 		Assert.hasText(sql,"sql语句不正确!");
@@ -44,26 +38,11 @@ public final class OracleJdbcDao extends BaseJdbcTemplate{
 			count=findLongByArray(CountSqlBuilder.getCountSql(sql), arrayParameters);
 			page.setTotalCount((int)count);
 		}
-		List list=null;
-		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String querySqlFirst="SELECT * FROM ( SELECT tempt.*,ROWNUM rn FROM ( ";
-			String querySqlLast=" ) tempt WHERE ROWNUM<="+page.getFirst()+page.getPageSize()+" ) WHERE rn>"+page.getFirst();
-			String lastSql=querySqlFirst.concat(sql.concat(querySqlLast));
-			list= findListBeanByArray(lastSql, clazz, arrayParameters);
-		}else{
-			list= findListBeanByArray(sql, clazz, arrayParameters);
-		}
+		List list=findListBeanByArray(getSql(sql, page), clazz, arrayParameters);
 		page.setResult(list);
 		return page;
 	}
 
-	/**
-	 * oracle用分页方法,page对象中返回结果为map集合
-	 * @param sql语句，不用写分页函数、排序，只需要写获取数据的内容，如：select * from tb_table where id=? and user_name like :?
-	 * @param arrayParameters参数集合
-	 * @param page分页对象
-	 * @return
-	 */
 	public Page findPageListMap(final String sql,Page page,Object... arrayParameters){
 		Assert.notNull(page,"分页信息不能为空");
 		Assert.hasText(sql,"sql语句不正确!");
@@ -72,17 +51,60 @@ public final class OracleJdbcDao extends BaseJdbcTemplate{
 			count=findLongByArray(CountSqlBuilder.getCountSql(sql), arrayParameters);
 			page.setTotalCount((int)count);
 		}
-		List list=null;
+		List list = findListMapByArray(getSql(sql, page), arrayParameters);
+		page.setResult(list);
+		return page;
+	}
+	
+
+	public Page findPageListBeanByBean(String sql, Class clazz, Page page,Object beanParameters) {
+		Assert.notNull(page,"分页信息不能为空");
+		Assert.hasText(sql,"sql语句不正确!");
+		long count=0;
+		if (page.isAutoCount()) {
+			count=findLongByBean(CountSqlBuilder.getCountSql(sql), beanParameters);
+			page.setTotalCount((int)count);
+		}
+		List list = findListBeanByBean(getSql(sql, page),clazz, beanParameters);
+		page.setResult(list);
+		return page;
+	}
+
+	public Page findPageListBeanByMap(String sql, Class clazz, Page page,Map<String, Object> mapParameters) {
+		Assert.notNull(page,"分页信息不能为空");
+		Assert.hasText(sql,"sql语句不正确!");
+		long count=0;
+		if (page.isAutoCount()) {
+			count=findLongByMap(CountSqlBuilder.getCountSql(sql), mapParameters);
+			page.setTotalCount((int)count);
+		}
+		List list = findListBeanByMap(getSql(sql, page),clazz, mapParameters);
+		page.setResult(list);
+		return page;
+	}
+
+	public Page findPageListMapByMap(String sql, Page page,Map<String, Object> mapParameters) {
+		Assert.notNull(page,"分页信息不能为空");
+		Assert.hasText(sql,"sql语句不正确!");
+		long count=0;
+		if (page.isAutoCount()) {
+			count=findLongByMap(CountSqlBuilder.getCountSql(sql), mapParameters);
+			page.setTotalCount((int)count);
+		}
+		List list = findListMapByMap(getSql(sql, page), mapParameters);
+		page.setResult(list);
+		return page;
+	}
+	
+	public static String getSql(final String sql,Page page){
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
 			String querySqlFirst="SELECT * FROM ( SELECT tempt.*,ROWNUM rn FROM ( ";
 			String querySqlLast=" ) tempt WHERE ROWNUM<="+page.getFirst()+page.getPageSize()+" ) WHERE rn>"+page.getFirst();
 			String lastSql=querySqlFirst.concat(sql.concat(querySqlLast));
-			list= findListMapByArray(lastSql, arrayParameters);
+			return lastSql;
 		}else{
-			list= findListMapByArray(sql, arrayParameters);
+			return sql;
 		}
-		page.setResult(list);
-		return page;
 	}
 	
 }

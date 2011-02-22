@@ -275,7 +275,8 @@ public interface JdbcTemplate {
 	
 	/**
 	 * 通用用分页方法,page对象中返回结果为bean集合
-	 * @param sql语句，不用写分页函数、排序，只需要写获取数据的内容，如：select * from tb_table where id=? and user_name like :?
+	 * @param sql语句，不用写分页函数、排序，只需要写获取数据的内容，如：select * from tb_table where id=? and user_name like ?
+	 * @param clazz返回对象类型
 	 * @param arrayParameters参数集合
 	 * @param page分页对象
 	 * @return
@@ -283,12 +284,41 @@ public interface JdbcTemplate {
 	public Page findPageListBean(final String sql,Class clazz,Page page,Object... arrayParameters);
 
 	/**
+	 * 通用用分页方法,page对象中返回结果为bean集合
+	 * @param sql语句，不用写分页函数、排序，只需要写获取数据的内容，如：select * from tb_table where id=:userId and user_name =:userName
+	 * @param clazz返回对象类型
+	 * @param page分页对象
+	 * @param beanParameters参数bean
+	 * @return
+	 */
+	public Page findPageListBeanByBean(final String sql,Class clazz,Page page,Object beanParameters);
+	
+	/**
+	 * 通用用分页方法,page对象中返回结果为bean集合
+	 * @param sql语句，不用写分页函数、排序，只需要写获取数据的内容，如：select * from tb_table where id=:user_id and user_name =:user_name
+	 * @param clazz返回对象类型
+	 * @param page分页对象
+	 * @param mapParameters参数map
+	 * @return
+	 */
+	public Page findPageListBeanByMap(final String sql,Class clazz,Page page,Map<String,Object> mapParameters);
+
+	/**
 	 * 通用用分页方法,page对象中返回结果为map集合
-	 * @param sql语句，不用写分页函数、排序，只需要写获取数据的内容，如：select * from tb_table where id=? and user_name like :?
+	 * @param sql语句，不用写分页函数、排序，只需要写获取数据的内容，如：select * from tb_table where id=? and user_name like ?
 	 * @param arrayParameters参数集合
 	 * @param page分页对象
 	 * @return
 	 */
 	public Page findPageListMap(final String sql,Page page,Object... arrayParameters);
+	
+	/**
+	 * 通用用分页方法,page对象中返回结果为map集合
+	 * @param sql语句，不用写分页函数、排序，只需要写获取数据的内容，如：select * from tb_table where id=:user_id and user_name like :user_name
+	 * @param page分页对象
+	 * @param mapParameters参数map
+	 * @return
+	 */
+	public Page findPageListMapByMap(final String sql,Page page,Map<String,Object> mapParameters);
 	
 }

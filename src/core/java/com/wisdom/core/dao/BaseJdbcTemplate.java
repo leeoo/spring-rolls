@@ -54,8 +54,10 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	}
 	
 	abstract public Page findPageListBean(final String sql,Class clazz,Page page,Object... arrayParameters);
-	
+	abstract public Page findPageListBeanByBean(final String sql,Class clazz,Page page,Object beanParameters);
+	abstract public Page findPageListBeanByMap(final String sql,Class clazz,Page page,Map<String,Object> mapParameters);
 	abstract public Page findPageListMap(final String sql,Page page,Object... arrayParameters);
+	abstract public Page findPageListMapByMap(final String sql,Page page,Map<String,Object> mapParameters);
 	
 	public void callProcedure(String procedureName){
 		jdbcCall=new SimpleJdbcCall(dataSource);
