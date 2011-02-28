@@ -52,7 +52,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/junit-4.9b1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons/commons-lang3-3.0-beta.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/cache/ehcache-core-2.3.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/drivers/lucene-core-3.0.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/validation/org.springframework.test-3.1.0.M1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/security/spring-security-config-3.1.0.RC1.jar"/>
@@ -70,5 +69,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.transaction-3.1.0.M1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web-3.1.0.M1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/org.springframework.web.servlet-3.1.0.M1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/candidate/cache/ehcache-core-2.4.0.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
