@@ -18,7 +18,7 @@ public abstract class CountSqlBuilder {
 		Assert.hasText(nativeSQL,"sql语句不正确!");
 		String sql=nativeSQL.toUpperCase();
 		if(sql.indexOf("DISTINCT(")>=0||sql.indexOf(" GROUP BY ")>=0){
-			return "SELECT "+countSQL+" FROM ("+sql+") TEMP_COUNT_TABLE";
+			return "SELECT "+countSQL+" FROM ("+nativeSQL+") TEMP_COUNT_TABLE";
 		}
 		String[] froms=sql.split(" FROM ");
 		String tempSql="";
@@ -34,12 +34,12 @@ public abstract class CountSqlBuilder {
 				break;
 			}
 		}
-		tempSql=" FROM "+sql.substring(tempSql.length(),sql.length());
-		String withOutOrderBy=tempSql;
-		if(tempSql.indexOf(" ORDER BY ")>=0){
-			withOutOrderBy=tempSql.substring(0,tempSql.indexOf(" ORDER BY"));
+		tempSql=" FROM "+nativeSQL.substring(tempSql.length(),sql.length());
+		int orderBy = tempSql.toUpperCase().indexOf(" ORDER BY ");
+		if(orderBy>=0){
+			tempSql=tempSql.substring(0,orderBy);
 		}
-		return "SELECT "+countSQL+" ".concat(withOutOrderBy);
+		return "SELECT "+countSQL+" ".concat(tempSql);
 	}
 	
 }
