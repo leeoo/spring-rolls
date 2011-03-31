@@ -20,10 +20,12 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 		super(connection);
 	}
 
+	public abstract String getSql(final String sql, Page page);
+	
 	public Page queryPageBeanByArray(final String sql, Class<?> clazz, Page page, Object... arrayParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByArray(CountSqlBuilder.getCountSql(sql), arrayParameters);
+			count = (Long) queryUniqueColumnValueByArray(getCountSql(sql), arrayParameters);
 			page.setTotalCount((int) count);
 		}
 		Collection<?> list = queryByArray(getSql(sql, page), clazz, arrayParameters);
@@ -34,7 +36,7 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	public Page queryPageMapsByArray(final String sql, Page page,Object... arrayParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByArray(CountSqlBuilder.getCountSql(sql), arrayParameters);
+			count = (Long) queryUniqueColumnValueByArray(getCountSql(sql), arrayParameters);
 			page.setTotalCount((int) count);
 		}
 		Collection<?> list = queryByArray(getSql(sql, page), arrayParameters);
@@ -45,7 +47,7 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	public Page queryPageBeansByBean(String sql, Class<?> clazz, Page page, Object beanParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByBean(CountSqlBuilder.getCountSql(sql), beanParameters);
+			count = (Long) queryUniqueColumnValueByBean(getCountSql(sql), beanParameters);
 			page.setTotalCount((int) count);
 		}
 		Collection<?> list = queryByBean(getSql(sql, page), clazz, beanParameters);
@@ -56,7 +58,7 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	public Page queryPageBeansByMap(String sql, Class<?> clazz, Page page, Map<String, Object> mapParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByMap(CountSqlBuilder.getCountSql(sql), mapParameters);
+			count = (Long) queryUniqueColumnValueByMap(getCountSql(sql), mapParameters);
 			page.setTotalCount((int) count);
 		}
 		Collection<?> list = queryByMap(getSql(sql, page), clazz, mapParameters);
@@ -67,7 +69,7 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	public Page queryPageMapsByMap(String sql, Page page, Map<String, Object> mapParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByMap(CountSqlBuilder.getCountSql(sql), mapParameters);
+			count = (Long) queryUniqueColumnValueByMap(getCountSql(sql), mapParameters);
 			page.setTotalCount((int) count);
 		}
 		Collection<?> list = queryByMap(getSql(sql, page), mapParameters);
@@ -75,6 +77,35 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 		return page;
 	}
 	
-	public abstract String getSql(final String sql, Page page);
+	private static String getCountSql(String nativeSQL){
+		return getCountSql(nativeSQL,"COUNT(0)");
+	}
+
+	private static String getCountSql(String nativeSQL,String countSQL){
+		String sql=nativeSQL.toUpperCase();
+		if(sql.indexOf("DISTINCT(")>=0||sql.indexOf(" GROUP BY ")>=0){
+			return "SELECT "+countSQL+" FROM ("+nativeSQL+") TEMP_COUNT_TABLE";
+		}
+		String[] froms=sql.split(" FROM ");
+		String tempSql="";
+		for(int i=0;i<froms.length;i++){
+			if(i!=froms.length-1){
+				tempSql=tempSql.concat(froms[i]+" FROM ");
+			}else{
+				tempSql=tempSql.concat(froms[i]);
+			}
+			int left=tempSql.split("\\(").length;
+			int right=tempSql.split("\\)").length;
+			if(left==right){
+				break;
+			}
+		}
+		tempSql=" FROM "+nativeSQL.substring(tempSql.length(),sql.length());
+		int orderBy = tempSql.toUpperCase().indexOf(" ORDER BY ");
+		if(orderBy>=0){
+			tempSql=tempSql.substring(0,orderBy);
+		}
+		return "SELECT "+countSQL+" ".concat(tempSql);
+	}
 	
 }
