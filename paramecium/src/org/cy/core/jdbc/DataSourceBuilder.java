@@ -52,6 +52,9 @@ public abstract class DataSourceBuilder {
 			}
 		}
 		JdbcTemplateFactory.dbType = properties.getProperty("dbType");
+		if(JdbcTemplateFactory.dbType!=null&&!JdbcTemplateFactory.dbType.isEmpty()){
+			JdbcTemplateFactory.dbType = JdbcTemplateFactory.dbType.toLowerCase();
+		}
 	}
 	
 	public Connection createConnection(){
