@@ -3,8 +3,8 @@ package org.cy.core.test;
 import java.util.Date;
 
 import org.cy.core.jdbc.JdbcTemplate;
+import org.cy.core.jdbc.JdbcTemplateFactory;
 import org.cy.core.jdbc.TransactionManager;
-import org.cy.core.jdbc.dialect.MySqlDialect;
 
 public class Test{
 	
@@ -14,7 +14,7 @@ public class Test{
 	
 	public static void main(String[] args) throws Exception {
 		TransactionManager transactionManager = new TransactionManager();
-		JdbcTemplate template = new MySqlDialect(transactionManager.getConnection());
+		JdbcTemplate template = JdbcTemplateFactory.getJdbcTemplate(transactionManager.getConnection());
 		Test test = new Test();
 		test.setLogInfo("哈哈神马都是浮云");
 		test.setLogDate(new Date());

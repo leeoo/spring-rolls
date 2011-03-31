@@ -51,6 +51,7 @@ public abstract class DataSourceBuilder {
 				logger.info(driverClassName+" not fund!");
 			}
 		}
+		JdbcTemplateFactory.dbType = properties.getProperty("dbType");
 	}
 	
 	public Connection createConnection(){
