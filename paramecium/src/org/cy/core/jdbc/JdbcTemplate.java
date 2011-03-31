@@ -173,13 +173,29 @@ public interface JdbcTemplate extends Dialect{
 	public int executeDML(final String sql) throws SQLException ;
 	
 	/**
+	 * 对带有自增列的表插入INSERT操作，并获得自增值
+	 * @param sql
+	 * @return 受影响的条目数
+	 * @throws SQLException
+	 */
+	public Long insertGetGeneratedValue(final String sql) throws SQLException ;
+	
+	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,例如:INSERT INTO table(id,name) VALUES(?,?)
 	 * @param sql
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
 	public int executeDMLByArray(final String sql,Object... arrayParams) throws SQLException ;
-
+	
+	/**
+	 * 对带有自增列的表插入INSERT操作，并获得自增值
+	 * @param sql
+	 * @return 受影响的条目数
+	 * @throws SQLException
+	 */
+	public Long insertGetGeneratedValueByArray(final String sql,Object... arrayParams) throws SQLException;
+	
 	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,参数形式为:冒号,例如:INSERT INTO table(id,name) VALUES(:id,:name)
 	 * @param sql
@@ -189,12 +205,28 @@ public interface JdbcTemplate extends Dialect{
 	public int executeDMLByMap(final String sql,Map<String, Object> mapParams) throws SQLException ;
 	
 	/**
+	 * 对带有自增列的表插入INSERT操作，并获得自增值
+	 * @param sql
+	 * @return 受影响的条目数
+	 * @throws SQLException
+	 */
+	public Long insertGetGeneratedValueByMap(final String sql,Map<String, Object> mapParams) throws SQLException ;
+	
+	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,参数形式为:冒号,例如:INSERT INTO table(id,name) VALUES(:id,:name)
 	 * @param sql
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
 	public int executeDMLByBean(final String sql,Object bean) throws SQLException ;
+	
+	/**
+	 * 对带有自增列的表插入INSERT操作，并获得自增值
+	 * @param sql
+	 * @return 受影响的条目数
+	 * @throws SQLException
+	 */
+	public Long insertGetGeneratedValueByBean(final String sql,Object bean) throws SQLException ;
 	
 	/**
 	 * 批量执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句

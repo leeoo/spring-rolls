@@ -544,6 +544,23 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		logger.info("影响"+result+"条:"+sql);
 		return result;
 	}
+
+	/**
+	 * 对带有自增列的表插入INSERT操作，并获得自增值
+	 * @param sql
+	 * @return 受影响的条目数
+	 * @throws SQLException
+	 */
+	public Long insertGetGeneratedValue(final String sql) throws SQLException {
+		Statement statement = connection.createStatement();
+		statement.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
+		ResultSet resultSet = statement.getGeneratedKeys();
+		resultSet.next();
+		Object value = resultSet.getObject(1);
+		close(statement,resultSet);
+		logger.info(sql);
+		return Long.valueOf(value.toString());
+	}
 	
 	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,例如:INSERT INTO table(id,name) VALUES(?,?)
@@ -564,6 +581,30 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		close(preparedStatement);
 		logger.info("影响"+result+"条:"+sql);
 		return result;
+	}
+	
+	/**
+	 * 对带有自增列的表插入INSERT操作，并获得自增值
+	 * @param sql
+	 * @return 受影响的条目数
+	 * @throws SQLException
+	 */
+	public Long insertGetGeneratedValueByArray(final String sql,Object... arrayParams) throws SQLException {
+		if(arrayParams==null||arrayParams.length==0){
+			return insertGetGeneratedValue(sql);
+		}
+		PreparedStatement preparedStatement = connection.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
+		int i = 1;
+		for(Object param:arrayParams){
+			preparedStatement.setObject((i++), param);
+		}
+		preparedStatement.executeUpdate();
+		ResultSet resultSet = preparedStatement.getGeneratedKeys();
+		resultSet.next();
+		Object value = resultSet.getObject(1);
+		close(preparedStatement,resultSet);
+		logger.info(sql);
+		return Long.valueOf(value.toString());
 	}
 
 	/**
@@ -590,6 +631,32 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	}
 	
 	/**
+	 * 对带有自增列的表插入INSERT操作，并获得自增值
+	 * @param sql
+	 * @return 受影响的条目数
+	 * @throws SQLException
+	 */
+	public Long insertGetGeneratedValueByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
+		if(mapParams==null||mapParams.size()==0){
+			return insertGetGeneratedValue(sql);
+		}
+		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
+		String preparedSql = (String) value.get(-19820206);
+		value.remove(-19820206);
+		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql,PreparedStatement.RETURN_GENERATED_KEYS);
+		for(Entry<Integer, Object> entry : value.entrySet()){
+			preparedStatement.setObject(entry.getKey(), entry.getValue());
+		}
+		preparedStatement.executeUpdate();
+		ResultSet resultSet = preparedStatement.getGeneratedKeys();
+		resultSet.next();
+		Object value2 = resultSet.getObject(1);
+		close(preparedStatement,resultSet);
+		logger.info(sql);
+		return Long.valueOf(value2.toString());
+	}
+	
+	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,参数形式为:冒号,例如:INSERT INTO table(id,name) VALUES(:id,:name)
 	 * @param sql
 	 * @return 受影响的条目数
@@ -611,6 +678,33 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		close(preparedStatement);
 		logger.info("影响"+result+"条:"+sql);
 		return result;
+	}
+	
+	/**
+	 * 对带有自增列的表插入INSERT操作，并获得自增值
+	 * @param sql
+	 * @return 受影响的条目数
+	 * @throws SQLException
+	 */
+	public Long insertGetGeneratedValueByBean(final String sql,Object bean) throws SQLException {
+		if(bean==null){
+			return insertGetGeneratedValue(sql);
+		}
+		Map<String, Object> mapParams = BeanUitls.bean2Map(bean);
+		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
+		String preparedSql = (String) value.get(-19820206);
+		value.remove(-19820206);
+		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql,PreparedStatement.RETURN_GENERATED_KEYS);
+		for(Entry<Integer, Object> entry : value.entrySet()){
+			preparedStatement.setObject(entry.getKey(), entry.getValue());
+		}
+		preparedStatement.executeUpdate();
+		ResultSet resultSet = preparedStatement.getGeneratedKeys();
+		resultSet.next();
+		Object value2 = resultSet.getObject(1);
+		close(preparedStatement,resultSet);
+		logger.info(sql);
+		return Long.valueOf(value2.toString());
 	}
 	
 	/**
