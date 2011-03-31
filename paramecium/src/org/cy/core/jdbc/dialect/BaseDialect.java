@@ -20,6 +20,12 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 		super(connection);
 	}
 
+	/**
+	 * 获得分页语句
+	 * @param sql
+	 * @param page
+	 * @return
+	 */
 	public abstract String getSql(final String sql, Page page);
 	
 	public Page queryPageBeanByArray(final String sql, Class<?> clazz, Page page, Object... arrayParameters) throws SQLException {
