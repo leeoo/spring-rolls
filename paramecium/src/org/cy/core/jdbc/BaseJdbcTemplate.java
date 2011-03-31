@@ -42,19 +42,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public Collection<Map<String, Object>> query(final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql);
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Collection<Map<String, Object>> collection = new ArrayList<Map<String, Object>>();
-		Map<String, Object> map = null;
-		for (; resultSet.next();) {
-			map = new HashMap<String, Object>();
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			collection.add(map);
-		}
+		Collection<Map<String, Object>> collection = getCollection(resultSet);
 		logger.info("响应"+collection.size()+"条:"+sql);
 		close(statement, resultSet);
 		return collection;
@@ -70,21 +58,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public Collection<?> query(final String sql,Class<?> clazz) throws SQLException {
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql);
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Collection<Object> collection = new ArrayList<Object>();
-		Map<String, Object> map = null;
-		Object bean = null;
-		for (; resultSet.next();) {
-			map = new HashMap<String, Object>();
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			bean = BeanUitls.map2Bean(clazz, map, true);
-			collection.add(bean);
-		}
+		Collection<?> collection = getCollection(resultSet,clazz);
 		logger.info("响应"+collection.size()+"条:"+sql);
 		close(statement, resultSet);
 		return collection;
@@ -107,19 +81,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject((i++), param);
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Collection<Map<String, Object>> collection = new ArrayList<Map<String, Object>>();
-		Map<String, Object> map = null;
-		for (; resultSet.next();) {
-			map = new HashMap<String, Object>();
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			collection.add(map);
-		}
+		Collection<Map<String, Object>> collection = getCollection(resultSet);
 		logger.info("响应"+collection.size()+"条:"+sql);
 		close(preparedStatement, resultSet);
 		return collection;
@@ -143,21 +105,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject((i++), param);
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Collection<Object> collection = new ArrayList<Object>();
-		Map<String, Object> map = null;
-		Object bean = null;
-		for (; resultSet.next();) {
-			map = new HashMap<String, Object>();
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			bean = BeanUitls.map2Bean(clazz, map, true);
-			collection.add(bean);
-		}
+		Collection<?> collection = getCollection(resultSet,clazz);
 		logger.info("响应"+collection.size()+"条:"+sql);
 		close(preparedStatement, resultSet);
 		return collection;
@@ -182,19 +130,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Collection<Map<String, Object>> collection = new ArrayList<Map<String, Object>>();
-		Map<String, Object> map = null;
-		for (; resultSet.next();) {
-			map = new HashMap<String, Object>();
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			collection.add(map);
-		}
+		Collection<Map<String, Object>> collection = getCollection(resultSet);
 		logger.info("响应"+collection.size()+"条:"+sql);
 		close(preparedStatement, resultSet);
 		return collection;
@@ -220,21 +156,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Collection<Object> collection = new ArrayList<Object>();
-		Map<String, Object> map = null;
-		Object bean = null;
-		for (; resultSet.next();) {
-			map = new HashMap<String, Object>();
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			bean = BeanUitls.map2Bean(clazz, map, true);
-			collection.add(bean);
-		}
+		Collection<?> collection = getCollection(resultSet,clazz);
 		logger.info("响应"+collection.size()+"条:"+sql);
 		close(preparedStatement, resultSet);
 		return collection;
@@ -261,21 +183,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Collection<Object> collection = new ArrayList<Object>();
-		Map<String, Object> map = null;
-		Object bean = null;
-		for (; resultSet.next();) {
-			map = new HashMap<String, Object>();
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			bean = BeanUitls.map2Bean(clazz, map, true);
-			collection.add(bean);
-		}
+		Collection<?> collection = getCollection(resultSet,clazz);
 		logger.info("响应"+collection.size()+"条:"+sql);
 		close(preparedStatement, resultSet);
 		return collection;
@@ -288,22 +196,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public Map<String, Object> queryUnique(final String sql) throws SQLException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		Statement statement = connection.createStatement();
-		ResultSet resultSet = statement.executeQuery(sql);
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		for (; resultSet.next();) {
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			break;
-		}
-		close(statement, resultSet);
-		logger.info(sql);
-		return map;
+		return query(sql).iterator().next();
 	}
 
 	/**
@@ -313,24 +206,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public Object queryUnique(final String sql,Class<?> clazz) throws SQLException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		Statement statement = connection.createStatement();
-		ResultSet resultSet = statement.executeQuery(sql);
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Object bean = null;
-		for (; resultSet.next();) {
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			bean = BeanUitls.map2Bean(clazz, map, true);
-			break;
-		}
-		close(statement, resultSet);
-		logger.info(sql);
-		return bean;
+		return query(sql, clazz).iterator().next();
 	}
 	
 	/**
@@ -340,29 +216,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public Map<String, Object> queryUniqueByArray(final String sql,Object... arrayParams) throws SQLException {
-		if(arrayParams==null||arrayParams.length==0){
-			return queryUnique(sql);
-		}
-		PreparedStatement preparedStatement = connection.prepareStatement(sql);
-		int i = 1;
-		for(Object param:arrayParams){
-			preparedStatement.setObject((i++), param);
-		}
-		ResultSet resultSet = preparedStatement.executeQuery();
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Map<String, Object> map = new HashMap<String, Object>();
-		for (; resultSet.next();) {
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			break;
-		}
-		close(preparedStatement, resultSet);
-		logger.info(sql);
-		return map;
+		return queryByArray(sql, arrayParams).iterator().next();
 	}
 	
 	/**
@@ -374,31 +228,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public Object queryUniqueByArray(final String sql,Class<?> clazz,Object... arrayParams) throws SQLException {
-		if(arrayParams==null||arrayParams.length==0){
-			return queryUnique(sql,clazz);
-		}
-		PreparedStatement preparedStatement = connection.prepareStatement(sql);
-		int i = 1;
-		for(Object param:arrayParams){
-			preparedStatement.setObject((i++), param);
-		}
-		ResultSet resultSet = preparedStatement.executeQuery();
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Map<String, Object> map = new HashMap<String, Object>();
-		Object bean = null;
-		for (; resultSet.next();) {
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			bean = BeanUitls.map2Bean(clazz, map, true);
-			break;
-		}
-		close(preparedStatement, resultSet);
-		logger.info(sql);
-		return bean;
+		return queryByArray(sql,clazz ,arrayParams).iterator().next();
 	}
 	
 	/**
@@ -410,34 +240,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public Object queryUniqueByBean(final String sql,Class<?> clazz,Object beanParams) throws SQLException {
-		if(beanParams==null){
-			return queryUnique(sql,clazz);
-		}
-		Map<String, Object> mapParams = BeanUitls.bean2Map(beanParams);
-		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
-		String preparedSql = (String) value.get(-19820206);
-		value.remove(-19820206);
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
-		for(Entry<Integer, Object> entry : value.entrySet()){
-			preparedStatement.setObject(entry.getKey(), entry.getValue());
-		}
-		ResultSet resultSet = preparedStatement.executeQuery();
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Map<String, Object> map = new HashMap<String, Object>();
-		Object bean = null;
-		for (; resultSet.next();) {
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			bean = BeanUitls.map2Bean(clazz, map, true);
-			break;
-		}
-		close(preparedStatement, resultSet);
-		logger.info(sql);
-		return bean;
+		return queryByBean(sql,clazz ,beanParams).iterator().next();
 	}
 	
 	/**
@@ -447,31 +250,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public Map<String, Object> queryUniqueByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
-		if(mapParams==null||mapParams.size()==0){
-			return queryUnique(sql);
-		}
-		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
-		String preparedSql = (String) value.get(-19820206);
-		value.remove(-19820206);
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
-		for(Entry<Integer, Object> entry : value.entrySet()){
-			preparedStatement.setObject(entry.getKey(), entry.getValue());
-		}
-		ResultSet resultSet = preparedStatement.executeQuery();
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Map<String, Object> map = new HashMap<String, Object>();
-		for (; resultSet.next();) {
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			break;
-		}
-		close(preparedStatement, resultSet);
-		logger.info(sql);
-		return map;
+		return queryByMap(sql,mapParams).iterator().next();
 	}
 	
 	/**
@@ -934,6 +713,42 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			values.add(getPreparedStatementSql(sql, mapParams));
 		}
 		return values;
+	}
+	
+	private static Collection<Map<String,Object>> getCollection(ResultSet resultSet) throws SQLException {
+		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+		int columnCount = resultSetMetaData.getColumnCount();
+		Collection<Map<String, Object>> collection = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = null;
+		for (; resultSet.next();) {
+			map = new HashMap<String, Object>();
+			for (int column = 1; column <= columnCount; column++) {
+				String columnLabel = resultSetMetaData.getColumnLabel(column);
+				Object columnValue = resultSet.getObject(columnLabel);
+				map.put(columnLabel, columnValue);
+			}
+			collection.add(map);
+		}
+		return collection;
+	}
+
+	private static Collection<?> getCollection(ResultSet resultSet,Class<?> clazz) throws SQLException {
+		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+		int columnCount = resultSetMetaData.getColumnCount();
+		Collection<Object> collection = new ArrayList<Object>();
+		Map<String, Object> map = null;
+		Object bean = null;
+		for (; resultSet.next();) {
+			map = new HashMap<String, Object>();
+			for (int column = 1; column <= columnCount; column++) {
+				String columnLabel = resultSetMetaData.getColumnLabel(column);
+				Object columnValue = resultSet.getObject(columnLabel);
+				map.put(columnLabel, columnValue);
+			}
+			bean = BeanUitls.map2Bean(clazz, map, true);
+			collection.add(bean);
+		}
+		return collection;
 	}
 	
 	void close(CallableStatement callableStatement) throws SQLException {
