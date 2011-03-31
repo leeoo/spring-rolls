@@ -16,7 +16,6 @@ import org.cy.core.jdbc.BaseJdbcTemplate;
  */
 public abstract class BaseDialect extends BaseJdbcTemplate{
 	
-
 	public BaseDialect(Connection connection) {
 		super(connection);
 	}
