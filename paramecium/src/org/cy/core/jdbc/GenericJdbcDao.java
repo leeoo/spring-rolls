@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.cy.core.jdbc.dialect.Page;
-import org.cy.core.transaction.Transaction;
 import org.cy.core.transaction.TransactionManager;
 
 /**
@@ -19,16 +18,14 @@ import org.cy.core.transaction.TransactionManager;
  */
 public class GenericJdbcDao {
 	
-	private Transaction transaction;
 	private JdbcTemplate jdbcTemplate;
 	
 	/**
 	 * 默认构造方法会自动加载事务线程
 	 */
 	public GenericJdbcDao(){
-		this.transaction = TransactionManager.getCurrentTransaction();
 		try {
-			this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(this.transaction.getConnection());
+			this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(TransactionManager.getCurrentTransaction().getConnection());
 		} catch (SQLException e) {
 		}
 	}
@@ -316,14 +313,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public void executeDDL(final String sql) throws SQLException {
-		try{
-			this.jdbcTemplate.executeDDL(sql);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		this.jdbcTemplate.executeDDL(sql);
 	}
 	
 	/**
@@ -333,14 +323,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int executeDML(final String sql) throws SQLException {
-		try{
-			return this.jdbcTemplate.executeDML(sql);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.executeDML(sql);
 	}
 	
 	/**
@@ -350,14 +333,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public Number insertGetGeneratedKey(final String sql) throws SQLException {
-		try{
-			return this.jdbcTemplate.insertGetGeneratedKey(sql);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.insertGetGeneratedKey(sql);
 	}
 	
 	/**
@@ -367,14 +343,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int executeDMLByArray(final String sql,Object... arrayParams) throws SQLException {
-		try{
-			return this.jdbcTemplate.executeDMLByArray(sql, arrayParams);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.executeDMLByArray(sql, arrayParams);
 	}
 	
 	/**
@@ -384,14 +353,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public Number insertGetGeneratedKeyByArray(final String sql,Object... arrayParams) throws SQLException{
-		try{
-			return this.jdbcTemplate.insertGetGeneratedKeyByArray(sql, arrayParams);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.insertGetGeneratedKeyByArray(sql, arrayParams);
 	}
 	
 	/**
@@ -401,14 +363,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int executeDMLByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
-		try{
-			return this.jdbcTemplate.executeDMLByMap(sql, mapParams);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.executeDMLByMap(sql, mapParams);
 	}
 	
 	/**
@@ -418,14 +373,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public Number insertGetGeneratedKeyByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
-		try{
-			return this.jdbcTemplate.insertGetGeneratedKeyByMap(sql, mapParams);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.insertGetGeneratedKeyByMap(sql, mapParams);
 	}
 	
 	/**
@@ -435,14 +383,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int executeDMLByBean(final String sql,Object bean) throws SQLException {
-		try{
-			return this.jdbcTemplate.executeDMLByBean(sql, bean);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.executeDMLByBean(sql, bean);
 	}
 	
 	/**
@@ -452,14 +393,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public Number insertGetGeneratedKeyByBean(final String sql,Object bean) throws SQLException {
-		try{
-			return this.jdbcTemplate.insertGetGeneratedKeyByBean(sql, bean);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.insertGetGeneratedKeyByBean(sql, bean);
 	}
 	
 	/**
@@ -469,14 +403,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDML(final String... sqls) throws SQLException {
-		try{
-			return this.jdbcTemplate.executeBatchDML(sqls);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.executeBatchDML(sqls);
 	}
 	
 	/**
@@ -486,14 +413,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDML(final Collection<String> sqls) throws SQLException {
-		try{
-			return this.jdbcTemplate.executeBatchDML(sqls);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.executeBatchDML(sqls);
 	}
 	
 	/**
@@ -504,14 +424,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDMLByMaps(final String sql,Collection<Map<String, Object>> mapParamsList) throws SQLException {
-		try{
-			return this.jdbcTemplate.executeBatchDMLByMaps(sql, mapParamsList);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.executeBatchDMLByMaps(sql, mapParamsList);
 	}
 	
 	/**
@@ -522,14 +435,7 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDMLByBeans(final String sql,Collection<?> beanParamsList) throws SQLException {
-		try{
-			return this.jdbcTemplate.executeBatchDMLByBeans(sql, beanParamsList);
-		}catch (SQLException e) {
-			if(this.transaction!=null){
-				this.transaction.setException();
-			}
-			throw new SQLException(e.getMessage());
-		}
+		return this.jdbcTemplate.executeBatchDMLByBeans(sql, beanParamsList);
 	}
 	
 	/**
