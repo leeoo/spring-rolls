@@ -330,15 +330,15 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Long insertGetGeneratedValue(final String sql) throws SQLException {
+	public Number insertGetGeneratedKey(final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		statement.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
 		ResultSet resultSet = statement.getGeneratedKeys();
 		resultSet.next();
-		Object value = resultSet.getObject(1);
+		Number value = (Number) resultSet.getObject(1);
 		close(statement,resultSet);
 		logger.info(sql);
-		return Long.valueOf(value.toString());
+		return value;
 	}
 	
 	/**
@@ -368,9 +368,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Long insertGetGeneratedValueByArray(final String sql,Object... arrayParams) throws SQLException {
+	public Number insertGetGeneratedKeyByArray(final String sql,Object... arrayParams) throws SQLException {
 		if(arrayParams==null||arrayParams.length==0){
-			return insertGetGeneratedValue(sql);
+			return insertGetGeneratedKey(sql);
 		}
 		PreparedStatement preparedStatement = connection.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
 		int i = 1;
@@ -380,10 +380,10 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		preparedStatement.executeUpdate();
 		ResultSet resultSet = preparedStatement.getGeneratedKeys();
 		resultSet.next();
-		Object value = resultSet.getObject(1);
+		Number value = (Number) resultSet.getObject(1);
 		close(preparedStatement,resultSet);
 		logger.info(sql);
-		return Long.valueOf(value.toString());
+		return value;
 	}
 
 	/**
@@ -415,9 +415,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Long insertGetGeneratedValueByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
+	public Number insertGetGeneratedKeyByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
 		if(mapParams==null||mapParams.size()==0){
-			return insertGetGeneratedValue(sql);
+			return insertGetGeneratedKey(sql);
 		}
 		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
@@ -429,10 +429,10 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		preparedStatement.executeUpdate();
 		ResultSet resultSet = preparedStatement.getGeneratedKeys();
 		resultSet.next();
-		Object value2 = resultSet.getObject(1);
+		Number value2 = (Number) resultSet.getObject(1);
 		close(preparedStatement,resultSet);
 		logger.info(sql);
-		return Long.valueOf(value2.toString());
+		return value2;
 	}
 	
 	/**
@@ -465,9 +465,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Long insertGetGeneratedValueByBean(final String sql,Object bean) throws SQLException {
+	public Number insertGetGeneratedKeyByBean(final String sql,Object bean) throws SQLException {
 		if(bean==null){
-			return insertGetGeneratedValue(sql);
+			return insertGetGeneratedKey(sql);
 		}
 		Map<String, Object> mapParams = BeanUitls.bean2Map(bean);
 		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
@@ -480,10 +480,10 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		preparedStatement.executeUpdate();
 		ResultSet resultSet = preparedStatement.getGeneratedKeys();
 		resultSet.next();
-		Object value2 = resultSet.getObject(1);
+		Number value2 = (Number) resultSet.getObject(1);
 		close(preparedStatement,resultSet);
 		logger.info(sql);
-		return Long.valueOf(value2.toString());
+		return value2;
 	}
 	
 	/**

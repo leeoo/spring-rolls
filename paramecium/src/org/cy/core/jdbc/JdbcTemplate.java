@@ -178,7 +178,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Long insertGetGeneratedValue(final String sql) throws SQLException ;
+	public Number insertGetGeneratedKey(final String sql) throws SQLException ;
 	
 	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,例如:INSERT INTO table(id,name) VALUES(?,?)
@@ -194,7 +194,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Long insertGetGeneratedValueByArray(final String sql,Object... arrayParams) throws SQLException;
+	public Number insertGetGeneratedKeyByArray(final String sql,Object... arrayParams) throws SQLException;
 	
 	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,参数形式为:冒号,例如:INSERT INTO table(id,name) VALUES(:id,:name)
@@ -210,7 +210,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Long insertGetGeneratedValueByMap(final String sql,Map<String, Object> mapParams) throws SQLException ;
+	public Number insertGetGeneratedKeyByMap(final String sql,Map<String, Object> mapParams) throws SQLException ;
 	
 	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,参数形式为:冒号,例如:INSERT INTO table(id,name) VALUES(:id,:name)
@@ -226,7 +226,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Long insertGetGeneratedValueByBean(final String sql,Object bean) throws SQLException ;
+	public Number insertGetGeneratedKeyByBean(final String sql,Object bean) throws SQLException ;
 	
 	/**
 	 * 批量执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句
