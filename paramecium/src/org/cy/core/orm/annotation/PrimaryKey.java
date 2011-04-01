@@ -29,24 +29,20 @@ public @interface PrimaryKey {
 		 */
 		NATIVE_SEQUENCE,
 		/**
-		 * 自定义自增策略,视isAutoGenerate为false
-		 */
-		SPECIAL,
-		/**
-		 * UUID值,视isAutoGenerate为false
-		 */
-		UUID,
-		/**
 		 * 联合主键策略,视isAutoGenerate为false
 		 */
-		JOINT
+		JOINT,
+		/**
+		 * 自定义自增策略,视isAutoGenerate为false
+		 */
+		SPECIAL
 	}
 	
 	/**
-	 * 是否自增
+	 * 
 	 * @return
 	 */
-	boolean isAutoGenerate() default true ;
+	AUTO_GENERATE_MODE autoGenerateMode() default AUTO_GENERATE_MODE.NATIVE ;
 	
 	/**
 	 * 序列名称（oracle、db2带有序列功能），可以自定义序列生成器，该属性也可以用于区分标志位。
