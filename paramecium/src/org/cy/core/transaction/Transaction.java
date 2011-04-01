@@ -2,6 +2,7 @@ package org.cy.core.transaction;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -15,6 +16,8 @@ import org.cy.core.jdbc.datasource.DataSourceBuilder;
  */
 public class Transaction {
 
+	private Logger logger = Logger.getLogger(Transaction.class.getName());
+	
 	private Connection connection = null;
 	
 	private boolean isException = false;
@@ -26,6 +29,7 @@ public class Transaction {
 	private void initConnection() throws SQLException{
 		DataSource dataSource = DataSourceBuilder.getDataSource();
 		this.connection = dataSource.getConnection();
+		logger.info("初始化CONNECTION#"+this.connection.hashCode());
 	}
 
 	/**
@@ -91,6 +95,7 @@ public class Transaction {
 	public void commit() throws SQLException{
 		connectionLife();
 		connection.commit();
+		logger.info("CONNECTION#"+this.connection.hashCode()+" is commit!");
 	}
 
 	/**
@@ -100,6 +105,7 @@ public class Transaction {
 	public void rollback() throws SQLException{
 		connectionLife();
 		connection.rollback();
+		logger.info("CONNECTION#"+this.connection.hashCode()+" is roolback!");
 	}
 	
 	/**
@@ -109,6 +115,7 @@ public class Transaction {
 	public void close() throws SQLException{
 		if(connection!=null&&!connection.isClosed()){
 			connection.close();
+			logger.info("CONNECTION#"+this.connection.hashCode()+" is close!");
 		}
 	}
 
