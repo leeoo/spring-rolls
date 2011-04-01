@@ -29,11 +29,11 @@ public @interface PrimaryKey {
 		 */
 		NATIVE_SEQUENCE,
 		/**
-		 * 自定义自增策略
+		 * 自定义自增策略,视isAutoGenerate为false
 		 */
 		SPECIAL,
 		/**
-		 * UUID值
+		 * UUID值,视isAutoGenerate为false
 		 */
 		UUID,
 		/**
