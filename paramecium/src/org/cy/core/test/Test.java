@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.cy.core.jdbc.JdbcTemplate;
 import org.cy.core.jdbc.JdbcTemplateFactory;
-import org.cy.core.jdbc.TransactionManager;
+import org.cy.core.transaction.TransactionManager;
 
 public class Test{
 	
