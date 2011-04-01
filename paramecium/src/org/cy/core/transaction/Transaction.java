@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.cy.core.jdbc.DefaultDataSource;
+import org.cy.core.jdbc.datasource.DataSourceBuilder;
 /**
  * 功 能 描 述:<br>
  * 数据库事务处理
@@ -20,14 +20,10 @@ public class Transaction {
 	private boolean isException = false;
 	
 	public Transaction() throws SQLException{
-		DataSource dataSource = new DefaultDataSource();
+		DataSource dataSource = DataSourceBuilder.getDataSource();
 		this.connection = dataSource.getConnection();
 	}
 
-	public Transaction(DataSource dataSource) throws SQLException{
-		this.connection = dataSource.getConnection();
-	}
-	
 	public Connection getConnection() throws SQLException {
 		if(this.connection!=null&&!this.connection.isClosed()){
 			return this.connection;
