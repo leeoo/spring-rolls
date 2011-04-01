@@ -23,12 +23,4 @@ public @interface Entity {
 	 */
 	public String tableName();
 	
-	/**
-	 * 该属性为true时，实体内所有基本类型全部映射数据库，无需各属性无需使用@Column注解
-	 * @return
-	 */
-	public boolean isAutoMappingColume() default true;
-	
-	
-
 }
