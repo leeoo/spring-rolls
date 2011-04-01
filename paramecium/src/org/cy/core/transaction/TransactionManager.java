@@ -11,7 +11,18 @@ import java.sql.SQLException;
  */
 public class TransactionManager {
 	
-	private static ThreadLocal<Transaction> transactionThreadLocal;
+	private static ThreadLocal<Transaction> transactionThreadLocal = new ThreadLocal<Transaction>();
+	
+	/**
+	 * 获得当前事务
+	 * @return
+	 * @throws SQLException
+	 */
+	public static Transaction getCurrentTransaction() throws SQLException {
+		before();
+		Transaction transaction = transactionThreadLocal.get();
+		return transaction;
+	}
 	
 	/**
 	 * 开启一段事务
@@ -24,6 +35,10 @@ public class TransactionManager {
 		}
 	}
 	
+	/**
+	 * 结束本次事务
+	 * @throws SQLException
+	 */
 	public static void end() throws SQLException {
 		Transaction transaction = transactionThreadLocal.get();
 		if(transaction!=null){

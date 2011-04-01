@@ -19,16 +19,16 @@ public class Transaction {
 	
 	private boolean isException = false;
 	
-	public Transaction()throws SQLException{
+	public Transaction() throws SQLException{
 		DataSource dataSource = new DefaultDataSource();
 		this.connection = dataSource.getConnection();
 	}
 
-	public Transaction(DataSource dataSource)throws SQLException{
+	public Transaction(DataSource dataSource) throws SQLException{
 		this.connection = dataSource.getConnection();
 	}
 	
-	public Connection getConnection() throws SQLException{
+	public Connection getConnection() throws SQLException {
 		if(this.connection!=null&&!this.connection.isClosed()){
 			return this.connection;
 		}
