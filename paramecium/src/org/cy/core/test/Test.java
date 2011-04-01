@@ -32,6 +32,7 @@ public class Test{
 			System.out.println(id3);
 			System.out.println(id4);
 		}catch (Exception e) {
+			e.printStackTrace();
 			TransactionManager.getCurrentTransaction().setException();
 		}
 		TransactionManager.end();
