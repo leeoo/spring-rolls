@@ -2,10 +2,6 @@ package org.cy.core.test;
 
 import java.util.Date;
 
-import org.cy.core.jdbc.JdbcTemplate;
-import org.cy.core.jdbc.JdbcTemplateFactory;
-import org.cy.core.transaction.TransactionManager;
-
 public class Test{
 	
 	private String logInfo;
@@ -13,7 +9,7 @@ public class Test{
 	private Date logDate;
 	
 	public static void main(String[] args) throws Exception {
-		TransactionManager transactionManager = new TransactionManager();
+		/*TransactionManager transactionManager = new TransactionManager();
 		JdbcTemplate template = JdbcTemplateFactory.getJdbcTemplate(transactionManager.getConnection());
 		Test test = new Test();
 		test.setLogInfo("哈哈神马都是浮云");
@@ -23,7 +19,7 @@ public class Test{
 		System.out.println(id);
 		System.out.println(id2);
 		transactionManager.commit();
-		transactionManager.close();
+		transactionManager.close();*/
 	}
 
 	public String getLogInfo() {
