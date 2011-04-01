@@ -23,4 +23,10 @@ public @interface Entity {
 	 */
 	public String tableName();
 	
+	/**
+	 * 可用于扩展页面显示组件
+	 * @return UI显示
+	 */
+	public String showLabel() default "";
+	
 }
