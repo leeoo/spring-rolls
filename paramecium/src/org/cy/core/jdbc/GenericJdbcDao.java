@@ -25,7 +25,7 @@ public class GenericJdbcDao {
 	 */
 	public GenericJdbcDao(){
 		try {
-			this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(TransactionManager.getCurrentTransaction().getConnection());
+			this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(TransactionManager.getCurrentTransaction().getCurrentConnection());
 		} catch (SQLException e) {
 		}
 	}
