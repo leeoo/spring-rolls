@@ -18,7 +18,7 @@ public class TransactionManager {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static Transaction getCurrentTransaction() throws SQLException {
+	public static Transaction getCurrentTransaction() {
 		before();
 		Transaction transaction = transactionThreadLocal.get();
 		return transaction;
@@ -28,10 +28,14 @@ public class TransactionManager {
 	 * 开启一段事务
 	 * @throws SQLException
 	 */
-	public static void before() throws SQLException {
+	public static void before() {
 		Transaction transaction = transactionThreadLocal.get();
 		if(transaction==null){
-			transactionThreadLocal.set(new Transaction());
+			try {
+				transactionThreadLocal.set(new Transaction());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -39,15 +43,19 @@ public class TransactionManager {
 	 * 结束本次事务
 	 * @throws SQLException
 	 */
-	public static void end() throws SQLException {
+	public static void end() {
 		Transaction transaction = transactionThreadLocal.get();
 		if(transaction!=null){
-			if(transaction.isException()){
-				transaction.rollback();
-			}else{
-				transaction.commit();
+			try {
+				if(transaction.isException()){
+					transaction.rollback();
+				}else{
+					transaction.commit();
+				}
+				transaction.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-			transaction.close();
 		}
 	}
 	
