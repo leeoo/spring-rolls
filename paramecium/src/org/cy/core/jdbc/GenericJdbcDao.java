@@ -23,7 +23,7 @@ public class GenericJdbcDao {
 	private JdbcTemplate jdbcTemplate;
 	
 	/**
-	 * 默认实例化加入自动事务代理
+	 * 默认构造方法会自动加载事务线程
 	 */
 	public GenericJdbcDao(){
 		this.transaction = TransactionManager.getCurrentTransaction();
@@ -33,6 +33,10 @@ public class GenericJdbcDao {
 		}
 	}
 	
+	/**
+	 * 该构造方法需要手动控制事务
+	 * @param connection
+	 */
 	public GenericJdbcDao(Connection connection){
 		this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(connection);
 	}

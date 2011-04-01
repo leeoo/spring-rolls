@@ -1,6 +1,5 @@
 package org.cy.core.orm;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,9 +8,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.cy.core.jdbc.JdbcTemplate;
-import org.cy.core.jdbc.JdbcTemplateFactory;
-import org.cy.core.orm.annotation.Entity;
+import org.cy.core.jdbc.GenericJdbcDao;
 import org.cy.core.orm.annotation.PrimaryKey;
 /**
  * 功 能 描 述:<br>
@@ -22,15 +19,26 @@ import org.cy.core.orm.annotation.PrimaryKey;
  */
 public final class GenericOrmDao<T>{
 	private static ConcurrentMap<String, String> sqlCache = new ConcurrentHashMap<String, String>();
-	private JdbcTemplate jdbcTemplate;
+	private GenericJdbcDao genericJdbcDao;
+	
+	/**
+	 * 默认构造方法会自动加载事务线程
+	 */
+	public GenericOrmDao(){
+		genericJdbcDao = new GenericJdbcDao();
+	}
 
+	/**
+	 * 该构造方法需要手动控制事务
+	 * @param connection
+	 */
 	public GenericOrmDao(Connection connection) {
-		jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(connection);
+		genericJdbcDao = new GenericJdbcDao(connection);
 	}
 
 	public Number save(T bean) throws SQLException {
 		String sql = null;
-		jdbcTemplate.executeDMLByBean(sql, bean);
+		genericJdbcDao.executeDMLByBean(sql, bean);
 		return null;
 	}
 
