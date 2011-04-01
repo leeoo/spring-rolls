@@ -20,15 +20,41 @@ public class Transaction {
 	private boolean isException = false;
 	
 	public Transaction() throws SQLException{
+		initConnection();
+	}
+	
+	private void initConnection() throws SQLException{
 		DataSource dataSource = DataSourceBuilder.getDataSource();
 		this.connection = dataSource.getConnection();
 	}
 
-	public Connection getConnection() throws SQLException {
+	/**
+	 * 获得当前连接
+	 * @return
+	 * @throws SQLException
+	 */
+	public Connection getCurrentConnection() throws SQLException {
 		if(this.connection!=null&&!this.connection.isClosed()){
 			return this.connection;
 		}
 		throw new SQLException("EN:connection fail!CN:数据库连接错误!");
+	}
+	
+	/**
+	 * 重新获得新连接,并释放之前的连接资源
+	 * @param isCommitOldConnection是否将之前的连接提交
+	 * @return
+	 * @throws SQLException
+	 */
+	public Connection getNewConnection(boolean isCommitOldConnection) throws SQLException {
+		if(isCommitOldConnection){
+			commit();
+		}else{
+			rollback();
+		}
+		close();
+		initConnection();
+		return getCurrentConnection();
 	}
 	
 	private void connectionLife() throws SQLException{
@@ -58,16 +84,28 @@ public class Transaction {
 		connection.setReadOnly(readOnly);
 	}
 
+	/**
+	 * 提交事务
+	 * @throws SQLException
+	 */
 	public void commit() throws SQLException{
 		connectionLife();
 		connection.commit();
 	}
 
+	/**
+	 * 回滚事务
+	 * @throws SQLException
+	 */
 	public void rollback() throws SQLException{
 		connectionLife();
 		connection.rollback();
 	}
 	
+	/**
+	 * 关闭连接
+	 * @throws SQLException
+	 */
 	public void close() throws SQLException{
 		if(connection!=null&&!connection.isClosed()){
 			connection.close();
