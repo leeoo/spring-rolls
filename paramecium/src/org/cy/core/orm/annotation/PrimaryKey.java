@@ -25,17 +25,13 @@ public @interface PrimaryKey {
 		 */
 		NATIVE,
 		/**
-		 * 数据库级别序列自增
+		 * 数据库级别序列自增,如Oracle、DB2等带有序列功能。
 		 */
 		NATIVE_SEQUENCE,
 		/**
-		 * 联合主键策略,视isAutoGenerate为false
+		 * 手动赋值,如果@PrimaryKey被两个以上属性声明,所有使用@PrimaryKey的属性都被视为AUTO_GENERATE_MODE.NATIVE
 		 */
-		JOINT,
-		/**
-		 * 自定义自增策略,视isAutoGenerate为false
-		 */
-		SPECIAL
+		MANUAL
 	}
 	
 	/**
