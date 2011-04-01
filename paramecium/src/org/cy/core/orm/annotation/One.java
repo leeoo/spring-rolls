@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 /**
  * 功 能 描 述:<br>
- * 一对一声明
+ * 单一实体对应，包含ManyToone,oneToOne关系
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2011-3-31下午04:59:20
  * <br>项 目 信 息:paramecium:org.cy.core.orm.annotation.OneToOne.java
@@ -17,6 +17,6 @@ import java.lang.annotation.Target;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)    
 @Target(ElementType.FIELD)
-public @interface OneToOne {
+public @interface One {
 
 }
