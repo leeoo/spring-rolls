@@ -10,7 +10,8 @@ import java.util.Date;
  * <br>开 发 日 期:2011-4-2下午03:55:50
  * <br>项 目 信 息:paramecium:org.cy.core.commons.DateUtils.java
  */
-public class DateUtils {
+public abstract class DateUtils {
+	
 	public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd",java.util.Locale.CHINA);
 	public static final DateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss",java.util.Locale.CHINA);	
 	public static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",java.util.Locale.CHINA);

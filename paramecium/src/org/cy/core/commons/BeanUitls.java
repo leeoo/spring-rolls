@@ -13,7 +13,7 @@ import org.cy.core.log.LoggerFactory;
  * <br>开 发 日 期:2011-3-30下午02:12:56
  * <br>项 目 信 息:paramecium:org.cy.core.commons.BeanUitls.java
  */
-public class BeanUitls {
+public abstract class BeanUitls {
 	
 	private static Log logger = LoggerFactory.getLogger(BeanUitls.class);
 	
