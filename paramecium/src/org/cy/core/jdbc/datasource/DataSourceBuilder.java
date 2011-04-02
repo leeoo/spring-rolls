@@ -27,7 +27,7 @@ public class DataSourceBuilder extends DefaultDataSource{
 		try {
 			properties.load(inputStream);
 		} catch (IOException e) {
-			logger.error(e.getCause());
+			logger.error(e.fillInStackTrace());
 		}
 		String autoCommitStr = properties.getProperty("autoCommit");
 		autoCommit = autoCommitStr != null ? Boolean.valueOf(autoCommitStr) : true;

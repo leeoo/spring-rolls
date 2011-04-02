@@ -10,8 +10,12 @@ import org.cy.core.log.LogHandler;
  */
 public class DataBaseLogHandler implements LogHandler{
 
-	public void log(String message) {
-		System.out.println(message);
+	public void log(String message, boolean isError) {
+		if(isError){
+			System.err.println(message);
+		}else{
+			System.out.println(message);
+		}
 	}
 
 }

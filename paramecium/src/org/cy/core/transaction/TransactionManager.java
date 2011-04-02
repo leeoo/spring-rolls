@@ -39,7 +39,7 @@ public class TransactionManager {
 			try {
 				transactionThreadLocal.set(new Transaction());
 			} catch (SQLException e) {
-				logger.error(e.getCause());
+				logger.error(e.fillInStackTrace());
 			}
 		}
 	}
@@ -59,7 +59,7 @@ public class TransactionManager {
 				}
 				transaction.close();
 			} catch (SQLException e) {
-				logger.error(e.getCause());
+				logger.error(e.fillInStackTrace());
 			}
 		}
 	}

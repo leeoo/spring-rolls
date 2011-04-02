@@ -32,7 +32,7 @@ public class BeanUitls {
 				try {
 					map.put(field.getName(),field.get(bean));
 				} catch (Exception e) {
-					logger.warn(e.getCause());
+					logger.warn(e.fillInStackTrace());
 				}
 			}
 		}
@@ -61,7 +61,7 @@ public class BeanUitls {
 						}
 						field.set(bean, map.get(name));
 					} catch (Exception e) {
-						logger.warn(e.getCause());
+						logger.warn(e.fillInStackTrace());
 					}
 				}
 			}

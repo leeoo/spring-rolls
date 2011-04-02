@@ -97,78 +97,78 @@ public class LoggerFactory {
 		}
 
 		public void debug(String message) {
-			if(currentLevel >= Log.LEVEL_DEBUG){
-				logHandler.log(getMessage(message, "DEBUG", className));
+			if(currentLevel <= Log.LEVEL_DEBUG){
+				logHandler.log(getMessage(message, "DEBUG", className),false);
 			}
 		}
 
 		
 		public void debug(Throwable throwable) {
-			if(currentLevel >= Log.LEVEL_DEBUG){
-				logHandler.log(getMessage(throwable.getMessage(), "DEBUG", className));
+			if(currentLevel <= Log.LEVEL_DEBUG){
+				logHandler.log(getMessage(throwable.getMessage(), "DEBUG", className),false);
 			}
 		}
 
 		
 		public void error(String message) {
-			if(currentLevel >= Log.LEVEL_ERROR){
-				logHandler.log(getMessage(message, "ERROR", className));
+			if(currentLevel <= Log.LEVEL_ERROR){
+				logHandler.log(getMessage(message, "ERROR", className),true);
 			}
 		}
 
 		
 		public void error(Throwable throwable) {
-			if(currentLevel >= Log.LEVEL_ERROR){
-				logHandler.log(getMessage(throwable.getMessage(), "ERROR", className));
+			if(currentLevel <= Log.LEVEL_ERROR){
+				logHandler.log(getMessage(throwable.getMessage(), "ERROR", className),true);
 			}
 		}
 
 		
 		public void fatal(String message) {
-			if(currentLevel >= Log.LEVEL_FATAL){
-				logHandler.log(getMessage(message, "FATAL", className));
+			if(currentLevel <= Log.LEVEL_FATAL){
+				logHandler.log(getMessage(message, "FATAL", className),true);
 			}
 		}
 
 		public void fatal(Throwable throwable) {
-			if(currentLevel >= Log.LEVEL_FATAL){
-				logHandler.log(getMessage(throwable.getMessage(), "FATAL", className));
+			if(currentLevel <= Log.LEVEL_FATAL){
+				logHandler.log(getMessage(throwable.getMessage(), "FATAL", className),true);
 			}
 		}
 
 		public void info(String message) {
-			if(currentLevel >= Log.LEVEL_INFO){
-				logHandler.log(getMessage(message, "INFO", className));
+			if(currentLevel <= Log.LEVEL_INFO){
+				logHandler.log(getMessage(message, "INFO", className),false);
 			}
 		}
 
 		public void info(Throwable throwable) {
-			if(currentLevel >= Log.LEVEL_INFO){
-				logHandler.log(getMessage(throwable.getMessage(), "INFO", className));
+			if(currentLevel <= Log.LEVEL_INFO){
+				logHandler.log(getMessage(throwable.getMessage(), "INFO", className),false);
 			}
 		}
 
 		public void trace(String message) {
-			if(currentLevel >= Log.LEVEL_TRACE){
-				logHandler.log(getMessage(message, "TRACE", className));
+			if(currentLevel <= Log.LEVEL_TRACE){
+				logHandler.log(getMessage(message, "TRACE", className),false);
 			}
 		}
 
 		public void trace(Throwable throwable) {
-			if(currentLevel >= Log.LEVEL_TRACE){
-				logHandler.log(getMessage(throwable.getMessage(), "TRACE", className));
+			if(currentLevel <= Log.LEVEL_TRACE){
+				logHandler.log(getMessage(throwable.getMessage(), "TRACE", className),false);
 			}
 		}
 		
 		public void warn(String message) {
-			if(currentLevel >= Log.LEVEL_WARN){
-				logHandler.log(getMessage(message, "WARN", className));
+			if(currentLevel <= Log.LEVEL_WARN){
+				logHandler.log(getMessage(message, "WARN", className),true);
 			}
 		}
 
 		public void warn(Throwable throwable) {
-			if(currentLevel >= Log.LEVEL_WARN){
-				logHandler.log(getMessage(throwable.getMessage(), "WARN", className));
+			if(currentLevel <= Log.LEVEL_WARN){
+				logHandler.log(getMessage(throwable.getMessage(), "WARN", className),true);
 			}
 		}
 	}

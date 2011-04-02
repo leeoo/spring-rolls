@@ -7,5 +7,5 @@ package org.cy.core.log;
  * <br>项 目 信 息:paramecium:org.cy.core.log.LogHandler.java
  */
 public interface LogHandler {
-	public void log(String message);
+	public void log(String message,boolean isError);
 }
