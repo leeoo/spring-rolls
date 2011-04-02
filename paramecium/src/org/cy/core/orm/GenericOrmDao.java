@@ -54,10 +54,9 @@ public final class GenericOrmDao<T>{
 		return stringBuffer.toString();
 	}
 	
-	private Set<PrimaryKey> getPrimaryKey(T bean){
+	private Set<PrimaryKey> getPrimaryKey(Class<?> entityClass){
 		Set<PrimaryKey> pks = new HashSet<PrimaryKey>();
-		Class<?> clazz = bean.getClass();
-		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+		for (Class<?> superClass = entityClass; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
 				try {
