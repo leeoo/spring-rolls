@@ -11,15 +11,14 @@ import java.util.StringTokenizer;
  * <br>开 发 日 期:2010-11-18上午10:24:56
  * <br>项 目 信 息:wisdom.3.0:com.wisdom.core.logger.format.BasicFormatter.java
  */
-@SuppressWarnings({"unchecked","unused"})
 public class BasicFormatter{
 
-	private static final Set BEGIN_CLAUSES = new HashSet();
-	private static final Set END_CLAUSES = new HashSet();
-	private static final Set LOGICAL = new HashSet();
-	private static final Set QUANTIFIERS = new HashSet();
-	private static final Set DML = new HashSet();
-	private static final Set MISC = new HashSet();
+	private static final Set<Object> BEGIN_CLAUSES = new HashSet<Object>();
+	private static final Set<Object> END_CLAUSES = new HashSet<Object>();
+	private static final Set<Object> LOGICAL = new HashSet<Object>();
+	private static final Set<Object> QUANTIFIERS = new HashSet<Object>();
+	private static final Set<Object> DML = new HashSet<Object>();
+	private static final Set<Object> MISC = new HashSet<Object>();
 
 	static {
 		BEGIN_CLAUSES.add( "left" );
@@ -70,14 +69,13 @@ public class BasicFormatter{
 		boolean beginLine = true;
 		boolean afterBeginBeforeEnd = false;
 		boolean afterByOrSetOrFromOrSelect = false;
-		boolean afterValues = false;
 		boolean afterOn = false;
 		boolean afterBetween = false;
 		boolean afterInsert = false;
 		int inFunction = 0;
 		int parensSinceSelect = 0;
-		private LinkedList parenCounts = new LinkedList();
-		private LinkedList afterByOrFromOrSelects = new LinkedList();
+		private LinkedList<Object> parenCounts = new LinkedList<Object>();
+		private LinkedList<Object> afterByOrFromOrSelects = new LinkedList<Object>();
 
 		int indent = 1;
 
@@ -302,7 +300,6 @@ public class BasicFormatter{
 			out();
 			indent++;
 			newline();
-			afterValues = true;
 		}
 
 		private void closeParen() {
