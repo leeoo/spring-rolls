@@ -61,7 +61,7 @@ public class TransactionManager {
 			} catch (SQLException e) {
 				logger.error(e.fillInStackTrace());
 			}
-			transactionThreadLocal.set(null);
+			transactionThreadLocal.remove();
 		}
 	}
 	
