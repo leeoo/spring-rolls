@@ -4,9 +4,11 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 import javax.sql.DataSource;
+
+import org.cy.core.log.Log;
+import org.cy.core.log.LoggerFactory;
 
 /**
  * 功能描述(Description):<br><b>
@@ -17,7 +19,8 @@ import javax.sql.DataSource;
  * <br>包及类名(Package Class): <b>org.cy.core.jdbc.datasource.DefaultDataSource.java</b>
  */
 public abstract class DefaultDataSource implements DataSource{
-	private static Logger logger = Logger.getLogger(DefaultDataSource.class.getName());
+	
+	private static Log logger = LoggerFactory.getLogger(DefaultDataSource.class);
 	static Boolean autoCommit = true;
 	static PrintWriter printWriter;
 	static Integer loginTimeout = 5;

@@ -12,9 +12,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
 
 import org.cy.core.commons.BeanUitls;
+import org.cy.core.log.Log;
+import org.cy.core.log.LoggerFactory;
 
 /**
  * 功 能 描 述:<br>
@@ -25,7 +26,7 @@ import org.cy.core.commons.BeanUitls;
  */
 public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	
-	private Logger logger = Logger.getLogger(BaseJdbcTemplate.class.getName());
+	private static Log logger = LoggerFactory.getLogger(BaseJdbcTemplate.class);
 
 	private Connection connection;
 

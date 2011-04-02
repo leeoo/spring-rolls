@@ -3,11 +3,12 @@ package org.cy.core.jdbc.datasource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
 import org.cy.core.jdbc.JdbcTemplateFactory;
+import org.cy.core.log.Log;
+import org.cy.core.log.LoggerFactory;
 /**
  * 功能描述(Description):<br><b>
  * 默认数据源的链接信息构建器
@@ -17,7 +18,8 @@ import org.cy.core.jdbc.JdbcTemplateFactory;
  * <br>包及类名(Package Class): <b>org.cy.core.jdbc.datasource.DataSourceBuilder.java</b>
  */
 public class DataSourceBuilder extends DefaultDataSource{
-	private static Logger logger = Logger.getLogger(DataSourceBuilder.class.getName());
+	
+	private static Log logger = LoggerFactory.getLogger(DataSourceBuilder.class);
 	
 	static{
 		Properties properties = new Properties();

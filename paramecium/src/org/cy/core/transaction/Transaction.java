@@ -2,11 +2,12 @@ package org.cy.core.transaction;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
 import org.cy.core.jdbc.datasource.DataSourceBuilder;
+import org.cy.core.log.Log;
+import org.cy.core.log.LoggerFactory;
 /**
  * 功 能 描 述:<br>
  * 数据库事务处理
@@ -16,7 +17,7 @@ import org.cy.core.jdbc.datasource.DataSourceBuilder;
  */
 public class Transaction {
 
-	private Logger logger = Logger.getLogger(Transaction.class.getName());
+	private static Log logger = LoggerFactory.getLogger(Transaction.class);
 	
 	private Connection connection = null;
 	

@@ -8,6 +8,13 @@ package org.cy.core.log;
  */
 public interface Log{
 	
+	public static final int LEVEL_TRACE = 1;
+	public static final int LEVEL_DEBUG = 3;
+	public static final int LEVEL_INFO = 5;
+	public static final int LEVEL_WARN = 7;
+	public static final int LEVEL_ERROR = 9;
+	public static final int LEVEL_FATAL = 11;
+	
 	/**
 	 * 跟踪级别输出
 	 * @param message
