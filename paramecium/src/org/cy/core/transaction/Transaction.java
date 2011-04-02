@@ -30,7 +30,7 @@ public class Transaction {
 	private void initConnection() throws SQLException{
 		DataSource dataSource = DataSourceBuilder.getDataSource();
 		this.connection = dataSource.getConnection();
-		logger.info("CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
+		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class Transaction {
 	public void commit() throws SQLException{
 		connectionLife();
 		connection.commit();
-		logger.info("CONNECTION#"+this.connection.hashCode()+" IS COMMIT!");
+		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS COMMIT!");
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class Transaction {
 	public void rollback() throws SQLException{
 		connectionLife();
 		connection.rollback();
-		logger.info("CONNECTION#"+this.connection.hashCode()+" IS ROOLBACK!");
+		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS ROOLBACK!");
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public class Transaction {
 	public void close() throws SQLException{
 		if(connection!=null&&!connection.isClosed()){
 			connection.close();
-			logger.info("CONNECTION#"+this.connection.hashCode()+" IS CLOSE!");
+			logger.debug("CONNECTION#"+this.connection.hashCode()+" IS CLOSE!");
 		}
 	}
 
