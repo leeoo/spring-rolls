@@ -44,7 +44,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql);
 		Collection<Map<String, Object>> collection = getCollection(resultSet);
-		logger.info("响应"+collection.size()+"条:"+sql);
+		logger.debug("响应"+collection.size()+"条:"+sql);
 		close(statement, resultSet);
 		return collection;
 	}
@@ -60,7 +60,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql);
 		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.info("响应"+collection.size()+"条:"+sql);
+		logger.debug("响应"+collection.size()+"条:"+sql);
 		close(statement, resultSet);
 		return collection;
 	}
@@ -83,7 +83,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<Map<String, Object>> collection = getCollection(resultSet);
-		logger.info("响应"+collection.size()+"条:"+sql);
+		logger.debug("响应"+collection.size()+"条:"+sql);
 		close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -107,7 +107,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.info("响应"+collection.size()+"条:"+sql);
+		logger.debug("响应"+collection.size()+"条:"+sql);
 		close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -132,7 +132,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<Map<String, Object>> collection = getCollection(resultSet);
-		logger.info("响应"+collection.size()+"条:"+sql);
+		logger.debug("响应"+collection.size()+"条:"+sql);
 		close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -158,7 +158,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.info("响应"+collection.size()+"条:"+sql);
+		logger.debug("响应"+collection.size()+"条:"+sql);
 		close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -185,7 +185,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.info("响应"+collection.size()+"条:"+sql);
+		logger.debug("响应"+collection.size()+"条:"+sql);
 		close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -308,7 +308,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		statement.execute(sql);
 		close(statement);
-		logger.info(sql);
+		logger.debug(sql);
 	}
 	
 	/**
@@ -321,7 +321,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		int result = statement.executeUpdate(sql);
 		close(statement);
-		logger.info("影响"+result+"条:"+sql);
+		logger.debug("影响"+result+"条:"+sql);
 		return result;
 	}
 
@@ -338,7 +338,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		resultSet.next();
 		Number value = (Number) resultSet.getObject(1);
 		close(statement,resultSet);
-		logger.info(sql);
+		logger.debug(sql);
 		return value;
 	}
 	
@@ -359,7 +359,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		int result = preparedStatement.executeUpdate();
 		close(preparedStatement);
-		logger.info("影响"+result+"条:"+sql);
+		logger.debug("影响"+result+"条:"+sql);
 		return result;
 	}
 	
@@ -383,7 +383,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		resultSet.next();
 		Number value = (Number) resultSet.getObject(1);
 		close(preparedStatement,resultSet);
-		logger.info(sql);
+		logger.debug(sql);
 		return value;
 	}
 
@@ -406,7 +406,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		int result = preparedStatement.executeUpdate();
 		close(preparedStatement);
-		logger.info("影响"+result+"条:"+sql);
+		logger.debug("影响"+result+"条:"+sql);
 		return result;
 	}
 	
@@ -432,7 +432,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		resultSet.next();
 		Number value2 = (Number) resultSet.getObject(1);
 		close(preparedStatement,resultSet);
-		logger.info(sql);
+		logger.debug(sql);
 		return value2;
 	}
 	
@@ -456,7 +456,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		int result = preparedStatement.executeUpdate();
 		close(preparedStatement);
-		logger.info("影响"+result+"条:"+sql);
+		logger.debug("影响"+result+"条:"+sql);
 		return result;
 	}
 	
@@ -483,7 +483,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		resultSet.next();
 		Number value2 = (Number) resultSet.getObject(1);
 		close(preparedStatement,resultSet);
-		logger.info(sql);
+		logger.debug(sql);
 		return value2;
 	}
 	
@@ -539,7 +539,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		int[] result = preparedStatement.executeBatch();
 		close(preparedStatement);
-		logger.info(sql);
+		logger.debug(sql);
 		return result;
 	}
 	
@@ -567,7 +567,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		int[] result = preparedStatement.executeBatch();
 		close(preparedStatement);
-		logger.info(sql);
+		logger.debug(sql);
 		return result;
 	}
 	
@@ -580,7 +580,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		CallableStatement callableStatement = connection.prepareCall(sql);
 		callableStatement.execute();
 		close(callableStatement);
-		logger.info(sql);
+		logger.debug(sql);
 	}
 
 	
@@ -598,7 +598,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		callableStatement.execute();
 		close(callableStatement);
-		logger.info(sql);
+		logger.debug(sql);
 	}
 	
 	/**
@@ -619,7 +619,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			collection.add(callableStatement.getObject((j++)));
 		}
 		close(callableStatement);
-		logger.info(sql);
+		logger.debug(sql);
 		return collection;
 	}
 
@@ -647,7 +647,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			returnValues.put(outParam, callableStatement.getObject(outParam));
 		}
 		close(callableStatement);
-		logger.info(sql);
+		logger.debug(sql);
 		return returnValues;
 	}
 	
