@@ -21,7 +21,7 @@ public class DataSourceBuilder extends DefaultDataSource{
 	
 	static{
 		Properties properties = new Properties();
-		InputStream inputStream = System.class.getResourceAsStream("/config.properties");
+		InputStream inputStream = System.class.getResourceAsStream("/database.properties");
 		try {
 			properties.load(inputStream);
 		} catch (IOException e) {
