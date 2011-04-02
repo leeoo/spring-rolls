@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.cy.core.commons.BeanUitls;
+import org.cy.core.jdbc.datasource.DataSourceBuilder;
 import org.cy.core.jdbc.formatter.DDLFormatter;
 import org.cy.core.jdbc.formatter.DMLFormatter;
 import org.cy.core.log.Log;
@@ -674,11 +675,11 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(splite>-1){
 			sql = sql.substring(splite+1,sql.length());
 		}
-		return DMLFormatter.format(sql);
+		return DataSourceBuilder.sqlIsFormat ? DMLFormatter.format(sql) : sql;
 	}
 
 	private static String getNativeDDLSql(String sql){
-		return DDLFormatter.format(sql);
+		return DataSourceBuilder.sqlIsFormat ? DDLFormatter.format(sql) : sql;
 	}
 
 	/**

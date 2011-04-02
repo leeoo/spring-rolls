@@ -20,6 +20,7 @@ import org.cy.core.log.LoggerFactory;
 public class DataSourceBuilder extends DefaultDataSource{
 	
 	private final static Log logger = LoggerFactory.getLogger(DataSourceBuilder.class);
+	public static boolean sqlIsFormat = false;
 	
 	static{
 		Properties properties = new Properties();
@@ -31,6 +32,8 @@ public class DataSourceBuilder extends DefaultDataSource{
 		}
 		String autoCommitStr = properties.getProperty("autoCommit");
 		autoCommit = autoCommitStr != null ? Boolean.valueOf(autoCommitStr) : true;
+		String sqlIsFormatStr = properties.getProperty("sqlIsFormat");
+		sqlIsFormat = sqlIsFormatStr != null ? Boolean.valueOf(sqlIsFormatStr) : false;
 		String loginTimeoutStr = properties.getProperty("loginTimeout");
 		loginTimeout = loginTimeoutStr != null ? Integer.valueOf(loginTimeoutStr) : 5;
 		driverClassName = properties.getProperty("driverClassName");
