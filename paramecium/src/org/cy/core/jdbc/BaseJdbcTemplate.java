@@ -670,7 +670,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	private static String getNativeSql(String str){
 		int splite = str.indexOf(": ");
 		if(splite>-1){
-			return str.substring(splite,str.length());
+			return str.substring(splite+1,str.length());
 		}
 		return str;
 	}

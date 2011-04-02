@@ -44,7 +44,8 @@ public class DataSourceBuilder extends DefaultDataSource{
 			try {
 				Class.forName(driverClassName);
 			} catch (ClassNotFoundException e) {
-				logger.info(driverClassName+" not fund!");
+				e.printStackTrace();
+				logger.error(e.fillInStackTrace());
 			}
 		}
 		JdbcTemplateFactory.dbType = properties.getProperty("dbType");

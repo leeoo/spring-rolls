@@ -39,6 +39,7 @@ public class TransactionManager {
 			try {
 				transactionThreadLocal.set(new Transaction());
 			} catch (SQLException e) {
+				e.printStackTrace();
 				logger.error(e.fillInStackTrace());
 			}
 		}
@@ -59,6 +60,7 @@ public class TransactionManager {
 				}
 				transaction.close();
 			} catch (SQLException e) {
+				e.printStackTrace();
 				logger.error(e.fillInStackTrace());
 			}
 			transactionThreadLocal.remove();
