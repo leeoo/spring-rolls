@@ -37,7 +37,7 @@ public abstract class DefaultDataSource implements DataSource{
 				connection = DriverManager.getConnection(url, username, password);
 				connection.setAutoCommit(autoCommit);
 			} catch (SQLException e) {
-				logger.info("connection not create!");
+				logger.error(e.getCause());
 			}
 		}
 		return connection;

@@ -2,6 +2,9 @@ package org.cy.core.transaction;
 
 import java.sql.SQLException;
 
+import org.cy.core.log.Log;
+import org.cy.core.log.LoggerFactory;
+
 /**
  * 功 能 描 述:<br>
  * 事务管理器
@@ -10,6 +13,8 @@ import java.sql.SQLException;
  * <br>项 目 信 息:paramecium:org.cy.core.transaction.TransactionManager.java
  */
 public class TransactionManager {
+	
+	private static Log logger = LoggerFactory.getLogger(TransactionManager.class);
 	
 	private static ThreadLocal<Transaction> transactionThreadLocal = new ThreadLocal<Transaction>();
 	
@@ -34,7 +39,7 @@ public class TransactionManager {
 			try {
 				transactionThreadLocal.set(new Transaction());
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.error(e.getCause());
 			}
 		}
 	}
@@ -54,7 +59,7 @@ public class TransactionManager {
 				}
 				transaction.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.error(e.getCause());
 			}
 		}
 	}

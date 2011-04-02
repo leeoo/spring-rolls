@@ -3,6 +3,9 @@ package org.cy.core.commons;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.cy.core.log.Log;
+import org.cy.core.log.LoggerFactory;
 /**
  * 功 能 描 述:<br>
  * jdbc所涉及到的bean工具
@@ -11,6 +14,8 @@ import java.util.Map;
  * <br>项 目 信 息:paramecium:org.cy.core.commons.BeanUitls.java
  */
 public class BeanUitls {
+	
+	private static Log logger = LoggerFactory.getLogger(BeanUitls.class);
 	
 	/**
 	 * bean实例转换为Map实例
@@ -27,6 +32,7 @@ public class BeanUitls {
 				try {
 					map.put(field.getName(),field.get(bean));
 				} catch (Exception e) {
+					logger.warn(e.getCause());
 				}
 			}
 		}
@@ -55,6 +61,7 @@ public class BeanUitls {
 						}
 						field.set(bean, map.get(name));
 					} catch (Exception e) {
+						logger.warn(e.getCause());
 					}
 				}
 			}

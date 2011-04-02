@@ -27,7 +27,7 @@ public class DataSourceBuilder extends DefaultDataSource{
 		try {
 			properties.load(inputStream);
 		} catch (IOException e) {
-			logger.info("config.properties not fund!");
+			logger.error(e.getCause());
 		}
 		String autoCommitStr = properties.getProperty("autoCommit");
 		autoCommit = autoCommitStr != null ? Boolean.valueOf(autoCommitStr) : true;
