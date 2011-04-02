@@ -17,7 +17,7 @@ import org.cy.core.log.LoggerFactory;
  */
 public class Transaction {
 
-	private static Log logger = LoggerFactory.getLogger(Transaction.class);
+	private final static Log logger = LoggerFactory.getLogger(Transaction.class);
 	
 	private Connection connection = null;
 	

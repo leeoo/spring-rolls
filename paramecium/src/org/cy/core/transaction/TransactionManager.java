@@ -14,9 +14,9 @@ import org.cy.core.log.LoggerFactory;
  */
 public class TransactionManager {
 	
-	private static Log logger = LoggerFactory.getLogger(TransactionManager.class);
+	private final static Log logger = LoggerFactory.getLogger(TransactionManager.class);
 	
-	private static ThreadLocal<Transaction> transactionThreadLocal = new ThreadLocal<Transaction>();
+	private final static ThreadLocal<Transaction> transactionThreadLocal = new ThreadLocal<Transaction>();
 	
 	/**
 	 * 获得当前事务
@@ -61,6 +61,7 @@ public class TransactionManager {
 			} catch (SQLException e) {
 				logger.error(e.fillInStackTrace());
 			}
+			transactionThreadLocal.set(null);
 		}
 	}
 	

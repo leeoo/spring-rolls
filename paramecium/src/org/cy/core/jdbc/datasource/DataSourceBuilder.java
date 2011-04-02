@@ -19,7 +19,7 @@ import org.cy.core.log.LoggerFactory;
  */
 public class DataSourceBuilder extends DefaultDataSource{
 	
-	private static Log logger = LoggerFactory.getLogger(DataSourceBuilder.class);
+	private final static Log logger = LoggerFactory.getLogger(DataSourceBuilder.class);
 	
 	static{
 		Properties properties = new Properties();
