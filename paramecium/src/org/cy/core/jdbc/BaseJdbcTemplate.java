@@ -44,7 +44,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql);
 		Collection<Map<String, Object>> collection = getCollection(resultSet);
-		logger.debug("响应"+collection.size()+"条:"+sql);
+		logger.debug(sql);
 		close(statement, resultSet);
 		return collection;
 	}
@@ -60,7 +60,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql);
 		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.debug("响应"+collection.size()+"条:"+sql);
+		logger.debug(sql);
 		close(statement, resultSet);
 		return collection;
 	}
@@ -83,7 +83,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<Map<String, Object>> collection = getCollection(resultSet);
-		logger.debug("响应"+collection.size()+"条:"+sql);
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -107,7 +107,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.debug("响应"+collection.size()+"条:"+sql);
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -132,7 +132,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<Map<String, Object>> collection = getCollection(resultSet);
-		logger.debug("响应"+collection.size()+"条:"+sql);
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -158,7 +158,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.debug("响应"+collection.size()+"条:"+sql);
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -185,7 +185,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.debug("响应"+collection.size()+"条:"+sql);
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -307,8 +307,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public void executeDDL(final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		statement.execute(sql);
-		close(statement);
 		logger.debug(sql);
+		close(statement);
 	}
 	
 	/**
@@ -320,8 +320,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public int executeDML(final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		int result = statement.executeUpdate(sql);
+		logger.debug(sql);
 		close(statement);
-		logger.debug("影响"+result+"条:"+sql);
 		return result;
 	}
 
@@ -337,8 +337,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = statement.getGeneratedKeys();
 		resultSet.next();
 		Number value = (Number) resultSet.getObject(1);
-		close(statement,resultSet);
 		logger.debug(sql);
+		close(statement,resultSet);
 		return value;
 	}
 	
@@ -358,8 +358,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject((i++), param);
 		}
 		int result = preparedStatement.executeUpdate();
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement);
-		logger.debug("影响"+result+"条:"+sql);
 		return result;
 	}
 	
@@ -382,8 +382,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.getGeneratedKeys();
 		resultSet.next();
 		Number value = (Number) resultSet.getObject(1);
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement,resultSet);
-		logger.debug(sql);
 		return value;
 	}
 
@@ -405,8 +405,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
 		int result = preparedStatement.executeUpdate();
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement);
-		logger.debug("影响"+result+"条:"+sql);
 		return result;
 	}
 	
@@ -431,8 +431,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.getGeneratedKeys();
 		resultSet.next();
 		Number value2 = (Number) resultSet.getObject(1);
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement,resultSet);
-		logger.debug(sql);
 		return value2;
 	}
 	
@@ -455,8 +455,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
 		int result = preparedStatement.executeUpdate();
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement);
-		logger.debug("影响"+result+"条:"+sql);
 		return result;
 	}
 	
@@ -482,8 +482,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.getGeneratedKeys();
 		resultSet.next();
 		Number value2 = (Number) resultSet.getObject(1);
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement,resultSet);
-		logger.debug(sql);
 		return value2;
 	}
 	
@@ -497,6 +497,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		for(String sql:sqls){
 			statement.addBatch(sql);
+			logger.debug(sql);
 		}
 		int[] result = statement.executeBatch();
 		close(statement);
@@ -513,6 +514,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		for(String sql:sqls){
 			statement.addBatch(sql);
+			logger.debug(sql);
 		}
 		int[] result = statement.executeBatch();
 		close(statement);
@@ -538,8 +540,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.addBatch();
 		}
 		int[] result = preparedStatement.executeBatch();
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement);
-		logger.debug(sql);
 		return result;
 	}
 	
@@ -566,8 +568,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.addBatch();
 		}
 		int[] result = preparedStatement.executeBatch();
+		logger.debug(getNativeSql(preparedStatement.toString()));
 		close(preparedStatement);
-		logger.debug(sql);
 		return result;
 	}
 	
@@ -579,8 +581,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public void call(final String sql) throws SQLException {
 		CallableStatement callableStatement = connection.prepareCall(sql);
 		callableStatement.execute();
+		logger.debug(getNativeSql(callableStatement.toString()));
 		close(callableStatement);
-		logger.debug(sql);
 	}
 
 	
@@ -597,8 +599,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			callableStatement.setObject((i++),inParam);
 		}
 		callableStatement.execute();
+		logger.debug(getNativeSql(callableStatement.toString()));
 		close(callableStatement);
-		logger.debug(sql);
 	}
 	
 	/**
@@ -618,8 +620,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		for(int j=1;j<=outParams.length;j++){
 			collection.add(callableStatement.getObject((j++)));
 		}
+		logger.debug(getNativeSql(callableStatement.toString()));
 		close(callableStatement);
-		logger.debug(sql);
 		return collection;
 	}
 
@@ -646,8 +648,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		for(String outParam:outParams.keySet()){
 			returnValues.put(outParam, callableStatement.getObject(outParam));
 		}
+		logger.debug(getNativeSql(callableStatement.toString()));
 		close(callableStatement);
-		logger.debug(sql);
 		return returnValues;
 	}
 	
@@ -663,6 +665,14 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			}
 		}
 		return false;
+	}
+	
+	private static String getNativeSql(String str){
+		int splite = str.indexOf(": ");
+		if(splite>-1){
+			return str.substring(splite,str.length());
+		}
+		return str;
 	}
 
 	/**
