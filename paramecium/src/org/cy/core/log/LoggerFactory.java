@@ -67,7 +67,7 @@ public class LoggerFactory {
 	private static String getMessage(String message,String level,String className,String methodName){
 		StringBuffer sb = new StringBuffer();
 		sb.append(DateUtils.getCurrentDateTimeStr()).append(' ');
-		sb.append(className).append(' ').append(methodName);
+		sb.append(className).append('.').append(methodName);
 		sb.append("\r\n");
 		sb.append(level).append(":");
 		sb.append(message);
@@ -117,6 +117,7 @@ public class LoggerFactory {
 			if(currentLevel <= Log.LEVEL_ERROR){
 				Exception exception = new Exception();
 				String methodName = exception.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				methodName = methodName+"("+exception.getStackTrace()[1].getFileName()+":"+exception.getStackTrace()[1].getLineNumber()+")";// 获得调用者的文件名和行号
 				if(this.className==null){
 					className = exception.getStackTrace()[1].getClassName();// 获得调用者的类名
 				}
@@ -128,6 +129,7 @@ public class LoggerFactory {
 		public void error(Throwable throwable) {
 			if(currentLevel <= Log.LEVEL_ERROR){
 				String methodName = throwable.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				methodName = methodName+"("+throwable.getStackTrace()[1].getFileName()+":"+throwable.getStackTrace()[1].getLineNumber()+")";// 获得调用者的文件名和行号
 				if(this.className==null){
 					className = throwable.getStackTrace()[1].getClassName();// 获得调用者的类名
 				}
@@ -140,6 +142,7 @@ public class LoggerFactory {
 			if(currentLevel <= Log.LEVEL_FATAL){
 				Exception exception = new Exception();
 				String methodName = exception.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				methodName = methodName+"("+exception.getStackTrace()[1].getFileName()+":"+exception.getStackTrace()[1].getLineNumber()+")";// 获得调用者的文件名和行号
 				if(this.className==null){
 					className = exception.getStackTrace()[1].getClassName();// 获得调用者的类名
 				}
@@ -150,6 +153,7 @@ public class LoggerFactory {
 		public void fatal(Throwable throwable) {
 			if(currentLevel <= Log.LEVEL_FATAL){
 				String methodName = throwable.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				methodName = methodName+"("+throwable.getStackTrace()[1].getFileName()+":"+throwable.getStackTrace()[1].getLineNumber()+")";// 获得调用者的文件名和行号
 				if(this.className==null){
 					className = throwable.getStackTrace()[1].getClassName();// 获得调用者的类名
 				}
