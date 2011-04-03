@@ -22,11 +22,23 @@ public @interface Entity {
 	 * @return 表名称
 	 */
 	public String tableName();
+
+	/**
+	 * 数据库表别名,当联合查询时必须指定该表别名
+	 * @return 表名称
+	 */
+	public String alias() default "";
 	
 	/**
 	 * 可用于扩展页面显示组件
 	 * @return UI显示
 	 */
 	public String showLabel() default "";
+	
+	/**
+	 * 排序实例：“id DESC , name ASC”
+	 * @return 合成语句
+	 */
+	public String orderBy() default "";
 	
 }
