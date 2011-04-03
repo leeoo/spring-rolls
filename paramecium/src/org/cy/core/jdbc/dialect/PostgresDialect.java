@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public final class PostgresDialect extends BaseDialect implements Dialect {
 
-	public PostgresDialect(Connection connection) {
+	public PostgresDialect(final Connection connection) {
 		super(connection);
 	}
 

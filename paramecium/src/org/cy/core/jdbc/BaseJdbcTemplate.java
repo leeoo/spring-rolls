@@ -33,7 +33,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 
 	private Connection connection;
 
-	public BaseJdbcTemplate(Connection connection) {
+	public BaseJdbcTemplate(final Connection connection) {
 		this.connection = connection;
 	}
 

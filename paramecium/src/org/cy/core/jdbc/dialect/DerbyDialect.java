@@ -12,7 +12,7 @@ import java.sql.SQLException;
  */
 public final class DerbyDialect extends BaseDialect implements Dialect {
 
-	public DerbyDialect(Connection connection) {
+	public DerbyDialect(final Connection connection) {
 		super(connection);
 	}
 

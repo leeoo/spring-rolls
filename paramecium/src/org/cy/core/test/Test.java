@@ -14,8 +14,15 @@ public class Test{
 	
 	private Date logDate;
 	
+	public Test(String name){
+		System.out.println("初始化"+name);
+	}
+	
 	public static void main(String[] args) throws Exception {
-		String sql = "insert into t_logger_info(log_info,log_date) values(:logInfo,:logDate)";
+		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+		classLoader.loadClass("org.cy.core.test.Test").newInstance();
+		
+		/*String sql = "insert into t_logger_info(log_info,log_date) values(:logInfo,:logDate)";
 		TransactionManager.before();
 		try{
 			GenericJdbcDao dao = new GenericJdbcDao();
@@ -37,7 +44,7 @@ public class Test{
 		}catch (Exception e) {
 			TransactionManager.getCurrentTransaction().setException();
 		}
-		TransactionManager.end();
+		TransactionManager.end();*/
 	}
 
 	public String getLogInfo() {

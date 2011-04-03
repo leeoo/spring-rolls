@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public final class SqlServer2005Dialect extends BaseDialect implements Dialect {
 
-	public SqlServer2005Dialect(Connection connection) {
+	public SqlServer2005Dialect(final Connection connection) {
 		super(connection);
 	}
 

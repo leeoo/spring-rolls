@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public final class OracleDialect extends BaseDialect implements Dialect {
 
-	public OracleDialect(Connection connection) {
+	public OracleDialect(final Connection connection) {
 		super(connection);
 	}
 

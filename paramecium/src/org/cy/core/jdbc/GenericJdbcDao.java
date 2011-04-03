@@ -40,7 +40,7 @@ public class GenericJdbcDao {
 	 * 该构造方法需要手动控制事务
 	 * @param connection
 	 */
-	public GenericJdbcDao(Connection connection){
+	public GenericJdbcDao(final Connection connection){
 		this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(connection);
 	}
 	

@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public final class MySqlDialect extends BaseDialect implements Dialect {
 
-	public MySqlDialect(Connection connection) {
+	public MySqlDialect(final Connection connection) {
 		super(connection);
 	}
 

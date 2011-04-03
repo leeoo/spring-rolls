@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public final class SqliteDialect extends BaseDialect implements Dialect {
 
-	public SqliteDialect(Connection connection) {
+	public SqliteDialect(final Connection connection) {
 		super(connection);
 	}
 	public String getSql(final String sql,Page page){

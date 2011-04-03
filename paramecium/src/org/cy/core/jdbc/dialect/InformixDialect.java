@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public final class InformixDialect extends BaseDialect implements Dialect {
 
-	public InformixDialect(Connection connection) {
+	public InformixDialect(final Connection connection) {
 		super(connection);
 	}
 

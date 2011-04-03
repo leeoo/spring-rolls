@@ -12,7 +12,7 @@ import java.sql.Types;
  */
 public final class HSqlDialect extends BaseDialect implements Dialect {
 
-	public HSqlDialect(Connection connection) {
+	public HSqlDialect(final Connection connection) {
 		super(connection);
 	}
 

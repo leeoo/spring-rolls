@@ -23,7 +23,7 @@ import org.cy.core.jdbc.dialect.SqliteDialect;
 public class JdbcTemplateFactory {
 	public static String dbType;
 	
-	public static JdbcTemplate getJdbcTemplate(Connection connection) {
+	public static JdbcTemplate getJdbcTemplate(final Connection connection) {
 		if(dbType.equals("mysql")){
 			return new MySqlDialect(connection);
 		}else if(dbType.equals("hsql")){

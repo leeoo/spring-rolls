@@ -12,7 +12,7 @@ import java.sql.SQLException;
  */
 public final class H2Dialect extends BaseDialect implements Dialect {
 
-	public H2Dialect(Connection connection) {
+	public H2Dialect(final Connection connection) {
 		super(connection);
 	}
 
