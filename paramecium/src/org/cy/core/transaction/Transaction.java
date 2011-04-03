@@ -30,6 +30,7 @@ public class Transaction {
 	private void initConnection() throws SQLException{
 		DataSource dataSource = DataSourceBuilder.getDataSource();
 		this.connection = dataSource.getConnection();
+		this.connection.setAutoCommit(false);
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
 	}
 

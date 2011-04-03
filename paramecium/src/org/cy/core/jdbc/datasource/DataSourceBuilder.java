@@ -30,12 +30,8 @@ public class DataSourceBuilder extends DefaultDataSource{
 		} catch (IOException e) {
 			logger.error(e.fillInStackTrace());
 		}
-		String autoCommitStr = properties.getProperty("autoCommit");
-		autoCommit = autoCommitStr != null ? Boolean.valueOf(autoCommitStr) : true;
 		String sqlIsFormatStr = properties.getProperty("sqlIsFormat");
 		sqlIsFormat = sqlIsFormatStr != null ? Boolean.valueOf(sqlIsFormatStr) : false;
-		String loginTimeoutStr = properties.getProperty("loginTimeout");
-		loginTimeout = loginTimeoutStr != null ? Integer.valueOf(loginTimeoutStr) : 5;
 		driverClassName = properties.getProperty("driverClassName");
 		url = properties.getProperty("url");
 		username = properties.getProperty("username");

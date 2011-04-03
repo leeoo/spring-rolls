@@ -1,5 +1,6 @@
 package org.cy.core.orm;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,6 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.cy.core.jdbc.GenericJdbcDao;
+import org.cy.core.log.Log;
+import org.cy.core.log.LoggerFactory;
 import org.cy.core.orm.annotation.PrimaryKey;
 /**
  * 功 能 描 述:<br>
@@ -17,8 +20,12 @@ import org.cy.core.orm.annotation.PrimaryKey;
  * <br>开 发 日 期:2011-4-1下午02:37:54
  * <br>项 目 信 息:paramecium:org.cy.core.orm.GenericOrmDao.java
  */
-public final class GenericOrmDao<T>{
+public final class GenericOrmDao<T , PK extends Serializable>{
+	
+	private static Log logger = LoggerFactory.getLogger();
+	
 	private static ConcurrentMap<String, String> sqlCache = new ConcurrentHashMap<String, String>();
+	
 	private GenericJdbcDao genericJdbcDao;
 	
 	/**
@@ -36,10 +43,20 @@ public final class GenericOrmDao<T>{
 		genericJdbcDao = new GenericJdbcDao(connection);
 	}
 
-	public Number save(T bean) throws SQLException {
-		String sql = null;
-		genericJdbcDao.executeDMLByBean(sql, bean);
+	public Number insert(T bean) throws SQLException {
 		return null;
+	}
+
+	public void update(T bean) throws SQLException {
+		
+	}
+	
+	public void delete(PK primaryKey)throws SQLException {
+		
+	}
+
+	public void delete(PK primaryKey)throws SQLException {
+		
 	}
 
 	private String buildInsertSQL(T bean) {

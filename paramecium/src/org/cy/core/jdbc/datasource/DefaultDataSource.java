@@ -21,9 +21,7 @@ import org.cy.core.log.LoggerFactory;
 public abstract class DefaultDataSource implements DataSource{
 	
 	private final static Log logger = LoggerFactory.getLogger();
-	static Boolean autoCommit = true;
 	static PrintWriter printWriter;
-	static Integer loginTimeout = 5;
 	static String driverClassName;
 	static String url;
 	static String username;
@@ -31,11 +29,10 @@ public abstract class DefaultDataSource implements DataSource{
 	
 	public Connection getConnection(){
 		Connection connection = null;
-		DriverManager.setLoginTimeout(loginTimeout);
 		if(url!=null&&username!=null){
 			try {
 				connection = DriverManager.getConnection(url, username, password);
-				connection.setAutoCommit(autoCommit);
+				connection.setAutoCommit(true);
 			} catch (SQLException e) {
 				e.printStackTrace();
 				logger.error(e.fillInStackTrace());
@@ -57,11 +54,10 @@ public abstract class DefaultDataSource implements DataSource{
 	}
 
 	public int getLoginTimeout() {
-		return loginTimeout;
+		return 5;
 	}
 
 	public void setLoginTimeout(int _loginTimeout) {
-		loginTimeout = _loginTimeout;
 	}
 
 	public PrintWriter getLogWriter() throws SQLException {
