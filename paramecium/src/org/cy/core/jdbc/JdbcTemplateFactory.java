@@ -14,11 +14,12 @@ import org.cy.core.jdbc.dialect.SqlServer2005Dialect;
 import org.cy.core.jdbc.dialect.SqlServerDialect;
 import org.cy.core.jdbc.dialect.SqliteDialect;
 /**
- * 功 能 描 述:<br>
+ * 功能描述(Description):<br><b>
  * 通过配置文件获取数据库类型
- * <br>代 码 作 者:曹阳(CaoYang)
- * <br>开 发 日 期:2011-3-31下午01:14:37
- * <br>项 目 信 息:paramecium:org.cy.core.jdbc.JdbcTemplateFactory.java
+ * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
+ * <br>建立日期(Create Date): <b>2011-4-3下午09:34:19</b>
+ * <br>项目名称(Project Name): <b>paramecium</b>
+ * <br>包及类名(Package Class): <b>org.cy.core.jdbc.JdbcTemplateFactory.java</b>
  */
 public class JdbcTemplateFactory {
 	public static String dbType;

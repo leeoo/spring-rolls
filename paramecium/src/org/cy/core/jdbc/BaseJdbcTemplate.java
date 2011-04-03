@@ -21,11 +21,12 @@ import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 
 /**
- * 功 能 描 述:<br>
+ * 功能描述(Description):<br><b>
  * jdbc基础模板
- * <br>代 码 作 者:曹阳(CaoYang)
- * <br>开 发 日 期:2011-3-28下午02:42:44
- * <br>项 目 信 息:cybreeze:org.cy.core.jdbc.BaseJdbcTemplate.java
+ * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
+ * <br>建立日期(Create Date): <b>2011-4-3下午09:33:42</b>
+ * <br>项目名称(Project Name): <b>paramecium</b>
+ * <br>包及类名(Package Class): <b>org.cy.core.jdbc.BaseJdbcTemplate.java</b>
  */
 public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	

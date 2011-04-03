@@ -6,6 +6,14 @@ import java.util.Map;
 
 import org.cy.core.jdbc.dialect.Dialect;
 
+/**
+ * 功能描述(Description):<br><b>
+ * jdbc模板接口
+ * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
+ * <br>建立日期(Create Date): <b>2011-4-3下午09:33:54</b>
+ * <br>项目名称(Project Name): <b>paramecium</b>
+ * <br>包及类名(Package Class): <b>org.cy.core.jdbc.JdbcTemplate.java</b>
+ */
 public interface JdbcTemplate extends Dialect{
 	/**
 	 * 执行无参数selectSQL语句,数据以Map装载
