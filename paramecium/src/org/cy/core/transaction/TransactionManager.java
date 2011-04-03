@@ -14,7 +14,7 @@ import org.cy.core.log.LoggerFactory;
  */
 public class TransactionManager {
 	
-	private final static Log logger = LoggerFactory.getLogger(TransactionManager.class);
+	private final static Log logger = LoggerFactory.getLogger();
 	
 	private final static ThreadLocal<Transaction> transactionThreadLocal = new ThreadLocal<Transaction>();
 	

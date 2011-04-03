@@ -75,14 +75,10 @@ public class LoggerFactory {
 		return sb.toString();
 	}
 	
-	public static Log getLogger(String name){
-		return (new LoggerFactory()).new Logger(name);
+	public static Log getLogger(){
+		return (new LoggerFactory()).new Logger();
 	}
 
-	public static Log getLogger(Class<?> clazz){
-		return (new LoggerFactory()).new Logger(clazz.getName());
-	}
-	
 	/**
 	 * 功 能 描 述:<br>
 	 * 日志实现类
@@ -91,99 +87,139 @@ public class LoggerFactory {
 	 * <br>项 目 信 息:paramecium:org.cy.core.log.LoggerFactory.java
 	 */
 	private final class Logger implements Log{
-		private String className;
 		
-		public Logger(String className){
-			this.className = className;
-		}
+		private String className;
 		
 		public void debug(String message) {
 			if(currentLevel <= Log.LEVEL_DEBUG){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(message, "DEBUG", className,_methodName),false);
+				Exception exception = new Exception();
+				String methodName = exception.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = exception.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(message, "DEBUG", className,methodName),false);
 			}
 		}
 
 		
 		public void debug(Throwable throwable) {
 			if(currentLevel <= Log.LEVEL_DEBUG){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(throwable.getMessage(), "DEBUG", className,_methodName),false);
+				String methodName = throwable.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = throwable.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(throwable.getMessage(), "DEBUG", className,methodName),false);
 			}
 		}
 
 		
 		public void error(String message) {
 			if(currentLevel <= Log.LEVEL_ERROR){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(message, "ERROR", className,_methodName),true);
+				Exception exception = new Exception();
+				String methodName = exception.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = exception.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(message, "ERROR", className,methodName),true);
 			}
 		}
 
 		
 		public void error(Throwable throwable) {
 			if(currentLevel <= Log.LEVEL_ERROR){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(throwable.getMessage(), "ERROR", className,_methodName),true);
+				String methodName = throwable.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = throwable.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(throwable.getMessage(), "ERROR", className,methodName),true);
 			}
 		}
 
 		
 		public void fatal(String message) {
 			if(currentLevel <= Log.LEVEL_FATAL){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(message, "FATAL", className,_methodName),true);
+				Exception exception = new Exception();
+				String methodName = exception.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = exception.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(message, "FATAL", className,methodName),true);
 			}
 		}
 
 		public void fatal(Throwable throwable) {
 			if(currentLevel <= Log.LEVEL_FATAL){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(throwable.getMessage(), "FATAL", className,_methodName),true);
+				String methodName = throwable.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = throwable.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(throwable.getMessage(), "FATAL", className,methodName),true);
 			}
 		}
 
 		public void info(String message) {
 			if(currentLevel <= Log.LEVEL_INFO){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(message, "INFO", className,_methodName),false);
+				Exception exception = new Exception();
+				String methodName = exception.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = exception.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(message, "INFO", className,methodName),false);
 			}
 		}
 
 		public void info(Throwable throwable) {
 			if(currentLevel <= Log.LEVEL_INFO){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(throwable.getMessage(), "INFO", className,_methodName),false);
+				String methodName = throwable.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = throwable.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(throwable.getMessage(), "INFO", className,methodName),false);
 			}
 		}
 
 		public void trace(String message) {
 			if(currentLevel <= Log.LEVEL_TRACE){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(message, "TRACE", className,_methodName),false);
+				Exception exception = new Exception();
+				String methodName = exception.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = exception.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(message, "TRACE", className,methodName),false);
 			}
 		}
 
 		public void trace(Throwable throwable) {
 			if(currentLevel <= Log.LEVEL_TRACE){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(throwable.getMessage(), "TRACE", className,_methodName),false);
+				String methodName = throwable.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = throwable.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(throwable.getMessage(), "TRACE", className,methodName),false);
 			}
 		}
 		
 		public void warn(String message) {
 			if(currentLevel <= Log.LEVEL_WARN){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(message, "WARN", className,_methodName),true);
+				Exception exception = new Exception();
+				String methodName = exception.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = exception.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(message, "WARN", className,methodName),true);
 			}
 		}
 
 		public void warn(Throwable throwable) {
 			if(currentLevel <= Log.LEVEL_WARN){
-				String _methodName = new Exception().getStackTrace()[1].getMethodName();// 获得调用者的方法名
-				logHandler.log(getMessage(throwable.getMessage(), "WARN", className,_methodName),true);
+				String methodName = throwable.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+				if(this.className==null){
+					className = throwable.getStackTrace()[1].getClassName();// 获得调用者的类名
+				}
+				logHandler.log(getMessage(throwable.getMessage(), "WARN", className,methodName),true);
 			}
 		}
+		
 	}
 	
 }

@@ -20,7 +20,7 @@ import org.cy.core.log.LoggerFactory;
  */
 public abstract class DefaultDataSource implements DataSource{
 	
-	private final static Log logger = LoggerFactory.getLogger(DefaultDataSource.class);
+	private final static Log logger = LoggerFactory.getLogger();
 	static Boolean autoCommit = true;
 	static PrintWriter printWriter;
 	static Integer loginTimeout = 5;

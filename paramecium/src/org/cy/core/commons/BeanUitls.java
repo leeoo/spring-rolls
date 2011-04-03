@@ -15,7 +15,7 @@ import org.cy.core.log.LoggerFactory;
  */
 public abstract class BeanUitls {
 	
-	private final static Log logger = LoggerFactory.getLogger(BeanUitls.class);
+	private final static Log logger = LoggerFactory.getLogger();
 	
 	/**
 	 * bean实例转换为Map实例
