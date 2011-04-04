@@ -1,7 +1,5 @@
 package org.cy.core.test;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 import org.cy.core.orm.GenericOrmDao;
@@ -27,17 +25,9 @@ public class Test{
 		try{
 			GenericOrmDao<Test, Integer> ormDao = new GenericOrmDao<Test, Integer>();
 			Test test = new Test();
-			test.setLogDate(new Date());
-			test.setLogInfo("真狠啊");
-			ormDao.insert(test);
-			Collection<Test> tests = new ArrayList<Test>();
-			for(int i = 0 ;i<10000; i++){
-				Test test2 = new Test();
-				test2.setLogDate(new Date());
-				test2.setLogInfo("真狠啊"+i);
-				tests.add(test2);
-			}
-			ormDao.insert(tests);
+			test.setId(1);
+			test.setLogInfo("abc");
+			ormDao.updateNotNull(test);
 		}catch (Exception e) {
 			TransactionManager.getCurrentTransaction().setException();
 		}

@@ -88,6 +88,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			genericJdbcDao.executeDMLByBean(sql, bean);
 			return;
 		}
+		sql = EntityUtils.getUpdateSql(bean, true);
+		sqlCache.put(key, sql);
+		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
 	
 	/**
@@ -102,6 +105,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			genericJdbcDao.executeDMLByBean(sql, bean);
 			return;
 		}
+		sql = EntityUtils.getUpdateSql(bean, false);
+		sqlCache.put(key, sql);
+		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
 	
 	/**

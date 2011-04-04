@@ -3,8 +3,6 @@ package org.cy.core.commons;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.cy.core.orm.annotation.Column;
 import org.cy.core.orm.annotation.Entity;
@@ -94,21 +92,57 @@ public abstract class EntityUtils {
 		return sb.toString();
 	}
 	
-	public static Set<PrimaryKey> getPrimaryKey(Class<?> entityClass){
-		Set<PrimaryKey> pks = new HashSet<PrimaryKey>();
-		for (Class<?> superClass = entityClass; superClass != Object.class; superClass = superClass.getSuperclass()) {
+	public static String getUpdateSql(Object bean,boolean needNull){
+		StringBuffer sb = new StringBuffer();
+		String tableName = getTableName(bean);
+		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		Collection<String> sets = new ArrayList<String>();
+		Collection<String> wheres = new ArrayList<String>();
+		Class<?> clazz = bean.getClass();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				field.setAccessible(true);
 				try {
-					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-					if(primaryKey!=null){
-						pks.add(primaryKey);
+					if(!needNull&&field.get(bean)==null){
+						break;
+					}
+					if(entity!=null){
+						Column column = field.getAnnotation(Column.class);
+						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+						if(primaryKey!=null){
+							if(column!=null&&!column.fieldName().isEmpty()){
+								wheres.add(column.fieldName()+"=:"+field.getName()+" AND ");
+							}else{
+								wheres.add(BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
+							}
+						}else if(primaryKey==null){
+							if(column!=null&&!column.fieldName().isEmpty()){
+								sets.add(column.fieldName()+"=:"+field.getName()+",");
+							}else if(column!=null&&column.fieldName().isEmpty()){
+								sets.add(BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName()+",");
+							}
+						}
+					}else{
+						sets.add(BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName()+",");
 					}
 				} catch (Exception e) {
 				}
 			}
 		}
-		return pks;
+		sb.append("UPDATE ").append(tableName).append(" SET ");
+		for(String set : sets){
+			sb.append(set);
+		}
+		sb.delete(sb.length()-1, sb.length());
+		if(!wheres.isEmpty()){
+			sb.append(" WHERE ");
+			for(String where : wheres){
+				sb.append(where);
+			}
+			sb.delete(sb.length()-5, sb.length());
+		}
+		return sb.toString();
 	}
 	
 }
