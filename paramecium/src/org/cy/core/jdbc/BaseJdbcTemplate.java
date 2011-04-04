@@ -742,9 +742,10 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		for (; resultSet.next();) {
 			map = new HashMap<String, Object>();
 			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
+				String columnLabel = resultSetMetaData.getTableName(column);
+				String columnLabel2 = resultSetMetaData.getColumnLabel(column);
+				Object columnValue = resultSet.getObject(columnLabel+"."+columnLabel2);
+				map.put(columnLabel+"."+columnLabel2, columnValue);
 			}
 			collection.add(map);
 		}
