@@ -1,20 +1,17 @@
 package org.cy.core.orm;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.cy.core.commons.EntityUtils;
 import org.cy.core.jdbc.GenericJdbcDao;
 import org.cy.core.jdbc.dialect.Page;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
-import org.cy.core.orm.annotation.PrimaryKey;
 /**
  * 功 能 描 述:<br>
  * 通用ORM数据操作，功能类似hiberante
@@ -52,7 +49,14 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public Number insert(T bean) throws SQLException {
-		return null;
+		String key = bean.getClass().getName()+":insert";
+		String sql = sqlCache.get(key);
+		if(sql!=null){
+			return genericJdbcDao.insertGetGeneratedKeyByBean(sql, bean);
+		}
+		sql = EntityUtils.getInsertSql(bean);
+		sqlCache.put(key, sql);
+		return genericJdbcDao.insertGetGeneratedKeyByBean(sql, bean);
 	}
 
 	/**
@@ -60,8 +64,16 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @param bean
 	 * @throws SQLException
 	 */
-	public void insert(T... bean) throws SQLException {
-		
+	public void insert(Collection<T> beans) throws SQLException {
+		String key = beans.iterator().next().getClass().getName()+":insert";
+		String sql = sqlCache.get(key);
+		if(sql!=null){
+			genericJdbcDao.executeBatchDMLByBeans(sql, beans);
+			return;
+		}
+		sql = EntityUtils.getInsertSql(beans.iterator().next());
+		sqlCache.put(key, sql);
+		genericJdbcDao.executeBatchDMLByBeans(sql, beans);
 	}
 
 	/**
@@ -70,7 +82,12 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void update(T bean) throws SQLException {
-		
+		String key = bean.getClass().getName()+":update";
+		String sql = sqlCache.get(key);
+		if(sql!=null){
+			genericJdbcDao.executeDMLByBean(sql, bean);
+			return;
+		}
 	}
 	
 	/**
@@ -79,7 +96,12 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void updateNotNull(T bean) throws SQLException {
-		
+		String key = bean.getClass().getName()+":update2";
+		String sql = sqlCache.get(key);
+		if(sql!=null){
+			genericJdbcDao.executeDMLByBean(sql, bean);
+			return;
+		}
 	}
 	
 	/**
@@ -87,8 +109,13 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @param primaryKey
 	 * @throws SQLException
 	 */
-	public void delete(PK primaryKey)throws SQLException {
-		
+	public void delete(Class<T> clazz,PK primaryKey)throws SQLException {
+		String key = clazz.getName()+":delete";
+		String sql = sqlCache.get(key);
+		if(sql!=null){
+			genericJdbcDao.executeDMLByArray(sql, primaryKey);
+			return;
+		}
 	}
 
 	/**
@@ -97,7 +124,12 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void delete(T whereBean)throws SQLException {
-		
+		String key = whereBean.getClass().getName()+":delete2";
+		String sql = sqlCache.get(key);
+		if(sql!=null){
+			genericJdbcDao.executeDMLByArray(sql, whereBean);
+			return;
+		}
 	}
 	
 	/**
@@ -135,24 +167,6 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	public Collection<T> select(T whereBean){
 		return null;
-	}
-
-	
-	private Set<PrimaryKey> getPrimaryKey(Class<?> entityClass){
-		Set<PrimaryKey> pks = new HashSet<PrimaryKey>();
-		for (Class<?> superClass = entityClass; superClass != Object.class; superClass = superClass.getSuperclass()) {
-			Field[] fields = superClass.getDeclaredFields();
-			for(Field field : fields){
-				try {
-					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-					if(primaryKey!=null){
-						pks.add(primaryKey);
-					}
-				} catch (Exception e) {
-				}
-			}
-		}
-		return pks;
 	}
 
 }
