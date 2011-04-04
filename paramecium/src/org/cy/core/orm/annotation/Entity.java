@@ -24,12 +24,6 @@ public @interface Entity {
 	public String tableName();
 
 	/**
-	 * 数据库表别名,当联合查询时必须指定该表别名
-	 * @return 表名称
-	 */
-	public String alias() default "";
-	
-	/**
 	 * 可用于扩展页面显示组件
 	 * @return UI显示
 	 */
