@@ -48,7 +48,7 @@ public class GenericJdbcDao {
 	 * 设置多表查询，MAP结果集将变成[表名/别名].[字段名/别名],默认FALSE
 	 * @param isManyTable
 	 */
-	public void setManyTable(boolean isManyTable){
+	public void setManyTable(Boolean isManyTable){
 		this.jdbcTemplate.setManyTable(isManyTable);
 	}
 	

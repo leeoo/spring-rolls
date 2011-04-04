@@ -4,7 +4,6 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -14,9 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.cy.core.commons.BeanUitls;
-import org.cy.core.jdbc.datasource.DataSourceBuilder;
-import org.cy.core.jdbc.formatter.DDLFormatter;
-import org.cy.core.jdbc.formatter.DMLFormatter;
+import org.cy.core.commons.JdbcUtils;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 
@@ -34,7 +31,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 
 	private Connection connection;
 	
-	private boolean isManyTable = false;
+	private Boolean isManyTable = new Boolean(false);
 
 	public BaseJdbcTemplate(final Connection connection) {
 		this.connection = connection;
@@ -49,9 +46,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public Collection<Map<String, Object>> query(final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql);
-		Collection<Map<String, Object>> collection = getCollection(resultSet);
-		logger.debug(getNativeDMLSql(sql));
-		close(statement, resultSet);
+		Collection<Map<String, Object>> collection = JdbcUtils.getCollection(resultSet,this.isManyTable);
+		logger.debug(JdbcUtils.getNativeDMLSql(sql));
+		JdbcUtils.close(statement, resultSet);
 		return collection;
 	}
 	
@@ -65,9 +62,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public Collection<?> query(final String sql,Class<?> clazz) throws SQLException {
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql);
-		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.debug(getNativeDMLSql(sql));
-		close(statement, resultSet);
+		Collection<?> collection = JdbcUtils.getCollection(resultSet,clazz);
+		logger.debug(JdbcUtils.getNativeDMLSql(sql));
+		JdbcUtils.close(statement, resultSet);
 		return collection;
 	}
 	
@@ -88,9 +85,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject((i++), param);
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
-		Collection<Map<String, Object>> collection = getCollection(resultSet);
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement, resultSet);
+		Collection<Map<String, Object>> collection = JdbcUtils.getCollection(resultSet,this.isManyTable);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement, resultSet);
 		return collection;
 	}
 	
@@ -112,9 +109,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject((i++), param);
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
-		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement, resultSet);
+		Collection<?> collection = JdbcUtils.getCollection(resultSet,clazz);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement, resultSet);
 		return collection;
 	}
 	
@@ -129,7 +126,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(mapParams==null||mapParams.size()==0){
 			return query(sql);
 		}
-		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
+		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
 		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
@@ -137,9 +134,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
-		Collection<Map<String, Object>> collection = getCollection(resultSet);
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement, resultSet);
+		Collection<Map<String, Object>> collection = JdbcUtils.getCollection(resultSet,this.isManyTable);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement, resultSet);
 		return collection;
 	}
 	
@@ -155,7 +152,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(mapParams==null||mapParams.size()==0){
 			return query(sql,clazz);
 		}
-		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
+		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
 		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
@@ -163,9 +160,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
-		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement, resultSet);
+		Collection<?> collection = JdbcUtils.getCollection(resultSet,clazz);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement, resultSet);
 		return collection;
 	}
 	
@@ -182,7 +179,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			return query(sql,clazz);
 		}
 		Map<String, Object> mapParams = BeanUitls.bean2Map(beanParams);
-		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
+		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
 		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
@@ -190,9 +187,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
 		ResultSet resultSet = preparedStatement.executeQuery();
-		Collection<?> collection = getCollection(resultSet,clazz);
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement, resultSet);
+		Collection<?> collection = JdbcUtils.getCollection(resultSet,clazz);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement, resultSet);
 		return collection;
 	}
 	
@@ -313,8 +310,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public void executeDDL(final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		statement.execute(sql);
-		logger.debug(getNativeDDLSql(sql));
-		close(statement);
+		logger.debug(JdbcUtils.getNativeDDLSql(sql));
+		JdbcUtils.close(statement);
 	}
 	
 	/**
@@ -326,8 +323,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public int executeDML(final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		int result = statement.executeUpdate(sql);
-		logger.debug(getNativeDMLSql(sql));
-		close(statement);
+		logger.debug(JdbcUtils.getNativeDMLSql(sql));
+		JdbcUtils.close(statement);
 		return result;
 	}
 
@@ -343,8 +340,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = statement.getGeneratedKeys();
 		resultSet.next();
 		Number value = (Number) resultSet.getObject(1);
-		logger.debug(getNativeDMLSql(sql));
-		close(statement,resultSet);
+		logger.debug(JdbcUtils.getNativeDMLSql(sql));
+		JdbcUtils.close(statement,resultSet);
 		return value;
 	}
 	
@@ -364,8 +361,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject((i++), param);
 		}
 		int result = preparedStatement.executeUpdate();
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement);
 		return result;
 	}
 	
@@ -388,8 +385,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.getGeneratedKeys();
 		resultSet.next();
 		Number value = (Number) resultSet.getObject(1);
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement,resultSet);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement,resultSet);
 		return value;
 	}
 
@@ -403,7 +400,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(mapParams==null||mapParams.size()==0){
 			return executeDML(sql);
 		}
-		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
+		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
 		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
@@ -411,8 +408,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
 		int result = preparedStatement.executeUpdate();
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement);
 		return result;
 	}
 	
@@ -426,7 +423,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(mapParams==null||mapParams.size()==0){
 			return insertGetGeneratedKey(sql);
 		}
-		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
+		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
 		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql,PreparedStatement.RETURN_GENERATED_KEYS);
@@ -437,8 +434,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.getGeneratedKeys();
 		resultSet.next();
 		Number value2 = (Number) resultSet.getObject(1);
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement,resultSet);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement,resultSet);
 		return value2;
 	}
 	
@@ -453,7 +450,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			return executeDML(sql);
 		}
 		Map<String, Object> mapParams = BeanUitls.bean2Map(bean);
-		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
+		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
 		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
@@ -461,8 +458,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
 		int result = preparedStatement.executeUpdate();
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement);
 		return result;
 	}
 	
@@ -477,7 +474,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			return insertGetGeneratedKey(sql);
 		}
 		Map<String, Object> mapParams = BeanUitls.bean2Map(bean);
-		Map<Integer, Object> value = getPreparedStatementSql(sql,mapParams);
+		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
 		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql,PreparedStatement.RETURN_GENERATED_KEYS);
@@ -488,8 +485,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.getGeneratedKeys();
 		resultSet.next();
 		Number value2 = (Number) resultSet.getObject(1);
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement,resultSet);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement,resultSet);
 		return value2;
 	}
 	
@@ -503,10 +500,10 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		for(String sql:sqls){
 			statement.addBatch(sql);
-			logger.debug(getNativeDMLSql(sql));
+			logger.debug(JdbcUtils.getNativeDMLSql(sql));
 		}
 		int[] result = statement.executeBatch();
-		close(statement);
+		JdbcUtils.close(statement);
 		return result;
 	}
 	
@@ -520,10 +517,10 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		for(String sql:sqls){
 			statement.addBatch(sql);
-			logger.debug(getNativeDMLSql(sql));
+			logger.debug(JdbcUtils.getNativeDMLSql(sql));
 		}
 		int[] result = statement.executeBatch();
-		close(statement);
+		JdbcUtils.close(statement);
 		return result;
 	}
 	
@@ -535,7 +532,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDMLByMaps(final String sql,Collection<Map<String, Object>> mapParamsList) throws SQLException {
-		Collection<Map<Integer, Object>> values = getPreparedStatementSql(sql, mapParamsList);
+		Collection<Map<Integer, Object>> values = JdbcUtils.getPreparedStatementSql(sql, mapParamsList);
 		String preparedSql = (String) (values.iterator().next().get(-19820206));
 		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
 		for(Map<Integer, Object> value : values){
@@ -546,8 +543,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.addBatch();
 		}
 		int[] result = preparedStatement.executeBatch();
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement);
 		return result;
 	}
 	
@@ -563,7 +560,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		for(Object bean : beanParamsList){
 			mapParamsList.add(BeanUitls.bean2Map(bean));
 		}
-		Collection<Map<Integer, Object>> values = getPreparedStatementSql(sql, mapParamsList);
+		Collection<Map<Integer, Object>> values = JdbcUtils.getPreparedStatementSql(sql, mapParamsList);
 		String preparedSql = (String) (values.iterator().next().get(-19820206));
 		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
 		for(Map<Integer, Object> value : values){
@@ -574,8 +571,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			preparedStatement.addBatch();
 		}
 		int[] result = preparedStatement.executeBatch();
-		logger.debug(getNativeDMLSql(preparedStatement.toString()));
-		close(preparedStatement);
+		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		JdbcUtils.close(preparedStatement);
 		return result;
 	}
 	
@@ -587,8 +584,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public void call(final String sql) throws SQLException {
 		CallableStatement callableStatement = connection.prepareCall(sql);
 		callableStatement.execute();
-		logger.debug(getNativeDMLSql(callableStatement.toString()));
-		close(callableStatement);
+		logger.debug(JdbcUtils.getNativeDMLSql(callableStatement.toString()));
+		JdbcUtils.close(callableStatement);
 	}
 
 	
@@ -605,8 +602,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			callableStatement.setObject((i++),inParam);
 		}
 		callableStatement.execute();
-		logger.debug(getNativeDMLSql(callableStatement.toString()));
-		close(callableStatement);
+		logger.debug(JdbcUtils.getNativeDMLSql(callableStatement.toString()));
+		JdbcUtils.close(callableStatement);
 	}
 	
 	/**
@@ -626,8 +623,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		for(int j=1;j<=outParams.length;j++){
 			collection.add(callableStatement.getObject((j++)));
 		}
-		logger.debug(getNativeDMLSql(callableStatement.toString()));
-		close(callableStatement);
+		logger.debug(JdbcUtils.getNativeDMLSql(callableStatement.toString()));
+		JdbcUtils.close(callableStatement);
 		return collection;
 	}
 
@@ -654,175 +651,16 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		for(String outParam:outParams.keySet()){
 			returnValues.put(outParam, callableStatement.getObject(outParam));
 		}
-		logger.debug(getNativeDMLSql(callableStatement.toString()));
-		close(callableStatement);
+		logger.debug(JdbcUtils.getNativeDMLSql(callableStatement.toString()));
+		JdbcUtils.close(callableStatement);
 		return returnValues;
 	}
 	
-	private static final char[] END = new char[] { ' ', ',', ')', '(', '!', '|', '=', '+', '-', '*', '%', '/', '^', '\\', '<', '>', '"', '\'', ':', '&', ';','	' };
-
-	private static boolean isEND(char c) {
-		if (Character.isWhitespace(c)) {
-			return true;
-		}
-		for (char separator : END) {
-			if (c == separator) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private static String getNativeDMLSql(String sql){
-		int splite = sql.indexOf(": ");
-		if(splite>-1){
-			sql = sql.substring(splite+1,sql.length());
-		}
-		return DataSourceBuilder.sqlIsFormat ? DMLFormatter.format(sql) : sql;
-	}
-
-	private static String getNativeDDLSql(String sql){
-		return DataSourceBuilder.sqlIsFormat ? DDLFormatter.format(sql) : sql;
-	}
-
-	/**
-	 * 获得带有:冒号参数的PreparedStatement能够执行的?问号参数语句
-	 * @param sql
-	 * @param mapParams
-	 * @return
-	 * @throws SQLException
-	 */
-	private static Map<Integer, Object> getPreparedStatementSql(final String sql,Map<String, Object> mapParams) throws SQLException {
-		String jdbcSql = sql;
-		Map<Integer, Object> value = new HashMap<Integer, Object>();
-		StringBuffer tempFildeName = new StringBuffer("");
-		boolean isReading = false;
-		char[] cs = jdbcSql.toCharArray();
-		int pcount = 1;
-		for (int i = 0; i < cs.length; i++) {
-			char c = cs[i];
-			if (c == ':') {
-				if (isReading) {
-					throw new SQLException("请检查SQL语句是否正确!");
-				} else {
-					isReading = true;
-				}
-			} else if (isReading) {
-				if (isEND(c)) {
-					isReading = false;
-					jdbcSql = jdbcSql.replaceFirst(":" + tempFildeName, "?");
-					value.put(pcount++, mapParams.get(tempFildeName.toString()));
-					tempFildeName = new StringBuffer("");;
-				} else {
-					tempFildeName.append(c);
-					if (i + 1 == cs.length) {
-						isReading = false;
-						jdbcSql = jdbcSql.replaceFirst(":" + tempFildeName, "?");
-						value.put(pcount++, mapParams.get(tempFildeName.toString()));
-						tempFildeName = new StringBuffer("");;
-					}
-				}
-			}
-		}
-		value.put(-19820206, jdbcSql);
-		return value;
-	}
-	
-	private static Collection<Map<Integer, Object>> getPreparedStatementSql(final String sql,Collection<Map<String, Object>> mapParamsList) throws SQLException {
-		Collection<Map<Integer, Object>> values = new ArrayList<Map<Integer,Object>>();
-		for(Map<String, Object> mapParams : mapParamsList){
-			values.add(getPreparedStatementSql(sql, mapParams));
-		}
-		return values;
-	}
-	
-	private Collection<Map<String,Object>> getCollection(ResultSet resultSet) throws SQLException {
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Collection<Map<String, Object>> collection = new ArrayList<Map<String, Object>>();
-		Map<String, Object> map = null;
-		for (; resultSet.next();) {
-			map = new HashMap<String, Object>();
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				if(isManyTable){
-					columnLabel = resultSetMetaData.getTableName(column).concat(".").concat(columnLabel);
-				}
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			collection.add(map);
-		}
-		return collection;
-	}
-
-	private Collection<?> getCollection(ResultSet resultSet,Class<?> clazz) throws SQLException {
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		int columnCount = resultSetMetaData.getColumnCount();
-		Collection<Object> collection = new ArrayList<Object>();
-		Map<String, Object> map = null;
-		Object bean = null;
-		for (; resultSet.next();) {
-			map = new HashMap<String, Object>();
-			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
-			}
-			bean = BeanUitls.map2Bean(clazz, map, true);
-			collection.add(bean);
-		}
-		return collection;
-	}
-	
-	void close(CallableStatement callableStatement) throws SQLException {
-		close(callableStatement, null, null, null);
-	}
-
-	void close(CallableStatement callableStatement, ResultSet resultSet)
-			throws SQLException {
-		close(callableStatement, null, null, resultSet);
-	}
-
-	void close(PreparedStatement preparedStatement) throws SQLException {
-		close(null, preparedStatement, null, null);
-	}
-
-	void close(PreparedStatement preparedStatement, ResultSet resultSet)
-			throws SQLException {
-		close(null, preparedStatement, null, resultSet);
-	}
-
-	void close(Statement statement) throws SQLException {
-		close(null, null, statement, null);
-	}
-
-	void close(Statement statement, ResultSet resultSet) throws SQLException {
-		close(null, null, statement, resultSet);
-	}
-
-	void close(CallableStatement callableStatement,
-			PreparedStatement preparedStatement, Statement statement,
-			ResultSet resultSet) throws SQLException {
-		if (resultSet != null) {
-			resultSet.close();
-		}
-		if (callableStatement != null) {
-			callableStatement.close();
-		}
-		if (preparedStatement != null) {
-			preparedStatement.close();
-		}
-		if (statement != null) {
-			statement.close();
-		}
-	}
-
 	/**
 	 * 设置多表查询，MAP结果集将变成[表名/别名].[字段名/别名],默认FALSE
 	 * @param isManyTable
 	 */
-	public void setManyTable(boolean isManyTable) {
+	public void setManyTable(Boolean isManyTable) {
 		this.isManyTable = isManyTable;
 	}
 
