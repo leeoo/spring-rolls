@@ -33,6 +33,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	private static Log logger = LoggerFactory.getLogger();
 
 	private Connection connection;
+	
+	private boolean isManyTable = false;
 
 	public BaseJdbcTemplate(final Connection connection) {
 		this.connection = connection;
@@ -734,7 +736,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		return values;
 	}
 	
-	private static Collection<Map<String,Object>> getCollection(ResultSet resultSet) throws SQLException {
+	private Collection<Map<String,Object>> getCollection(ResultSet resultSet) throws SQLException {
 		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
 		int columnCount = resultSetMetaData.getColumnCount();
 		Collection<Map<String, Object>> collection = new ArrayList<Map<String, Object>>();
@@ -743,16 +745,18 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			map = new HashMap<String, Object>();
 			for (int column = 1; column <= columnCount; column++) {
 				String columnLabel = resultSetMetaData.getTableName(column);
-				String columnLabel2 = resultSetMetaData.getColumnLabel(column);
-				Object columnValue = resultSet.getObject(columnLabel+"."+columnLabel2);
-				map.put(columnLabel+"."+columnLabel2, columnValue);
+				if(isManyTable){
+					columnLabel = resultSetMetaData.getColumnLabel(column).concat(".").concat(columnLabel);
+				}
+				Object columnValue = resultSet.getObject(columnLabel);
+				map.put(columnLabel, columnValue);
 			}
 			collection.add(map);
 		}
 		return collection;
 	}
 
-	private static Collection<?> getCollection(ResultSet resultSet,Class<?> clazz) throws SQLException {
+	private Collection<?> getCollection(ResultSet resultSet,Class<?> clazz) throws SQLException {
 		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
 		int columnCount = resultSetMetaData.getColumnCount();
 		Collection<Object> collection = new ArrayList<Object>();
@@ -812,6 +816,14 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if (statement != null) {
 			statement.close();
 		}
+	}
+
+	/**
+	 * 设置多表查询，MAP结果集将变成[表名/别名].[字段名/别名],默认FALSE
+	 * @param isManyTable
+	 */
+	public void setManyTable(boolean isManyTable) {
+		this.isManyTable = isManyTable;
 	}
 
 }
