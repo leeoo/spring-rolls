@@ -25,10 +25,11 @@ public class Test{
 		try{
 			GenericOrmDao<Test, Integer> ormDao = new GenericOrmDao<Test, Integer>();
 			Test test = new Test();
-			test.setId(1);
-			test.setLogInfo("abc");
-			ormDao.updateNotNull(test);
+			test.setLogInfo("abab");
+			//ormDao.insert(test);
+			ormDao.delete(test);
 		}catch (Exception e) {
+			e.printStackTrace();
 			TransactionManager.getCurrentTransaction().setException();
 		}
 		TransactionManager.end();

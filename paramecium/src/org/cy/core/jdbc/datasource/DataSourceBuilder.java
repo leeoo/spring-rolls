@@ -28,7 +28,7 @@ public class DataSourceBuilder extends DefaultDataSource{
 		try {
 			properties.load(inputStream);
 		} catch (IOException e) {
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		String sqlIsFormatStr = properties.getProperty("sqlIsFormat");
 		sqlIsFormat = sqlIsFormatStr != null ? Boolean.valueOf(sqlIsFormatStr) : false;
@@ -44,7 +44,7 @@ public class DataSourceBuilder extends DefaultDataSource{
 				Class.forName(driverClassName);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
-				logger.error(e.fillInStackTrace());
+				logger.error(e);
 			}
 		}
 		JdbcTemplateFactory.dbType = properties.getProperty("dbType");

@@ -10,8 +10,6 @@ import java.util.concurrent.ConcurrentMap;
 import org.cy.core.commons.EntityUtils;
 import org.cy.core.jdbc.GenericJdbcDao;
 import org.cy.core.jdbc.dialect.Page;
-import org.cy.core.log.Log;
-import org.cy.core.log.LoggerFactory;
 /**
  * 功 能 描 述:<br>
  * 通用ORM数据操作，功能类似hiberante
@@ -20,8 +18,6 @@ import org.cy.core.log.LoggerFactory;
  * <br>项 目 信 息:paramecium:org.cy.core.orm.GenericOrmDao.java
  */
 public final class GenericOrmDao<T , PK extends Serializable>{
-	
-	private static Log logger = LoggerFactory.getLogger();
 	
 	private static ConcurrentMap<String, String> sqlCache = new ConcurrentHashMap<String, String>();
 	
@@ -122,6 +118,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			genericJdbcDao.executeDMLByArray(sql, primaryKey);
 			return;
 		}
+		sql = EntityUtils.getDeleteSql(clazz);
+		sqlCache.put(key, sql);
+		genericJdbcDao.executeDMLByArray(sql, primaryKey);
 	}
 
 	/**
@@ -130,12 +129,8 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void delete(T whereBean)throws SQLException {
-		String key = whereBean.getClass().getName()+":delete2";
-		String sql = sqlCache.get(key);
-		if(sql!=null){
-			genericJdbcDao.executeDMLByArray(sql, whereBean);
-			return;
-		}
+		String sql = EntityUtils.getDeleteSql(whereBean);
+		genericJdbcDao.executeDMLByBean(sql, whereBean);
 	}
 	
 	/**

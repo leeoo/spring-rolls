@@ -35,7 +35,7 @@ public abstract class DefaultDataSource implements DataSource{
 				connection.setAutoCommit(true);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				logger.error(e.fillInStackTrace());
+				logger.error(e);
 			}
 		}
 		return connection;

@@ -105,7 +105,7 @@ public abstract class EntityUtils {
 				field.setAccessible(true);
 				try {
 					if(!needNull&&field.get(bean)==null){
-						break;
+						continue;
 					}
 					if(entity!=null){
 						Column column = field.getAnnotation(Column.class);
@@ -141,6 +141,85 @@ public abstract class EntityUtils {
 				sb.append(where);
 			}
 			sb.delete(sb.length()-5, sb.length());
+		}else{
+			return null;
+		}
+		return sb.toString();
+	}
+	
+	public static String getDeleteSql(Class<?> clazz){
+		StringBuffer sb = new StringBuffer();
+		Entity entity = clazz.getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		Collection<String> wheres = new ArrayList<String>();
+		root:for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(entity!=null){
+						Column column = field.getAnnotation(Column.class);
+						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+						if(primaryKey!=null){
+							if(column!=null&&!column.fieldName().isEmpty()){
+								wheres.add(column.fieldName()+"=?");
+							}else{
+								wheres.add(BeanUitls.getDbFieldName(field.getName())+"=?");
+							}
+							break root;
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		sb.append("DELETE FROM ").append(tableName);
+		if(!wheres.isEmpty()){
+			sb.append(" WHERE ");
+			for(String where : wheres){
+				sb.append(where);
+			}
+		}else{
+			return null;
+		}
+		return sb.toString();
+	}
+	
+	public static String getDeleteSql(Object whereBean){
+		StringBuffer sb = new StringBuffer();
+		String tableName = getTableName(whereBean);
+		Entity entity = whereBean.getClass().getAnnotation(Entity.class);
+		Collection<String> wheres = new ArrayList<String>();
+		Class<?> clazz = whereBean.getClass();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(field.get(whereBean)==null){
+						continue;
+					}
+					if(entity!=null){
+						Column column = field.getAnnotation(Column.class);
+						if(column!=null&&!column.fieldName().isEmpty()){
+							wheres.add(column.fieldName()+"=:"+field.getName()+" AND ");
+						}else{
+							wheres.add(BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		sb.append("DELETE FROM ").append(tableName);
+		if(!wheres.isEmpty()){
+			sb.append(" WHERE ");
+			for(String where : wheres){
+				sb.append(where);
+			}
+			sb.delete(sb.length()-5, sb.length());
+		}else{
+			return null;
 		}
 		return sb.toString();
 	}

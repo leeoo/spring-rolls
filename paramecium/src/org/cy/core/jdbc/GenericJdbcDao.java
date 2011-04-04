@@ -32,7 +32,7 @@ public class GenericJdbcDao {
 			this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(TransactionManager.getCurrentTransaction().getCurrentConnection());
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 	}
 	
@@ -63,7 +63,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.query(sql);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -80,7 +80,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.query(sql, clazz);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -97,7 +97,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryByArray(sql, arrayParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -115,7 +115,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryByArray(sql, clazz, arrayParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -132,7 +132,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryByMap(sql, mapParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -150,7 +150,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryByMap(sql, clazz, mapParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -168,7 +168,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryByBean(sql, clazz, beanParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -184,7 +184,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryUnique(sql);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -200,7 +200,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryUnique(sql, clazz);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -216,7 +216,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryUniqueByArray(sql, arrayParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -234,7 +234,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryUniqueByArray(sql, clazz, arrayParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -252,7 +252,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryUniqueByBean(sql, clazz, beanParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -268,7 +268,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryUniqueByMap(sql, mapParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -284,7 +284,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryUniqueColumnValue(sql);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -300,7 +300,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryUniqueColumnValueByArray(sql, arrayParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -316,7 +316,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryUniqueColumnValueByMap(sql, mapParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -332,7 +332,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryUniqueColumnValueByBean(sql, beanParams);
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -344,7 +344,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public void executeDDL(final String sql) throws SQLException {
-		this.jdbcTemplate.executeDDL(sql);
+		try{
+			this.jdbcTemplate.executeDDL(sql);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -354,7 +360,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int executeDML(final String sql) throws SQLException {
-		return this.jdbcTemplate.executeDML(sql);
+		try{
+			return this.jdbcTemplate.executeDML(sql);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -364,7 +376,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public Number insertGetGeneratedKey(final String sql) throws SQLException {
-		return this.jdbcTemplate.insertGetGeneratedKey(sql);
+		try{
+			return this.jdbcTemplate.insertGetGeneratedKey(sql);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -374,7 +392,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int executeDMLByArray(final String sql,Object... arrayParams) throws SQLException {
-		return this.jdbcTemplate.executeDMLByArray(sql, arrayParams);
+		try{
+			return this.jdbcTemplate.executeDMLByArray(sql, arrayParams);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -384,7 +408,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public Number insertGetGeneratedKeyByArray(final String sql,Object... arrayParams) throws SQLException{
-		return this.jdbcTemplate.insertGetGeneratedKeyByArray(sql, arrayParams);
+		try{
+			return this.jdbcTemplate.insertGetGeneratedKeyByArray(sql, arrayParams);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -394,7 +424,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int executeDMLByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
-		return this.jdbcTemplate.executeDMLByMap(sql, mapParams);
+		try{
+			return this.jdbcTemplate.executeDMLByMap(sql, mapParams);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -404,7 +440,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public Number insertGetGeneratedKeyByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
-		return this.jdbcTemplate.insertGetGeneratedKeyByMap(sql, mapParams);
+		try{
+			return this.jdbcTemplate.insertGetGeneratedKeyByMap(sql, mapParams);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -414,7 +456,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int executeDMLByBean(final String sql,Object bean) throws SQLException {
-		return this.jdbcTemplate.executeDMLByBean(sql, bean);
+		try{
+			return this.jdbcTemplate.executeDMLByBean(sql, bean);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -424,7 +472,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public Number insertGetGeneratedKeyByBean(final String sql,Object bean) throws SQLException {
-		return this.jdbcTemplate.insertGetGeneratedKeyByBean(sql, bean);
+		try{
+			return this.jdbcTemplate.insertGetGeneratedKeyByBean(sql, bean);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -434,7 +488,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDML(final String... sqls) throws SQLException {
-		return this.jdbcTemplate.executeBatchDML(sqls);
+		try{
+			return this.jdbcTemplate.executeBatchDML(sqls);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -444,7 +504,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDML(final Collection<String> sqls) throws SQLException {
-		return this.jdbcTemplate.executeBatchDML(sqls);
+		try{
+			return this.jdbcTemplate.executeBatchDML(sqls);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -455,7 +521,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDMLByMaps(final String sql,Collection<Map<String, Object>> mapParamsList) throws SQLException {
-		return this.jdbcTemplate.executeBatchDMLByMaps(sql, mapParamsList);
+		try{
+			return this.jdbcTemplate.executeBatchDMLByMaps(sql, mapParamsList);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -466,7 +538,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDMLByBeans(final String sql,Collection<?> beanParamsList) throws SQLException {
-		return this.jdbcTemplate.executeBatchDMLByBeans(sql, beanParamsList);
+		try{
+			return this.jdbcTemplate.executeBatchDMLByBeans(sql, beanParamsList);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -475,7 +553,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public void call(final String sql) throws SQLException {
-		this.jdbcTemplate.call(sql);
+		try{
+			this.jdbcTemplate.call(sql);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 
 	
@@ -486,7 +570,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public void call(final String sql,Object... inParams) throws SQLException {
-		this.jdbcTemplate.call(sql, inParams);
+		try{
+			this.jdbcTemplate.call(sql, inParams);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -496,7 +586,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public Collection<?> call(final String sql,int... outParams) throws SQLException {
-		return this.jdbcTemplate.call(sql, outParams);
+		try{
+			return this.jdbcTemplate.call(sql, outParams);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 
 	/**
@@ -507,7 +603,13 @@ public class GenericJdbcDao {
 	 * @throws SQLException
 	 */
 	public Map<String,Object> call(final String sql,Map<String,Object> inParams,Map<String,Integer> outParams) throws SQLException {
-		return this.jdbcTemplate.call(sql, inParams, outParams);
+		try{
+			return this.jdbcTemplate.call(sql, inParams, outParams);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new SQLException(e);
+		}
 	}
 	
 	/**
@@ -520,7 +622,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.getAutoGeneratedKey();
 		}catch (SQLException e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -536,7 +638,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.getAutoGeneratedKey(sql);
 		}catch (SQLException e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -554,7 +656,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryPageBeanByArray(sql, clazz, page, arrayParameters);
 		}catch (SQLException e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -572,7 +674,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryPageBeansByBean(sql, clazz, page, beanParameters);
 		}catch (SQLException e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -590,7 +692,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryPageBeansByMap(sql, clazz, page, mapParameters);
 		}catch (SQLException e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -607,7 +709,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryPageMapsByArray(sql, page, arrayParameters);
 		}catch (SQLException e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
@@ -624,7 +726,7 @@ public class GenericJdbcDao {
 			return this.jdbcTemplate.queryPageMapsByMap(sql, page, mapParameters);
 		}catch (SQLException e) {
 			e.printStackTrace();
-			logger.error(e.fillInStackTrace());
+			logger.error(e);
 		}
 		return null;
 	}
