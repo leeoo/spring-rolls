@@ -744,9 +744,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		for (; resultSet.next();) {
 			map = new HashMap<String, Object>();
 			for (int column = 1; column <= columnCount; column++) {
-				String columnLabel = resultSetMetaData.getTableName(column);
+				String columnLabel = resultSetMetaData.getColumnLabel(column);
 				if(isManyTable){
-					columnLabel = resultSetMetaData.getColumnLabel(column).concat(".").concat(columnLabel);
+					columnLabel = resultSetMetaData.getTableName(column).concat(".").concat(columnLabel);
 				}
 				Object columnValue = resultSet.getObject(columnLabel);
 				map.put(columnLabel, columnValue);
