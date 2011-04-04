@@ -28,7 +28,7 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	 */
 	public abstract String getSql(final String sql, Page page);
 	
-	public Page queryPageBeanByArray(final String sql, Class<?> clazz, Page page, Object... arrayParameters) throws SQLException {
+	public Page queryPageBeansByArray(final String sql, Class<?> clazz, Page page, Object... arrayParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
 			count = (Long) queryUniqueColumnValueByArray(getCountSql(sql), arrayParameters);

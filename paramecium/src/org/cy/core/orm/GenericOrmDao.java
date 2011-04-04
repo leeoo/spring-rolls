@@ -23,19 +23,23 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	
 	private GenericJdbcDao genericJdbcDao;
 	
+	private Class<T> clazz;
+	
 	/**
 	 * 默认构造方法会自动加载事务线程
 	 */
-	public GenericOrmDao(){
+	public GenericOrmDao(Class<T> clazz){
 		genericJdbcDao = new GenericJdbcDao();
+		this.clazz = clazz;
 	}
 
 	/**
 	 * 该构造方法需要手动控制事务
 	 * @param connection
 	 */
-	public GenericOrmDao(Connection connection) {
+	public GenericOrmDao(Connection connection,Class<T> clazz) {
 		genericJdbcDao = new GenericJdbcDao(connection);
+		this.clazz = clazz;
 	}
 
 	/**
@@ -111,7 +115,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @param primaryKey
 	 * @throws SQLException
 	 */
-	public void delete(Class<T> clazz,PK primaryKey)throws SQLException {
+	public void delete(PK primaryKey)throws SQLException {
 		String key = clazz.getName()+":delete";
 		String sql = sqlCache.get(key);
 		if(sql!=null){
@@ -138,8 +142,16 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @param primaryKey
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public T select(PK primaryKey){
-		return null;
+		String key = clazz.getName()+":select";
+		String sql = sqlCache.get(key);
+		if(sql!=null){
+			return (T) genericJdbcDao.queryUniqueByArray(sql, clazz, primaryKey);
+		}
+		sql = EntityUtils.getSelectSql(clazz);
+		sqlCache.put(key, sql);
+		return (T) genericJdbcDao.queryUniqueByArray(sql, clazz, primaryKey);
 	}
 
 	/**
@@ -148,7 +160,14 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @return
 	 */
 	public Page select(Page page){
-		return null;
+		String key = clazz.getName()+":select2";
+		String sql = sqlCache.get(key);
+		if(sql!=null){
+			return genericJdbcDao.queryPageBeansByArray(sql, clazz, page);
+		}
+		sql = EntityUtils.getSelectSql2(clazz);
+		sqlCache.put(key, sql);
+		return genericJdbcDao.queryPageBeansByArray(sql, clazz, page);
 	}
 
 	/**
@@ -158,7 +177,14 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @return
 	 */
 	public Page select(Page page,T whereBean){
-		return null;
+		String key = clazz.getName()+":select2";
+		String sql = sqlCache.get(key);
+		if(sql==null){
+			sql = EntityUtils.getSelectSql2(clazz);
+			sqlCache.put(key, sql);
+		}
+		sql = sql.concat(EntityUtils.getWhereBean(whereBean));
+		return genericJdbcDao.queryPageBeansByBean(sql, clazz, page,whereBean);
 	}
 	
 	/**
@@ -166,8 +192,16 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @param whereBean
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<T> select(T whereBean){
-		return null;
+		String key = clazz.getName()+":select2";
+		String sql = sqlCache.get(key);
+		if(sql==null){
+			sql = EntityUtils.getSelectSql2(clazz);
+			sqlCache.put(key, sql);
+		}
+		sql = sql.concat(EntityUtils.getWhereBean(whereBean));
+		return (Collection<T>) genericJdbcDao.queryByBean(sql, clazz, whereBean);
 	}
 
 }

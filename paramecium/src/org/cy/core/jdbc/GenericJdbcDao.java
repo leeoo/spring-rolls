@@ -651,9 +651,9 @@ public class GenericJdbcDao {
 	 * @param page分页对象
 	 * @return
 	 */
-	public Page queryPageBeanByArray(final String sql,Class<?> clazz,Page page,Object... arrayParameters) {
+	public Page queryPageBeansByArray(final String sql,Class<?> clazz,Page page,Object... arrayParameters) {
 		try{
-			return this.jdbcTemplate.queryPageBeanByArray(sql, clazz, page, arrayParameters);
+			return this.jdbcTemplate.queryPageBeansByArray(sql, clazz, page, arrayParameters);
 		}catch (SQLException e) {
 			e.printStackTrace();
 			logger.error(e);
@@ -669,7 +669,7 @@ public class GenericJdbcDao {
 	 * @param beanParameters参数bean
 	 * @return
 	 */
-	public Page queryPageBeansByBean(final String sql,Class<?> clazz,Page page,Object beanParameters) throws SQLException {
+	public Page queryPageBeansByBean(final String sql,Class<?> clazz,Page page,Object beanParameters) {
 		try{
 			return this.jdbcTemplate.queryPageBeansByBean(sql, clazz, page, beanParameters);
 		}catch (SQLException e) {
@@ -687,7 +687,7 @@ public class GenericJdbcDao {
 	 * @param mapParameters参数map
 	 * @return
 	 */
-	public Page queryPageBeansByMap(final String sql,Class<?> clazz,Page page,Map<String,Object> mapParameters) throws SQLException {
+	public Page queryPageBeansByMap(final String sql,Class<?> clazz,Page page,Map<String,Object> mapParameters) {
 		try{
 			return this.jdbcTemplate.queryPageBeansByMap(sql, clazz, page, mapParameters);
 		}catch (SQLException e) {
@@ -704,7 +704,7 @@ public class GenericJdbcDao {
 	 * @param page分页对象
 	 * @return
 	 */
-	public Page queryPageMapsByArray(final String sql,Page page,Object... arrayParameters) throws SQLException {
+	public Page queryPageMapsByArray(final String sql,Page page,Object... arrayParameters) {
 		try{
 			return this.jdbcTemplate.queryPageMapsByArray(sql, page, arrayParameters);
 		}catch (SQLException e) {
@@ -721,7 +721,7 @@ public class GenericJdbcDao {
 	 * @param mapParameters参数map
 	 * @return
 	 */
-	public Page queryPageMapsByMap(final String sql,Page page,Map<String,Object> mapParameters) throws SQLException {
+	public Page queryPageMapsByMap(final String sql,Page page,Map<String,Object> mapParameters) {
 		try{
 			return this.jdbcTemplate.queryPageMapsByMap(sql, page, mapParameters);
 		}catch (SQLException e) {

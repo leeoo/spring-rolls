@@ -34,7 +34,7 @@ public interface Dialect {
 	 * @param page分页对象
 	 * @return
 	 */
-	public Page queryPageBeanByArray(final String sql,Class<?> clazz,Page page,Object... arrayParameters) throws SQLException ;
+	public Page queryPageBeansByArray(final String sql,Class<?> clazz,Page page,Object... arrayParameters) throws SQLException ;
 
 	/**
 	 * 通用用分页方法,page对象中返回结果为bean集合
