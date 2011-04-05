@@ -6,6 +6,9 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.cy.core.orm.annotation.VirtualColumn.DYNAMIC_WHERE_COMPARISON;
+import org.cy.core.orm.annotation.VirtualColumn.DYNAMIC_WHERE_LOGIC;
 /**
  * 功 能 描 述:<br>
  * 字段声明
@@ -18,24 +21,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)    
 @Target(ElementType.FIELD)
 public @interface Column {
-	/**
-	 * 动态查询逻辑枚举
-	 */
-	public enum DYNAMIC_WHERE_LOGIC{
-		AND,
-		OR
-	}
-	
-	/**
-	 * 动态查询比较常量
-	 */
-	public class DYNAMIC_WHERE_COMPARISON{
-		public static final String EQUAL = " = ";
-		public static final String THAN = " > ";
-		public static final String THAN_EQUAL = " >= ";
-		public static final String LESS = " < ";
-		public static final String LESS_EQUAL = " <= ";
-	}
 
 	/**
 	 * 对应字段名称，默认将属性名变大写变小写并在前加下划线，如“userName <=> user_name”；如果字段名为u_name,则需要手动填写fieldName
@@ -59,7 +44,7 @@ public @interface Column {
 	 * 逻辑运算符
 	 * @return
 	 */
-	public DYNAMIC_WHERE_LOGIC logical() default DYNAMIC_WHERE_LOGIC.AND;
+	public String logical() default DYNAMIC_WHERE_LOGIC.AND;
 	
 	/**
 	 * 比较运算符
