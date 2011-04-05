@@ -38,6 +38,6 @@ public @interface TempColumn {
 	 * 被比较的数据库字段名
 	 * @return
 	 */
-	public String comparisonColumnName();
+	public String comparisonColumn();
 
 }
