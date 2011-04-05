@@ -19,8 +19,6 @@ import org.cy.core.jdbc.dialect.Page;
  */
 public final class GenericOrmDao<T , PK extends Serializable>{
 	
-	private static ConcurrentMap<String, String> sqlCache = new ConcurrentHashMap<String, String>();
-	
 	private GenericJdbcDao genericJdbcDao;
 	
 	private Class<T> clazz;
@@ -49,13 +47,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public Number insert(T bean) throws SQLException {
-		String key = bean.getClass().getName()+":insert";
-		String sql = sqlCache.get(key);
-		if(sql!=null){
-			return genericJdbcDao.insertGetGeneratedKeyByBean(sql, bean);
-		}
-		sql = EntityUtils.getInsertSql(bean);
-		sqlCache.put(key, sql);
+		String sql = EntitySqlBuilder.getInsertSql(bean);
 		return genericJdbcDao.insertGetGeneratedKeyByBean(sql, bean);
 	}
 
@@ -65,14 +57,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void insert(Collection<T> beans) throws SQLException {
-		String key = beans.iterator().next().getClass().getName()+":insert";
-		String sql = sqlCache.get(key);
-		if(sql!=null){
-			genericJdbcDao.executeBatchDMLByBeans(sql, beans);
-			return;
-		}
-		sql = EntityUtils.getInsertSql(beans.iterator().next());
-		sqlCache.put(key, sql);
+		String sql = EntitySqlBuilder.getInsertSql(beans.iterator().next());
 		genericJdbcDao.executeBatchDMLByBeans(sql, beans);
 	}
 
@@ -82,31 +67,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void update(T bean) throws SQLException {
-		String key = bean.getClass().getName()+":update";
-		String sql = sqlCache.get(key);
-		if(sql!=null){
-			genericJdbcDao.executeDMLByBean(sql, bean);
-			return;
-		}
-		sql = EntityUtils.getUpdateSql(bean, true);
-		sqlCache.put(key, sql);
-		genericJdbcDao.executeDMLByBean(sql, bean);
-	}
-	
-	/**
-	 * 只修改值不为空的属性，一般用于小表单对应大表的某几个字段
-	 * @param bean
-	 * @throws SQLException
-	 */
-	public void updateNotNull(T bean) throws SQLException {
-		String key = bean.getClass().getName()+":update2";
-		String sql = sqlCache.get(key);
-		if(sql!=null){
-			genericJdbcDao.executeDMLByBean(sql, bean);
-			return;
-		}
-		sql = EntityUtils.getUpdateSql(bean, false);
-		sqlCache.put(key, sql);
+		String sql = EntitySqlBuilder.getUpdateSql(bean);
 		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
 	
@@ -116,14 +77,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void delete(PK primaryKey)throws SQLException {
-		String key = clazz.getName()+":delete";
-		String sql = sqlCache.get(key);
-		if(sql!=null){
-			genericJdbcDao.executeDMLByArray(sql, primaryKey);
-			return;
-		}
-		sql = EntityUtils.getDeleteSql(clazz);
-		sqlCache.put(key, sql);
+		String sql = EntitySqlBuilder.getDeleteSql(clazz);
 		genericJdbcDao.executeDMLByArray(sql, primaryKey);
 	}
 
@@ -133,7 +87,11 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void delete(T whereBean)throws SQLException {
-		String sql = EntityUtils.getDeleteSql(whereBean);
+		String sql = EntitySqlBuilder.getDeleteSql(clazz);
+		int start =sql.indexOf(" WHERE ");
+		sql = sql.substring(start, sql.length());
+		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
+		sql = sql.concat(" WHERE ").concat(where);
 		genericJdbcDao.executeDMLByBean(sql, whereBean);
 	}
 	
