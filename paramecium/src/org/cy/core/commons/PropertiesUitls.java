@@ -55,24 +55,19 @@ public abstract class PropertiesUitls {
 		} catch (IOException e) {
 			logger.error(e);
 		}
-		String type = "";
 		Map<String,String> values = null;
 		for(Object key : properties.keySet()){
 			String property = (String)key;
 			int dotIndex = property.indexOf(".");
-			String newType = property.substring(0,dotIndex);
-			String value = property.substring(dotIndex+1,property.length());
-			String proValue = properties.getProperty(property);
-			if(!type.equals(newType)){
+			String newType = property.substring(0,dotIndex);//类型名
+			String value = property.substring(dotIndex+1,property.length());//同类型下的属性名
+			String proValue = properties.getProperty(property);//属性值
+			values = map.get(newType);
+			if(values==null){
 				values =new HashMap<String,String>();
-				values.put(value, proValue);
-				map.put(newType, values);
-				type = newType;
-			}else{
-				values = map.get(newType);
-				values.put(value, proValue);
-				map.put(newType, values);
 			}
+			values.put(value, proValue);
+			map.put(newType, values);
 		}
 		return map;
 	}
