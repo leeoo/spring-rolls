@@ -33,23 +33,26 @@ public class MultiDataSourceFactory {
 			JdbcTemplateFactory.dbTypes.put(key, propery.get("dbType"));
 			propery.remove("dataSourceClass");//移除，对实例化数据源无用
 			propery.remove("dbType");//移除，对实例化数据源无用
-			DataSource dataSource = null;
+			Object dataSource = null;
 			try {
-				dataSource = (DataSource) Class.forName(dataSourceClass).newInstance();
+				Class<?> clazz = Class.forName(dataSourceClass);
+				dataSource = clazz.newInstance();
 				for(Entry<String, String> entry : propery.entrySet()){
 					String fieldName = entry.getKey();
-					Field filed = DataSource.class.getField(fieldName);
-					filed.setAccessible(true);
-					if(filed.getType().equals(Integer.TYPE)){
-						filed.set(dataSource,Integer.valueOf(entry.getValue()));
-					}else if(filed.getType().equals(Boolean.TRUE)){
-						filed.set(dataSource,Boolean.valueOf(entry.getValue()));
-					}else{
-						filed.set(dataSource,entry.getValue());
+					for(Field filed:clazz.getDeclaredFields()){
+						if(fieldName.equalsIgnoreCase(filed.getName())){
+							filed.setAccessible(true);
+							if(filed.getType().equals(Integer.TYPE)){
+								filed.set(dataSource,Integer.valueOf(entry.getValue()));
+							}else if(filed.getType().equals(Boolean.TRUE)){
+								filed.set(dataSource,Boolean.valueOf(entry.getValue()));
+							}else{
+								filed.set(dataSource,entry.getValue());
+							}
+						}
 					}
-					
 				}
-				multiDataSource.put(key, dataSource);
+				multiDataSource.put(key,(DataSource)dataSource);
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e);

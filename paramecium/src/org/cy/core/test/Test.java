@@ -1,7 +1,5 @@
 package org.cy.core.test;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 import org.cy.core.jdbc.dialect.Page;
@@ -26,7 +24,7 @@ public class Test{
 	public static void main(String[] args) throws Exception {
 		TransactionManager.before();
 		try{
-			GenericOrmDao<Test, Integer> ormDao = new GenericOrmDao<Test, Integer>(Test.class);
+			GenericOrmDao<Test, Integer> ormDao = new GenericOrmDao<Test, Integer>("ds1",Test.class);
 			/*Collection<Test> tests = new ArrayList<Test>();
 			for(int i=0;i<100;i++){
 				Test test = new Test();
@@ -36,7 +34,7 @@ public class Test{
 			}
 			ormDao.insert(tests);*/
 			Test test = new Test();
-			test.setInfo("aaa4");
+			test.setInfo("哈哈神马都是浮云");
 			Page page =new Page(5);
 			page.setPageNo(3);
 			page = ormDao.select(page,test);
@@ -44,7 +42,7 @@ public class Test{
 				System.out.println(((Test)test1).getInfo());
 			}
 		}catch (Exception e) {
-			TransactionManager.getCurrentTransaction().setException();
+			TransactionManager.globalException();
 		}
 		TransactionManager.end();
 	}

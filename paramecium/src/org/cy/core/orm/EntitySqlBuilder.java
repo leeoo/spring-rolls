@@ -24,9 +24,9 @@ public class EntitySqlBuilder {
 		if(sql!=null){
 			return sql;
 		}
-		StringBuffer sb = new StringBuffer();
-		String tableName = bean.getClass().getAnnotation(Entity.class).tableName();
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		StringBuffer sb = new StringBuffer();
 		Collection<String> columns = new ArrayList<String>();
 		Collection<String> propertys = new ArrayList<String>();
 		Class<?> clazz = bean.getClass();
@@ -89,9 +89,9 @@ public class EntitySqlBuilder {
 		if(sql!=null){
 			return sql;
 		}
-		StringBuffer sb = new StringBuffer();
-		String tableName = bean.getClass().getAnnotation(Entity.class).tableName();
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		StringBuffer sb = new StringBuffer();
 		Collection<String> sets = new ArrayList<String>();
 		Collection<String> wheres = new ArrayList<String>();
 		Class<?> clazz = bean.getClass();
@@ -149,9 +149,9 @@ public class EntitySqlBuilder {
 		if(sql!=null){
 			return sql;
 		}
-		String tableName = clazz.getAnnotation(Entity.class).tableName();
-		StringBuffer sb = new StringBuffer();
 		Entity entity = clazz.getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		StringBuffer sb = new StringBuffer();
 		Collection<String> wheres = new ArrayList<String>();
 		root:for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
@@ -175,6 +175,62 @@ public class EntitySqlBuilder {
 			}
 		}
 		sb.append("DELETE FROM ").append(tableName);
+		if(!wheres.isEmpty()){
+			sb.append(" WHERE ");
+			for(String where : wheres){
+				sb.append(where);
+			}
+		}else{
+			return null;
+		}
+		sqlCache.put(key, sb.toString());
+		return sb.toString();
+	}
+	
+	public static String getSelectSqlByPk(Class<?> clazz){
+		String key = clazz.getName()+":select";
+		String sql = sqlCache.get(key);
+		if(sql!=null){
+			return sql;
+		}
+		Entity entity = clazz.getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		StringBuffer sb = new StringBuffer();
+		Collection<String> columns = new ArrayList<String>();
+		Collection<String> wheres = new ArrayList<String>();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(entity!=null){
+						Column column = field.getAnnotation(Column.class);
+						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+						if(primaryKey!=null&&wheres.isEmpty()){
+							if(column!=null&&!column.fieldName().isEmpty()){
+								wheres.add(column.fieldName()+"=?");
+							}else{
+								wheres.add(BeanUitls.getDbFieldName(field.getName())+"=?");
+							}
+						}
+						if(column!=null&&!column.fieldName().isEmpty()){
+							columns.add(column.fieldName()+" "+field.getName());
+						}else if(column!=null&&column.fieldName().isEmpty()){
+							columns.add(BeanUitls.getDbFieldName(field.getName()));
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		sb.append("SELECT ");
+		if(!columns.isEmpty()){
+			for(String column : columns){
+				sb.append(column).append(",");
+			}
+		}
+		sb.delete(sb.length()-1, sb.length());
+		sb.append(" FROM ").append(tableName);
 		if(!wheres.isEmpty()){
 			sb.append(" WHERE ");
 			for(String where : wheres){

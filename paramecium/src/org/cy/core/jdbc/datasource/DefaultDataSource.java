@@ -21,11 +21,17 @@ import org.cy.core.log.LoggerFactory;
 public class DefaultDataSource implements DataSource{
 	private static boolean isInit = false;
 	private final static Log logger = LoggerFactory.getLogger();
-	static PrintWriter printWriter;
-	static String driverClassName;
-	static String url;
-	static String username;
-	static String password;
+	private PrintWriter printWriter;
+	
+	private String driverClassName;
+	private String url;
+	private String username;
+	private String password;
+	private int loginTimeout = 5;
+	
+	public DefaultDataSource(){
+		logger.debug("默认数据源被载入");
+	}
 	
 	public Connection getConnection(){
 		Connection connection = null;
@@ -62,19 +68,52 @@ public class DefaultDataSource implements DataSource{
 		throw new UnsupportedOperationException("EN:The method can't using!;CN:不能使用该方法!;");
 	}
 
-	public int getLoginTimeout() {
-		return 5;
-	}
-
-	public void setLoginTimeout(int _loginTimeout) {
-	}
-
 	public PrintWriter getLogWriter() throws SQLException {
 		return printWriter;
 	}
 
 	public void setLogWriter(PrintWriter _printWriter) throws SQLException {
-		printWriter = _printWriter;
+		this.printWriter = _printWriter;
+	}
+
+	public String getDriverClassName() {
+		return driverClassName;
+	}
+
+	public void setDriverClassName(String driverClassName) {
+		this.driverClassName = driverClassName;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public int getLoginTimeout() {
+		return loginTimeout;
+	}
+
+	public void setLoginTimeout(int loginTimeout) {
+		this.loginTimeout = loginTimeout;
 	}
 
 }
