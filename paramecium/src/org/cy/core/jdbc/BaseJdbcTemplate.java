@@ -36,7 +36,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public BaseJdbcTemplate(final Connection connection) {
 		this.connection = connection;
 	}
-
+	
 	/**
 	 * 执行无参数selectSQL语句,数据以Map装载
 	 * @param sql

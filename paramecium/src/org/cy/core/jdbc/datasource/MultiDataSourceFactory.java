@@ -1,6 +1,7 @@
 package org.cy.core.jdbc.datasource;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,6 +10,7 @@ import java.util.concurrent.ConcurrentMap;
 import javax.sql.DataSource;
 
 import org.cy.core.commons.PropertiesUitls;
+import org.cy.core.jdbc.JdbcTemplateFactory;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 /**
@@ -28,7 +30,9 @@ public class MultiDataSourceFactory {
 		for(String key : map.keySet()){
 			Map<String,String> propery = map.get(key);
 			String dataSourceClass = propery.get("dataSourceClass");
+			JdbcTemplateFactory.dbTypes.put(key, propery.get("dbType"));
 			propery.remove("dataSourceClass");//移除，对实例化数据源无用
+			propery.remove("dbType");//移除，对实例化数据源无用
 			DataSource dataSource = null;
 			try {
 				dataSource = (DataSource) Class.forName(dataSourceClass).newInstance();
@@ -53,12 +57,29 @@ public class MultiDataSourceFactory {
 		}
 	}
 	
-	public DataSource getDataSource(){
+	/**
+	 * 获得多数据源默认的数据源，如果只有一个返回当前
+	 * @return
+	 */
+	public static DataSource getDataSource(){
 		return multiDataSource.values().iterator().next();
 	}
-	
-	public DataSource getDataSource(String dataSourceName){
+
+	/**
+	 * 根据指定数据源名称获得数据源
+	 * @param dataSourceName
+	 * @return
+	 */
+	public static DataSource getDataSource(String dataSourceName){
 		return multiDataSource.get(dataSourceName);
+	}
+	
+	/**
+	 * 获得所有数据源名称
+	 * @return
+	 */
+	public static Collection<String> getDataSourceNames(){
+		return multiDataSource.keySet();
 	}
 	
 }

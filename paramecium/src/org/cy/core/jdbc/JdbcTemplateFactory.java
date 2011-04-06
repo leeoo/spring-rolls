@@ -1,7 +1,11 @@
 package org.cy.core.jdbc;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
+import org.cy.core.jdbc.datasource.MultiDataSourceFactory;
 import org.cy.core.jdbc.dialect.Db2Dialect;
 import org.cy.core.jdbc.dialect.DerbyDialect;
 import org.cy.core.jdbc.dialect.H2Dialect;
@@ -22,9 +26,10 @@ import org.cy.core.jdbc.dialect.SqliteDialect;
  * <br>包及类名(Package Class): <b>org.cy.core.jdbc.JdbcTemplateFactory.java</b>
  */
 public class JdbcTemplateFactory {
-	public static String dbType;
+	public final static ConcurrentMap<String,String> dbTypes = new ConcurrentHashMap<String,String>();
 	
-	public static JdbcTemplate getJdbcTemplate(final Connection connection) {
+	public static JdbcTemplate getJdbcTemplate(String dataSourceName,Connection connection) {
+		String dbType = dbTypes.get(dataSourceName);
 		if(dbType.equals("mysql")){
 			return new MySqlDialect(connection);
 		}else if(dbType.equals("hsql")){
@@ -47,6 +52,19 @@ public class JdbcTemplateFactory {
 			return new Db2Dialect(connection);
 		}else if(dbType.equals("informix")){
 			return new InformixDialect(connection);
+		}
+		return null;
+	}
+	
+	public static JdbcTemplate getJdbcTemplate(Connection connection){
+		return getJdbcTemplate(MultiDataSourceFactory.getDataSourceNames().iterator().next(), connection);
+	}
+
+	public static JdbcTemplate getJdbcTemplate(String dataSourceName){
+		try {
+			return getJdbcTemplate(dataSourceName, MultiDataSourceFactory.getDataSource(dataSourceName).getConnection());
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

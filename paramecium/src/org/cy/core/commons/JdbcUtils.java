@@ -11,9 +11,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cy.core.jdbc.datasource.DataSourceBuilder;
 import org.cy.core.jdbc.formatter.DDLFormatter;
 import org.cy.core.jdbc.formatter.DMLFormatter;
+import org.cy.core.log.LoggerFactory;
 
 /**
  * 功能描述(Description):<br><b>
@@ -44,11 +44,11 @@ public abstract class JdbcUtils {
 		if(splite>-1){
 			sql = sql.substring(splite+1,sql.length());
 		}
-		return DataSourceBuilder.sqlIsFormat ? DMLFormatter.format(sql) : sql;
+		return LoggerFactory.sqlIsFormat ? DMLFormatter.format(sql) : sql;
 	}
 
 	public static String getNativeDDLSql(String sql){
-		return DataSourceBuilder.sqlIsFormat ? DDLFormatter.format(sql) : sql;
+		return LoggerFactory.sqlIsFormat ? DDLFormatter.format(sql) : sql;
 	}
 
 	/**

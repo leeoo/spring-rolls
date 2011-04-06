@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.cy.core.jdbc.datasource.DataSourceBuilder;
+import org.cy.core.jdbc.datasource.MultiDataSourceFactory;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 /**
@@ -24,14 +24,14 @@ public class Transaction {
 	private boolean isException = false;
 	
 	public Transaction() throws SQLException{
-		DataSource dataSource = DataSourceBuilder.getDataSource();
+		DataSource dataSource = MultiDataSourceFactory.getDataSource();
 		this.connection = dataSource.getConnection();
 		this.connection.setAutoCommit(false);
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
 	}
 
-	public Transaction(DataSource dataSource) throws SQLException{
-		this.connection = dataSource.getConnection();
+	public Transaction(String dataSourceName) throws SQLException{
+		this.connection = MultiDataSourceFactory.getDataSource(dataSourceName).getConnection();
 		this.connection.setAutoCommit(false);
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
 	}

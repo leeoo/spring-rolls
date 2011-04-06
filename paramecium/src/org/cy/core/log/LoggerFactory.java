@@ -1,12 +1,10 @@
 package org.cy.core.log;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.cy.core.commons.DateUtils;
+import org.cy.core.commons.PropertiesUitls;
 import org.cy.core.log.handler.ConsoleLogHandler;
 import org.cy.core.log.handler.DataBaseLogHandler;
 import org.cy.core.log.handler.FileLogHandler;
@@ -24,6 +22,7 @@ public class LoggerFactory {
 	private static int currentLevel = Log.LEVEL_INFO;
 	public static String loggerFileName;
 	public static String loggerDbInterface;
+	public static boolean sqlIsFormat = false;
 	
 	static{
 		levelMap.put("trace", Log.LEVEL_TRACE);
@@ -32,29 +31,27 @@ public class LoggerFactory {
 		levelMap.put("warn", Log.LEVEL_WARN);
 		levelMap.put("error", Log.LEVEL_ERROR);
 		levelMap.put("fatal", Log.LEVEL_FATAL);
-		Properties properties = new Properties();
-		InputStream inputStream = System.class.getResourceAsStream("/logger.properties");
-		try {
-			properties.load(inputStream);
-		} catch (IOException e) {}
-		String loggerLevel = properties.getProperty("loggerLevel");
+		Map<String,String> properties = PropertiesUitls.get("/logger.properties");
+		String loggerLevel = properties.get("loggerLevel");
 		if(loggerLevel!=null){
 			loggerLevel = loggerLevel.toLowerCase();
 			currentLevel = levelMap.get(loggerLevel);
 		}
-		String loggerMode = properties.getProperty("loggerMode");
+		String loggerMode = properties.get("loggerMode");
 		if(loggerMode!=null){
 			loggerMode = loggerMode.toLowerCase();
 			if(loggerMode.indexOf("file")>-1){
 				logHandler = new FileLogHandler();
-				loggerFileName = properties.getProperty("loggerFileName");
+				loggerFileName = properties.get("loggerFileName");
 			}else if(loggerMode.indexOf("db")>-1||loggerMode.indexOf("database")>-1){
 				logHandler = new DataBaseLogHandler();
-				loggerDbInterface = properties.getProperty("loggerDbInterface");
+				loggerDbInterface = properties.get("loggerDbInterface");
 			}else{
 				logHandler = new ConsoleLogHandler();
 			}
 		}
+		String sqlIsFormatStr = properties.get("sqlIsFormat");
+		sqlIsFormat = sqlIsFormatStr != null ? Boolean.valueOf(sqlIsFormatStr) : false;
 	}
 	
 	/**
