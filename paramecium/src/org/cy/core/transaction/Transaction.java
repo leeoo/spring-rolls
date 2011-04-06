@@ -24,16 +24,18 @@ public class Transaction {
 	private boolean isException = false;
 	
 	public Transaction() throws SQLException{
-		initConnection();
-	}
-	
-	private void initConnection() throws SQLException{
 		DataSource dataSource = DataSourceBuilder.getDataSource();
 		this.connection = dataSource.getConnection();
 		this.connection.setAutoCommit(false);
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
 	}
 
+	public Transaction(DataSource dataSource) throws SQLException{
+		this.connection = dataSource.getConnection();
+		this.connection.setAutoCommit(false);
+		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
+	}
+	
 	/**
 	 * 获得当前连接
 	 * @return
@@ -44,23 +46,6 @@ public class Transaction {
 			return this.connection;
 		}
 		throw new SQLException("EN:connection fail!CN:数据库连接错误!");
-	}
-	
-	/**
-	 * 重新获得新连接,并释放之前的连接资源
-	 * @param isCommitOldConnection是否将之前的连接提交
-	 * @return
-	 * @throws SQLException
-	 */
-	public Connection getNewConnection(boolean isCommitOldConnection) throws SQLException {
-		if(isCommitOldConnection){
-			commit();
-		}else{
-			rollback();
-		}
-		close();
-		initConnection();
-		return getCurrentConnection();
 	}
 	
 	private void connectionLife() throws SQLException{
