@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Map.Entry;
 
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
@@ -19,27 +18,6 @@ import org.cy.core.log.LoggerFactory;
 public abstract class PropertiesUitls {
 	
 	private final static Log logger = LoggerFactory.getLogger();
-	
-	public static void main(String[] args) {
-		Map<String,Map<String,String>> map = getByType("/database.properties");
-		for(String key : map.keySet()){
-			System.out.println(key);
-			System.out.println("-=-=-=-=-=-=-");
-			for(Entry<String, String> entry : map.get(key).entrySet()){
-				System.out.print(entry.getKey());
-				System.out.print(" = ");
-				System.out.println(entry.getValue());
-			}
-		}
-		System.out.println("========================================");
-		Map<String,String> map2 = get("/logger.properties");
-		System.out.println("-=-=-=-=-=-=-");
-		for(String key : map2.keySet()){
-			System.out.print(key);
-			System.out.print(" = ");
-			System.out.println(map2.get(key));
-		}
-	}
 	
 	/**
 	 * 获取以.为分割的区域类别划分信息，如ds1.username,ds1.url;ds2.username,ds2.url;
