@@ -34,7 +34,7 @@ public class Test{
 			}
 			ormDao.insert(tests);*/
 			Test test = new Test();
-			test.setInfo("哈哈神马都是浮云");
+			test.setInfo("aaa1");
 			Page page =new Page(5);
 			page.setPageNo(3);
 			page = ormDao.select(page,test);
@@ -42,6 +42,7 @@ public class Test{
 				System.out.println(((Test)test1).getInfo());
 			}
 		}catch (Exception e) {
+			e.printStackTrace();
 			TransactionManager.globalException();
 		}
 		TransactionManager.end();

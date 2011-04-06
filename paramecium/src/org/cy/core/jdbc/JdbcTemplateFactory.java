@@ -28,27 +28,27 @@ public class JdbcTemplateFactory {
 	
 	public static JdbcTemplate getJdbcTemplate(final String dataSourceName,final Connection connection) {
 		String dbType = dbTypes.get(dataSourceName);
-		if(dbType.equals("mysql")){
+		if(dbType.equalsIgnoreCase("mysql")){
 			return new MySqlDialect(connection);
-		}else if(dbType.equals("hsql")){
+		}else if(dbType.equalsIgnoreCase("hsql")){
 			return new HSqlDialect(connection);
-		}else if(dbType.equals("h2")){
+		}else if(dbType.equalsIgnoreCase("h2")){
 			return new H2Dialect(connection);
-		}else if(dbType.equals("postgresql")){
+		}else if(dbType.equalsIgnoreCase("postgresql")){
 			return new PostgresDialect(connection);
-		}else if(dbType.equals("sqlite")){
+		}else if(dbType.equalsIgnoreCase("sqlite")){
 			return new SqliteDialect(connection);
-		}else if(dbType.equals("derby")){
+		}else if(dbType.equalsIgnoreCase("derby")){
 			return new DerbyDialect(connection);
-		}else if(dbType.equals("oracle")){
+		}else if(dbType.equalsIgnoreCase("oracle")){
 			return new OracleDialect(connection);
-		}else if(dbType.equals("sqlserver")||dbType.equals("sqlserver2000")){
+		}else if(dbType.equalsIgnoreCase("sqlserver")||dbType.equalsIgnoreCase("sqlserver2000")){
 			return new SqlServerDialect(connection);
-		}else if(dbType.equals("sqlserver2005")||dbType.equals("sqlserver2008")){
+		}else if(dbType.equalsIgnoreCase("sqlserver2005")||dbType.equalsIgnoreCase("sqlserver2008")){
 			return new SqlServer2005Dialect(connection);
-		}else if(dbType.equals("db2")){
+		}else if(dbType.equalsIgnoreCase("db2")){
 			return new Db2Dialect(connection);
-		}else if(dbType.equals("informix")){
+		}else if(dbType.equalsIgnoreCase("informix")){
 			return new InformixDialect(connection);
 		}
 		return null;

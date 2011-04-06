@@ -55,7 +55,7 @@ public class TransactionManager {
 					transactionMap.put(dataSourceName, new Transaction(dataSourceName));
 					transactionThreadLocal.set(transactionMap);
 				}
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e);
 			}
@@ -77,7 +77,7 @@ public class TransactionManager {
 						transaction.commit();
 					}
 					transaction.close();
-				} catch (SQLException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					logger.error(e);
 				}

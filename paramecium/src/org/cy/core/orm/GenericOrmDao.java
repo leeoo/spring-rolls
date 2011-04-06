@@ -86,7 +86,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	public void delete(T whereBean)throws SQLException {
 		String sql = EntitySqlBuilder.getDeleteSql(clazz);
 		int start = sql.indexOf(" WHERE ");
-		sql = sql.substring(start, sql.length());
+		sql = sql.substring(0, start);
 		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
 		sql = sql.concat(" WHERE ").concat(where);
 		genericJdbcDao.executeDMLByBean(sql, whereBean);
@@ -111,7 +111,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	public Page select(Page page){
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
 		int start =sql.indexOf(" WHERE ");
-		sql = sql.substring(start, sql.length());
+		sql = sql.substring(0, start);
 		return genericJdbcDao.queryPageBeansByArray(sql, clazz, page);
 	}
 
@@ -124,7 +124,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	public Page select(Page page,T whereBean){
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
 		int start =sql.indexOf(" WHERE ");
-		sql = sql.substring(start, sql.length());
+		sql = sql.substring(0, start);
 		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
 		sql = sql.concat(" WHERE ").concat(where);
 		return genericJdbcDao.queryPageBeansByBean(sql, clazz, page,whereBean);
@@ -139,7 +139,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	public Collection<T> select(T whereBean){
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
 		int start =sql.indexOf(" WHERE ");
-		sql = sql.substring(start, sql.length());
+		sql = sql.substring(0, start);
 		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
 		sql = sql.concat(" WHERE ").concat(where);
 		return (Collection<T>) genericJdbcDao.queryByBean(sql, clazz, whereBean);

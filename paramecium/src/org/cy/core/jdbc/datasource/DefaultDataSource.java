@@ -48,7 +48,7 @@ public class DefaultDataSource implements DataSource{
 				}
 				connection = DriverManager.getConnection(url, username, password);
 				connection.setAutoCommit(true);
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e);
 			}
