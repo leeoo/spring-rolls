@@ -62,7 +62,7 @@ public class DMLFormatter{
 	static final String indentString = "    ";
 	static final String initial = "\n    ";
 
-	public static String format(String source) {
+	public static String format(final String source) {
 		return new FormatProcess( source ).perform();
 	}
 

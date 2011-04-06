@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
  */
 public class DDLFormatter{
 	
-	public static String format(String sql) {
+	public static String format(final String sql) {
 		if ( sql.toLowerCase().startsWith( "create table" ) ) {
 			return formatCreateTable( sql );
 		}
