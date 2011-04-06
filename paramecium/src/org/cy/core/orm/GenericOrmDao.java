@@ -26,8 +26,8 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	/**
 	 * 默认构造方法会自动加载事务线程
 	 */
-	public GenericOrmDao(Class<T> clazz){
-		genericJdbcDao = new GenericJdbcDao();
+	public GenericOrmDao(final String dataSourceName,Class<T> clazz){
+		genericJdbcDao = new GenericJdbcDao(dataSourceName);
 		this.clazz = clazz;
 	}
 
@@ -35,8 +35,8 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * 该构造方法需要手动控制事务
 	 * @param connection
 	 */
-	public GenericOrmDao(Connection connection,Class<T> clazz) {
-		genericJdbcDao = new GenericJdbcDao(connection);
+	public GenericOrmDao(final String dataSourceName,final Connection connection,Class<T> clazz) {
+		genericJdbcDao = new GenericJdbcDao(dataSourceName,connection);
 		this.clazz = clazz;
 	}
 

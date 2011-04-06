@@ -8,6 +8,8 @@ import java.util.Map;
 import org.cy.core.jdbc.dialect.Page;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
+import org.cy.core.transaction.Transaction;
+import org.cy.core.transaction.TransactionManager;
 
 /**
  * 功能描述(Description):<br><b>
@@ -29,6 +31,20 @@ public class GenericJdbcDao {
 	 */
 	public GenericJdbcDao(final String dataSourceName,final Connection connection){
 		this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(dataSourceName,connection);
+	}
+	
+	/**
+	 * 默认构造方法会自动加载事务线程
+	 * @param connection
+	 */
+	public GenericJdbcDao(final String dataSourceName){
+		Transaction transaction = TransactionManager.getCurrentTransaction(dataSourceName);
+		try {
+			this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(dataSourceName,transaction.getCurrentConnection());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.error(e);
+		}
 	}
 	
 	/**
