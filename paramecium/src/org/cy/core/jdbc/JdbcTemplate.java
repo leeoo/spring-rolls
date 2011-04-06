@@ -1,5 +1,6 @@
 package org.cy.core.jdbc;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
@@ -28,7 +29,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 结果集列表
 	 * @throws SQLException
 	 */
-	public Collection<Map<String, Object>> query(final String sql) throws SQLException ;
+	public Collection<Map<String, Object>> query(final Connection connection,final String sql) throws SQLException ;
 	
 	/**
 	 * 执行无参数selectSQL语句，数据以bean装载
@@ -37,7 +38,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 结果集列表
 	 * @throws SQLException
 	 */
-	public Collection<?> query(final String sql,Class<?> clazz) throws SQLException ;
+	public Collection<?> query(final Connection connection,final String sql,Class<?> clazz) throws SQLException ;
 	
 	/**
 	 * 带参数selectSQL语句,参数顺序应与?对应,例如：select * from table where id>? and id<?
@@ -46,7 +47,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<Map<String, Object>> queryByArray(final String sql,Object... arrayParams) throws SQLException ;
+	public Collection<Map<String, Object>> queryByArray(final Connection connection,final String sql,Object... arrayParams) throws SQLException ;
 	
 	/**
 	 * 带参数selectSQL语句,数据以bean装载,参数顺序应与?对应,例如：select * from table where id>? and id<?
@@ -56,7 +57,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<?> queryByArray(final String sql,Class<?> clazz,Object... arrayParams) throws SQLException ;
+	public Collection<?> queryByArray(final Connection connection,final String sql,Class<?> clazz,Object... arrayParams) throws SQLException ;
 	
 	/**
 	 * 带参数selectSQL语句，:冒号后变量对应map中的key名称，区分大小写,例如：select * from table where id>:id and name=:name
@@ -65,7 +66,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<Map<String, Object>> queryByMap(final String sql,Map<String, Object> mapParams) throws SQLException ;
+	public Collection<Map<String, Object>> queryByMap(final Connection connection,final String sql,Map<String, Object> mapParams) throws SQLException ;
 	
 	/**
 	 *  带参数selectSQL语句，:冒号后变量对应map中的key名称，区分大小写,例如：select * from table where id>:id and name=:name
@@ -75,7 +76,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<?> queryByMap(final String sql,Class<?> clazz,Map<String, Object> mapParams) throws SQLException ;
+	public Collection<?> queryByMap(final Connection connection,final String sql,Class<?> clazz,Map<String, Object> mapParams) throws SQLException ;
 	
 	/**
 	 * 带参数selectSQL语句，:冒号后变量对应bean中的属性名称，区分大小写,例如：select * from table where id>:id and name=:name
@@ -85,7 +86,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<?> queryByBean(final String sql,Class<?> clazz,Object beanParams) throws SQLException ;
+	public Collection<?> queryByBean(final Connection connection,final String sql,Class<?> clazz,Object beanParams) throws SQLException ;
 	
 	/**
 	 * 执行无参数selectSQL语句，返回唯一结果
@@ -93,7 +94,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 唯一结果集
 	 * @throws SQLException
 	 */
-	public Map<String, Object> queryUnique(final String sql) throws SQLException ;
+	public Map<String, Object> queryUnique(final Connection connection,final String sql) throws SQLException ;
 
 	/**
 	 * 执行无参数selectSQL语句，返回唯一结果
@@ -101,7 +102,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 唯一结果集
 	 * @throws SQLException
 	 */
-	public Object queryUnique(final String sql,Class<?> clazz) throws SQLException ;
+	public Object queryUnique(final Connection connection,final String sql,Class<?> clazz) throws SQLException ;
 	
 	/**
 	 * 执行带参数参数selectSQL语句，返回唯一结果,参数顺序应与?对应,例如：select * from table where id>? and id<?
@@ -109,7 +110,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 唯一结果集
 	 * @throws SQLException
 	 */
-	public Map<String, Object> queryUniqueByArray(final String sql,Object... arrayParams) throws SQLException ;
+	public Map<String, Object> queryUniqueByArray(final Connection connection,final String sql,Object... arrayParams) throws SQLException ;
 	
 	/**
 	 * 执行带参数参数selectSQL语句，返回唯一结果,参数顺序应与?对应,例如：select * from table where id>? and id<?
@@ -119,7 +120,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueByArray(final String sql,Class<?> clazz,Object... arrayParams) throws SQLException ;
+	public Object queryUniqueByArray(final Connection connection,final String sql,Class<?> clazz,Object... arrayParams) throws SQLException ;
 	
 	/**
 	 * 执行带参数参数selectSQL语句，返回唯一结果,参数顺序应与?对应,例如：select * from table where id>? and id<?
@@ -129,7 +130,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueByBean(final String sql,Class<?> clazz,Object beanParams) throws SQLException ;
+	public Object queryUniqueByBean(final Connection connection,final String sql,Class<?> clazz,Object beanParams) throws SQLException ;
 	
 	/**
 	 * 执行带参数参数selectSQL语句，返回唯一结果.:冒号后变量对应map中的key名称，区分大小写,例如：select * from table where id>:id and name=:name
@@ -137,7 +138,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 唯一结果集
 	 * @throws SQLException
 	 */
-	public Map<String, Object> queryUniqueByMap(final String sql,Map<String, Object> mapParams) throws SQLException ;
+	public Map<String, Object> queryUniqueByMap(final Connection connection,final String sql,Map<String, Object> mapParams) throws SQLException ;
 	
 	/**
 	 * 获得唯一值，如select count(1) from table;
@@ -145,7 +146,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueColumnValue(final String sql) throws SQLException ;
+	public Object queryUniqueColumnValue(final Connection connection,final String sql) throws SQLException ;
 
 	/**
 	 * 获得唯一值，如select count(1) from table where date>? and date<?;
@@ -153,7 +154,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueColumnValueByArray(final String sql,Object... arrayParams) throws SQLException ;
+	public Object queryUniqueColumnValueByArray(final Connection connection,final String sql,Object... arrayParams) throws SQLException ;
 
 	/**
 	 * 获得唯一值，如select count(1) from table where date>:startDate and date<:entDate;
@@ -161,7 +162,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueColumnValueByMap(final String sql,Map<String, Object> mapParams) throws SQLException ;
+	public Object queryUniqueColumnValueByMap(final Connection connection,final String sql,Map<String, Object> mapParams) throws SQLException ;
 
 	/**
 	 * 获得唯一值，如select count(1) from table where date>:startDate and date<:entDate;
@@ -169,7 +170,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueColumnValueByBean(final String sql,Object beanParams) throws SQLException ;
+	public Object queryUniqueColumnValueByBean(final Connection connection,final String sql,Object beanParams) throws SQLException ;
 	
 	
 	/**
@@ -177,7 +178,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @param sql
 	 * @throws SQLException
 	 */
-	public void executeDDL(final String sql) throws SQLException ;
+	public void executeDDL(final Connection connection,final String sql) throws SQLException ;
 	
 	/**
 	 * 执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句
@@ -185,7 +186,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public int executeDML(final String sql) throws SQLException ;
+	public int executeDML(final Connection connection,final String sql) throws SQLException ;
 	
 	/**
 	 * 对带有自增列的表插入INSERT操作，并获得自增值
@@ -193,7 +194,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Number insertGetGeneratedKey(final String sql) throws SQLException ;
+	public Number insertGetGeneratedKey(final Connection connection,final String sql) throws SQLException ;
 	
 	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,例如:INSERT INTO table(id,name) VALUES(?,?)
@@ -201,7 +202,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public int executeDMLByArray(final String sql,Object... arrayParams) throws SQLException ;
+	public int executeDMLByArray(final Connection connection,final String sql,Object... arrayParams) throws SQLException ;
 	
 	/**
 	 * 对带有自增列的表插入INSERT操作，并获得自增值
@@ -209,7 +210,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Number insertGetGeneratedKeyByArray(final String sql,Object... arrayParams) throws SQLException;
+	public Number insertGetGeneratedKeyByArray(final Connection connection,final String sql,Object... arrayParams) throws SQLException;
 	
 	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,参数形式为:冒号,例如:INSERT INTO table(id,name) VALUES(:id,:name)
@@ -217,7 +218,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public int executeDMLByMap(final String sql,Map<String, Object> mapParams) throws SQLException ;
+	public int executeDMLByMap(final Connection connection,final String sql,Map<String, Object> mapParams) throws SQLException ;
 	
 	/**
 	 * 对带有自增列的表插入INSERT操作，并获得自增值
@@ -225,7 +226,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Number insertGetGeneratedKeyByMap(final String sql,Map<String, Object> mapParams) throws SQLException ;
+	public Number insertGetGeneratedKeyByMap(final Connection connection,final String sql,Map<String, Object> mapParams) throws SQLException ;
 	
 	/**
 	 * 带参数执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句,参数形式为:冒号,例如:INSERT INTO table(id,name) VALUES(:id,:name)
@@ -233,7 +234,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public int executeDMLByBean(final String sql,Object bean) throws SQLException ;
+	public int executeDMLByBean(final Connection connection,final String sql,Object bean) throws SQLException ;
 	
 	/**
 	 * 对带有自增列的表插入INSERT操作，并获得自增值
@@ -241,7 +242,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Number insertGetGeneratedKeyByBean(final String sql,Object bean) throws SQLException ;
+	public Number insertGetGeneratedKeyByBean(final Connection connection,final String sql,Object bean) throws SQLException ;
 	
 	/**
 	 * 批量执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句
@@ -249,7 +250,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数组
 	 * @throws SQLException
 	 */
-	public int[] executeBatchDML(final String... sqls) throws SQLException ;
+	public int[] executeBatchDML(final Connection connection,final String... sqls) throws SQLException ;
 	
 	/**
 	 * 批量执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句
@@ -257,7 +258,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return 受影响的条目数组
 	 * @throws SQLException
 	 */
-	public int[] executeBatchDML(final Collection<String> sqls) throws SQLException ;
+	public int[] executeBatchDML(final Connection connection,final Collection<String> sqls) throws SQLException ;
 	
 	/**
 	 * 批量执行带参数除select以外的DML语句,如：INSERT,UPDATE,DELETE语句
@@ -266,7 +267,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public int[] executeBatchDMLByMaps(final String sql,Collection<Map<String, Object>> mapParamsList) throws SQLException ;
+	public int[] executeBatchDMLByMaps(final Connection connection,final String sql,Collection<Map<String, Object>> mapParamsList) throws SQLException ;
 	
 	/**
 	 * 批量执行带参数除select以外的DML语句,如：INSERT,UPDATE,DELETE语句
@@ -275,14 +276,14 @@ public interface JdbcTemplate extends Dialect{
 	 * @return
 	 * @throws SQLException
 	 */
-	public int[] executeBatchDMLByBeans(final String sql,Collection<?> beanParamsList) throws SQLException ;
+	public int[] executeBatchDMLByBeans(final Connection connection,final String sql,Collection<?> beanParamsList) throws SQLException ;
 	
 	/**
 	 * 调用存储过程;例如：" {call 过程名}"
 	 * @param sql
 	 * @throws SQLException
 	 */
-	public void call(final String sql) throws SQLException ;
+	public void call(final Connection connection,final String sql) throws SQLException ;
 
 	
 	/**
@@ -291,7 +292,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @param inParams IN参数集合=?问号的顺序
 	 * @throws SQLException
 	 */
-	public void call(final String sql,Object... inParams) throws SQLException ;
+	public void call(final Connection connection,final String sql,Object... inParams) throws SQLException ;
 	
 	/**
 	 * 调用存储过程;例如：" {? = call 过程名(?,?)}"
@@ -299,7 +300,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @param outParams OUT参数集合=?问号的顺序,详见 java.sql.Types;
 	 * @throws SQLException
 	 */
-	public Collection<?> call(final String sql,int... outParams) throws SQLException ;
+	public Collection<?> call(final Connection connection,final String sql,int... outParams) throws SQLException ;
 
 	/**
 	 * 调用存储过程;例如：" {? = call 过程名(?,?)}"
@@ -308,6 +309,6 @@ public interface JdbcTemplate extends Dialect{
 	 * @param inParams IN参数集合=?问号的顺序
 	 * @throws SQLException
 	 */
-	public Map<String,Object> call(final String sql,Map<String,Object> inParams,Map<String,Integer> outParams) throws SQLException ;
+	public Map<String,Object> call(final Connection connection,final String sql,Map<String,Object> inParams,Map<String,Integer> outParams) throws SQLException ;
 
 }

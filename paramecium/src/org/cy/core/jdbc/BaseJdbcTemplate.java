@@ -29,21 +29,15 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	
 	private static Log logger = LoggerFactory.getLogger();
 
-	private Connection connection;
-	
 	private Boolean isManyTable = new Boolean(false);
 
-	public BaseJdbcTemplate(final Connection connection) {
-		this.connection = connection;
-	}
-	
 	/**
 	 * 执行无参数selectSQL语句,数据以Map装载
 	 * @param sql
 	 * @return 结果集列表
 	 * @throws SQLException
 	 */
-	public Collection<Map<String, Object>> query(final String sql) throws SQLException {
+	public Collection<Map<String, Object>> query(final Connection connection,final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql);
 		Collection<Map<String, Object>> collection = JdbcUtils.getCollection(resultSet,this.isManyTable);
@@ -59,7 +53,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 结果集列表
 	 * @throws SQLException
 	 */
-	public Collection<?> query(final String sql,Class<?> clazz) throws SQLException {
+	public Collection<?> query(final Connection connection,final String sql,Class<?> clazz) throws SQLException {
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(sql);
 		Collection<?> collection = JdbcUtils.getCollection(resultSet,clazz);
@@ -75,9 +69,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<Map<String, Object>> queryByArray(final String sql,Object... arrayParams) throws SQLException {
+	public Collection<Map<String, Object>> queryByArray(final Connection connection,final String sql,Object... arrayParams) throws SQLException {
 		if(arrayParams==null||arrayParams.length==0){
-			return query(sql);
+			return query(connection,sql);
 		}
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
 		int i = 1;
@@ -99,9 +93,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<?> queryByArray(final String sql,Class<?> clazz,Object... arrayParams) throws SQLException {
+	public Collection<?> queryByArray(final Connection connection,final String sql,Class<?> clazz,Object... arrayParams) throws SQLException {
 		if(arrayParams==null||arrayParams.length==0){
-			return query(sql,clazz);
+			return query(connection,sql,clazz);
 		}
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
 		int i = 1;
@@ -122,9 +116,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<Map<String, Object>> queryByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
+	public Collection<Map<String, Object>> queryByMap(final Connection connection,final String sql,Map<String, Object> mapParams) throws SQLException {
 		if(mapParams==null||mapParams.size()==0){
-			return query(sql);
+			return query(connection,sql);
 		}
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
@@ -148,9 +142,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<?> queryByMap(final String sql,Class<?> clazz,Map<String, Object> mapParams) throws SQLException {
+	public Collection<?> queryByMap(final Connection connection,final String sql,Class<?> clazz,Map<String, Object> mapParams) throws SQLException {
 		if(mapParams==null||mapParams.size()==0){
-			return query(sql,clazz);
+			return query(connection,sql,clazz);
 		}
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
@@ -174,9 +168,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<?> queryByBean(final String sql,Class<?> clazz,Object beanParams) throws SQLException {
+	public Collection<?> queryByBean(final Connection connection,final String sql,Class<?> clazz,Object beanParams) throws SQLException {
 		if(beanParams==null){
-			return query(sql,clazz);
+			return query(connection,sql,clazz);
 		}
 		Map<String, Object> mapParams = BeanUitls.bean2Map(beanParams);
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
@@ -199,8 +193,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 唯一结果集
 	 * @throws SQLException
 	 */
-	public Map<String, Object> queryUnique(final String sql) throws SQLException {
-		return query(sql).iterator().next();
+	public Map<String, Object> queryUnique(final Connection connection,final String sql) throws SQLException {
+		return query(connection,sql).iterator().next();
 	}
 
 	/**
@@ -209,8 +203,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 唯一结果集
 	 * @throws SQLException
 	 */
-	public Object queryUnique(final String sql,Class<?> clazz) throws SQLException {
-		return query(sql, clazz).iterator().next();
+	public Object queryUnique(final Connection connection,final String sql,Class<?> clazz) throws SQLException {
+		return query(connection,sql, clazz).iterator().next();
 	}
 	
 	/**
@@ -219,8 +213,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 唯一结果集
 	 * @throws SQLException
 	 */
-	public Map<String, Object> queryUniqueByArray(final String sql,Object... arrayParams) throws SQLException {
-		return queryByArray(sql, arrayParams).iterator().next();
+	public Map<String, Object> queryUniqueByArray(final Connection connection,final String sql,Object... arrayParams) throws SQLException {
+		return queryByArray(connection,sql, arrayParams).iterator().next();
 	}
 	
 	/**
@@ -231,8 +225,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueByArray(final String sql,Class<?> clazz,Object... arrayParams) throws SQLException {
-		return queryByArray(sql,clazz ,arrayParams).iterator().next();
+	public Object queryUniqueByArray(final Connection connection,final String sql,Class<?> clazz,Object... arrayParams) throws SQLException {
+		return queryByArray(connection,sql,clazz ,arrayParams).iterator().next();
 	}
 	
 	/**
@@ -243,8 +237,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueByBean(final String sql,Class<?> clazz,Object beanParams) throws SQLException {
-		return queryByBean(sql,clazz ,beanParams).iterator().next();
+	public Object queryUniqueByBean(final Connection connection,final String sql,Class<?> clazz,Object beanParams) throws SQLException {
+		return queryByBean(connection,sql,clazz ,beanParams).iterator().next();
 	}
 	
 	/**
@@ -253,8 +247,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 唯一结果集
 	 * @throws SQLException
 	 */
-	public Map<String, Object> queryUniqueByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
-		return queryByMap(sql,mapParams).iterator().next();
+	public Map<String, Object> queryUniqueByMap(final Connection connection,final String sql,Map<String, Object> mapParams) throws SQLException {
+		return queryByMap(connection,sql,mapParams).iterator().next();
 	}
 	
 	/**
@@ -263,8 +257,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueColumnValue(final String sql) throws SQLException {
-		Map<String,Object> values = queryUnique(sql);
+	public Object queryUniqueColumnValue(final Connection connection,final String sql) throws SQLException {
+		Map<String,Object> values = queryUnique(connection,sql);
 		return values.entrySet().iterator().next().getValue();
 	}
 
@@ -274,8 +268,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueColumnValueByArray(final String sql,Object... arrayParams) throws SQLException {
-		Map<String,Object> values = queryUniqueByArray(sql, arrayParams);
+	public Object queryUniqueColumnValueByArray(final Connection connection,final String sql,Object... arrayParams) throws SQLException {
+		Map<String,Object> values = queryUniqueByArray(connection,sql, arrayParams);
 		return values.entrySet().iterator().next().getValue();
 	}
 
@@ -285,8 +279,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueColumnValueByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
-		Map<String,Object> values = queryUniqueByMap(sql, mapParams);
+	public Object queryUniqueColumnValueByMap(final Connection connection,final String sql,Map<String, Object> mapParams) throws SQLException {
+		Map<String,Object> values = queryUniqueByMap(connection,sql, mapParams);
 		return values.entrySet().iterator().next().getValue();
 	}
 
@@ -296,8 +290,8 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object queryUniqueColumnValueByBean(final String sql,Object beanParams) throws SQLException {
-		Map<String,Object> values = queryUniqueByMap(sql, BeanUitls.bean2Map(beanParams));
+	public Object queryUniqueColumnValueByBean(final Connection connection,final String sql,Object beanParams) throws SQLException {
+		Map<String,Object> values = queryUniqueByMap(connection,sql, BeanUitls.bean2Map(beanParams));
 		return values.entrySet().iterator().next().getValue();
 	}
 	
@@ -307,7 +301,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @param sql
 	 * @throws SQLException
 	 */
-	public void executeDDL(final String sql) throws SQLException {
+	public void executeDDL(final Connection connection,final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		statement.execute(sql);
 		logger.debug(JdbcUtils.getNativeDDLSql(sql));
@@ -320,7 +314,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public int executeDML(final String sql) throws SQLException {
+	public int executeDML(final Connection connection,final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		int result = statement.executeUpdate(sql);
 		logger.debug(JdbcUtils.getNativeDMLSql(sql));
@@ -334,7 +328,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Number insertGetGeneratedKey(final String sql) throws SQLException {
+	public Number insertGetGeneratedKey(final Connection connection,final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
 		statement.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
 		ResultSet resultSet = statement.getGeneratedKeys();
@@ -351,9 +345,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public int executeDMLByArray(final String sql,Object... arrayParams) throws SQLException {
+	public int executeDMLByArray(final Connection connection,final String sql,Object... arrayParams) throws SQLException {
 		if(arrayParams==null||arrayParams.length==0){
-			return executeDML(sql);
+			return executeDML(connection,sql);
 		}
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
 		int i = 1;
@@ -372,9 +366,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Number insertGetGeneratedKeyByArray(final String sql,Object... arrayParams) throws SQLException {
+	public Number insertGetGeneratedKeyByArray(final Connection connection,final String sql,Object... arrayParams) throws SQLException {
 		if(arrayParams==null||arrayParams.length==0){
-			return insertGetGeneratedKey(sql);
+			return insertGetGeneratedKey(connection,sql);
 		}
 		PreparedStatement preparedStatement = connection.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
 		int i = 1;
@@ -396,9 +390,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public int executeDMLByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
+	public int executeDMLByMap(final Connection connection,final String sql,Map<String, Object> mapParams) throws SQLException {
 		if(mapParams==null||mapParams.size()==0){
-			return executeDML(sql);
+			return executeDML(connection,sql);
 		}
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
@@ -419,9 +413,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Number insertGetGeneratedKeyByMap(final String sql,Map<String, Object> mapParams) throws SQLException {
+	public Number insertGetGeneratedKeyByMap(final Connection connection,final String sql,Map<String, Object> mapParams) throws SQLException {
 		if(mapParams==null||mapParams.size()==0){
-			return insertGetGeneratedKey(sql);
+			return insertGetGeneratedKey(connection,sql);
 		}
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
@@ -445,9 +439,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public int executeDMLByBean(final String sql,Object bean) throws SQLException {
+	public int executeDMLByBean(final Connection connection,final String sql,Object bean) throws SQLException {
 		if(bean==null){
-			return executeDML(sql);
+			return executeDML(connection,sql);
 		}
 		Map<String, Object> mapParams = BeanUitls.bean2Map(bean);
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
@@ -469,9 +463,9 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数
 	 * @throws SQLException
 	 */
-	public Number insertGetGeneratedKeyByBean(final String sql,Object bean) throws SQLException {
+	public Number insertGetGeneratedKeyByBean(final Connection connection,final String sql,Object bean) throws SQLException {
 		if(bean==null){
-			return insertGetGeneratedKey(sql);
+			return insertGetGeneratedKey(connection,sql);
 		}
 		Map<String, Object> mapParams = BeanUitls.bean2Map(bean);
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
@@ -496,7 +490,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数组
 	 * @throws SQLException
 	 */
-	public int[] executeBatchDML(final String... sqls) throws SQLException {
+	public int[] executeBatchDML(final Connection connection,final String... sqls) throws SQLException {
 		Statement statement = connection.createStatement();
 		for(String sql:sqls){
 			statement.addBatch(sql);
@@ -513,7 +507,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return 受影响的条目数组
 	 * @throws SQLException
 	 */
-	public int[] executeBatchDML(final Collection<String> sqls) throws SQLException {
+	public int[] executeBatchDML(final Connection connection,final Collection<String> sqls) throws SQLException {
 		Statement statement = connection.createStatement();
 		for(String sql:sqls){
 			statement.addBatch(sql);
@@ -531,7 +525,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public int[] executeBatchDMLByMaps(final String sql,Collection<Map<String, Object>> mapParamsList) throws SQLException {
+	public int[] executeBatchDMLByMaps(final Connection connection,final String sql,Collection<Map<String, Object>> mapParamsList) throws SQLException {
 		Collection<Map<Integer, Object>> values = JdbcUtils.getPreparedStatementSql(sql, mapParamsList);
 		String preparedSql = (String) (values.iterator().next().get(-19820206));
 		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
@@ -555,7 +549,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @return
 	 * @throws SQLException
 	 */
-	public int[] executeBatchDMLByBeans(final String sql,Collection<?> beanParamsList) throws SQLException {
+	public int[] executeBatchDMLByBeans(final Connection connection,final String sql,Collection<?> beanParamsList) throws SQLException {
 		Collection<Map<String, Object>> mapParamsList = new ArrayList<Map<String,Object>>();
 		for(Object bean : beanParamsList){
 			mapParamsList.add(BeanUitls.bean2Map(bean));
@@ -581,7 +575,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @param sql
 	 * @throws SQLException
 	 */
-	public void call(final String sql) throws SQLException {
+	public void call(final Connection connection,final String sql) throws SQLException {
 		CallableStatement callableStatement = connection.prepareCall(sql);
 		callableStatement.execute();
 		logger.debug(JdbcUtils.getNativeDMLSql(callableStatement.toString()));
@@ -595,7 +589,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @param inParams IN参数集合=?问号的顺序
 	 * @throws SQLException
 	 */
-	public void call(final String sql,Object... inParams) throws SQLException {
+	public void call(final Connection connection,final String sql,Object... inParams) throws SQLException {
 		CallableStatement callableStatement = connection.prepareCall(sql);
 		int i = 1;
 		for(Object inParam:inParams){
@@ -612,7 +606,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @param outParams OUT参数集合=?问号的顺序,详见 java.sql.Types;
 	 * @throws SQLException
 	 */
-	public Collection<?> call(final String sql,int... outParams) throws SQLException {
+	public Collection<?> call(final Connection connection,final String sql,int... outParams) throws SQLException {
 		CallableStatement callableStatement = connection.prepareCall(sql);
 		int i = 1;
 		for(int outParam:outParams){
@@ -635,7 +629,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @param inParams IN参数集合=?问号的顺序
 	 * @throws SQLException
 	 */
-	public Map<String,Object> call(final String sql,Map<String,Object> inParams,Map<String,Integer> outParams) throws SQLException {
+	public Map<String,Object> call(final Connection connection,final String sql,Map<String,Object> inParams,Map<String,Integer> outParams) throws SQLException {
 		CallableStatement callableStatement = connection.prepareCall(sql);
 		for(String outParam:outParams.keySet()){
 			callableStatement.registerOutParameter(outParam, outParams.get(outParam));

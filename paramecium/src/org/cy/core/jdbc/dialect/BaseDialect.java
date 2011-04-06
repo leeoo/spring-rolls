@@ -16,10 +16,6 @@ import org.cy.core.jdbc.BaseJdbcTemplate;
  */
 public abstract class BaseDialect extends BaseJdbcTemplate{
 	
-	public BaseDialect(final Connection connection) {
-		super(connection);
-	}
-
 	/**
 	 * 获得分页语句
 	 * @param sql
@@ -28,57 +24,57 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	 */
 	public abstract String getSql(final String sql, Page page);
 	
-	public Page queryPageBeansByArray(final String sql, Class<?> clazz, Page page, Object... arrayParameters) throws SQLException {
+	public Page queryPageBeansByArray(final Connection connection,final String sql, Class<?> clazz, Page page, Object... arrayParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByArray(getCountSql(sql), arrayParameters);
+			count = (Long) queryUniqueColumnValueByArray(connection,getCountSql(sql), arrayParameters);
 			page.setTotalCount((int) count);
 		}
-		Collection<?> list = queryByArray(getSql(sql, page), clazz, arrayParameters);
+		Collection<?> list = queryByArray(connection,getSql(sql, page), clazz, arrayParameters);
 		page.setResult(list);
 		return page;
 	}
 
-	public Page queryPageMapsByArray(final String sql, Page page,Object... arrayParameters) throws SQLException {
+	public Page queryPageMapsByArray(final Connection connection,final String sql, Page page,Object... arrayParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByArray(getCountSql(sql), arrayParameters);
+			count = (Long) queryUniqueColumnValueByArray(connection,getCountSql(sql), arrayParameters);
 			page.setTotalCount((int) count);
 		}
-		Collection<?> list = queryByArray(getSql(sql, page), arrayParameters);
+		Collection<?> list = queryByArray(connection,getSql(sql, page), arrayParameters);
 		page.setResult(list);
 		return page;
 	}
 
-	public Page queryPageBeansByBean(String sql, Class<?> clazz, Page page, Object beanParameters) throws SQLException {
+	public Page queryPageBeansByBean(final Connection connection,final String sql, Class<?> clazz, Page page, Object beanParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByBean(getCountSql(sql), beanParameters);
+			count = (Long) queryUniqueColumnValueByBean(connection,getCountSql(sql), beanParameters);
 			page.setTotalCount((int) count);
 		}
-		Collection<?> list = queryByBean(getSql(sql, page), clazz, beanParameters);
+		Collection<?> list = queryByBean(connection,getSql(sql, page), clazz, beanParameters);
 		page.setResult(list);
 		return page;
 	}
 
-	public Page queryPageBeansByMap(String sql, Class<?> clazz, Page page, Map<String, Object> mapParameters) throws SQLException {
+	public Page queryPageBeansByMap(final Connection connection,final String sql, Class<?> clazz, Page page, Map<String, Object> mapParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByMap(getCountSql(sql), mapParameters);
+			count = (Long) queryUniqueColumnValueByMap(connection,getCountSql(sql), mapParameters);
 			page.setTotalCount((int) count);
 		}
-		Collection<?> list = queryByMap(getSql(sql, page), clazz, mapParameters);
+		Collection<?> list = queryByMap(connection,getSql(sql, page), clazz, mapParameters);
 		page.setResult(list);
 		return page;
 	}
 
-	public Page queryPageMapsByMap(String sql, Page page, Map<String, Object> mapParameters) throws SQLException {
+	public Page queryPageMapsByMap(final Connection connection,final String sql, Page page, Map<String, Object> mapParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByMap(getCountSql(sql), mapParameters);
+			count = (Long) queryUniqueColumnValueByMap(connection,getCountSql(sql), mapParameters);
 			page.setTotalCount((int) count);
 		}
-		Collection<?> list = queryByMap(getSql(sql, page), mapParameters);
+		Collection<?> list = queryByMap(connection,getSql(sql, page), mapParameters);
 		page.setResult(list);
 		return page;
 	}

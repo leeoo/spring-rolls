@@ -1,7 +1,6 @@
 package org.cy.core.orm;
 
 import java.io.Serializable;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 
@@ -25,15 +24,6 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	public GenericOrmDao(final String dataSourceName,Class<T> clazz){
 		genericJdbcDao = new GenericJdbcDao(dataSourceName);
-		this.clazz = clazz;
-	}
-
-	/**
-	 * 该构造方法需要手动控制事务
-	 * @param connection
-	 */
-	public GenericOrmDao(final String dataSourceName,final Connection connection,Class<T> clazz) {
-		genericJdbcDao = new GenericJdbcDao(dataSourceName,connection);
 		this.clazz = clazz;
 	}
 
