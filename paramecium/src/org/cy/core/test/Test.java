@@ -26,11 +26,12 @@ public class Test{
 			GenericOrmDao<Test, Integer> ormDao1 = new GenericOrmDao<Test, Integer>("ds1",Test.class);
 			GenericOrmDao<Test, Integer> ormDao2 = new GenericOrmDao<Test, Integer>("ds2",Test.class);
 			Test test = new Test();
-			test.setInfo("测试一下分布式");
+			test.setInfo("出错了");
 			test.setLogDate(new Date());
 			ormDao1.insert(test);
 			ormDao2.insert(test);
-			//int i = 0 / 0;
+			int i = 0 / 0;
+			System.out.println(i);
 		}catch (Exception e) {
 			TransactionManager.globalException();
 		}
