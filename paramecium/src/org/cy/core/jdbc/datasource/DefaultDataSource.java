@@ -18,8 +18,8 @@ import org.cy.core.log.LoggerFactory;
  * <br>项目名称(Project Name): <b>paramecium</b>
  * <br>包及类名(Package Class): <b>org.cy.core.jdbc.datasource.DefaultDataSource.java</b>
  */
-public abstract class DefaultDataSource implements DataSource{
-	
+public class DefaultDataSource implements DataSource{
+	private static boolean isInit = false;
 	private final static Log logger = LoggerFactory.getLogger();
 	static PrintWriter printWriter;
 	static String driverClassName;
@@ -31,6 +31,15 @@ public abstract class DefaultDataSource implements DataSource{
 		Connection connection = null;
 		if(url!=null&&username!=null){
 			try {
+				if(!isInit){
+					try {
+						Class.forName(driverClassName);
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+						logger.error(e);
+					}
+					isInit= true;
+				}
 				connection = DriverManager.getConnection(url, username, password);
 				connection.setAutoCommit(true);
 			} catch (SQLException e) {
