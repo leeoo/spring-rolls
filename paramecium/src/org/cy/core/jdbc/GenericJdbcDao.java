@@ -8,7 +8,6 @@ import java.util.Map;
 import org.cy.core.jdbc.dialect.Page;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
-import org.cy.core.transaction.TransactionManager;
 
 /**
  * 功能描述(Description):<br><b>
@@ -25,23 +24,11 @@ public class GenericJdbcDao {
 	private JdbcTemplate jdbcTemplate;
 	
 	/**
-	 * 默认构造方法会自动加载事务线程
-	 */
-	public GenericJdbcDao(){
-		try {
-			this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(TransactionManager.getCurrentTransaction().getCurrentConnection());
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error(e);
-		}
-	}
-	
-	/**
 	 * 该构造方法需要手动控制事务
 	 * @param connection
 	 */
-	public GenericJdbcDao(final Connection connection){
-		this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(connection);
+	public GenericJdbcDao(final String dataSourceName,final Connection connection){
+		this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(dataSourceName,connection);
 	}
 	
 	/**

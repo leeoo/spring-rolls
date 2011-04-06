@@ -1,11 +1,9 @@
 package org.cy.core.jdbc;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.cy.core.jdbc.datasource.MultiDataSourceFactory;
 import org.cy.core.jdbc.dialect.Db2Dialect;
 import org.cy.core.jdbc.dialect.DerbyDialect;
 import org.cy.core.jdbc.dialect.H2Dialect;
@@ -52,19 +50,6 @@ public class JdbcTemplateFactory {
 			return new Db2Dialect(connection);
 		}else if(dbType.equals("informix")){
 			return new InformixDialect(connection);
-		}
-		return null;
-	}
-	
-	public static JdbcTemplate getJdbcTemplate(Connection connection){
-		return getJdbcTemplate(MultiDataSourceFactory.getDataSourceNames().iterator().next(), connection);
-	}
-
-	public static JdbcTemplate getJdbcTemplate(String dataSourceName){
-		try {
-			return getJdbcTemplate(dataSourceName, MultiDataSourceFactory.getDataSource(dataSourceName).getConnection());
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return null;
 	}
