@@ -2,7 +2,6 @@ package org.cy.core.test;
 
 import java.util.Date;
 
-import org.cy.core.jdbc.dialect.Page;
 import org.cy.core.orm.GenericOrmDao;
 import org.cy.core.orm.annotation.Column;
 import org.cy.core.orm.annotation.Entity;
@@ -24,25 +23,15 @@ public class Test{
 	public static void main(String[] args) throws Exception {
 		TransactionManager.before();
 		try{
-			GenericOrmDao<Test, Integer> ormDao = new GenericOrmDao<Test, Integer>("ds1",Test.class);
-			/*Collection<Test> tests = new ArrayList<Test>();
-			for(int i=0;i<100;i++){
-				Test test = new Test();
-				test.setInfo("aaa"+i);
-				test.setLogDate(new Date());
-				tests.add(test);
-			}
-			ormDao.insert(tests);*/
+			GenericOrmDao<Test, Integer> ormDao1 = new GenericOrmDao<Test, Integer>("ds1",Test.class);
+			GenericOrmDao<Test, Integer> ormDao2 = new GenericOrmDao<Test, Integer>("ds2",Test.class);
 			Test test = new Test();
-			test.setInfo("aaa1");
-			Page page =new Page(5);
-			page.setPageNo(3);
-			page = ormDao.select(page,test);
-			for(Object test1:page.getResult()){
-				System.out.println(((Test)test1).getInfo());
-			}
+			test.setInfo("测试一下分布式");
+			test.setLogDate(new Date());
+			ormDao1.insert(test);
+			ormDao2.insert(test);
+			//int i = 0 / 0;
 		}catch (Exception e) {
-			e.printStackTrace();
 			TransactionManager.globalException();
 		}
 		TransactionManager.end();

@@ -32,13 +32,15 @@ public class TransactionManager {
 		return transactionMap.get(dataSourceName);
 	}
 	
+	/**
+	 * 设置全局出现异常
+	 */
 	public static void globalException() {
 		Map<String,Transaction> transactionMap = transactionThreadLocal.get();
 		if(transactionMap!=null){
 			for(Transaction transaction : transactionMap.values()){
 				transaction.setException();
 			}
-			transactionThreadLocal.remove();
 		}
 	}
 	
