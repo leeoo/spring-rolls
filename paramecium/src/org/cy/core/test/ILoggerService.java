@@ -1,10 +1,9 @@
 package org.cy.core.test;
 
-import java.sql.SQLException;
 
 public interface ILoggerService {
 
-	public void save(Logger logger) throws SQLException ;
-	public void delete(Integer pk) throws SQLException ;
+	public int save(Logger logger) throws Exception ;
+	public void delete(Integer pk) throws Exception ;
 	
 }

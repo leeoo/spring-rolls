@@ -12,9 +12,9 @@ public class Test{
 		Logger logger = new Logger();
 		logger.setInfo("第一个");
 		logger.setLogDate(new Date());
-		loggerService.save(logger);
+		System.out.println(loggerService.save(logger));
 		logger.setInfo("第四个");
-		loggerService.save(logger);
+		System.out.println(loggerService.save(logger));
 	}
 
 }
