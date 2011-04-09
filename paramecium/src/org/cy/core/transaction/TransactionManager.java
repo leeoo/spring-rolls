@@ -27,7 +27,7 @@ public class TransactionManager {
 	 * @throws SQLException
 	 */
 	public static Transaction getCurrentTransaction(final String dataSourceName) {
-		before();
+		begin();
 		Map<String,Transaction> transactionMap = transactionThreadLocal.get();
 		return transactionMap.get(dataSourceName);
 	}
@@ -48,7 +48,7 @@ public class TransactionManager {
 	 * 开启一段事务，收集所有配置的可用数据源
 	 * @throws SQLException
 	 */
-	public static void before() {
+	public static void begin() {
 		Map<String,Transaction> transactionMap = transactionThreadLocal.get();
 		if(transactionMap==null){
 			try {

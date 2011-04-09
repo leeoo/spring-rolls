@@ -37,7 +37,7 @@ public class TransactionProxy {
 		}
 		
 		public Object invoke(Object proxy, Method method, Object[] parms) throws Exception {
-			TransactionManager.before();
+			TransactionManager.begin();
 			Object result = null;
 			try{
 				result = method.invoke(service, parms);
