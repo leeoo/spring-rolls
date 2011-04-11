@@ -5,12 +5,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 /**
  * 功 能 描 述:<br>
- * 事务代理
+ * 事务自动代理
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2011-4-7下午03:58:54
- * <br>项 目 信 息:paramecium:org.cy.core.transaction.TransactionProxy.java
+ * <br>项 目 信 息:paramecium:org.cy.core.transaction.TransactionAutoProxy.java
  */
-public class TransactionProxy {
+public class TransactionAutoProxy {
 	
 	/**
 	 * 获得需要代理的service实例
