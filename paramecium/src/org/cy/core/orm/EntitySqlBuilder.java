@@ -11,6 +11,7 @@ import org.cy.core.orm.annotation.Column;
 import org.cy.core.orm.annotation.Entity;
 import org.cy.core.orm.annotation.NotUpdate;
 import org.cy.core.orm.annotation.PrimaryKey;
+import org.cy.core.orm.annotation.ReferenceColumn;
 import org.cy.core.orm.annotation.VirtualColumn;
 import org.cy.core.orm.annotation.PrimaryKey.AUTO_GENERATE_MODE;
 
@@ -205,6 +206,7 @@ public class EntitySqlBuilder {
 				try {
 					if(entity!=null){
 						Column column = field.getAnnotation(Column.class);
+						ReferenceColumn referenceColumn = field.getAnnotation(ReferenceColumn.class);
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 						if(primaryKey!=null&&wheres.isEmpty()){
 							if(column!=null&&!column.fieldName().isEmpty()){
@@ -217,6 +219,8 @@ public class EntitySqlBuilder {
 							columns.add(column.fieldName()+" "+field.getName());
 						}else if(column!=null&&column.fieldName().isEmpty()){
 							columns.add(BeanUitls.getDbFieldName(field.getName()));
+						}else if(referenceColumn!=null&&referenceColumn.subSelectSql()!=null&&!referenceColumn.subSelectSql().isEmpty()){
+							columns.add(referenceColumn.subSelectSql());
 						}
 					}
 				} catch (Exception e) {
