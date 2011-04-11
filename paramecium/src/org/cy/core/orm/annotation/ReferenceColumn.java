@@ -2,21 +2,26 @@ package org.cy.core.orm.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 /**
  * 功 能 描 述:<br>
- * 单一实体对应，包含ManyToone,oneToOne关系
+ * 声明该注解的字段通过标量子查询获取该字段值
  * <br>代 码 作 者:曹阳(CaoYang)
- * <br>开 发 日 期:2011-3-31下午04:59:20
- * <br>项 目 信 息:paramecium:org.cy.core.orm.annotation.OneToOne.java
+ * <br>开 发 日 期:2011-3-31下午04:49:08
+ * <br>项 目 信 息:paramecium:org.cy.core.orm.annotation.ReferenceColumn.java
  */
 @Documented
-@Inherited
 @Retention(RetentionPolicy.RUNTIME)    
 @Target(ElementType.FIELD)
-public @interface One {
-
+public @interface ReferenceColumn {
+	
+	/**
+	 * 标量子查询语句
+	 * @return
+	 */
+	public String subSelectSql();
+	
 }
