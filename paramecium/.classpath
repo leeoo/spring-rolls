@@ -25,5 +25,6 @@
 	<classpathentry kind="lib" path="server/lib/tomcat-util.jar"/>
 	<classpathentry kind="lib" path="server/lib/jstl-1.1.2.jar"/>
 	<classpathentry kind="lib" path="server/lib/standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="server/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
