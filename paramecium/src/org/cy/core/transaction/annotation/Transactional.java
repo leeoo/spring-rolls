@@ -21,8 +21,21 @@ import java.sql.Connection;
 @Target({ElementType.METHOD,ElementType.TYPE})
 public @interface Transactional {
 	
+	/**
+	 * 只读设置，默认为可写
+	 * @return
+	 */
 	boolean readOnly() default false;
 	
+	/**
+	 * 设置书事务级别,如果数据库为Mysql并开启BinLog，需要把默认值改为TRANSACTION_REPEATABLE_READ
+	 * Connection.TRANSACTION_READ_COMMITTED:默认,可以防止脏读<br>
+	 * Connection.TRANSACTION_READ_UNCOMMITTED:只保证不会读到非法数据，有可能出现脏读取、重复读取、虚读<br>
+	 * Connection.TRANSACTION_REPEATABLE_READ:可以防止脏读和不可重复读取<br>
+	 * Connection.TRANSACTION_READ_SERIALIZABLE防止出现脏读取、重复读取、虚读。<br>
+	 * Connection.TRANSACTION_NONE<br>
+	 * @return
+	 */
 	int transactionLevel() default Connection.TRANSACTION_READ_COMMITTED;
 	
 }
