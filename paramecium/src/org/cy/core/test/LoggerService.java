@@ -1,8 +1,10 @@
 package org.cy.core.test;
 
 import org.cy.core.orm.GenericOrmDao;
+import org.cy.core.transaction.annotation.Transactional;
 
-public class LoggerService implements ILoggerService{
+@Transactional
+public class LoggerService{
 	static int i = 0;
 	private GenericOrmDao<Logger, Integer> ormDao1 = new GenericOrmDao<Logger, Integer>("ds1",Logger.class);
 	private GenericOrmDao<Logger, Integer> ormDao2 = new GenericOrmDao<Logger, Integer>("ds2",Logger.class);
@@ -10,9 +12,6 @@ public class LoggerService implements ILoggerService{
 	public int save(Logger logger) throws Exception{
 		int j = ormDao1.insert(logger).intValue();
 		int i = ormDao2.insert(logger).intValue();
-		if(j>=4){
-			i = 0 / 0 ; 
-		}
 		return i+j;
 	}
 

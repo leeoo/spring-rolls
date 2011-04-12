@@ -45,6 +45,40 @@ public class TransactionManager {
 	}
 	
 	/**
+	 * 设置只读
+	 */
+	public static void readOnly() {
+		Map<String,Transaction> transactionMap = transactionThreadLocal.get();
+		if(transactionMap!=null){
+			for(Transaction transaction : transactionMap.values()){
+				try {
+					transaction.setReadOnly(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.error(e);
+				}
+			}
+		}
+	}
+
+	/**
+	 * 设置事务级别
+	 */
+	public static void setLevel(int level) {
+		Map<String,Transaction> transactionMap = transactionThreadLocal.get();
+		if(transactionMap!=null){
+			for(Transaction transaction : transactionMap.values()){
+				try {
+					transaction.setTransactionIsolation(level);
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.error(e);
+				}
+			}
+		}
+	}
+	
+	/**
 	 * 开启一段事务，收集所有配置的可用数据源
 	 * @throws SQLException
 	 */

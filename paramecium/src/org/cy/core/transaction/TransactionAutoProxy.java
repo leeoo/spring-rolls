@@ -1,8 +1,12 @@
 package org.cy.core.transaction;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import java.sql.Connection;
+
+import org.cy.core.aop.cglib.Enhancer;
+import org.cy.core.aop.cglib.MethodInterceptor;
+import org.cy.core.aop.cglib.MethodProxy;
+import org.cy.core.transaction.annotation.Transactional;
 /**
  * 功 能 描 述:<br>
  * 事务自动代理
@@ -20,27 +24,40 @@ public class TransactionAutoProxy {
 	public static Object getServiceInstance(Class<?> serviceClass){
 		Object service = null;
 		try{
-			service = serviceClass.newInstance();
-			service = Proxy.newProxyInstance(serviceClass.getClassLoader(), serviceClass.getInterfaces(), new TransactionHandler(service));
+			Enhancer enhancer = new Enhancer();
+	        enhancer.setSuperclass(serviceClass);
+	        enhancer.setCallback( new TransactionInterceptor() );
+	        service = enhancer.create();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		return service;
 	}
 	
-	private static class TransactionHandler implements InvocationHandler{
-
-		private Object service;
-		
-		public TransactionHandler(Object service){
-			this.service = service;
-		}
-		
-		public Object invoke(Object proxy, Method method, Object[] parms) throws Exception {
+	private static class TransactionInterceptor implements MethodInterceptor{
+		public Object intercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
+			boolean readOnly = false;
+			int level = Connection.TRANSACTION_READ_COMMITTED;
+			Transactional serviceTransaction = service.getClass().getAnnotation(Transactional.class);
+			if(serviceTransaction==null){
+				return service;
+			}
+			readOnly = serviceTransaction.readOnly();
+			level = serviceTransaction.transactionLevel();
+			
 			TransactionManager.begin();
+			Transactional methodTransaction = method.getAnnotation(Transactional.class);
+			if(methodTransaction!=null){
+				readOnly = methodTransaction.readOnly();
+				level = methodTransaction.transactionLevel();
+			}
+			TransactionManager.setLevel(level);
+			if(readOnly){
+				TransactionManager.readOnly();
+			}
 			Object result = null;
 			try{
-				result = method.invoke(service, parms);
+				result = proxy.invokeSuper(service, parameters);
 			}catch (Exception e) {
 				e.printStackTrace();
 				TransactionManager.globalException();
