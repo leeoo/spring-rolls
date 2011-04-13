@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface PrimaryKey {
 	
-	public enum AUTO_GENERATE_MODE{
+	public static enum AUTO_GENERATE_MODE{
 		/**
 		 * 数据库级别自增
 		 */
@@ -31,7 +31,7 @@ public @interface PrimaryKey {
 		/**
 		 * 手动赋值,如果@PrimaryKey被两个以上属性声明,所有使用@PrimaryKey的属性都被视为AUTO_GENERATE_MODE.NATIVE
 		 */
-		MANUAL
+		MANUAL;
 	}
 	
 	/**
