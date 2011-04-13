@@ -40,18 +40,18 @@ public @interface VirtualColumn {
 	 * 逻辑运算符
 	 * @return
 	 */
-	public String logical() default DYNAMIC_WHERE_LOGIC.AND;
+	String logical() default DYNAMIC_WHERE_LOGIC.AND;
 	
 	/**
 	 * 比较运算符
 	 * @return
 	 */
-	public String comparison() default DYNAMIC_WHERE_COMPARISON.EQUAL;
+	String comparison() default DYNAMIC_WHERE_COMPARISON.EQUAL;
 	
 	/**
 	 * 被比较的数据库字段名
 	 * @return
 	 */
-	public String comparisonColumn();
+	String comparisonColumn();
 
 }

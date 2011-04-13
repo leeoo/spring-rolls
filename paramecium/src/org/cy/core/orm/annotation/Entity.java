@@ -21,18 +21,18 @@ public @interface Entity {
 	 * 实体对应的数据库表名称
 	 * @return 表名称
 	 */
-	public String tableName();
+	String tableName();
 
 	/**
 	 * 可用于扩展页面显示组件
 	 * @return UI显示
 	 */
-	public String showLabel() default "";
+	String showLabel() default "";
 	
 	/**
 	 * 排序实例：“id DESC , name ASC”
 	 * @return 合成语句
 	 */
-	public String orderBy() default "";
+	String orderBy() default "";
 	
 }

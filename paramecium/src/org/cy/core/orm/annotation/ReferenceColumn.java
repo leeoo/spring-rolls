@@ -22,6 +22,6 @@ public @interface ReferenceColumn {
 	 * 标量子查询语句
 	 * @return
 	 */
-	public String subSelectSql();
+	String subSelectSql();
 	
 }

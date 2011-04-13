@@ -32,7 +32,7 @@ public @interface Column {
 	 * 可用于扩展页面显示组件
 	 * @return UI显示
 	 */
-	public String showLabel() default "";
+	String showLabel() default "";
 	
 	/**
 	 * 是否参与动态查询
@@ -44,12 +44,12 @@ public @interface Column {
 	 * 逻辑运算符
 	 * @return
 	 */
-	public String logical() default DYNAMIC_WHERE_LOGIC.AND;
+	String logical() default DYNAMIC_WHERE_LOGIC.AND;
 	
 	/**
 	 * 比较运算符
 	 * @return
 	 */
-	public String comparison() default DYNAMIC_WHERE_COMPARISON.EQUAL;
+	String comparison() default DYNAMIC_WHERE_COMPARISON.EQUAL;
 
 }
