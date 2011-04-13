@@ -19,21 +19,15 @@ import java.lang.annotation.Target;
 public @interface Controller {
 	
 	/**
-	 * 防止同名Service注入冲突,为注入到容器中的controller起一个唯一的名字，默认为controller实例化名称
+	 * 进入该Controller的url地址
 	 * @return
 	 */
-	String uniqueName() default "";
+	String url();
 	
 	/**
 	 * 是否采用单例模式生成实例,默认为即时创建
 	 * @return
 	 */
 	boolean isSingle() default false;
-	
-	/**
-	 * 进入该Controller的url地址
-	 * @return
-	 */
-	String url();
 	
 }
