@@ -20,7 +20,7 @@ public @interface VirtualColumn {
 	/**
 	 * 动态查询逻辑枚举
 	 */
-	public class DYNAMIC_WHERE_LOGIC{
+	public static class DYNAMIC_WHERE_LOGIC{
 		public static final String AND = " AND ";
 		public static final String OR = " OR ";
 	}
@@ -28,7 +28,7 @@ public @interface VirtualColumn {
 	/**
 	 * 动态查询比较常量
 	 */
-	public class DYNAMIC_WHERE_COMPARISON{
+	public static class DYNAMIC_WHERE_COMPARISON{
 		public static final String EQUAL = " = ";
 		public static final String THAN = " > ";
 		public static final String THAN_EQUAL = " >= ";
