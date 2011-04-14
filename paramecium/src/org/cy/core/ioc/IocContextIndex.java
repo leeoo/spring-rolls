@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 /**
  * 功能描述(Description):<br><b>
- * 依赖注入上下文容器
+ * 依赖注入上下文容器索引
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-4-13下午08:56:36</b>
  * <br>项目名称(Project Name): <b>paramecium</b>
- * <br>包及类名(Package Class): <b>org.cy.core.ioc.IocContext.java</b>
+ * <br>包及类名(Package Class): <b>org.cy.core.ioc.IocContextIndex.java</b>
  */
-public class IocContext {
+public class IocContextIndex {
 	
 	private static ConcurrentHashMap<String, ControllerClassInfo> controllerClassInfos = new ConcurrentHashMap<String, ControllerClassInfo>();
 	private static ConcurrentHashMap<String, ServiceClassInfo> serviceClassInfos = new ConcurrentHashMap<String, ServiceClassInfo>();

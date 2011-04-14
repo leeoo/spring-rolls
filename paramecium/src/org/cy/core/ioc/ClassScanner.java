@@ -67,14 +67,14 @@ public class ClassScanner {
 			if(transactional!=null){
 				classInfo.setTransactional(true);
 			}
-			IocContext.setService(classInfo);
+			IocContextIndex.setService(classInfo);
 		}else if(controller!=null){
 			ControllerClassInfo classInfo = new ControllerClassInfo();
 			classInfo.setClazz(clazz);
 			classInfo.setUrl(controller.url());
 			classInfo.setSecurity(false);
 			classInfo.setSingle(controller.isSingle());
-			IocContext.setController(classInfo);
+			IocContextIndex.setController(classInfo);
 		}
 	}
 	
