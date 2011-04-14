@@ -12,8 +12,6 @@ public abstract class BaseClassInfo {
 
 	private Class<?> clazz = null;
 
-	private boolean single = false;
-
 	private boolean security = false;
 
 	public Class<?> getClazz() {
@@ -22,14 +20,6 @@ public abstract class BaseClassInfo {
 
 	public void setClazz(Class<?> clazz) {
 		this.clazz = clazz;
-	}
-
-	public boolean isSingle() {
-		return single;
-	}
-
-	public void setSingle(boolean single) {
-		this.single = single;
 	}
 
 	public boolean isSecurity() {

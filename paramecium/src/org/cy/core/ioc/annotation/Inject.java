@@ -8,20 +8,14 @@ import java.lang.annotation.Target;
 
 /**
  * 功 能 描 述:<br>
- * 业务实例注入代理声明
+ * 需要注入声明
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2011-4-13下午05:49:41
- * <br>项 目 信 息:paramecium:org.cy.core.ioc.annotation.Service.java
+ * <br>项 目 信 息:paramecium:org.cy.core.ioc.annotation.Inject.java
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Service {
+@Target(ElementType.FIELD)
+public @interface Inject {
 
-	/**
-	 * 防止同名Service注入冲突,为注入到容器中的service起一个唯一的名字，默认为service实例化名称
-	 * @return
-	 */
-	String uniqueName() default "";
-	
 }

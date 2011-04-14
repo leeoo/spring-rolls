@@ -27,9 +27,6 @@ public class ClassScanner {
 		init();
 	}
 	
-	public static void main(String[] args) throws Exception{
-	}
-	
 	/**
 	 * 初始化装载路径下的类，并将符合IOC注入的类装入IOC容器内
 	 */
@@ -60,7 +57,6 @@ public class ClassScanner {
 			if(!service.uniqueName().isEmpty()){
 				classInfo.setUniqueName(service.uniqueName());
 			}
-			classInfo.setSingle(service.isSingle());
 			classInfo.setSecurity(false);
 			classInfo.setTransactional(false);
 			Transactional transactional = clazz.getAnnotation(Transactional.class);
@@ -73,7 +69,6 @@ public class ClassScanner {
 			classInfo.setClazz(clazz);
 			classInfo.setUrl(controller.url());
 			classInfo.setSecurity(false);
-			classInfo.setSingle(controller.isSingle());
 			IocContextIndex.setController(classInfo);
 		}
 	}

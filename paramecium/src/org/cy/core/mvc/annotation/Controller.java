@@ -24,10 +24,4 @@ public @interface Controller {
 	 */
 	String url();
 	
-	/**
-	 * 是否采用单例模式生成实例,默认为即时创建
-	 * @return
-	 */
-	boolean isSingle() default false;
-	
 }
