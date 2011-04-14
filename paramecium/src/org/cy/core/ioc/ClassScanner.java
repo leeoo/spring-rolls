@@ -6,7 +6,16 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.cy.core.commons.PropertiesUitls;
-
+import org.cy.core.ioc.annotation.Service;
+import org.cy.core.mvc.annotation.Controller;
+import org.cy.core.transaction.annotation.Transactional;
+/**
+ * 功 能 描 述:<br>
+ * 类扫描器
+ * <br>代 码 作 者:曹阳(CaoYang)
+ * <br>开 发 日 期:2011-4-14上午10:43:25
+ * <br>项 目 信 息:paramecium:org.cy.core.ioc.ClassScanner.java
+ */
 public class ClassScanner {
 	
 	public static String iocScanBasePackage;
@@ -15,9 +24,64 @@ public class ClassScanner {
 	static{
 		Map<String,String> properties = PropertiesUitls.get("/context.properties");
 		iocScanBasePackage = properties.get("iocScanBasePackage");
+		init();
 	}
 	
 	public static void main(String[] args) throws Exception{
+	}
+	
+	/**
+	 * 初始化装载路径下的类，并将符合IOC注入的类装入IOC容器内
+	 */
+	public static void init(){
+		readRootClassFile();
+		for(String cp:classes){
+			Class<?> clazz = null;
+			try {
+				clazz = Class.forName(cp);
+				putIocContext(clazz);
+			} catch (ClassNotFoundException e) {
+			}
+		}
+	}
+	
+	/**
+	 * 装入IOC容器
+	 * @param clazz
+	 */
+	public static void putIocContext(Class<?> clazz){
+		Service service = clazz.getAnnotation(Service.class);
+		Controller controller = clazz.getAnnotation(Controller.class);
+		if(service!=null){
+			ServiceClassInfo classInfo = new ServiceClassInfo();
+			classInfo.setClazz(clazz);
+			String uniqueName = clazz.getSimpleName().substring(0, 1).toLowerCase()+clazz.getSimpleName().substring(1, clazz.getSimpleName().length());
+			classInfo.setUniqueName(uniqueName);
+			if(!service.uniqueName().isEmpty()){
+				classInfo.setUniqueName(service.uniqueName());
+			}
+			classInfo.setSingle(service.isSingle());
+			classInfo.setSecurity(false);
+			classInfo.setTransactional(false);
+			Transactional transactional = clazz.getAnnotation(Transactional.class);
+			if(transactional!=null){
+				classInfo.setTransactional(true);
+			}
+			IocContext.setService(classInfo);
+		}else if(controller!=null){
+			ControllerClassInfo classInfo = new ControllerClassInfo();
+			classInfo.setClazz(clazz);
+			classInfo.setUrl(controller.url());
+			classInfo.setSecurity(false);
+			classInfo.setSingle(controller.isSingle());
+			IocContext.setController(classInfo);
+		}
+	}
+	
+	/**
+	 * 读取类装载路径下根目录类文件
+	 */
+	private static void readRootClassFile(){
 		for(String baesPackage:iocScanBasePackage.split(",")){
 			if(baesPackage!=null&&!baesPackage.trim().isEmpty()){
 				String baesPath = baesPackage.replaceAll("\\.", "//").trim();
@@ -25,12 +89,13 @@ public class ClassScanner {
 				readClassFile(filePath,baesPackage.trim());
 			}
 		}
-		for(String cp:classes){
-			//Class<?> clazz = Class.forName(cp);
-			System.out.println(cp);
-		}
 	}
 	
+	/**
+	 * 递归读取子目录下类文件
+	 * @param currentPath
+	 * @param classPackage
+	 */
 	private static void readClassFile(String currentPath,String classPackage){
 		File file = new File(currentPath);
 		for(String str : file.list()){
