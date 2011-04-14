@@ -24,13 +24,7 @@ import org.cy.core.jdbc.dialect.SqliteDialect;
  */
 public class JdbcTemplateFactory {
 	public final static ConcurrentMap<String,String> dbTypes = new ConcurrentHashMap<String,String>();
-	static{
-		try {
-			Class.forName("org.cy.core.jdbc.datasource.MultiDataSourceFactory");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+	
 	public static JdbcTemplate getJdbcTemplate(final String dataSourceName) {
 		String dbType = dbTypes.get(dataSourceName);
 		if(dbType.equalsIgnoreCase("mysql")){
