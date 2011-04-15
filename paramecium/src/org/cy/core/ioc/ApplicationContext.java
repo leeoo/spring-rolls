@@ -1,5 +1,8 @@
 package org.cy.core.ioc;
 
+import java.lang.reflect.Field;
+
+import org.cy.core.ioc.annotation.AutoInject;
 import org.cy.core.transaction.TransactionAutoProxy;
 
 /**
@@ -11,6 +14,14 @@ import org.cy.core.transaction.TransactionAutoProxy;
  * <br>包及类名(Package Class): <b>org.cy.core.ioc.ApplicationContext.java</b>
  */
 public class ApplicationContext {
+	
+	static{
+		try {
+			Class.forName("org.cy.core.ioc.ClassScanner");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * 根据索引构建所需应用实例<br>
@@ -25,12 +36,63 @@ public class ApplicationContext {
 			ServiceClassInfo serviceClassInfo = (ServiceClassInfo)classInfo;
 			if(serviceClassInfo.isTransactional()){
 				instance = TransactionAutoProxy.getServiceInstance(serviceClassInfo.getClazz());
+				loopInject(instance);
 			}
 		}else if(classInfo instanceof ControllerClassInfo){
 			ControllerClassInfo controllerClassInfo = (ControllerClassInfo)classInfo;
-			
+			try {
+				instance = controllerClassInfo.getClazz().newInstance();
+			} catch (Exception e) {
+			}
+			Field[] fields = controllerClassInfo.getClazz().getDeclaredFields();
+			for(Field field : fields){
+				AutoInject autoInject = field.getAnnotation(AutoInject.class);
+				if(autoInject!=null){
+					String fieldName = field.getName();
+					ServiceClassInfo serviceClassInfo = IocContextIndex.getService(fieldName);
+					if(serviceClassInfo==null){
+						throw new InjectException(fieldName+"注入时,请用@Service声明!");
+					}
+					try {
+						Object fieldInstance = TransactionAutoProxy.getServiceInstance(serviceClassInfo.getClazz());
+						loopInject(fieldInstance);
+						field.set(instance, fieldInstance);
+					} catch (Exception e) {
+					}
+				}
+			}
 		}
 		return instance;
+	}
+	
+	private static void loopInject(Object instance){
+		Field[] fields = instance.getClass().getDeclaredFields();
+		for(Field field : fields){
+			AutoInject autoInject = field.getAnnotation(AutoInject.class);
+			if(autoInject!=null){
+				String fieldName = field.getName();
+				ServiceClassInfo serviceClassInfo = IocContextIndex.getService(fieldName);
+				if(serviceClassInfo==null){
+					throw new InjectException(fieldName+"注入时,请用@Service声明!");
+				}
+				try {
+					Object fieldInstance = serviceClassInfo.getClazz().newInstance();
+					loopInject(fieldInstance);
+					field.set(instance, fieldInstance);
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+	
+	static class InjectException extends IllegalArgumentException {
+
+		private static final long serialVersionUID = 2632354973442186300L;
+
+		public InjectException(String message) {
+	    	 super(message);
+	    }
+
 	}
 	
 	/**

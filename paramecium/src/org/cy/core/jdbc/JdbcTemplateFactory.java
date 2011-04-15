@@ -23,6 +23,15 @@ import org.cy.core.jdbc.dialect.SqliteDialect;
  * <br>包及类名(Package Class): <b>org.cy.core.jdbc.JdbcTemplateFactory.java</b>
  */
 public class JdbcTemplateFactory {
+	
+	static{
+		try {
+			Class.forName("org.cy.core.jdbc.datasource.MultiDataSourceFactory");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public final static ConcurrentMap<String,String> dbTypes = new ConcurrentHashMap<String,String>();
 	
 	public static JdbcTemplate getJdbcTemplate(final String dataSourceName) {
