@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.cy.core.commons.PropertiesUitls;
 import org.cy.core.ioc.annotation.Service;
+import org.cy.core.log.Log;
+import org.cy.core.log.LoggerFactory;
 import org.cy.core.mvc.annotation.Controller;
 import org.cy.core.transaction.annotation.Transactional;
 /**
@@ -18,6 +20,7 @@ import org.cy.core.transaction.annotation.Transactional;
  */
 public class ClassScanner {
 	
+	private static Log logger = LoggerFactory.getLogger();
 	public static String iocScanBasePackage;
 	private static Collection<String> classes = new ArrayList<String>();
 	
@@ -64,12 +67,14 @@ public class ClassScanner {
 				classInfo.setTransactional(true);
 			}
 			IocContextIndex.setService(classInfo);
+			logger.debug(clazz.getName()+" 被载入");
 		}else if(controller!=null){
 			ControllerClassInfo classInfo = new ControllerClassInfo();
 			classInfo.setClazz(clazz);
 			classInfo.setUrl(controller.url());
 			classInfo.setSecurity(false);
 			IocContextIndex.setController(classInfo);
+			logger.debug(clazz.getName()+" 被载入");
 		}
 	}
 	

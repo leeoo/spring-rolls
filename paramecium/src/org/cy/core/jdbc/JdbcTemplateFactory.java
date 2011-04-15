@@ -24,6 +24,8 @@ import org.cy.core.jdbc.dialect.SqliteDialect;
  */
 public class JdbcTemplateFactory {
 	
+	public final static ConcurrentMap<String,String> dbTypes = new ConcurrentHashMap<String,String>();
+
 	static{
 		try {
 			Class.forName("org.cy.core.jdbc.datasource.MultiDataSourceFactory");
@@ -31,8 +33,6 @@ public class JdbcTemplateFactory {
 			e.printStackTrace();
 		}
 	}
-	
-	public final static ConcurrentMap<String,String> dbTypes = new ConcurrentHashMap<String,String>();
 	
 	public static JdbcTemplate getJdbcTemplate(final String dataSourceName) {
 		String dbType = dbTypes.get(dataSourceName);

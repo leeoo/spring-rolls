@@ -26,7 +26,7 @@ public class TransactionAutoProxy {
 		try{
 			Enhancer enhancer = new Enhancer();
 	        enhancer.setSuperclass(serviceClass);
-	        enhancer.setCallback( new TransactionInterceptor() );
+	        enhancer.setCallback(new TransactionInterceptor());
 	        service = enhancer.create();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -35,6 +35,11 @@ public class TransactionAutoProxy {
 	}
 	
 	private static class TransactionInterceptor implements MethodInterceptor{
+		
+		public TransactionInterceptor() {
+			
+		}
+		
 		public Object intercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
 			boolean readOnly = false;
 			int level = Connection.TRANSACTION_READ_COMMITTED;

@@ -39,15 +39,15 @@ public class MultiDataSourceFactory {
 				dataSource = clazz.newInstance();
 				for(Entry<String, String> entry : propery.entrySet()){
 					String fieldName = entry.getKey();
-					for(Field filed:clazz.getDeclaredFields()){
-						if(fieldName.equalsIgnoreCase(filed.getName())){
-							filed.setAccessible(true);
-							if(filed.getType().equals(Integer.TYPE)){
-								filed.set(dataSource,Integer.valueOf(entry.getValue()));
-							}else if(filed.getType().equals(Boolean.TRUE)){
-								filed.set(dataSource,Boolean.valueOf(entry.getValue()));
+					for(Field field:clazz.getDeclaredFields()){
+						if(fieldName.equalsIgnoreCase(field.getName())){
+							field.setAccessible(true);
+							if(field.getType().equals(Integer.TYPE)){
+								field.set(dataSource,Integer.valueOf(entry.getValue()));
+							}else if(field.getType().equals(Boolean.TRUE)){
+								field.set(dataSource,Boolean.valueOf(entry.getValue()));
 							}else{
-								filed.set(dataSource,entry.getValue());
+								field.set(dataSource,entry.getValue());
 							}
 						}
 					}

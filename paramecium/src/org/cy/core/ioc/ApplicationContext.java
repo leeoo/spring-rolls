@@ -46,6 +46,7 @@ public class ApplicationContext {
 			}
 			Field[] fields = controllerClassInfo.getClazz().getDeclaredFields();
 			for(Field field : fields){
+				field.setAccessible(true);
 				AutoInject autoInject = field.getAnnotation(AutoInject.class);
 				if(autoInject!=null){
 					String fieldName = field.getName();
@@ -68,6 +69,7 @@ public class ApplicationContext {
 	private static void loopInject(Object instance){
 		Field[] fields = instance.getClass().getDeclaredFields();
 		for(Field field : fields){
+			field.setAccessible(true);
 			AutoInject autoInject = field.getAnnotation(AutoInject.class);
 			if(autoInject!=null){
 				String fieldName = field.getName();
