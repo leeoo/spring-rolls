@@ -1,8 +1,11 @@
 package org.cy.core.ioc;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.cy.core.ioc.annotation.AutoInject;
+import org.cy.core.mvc.annotation.Controller;
 import org.cy.core.transaction.TransactionAutoProxy;
 
 /**
@@ -14,6 +17,8 @@ import org.cy.core.transaction.TransactionAutoProxy;
  * <br>包及类名(Package Class): <b>org.cy.core.ioc.ApplicationContext.java</b>
  */
 public class ApplicationContext {
+	
+	private volatile static ConcurrentMap<String, Object> controllerContext = new ConcurrentHashMap<String, Object>();
 	
 	static{
 		try {
@@ -62,6 +67,7 @@ public class ApplicationContext {
 					}
 				}
 			}
+			controllerContext.put(controllerClassInfo.getUrl(), instance);
 		}
 		return instance;
 	}
@@ -104,9 +110,18 @@ public class ApplicationContext {
 	 */
 	public static Object getBean(String name){
 		Object instance = null;
-		BaseClassInfo index = IocContextIndex.getService(name);
+		BaseClassInfo index = IocContextIndex.getController(name);
+		if(index!=null){
+			Controller controller = index.getClazz().getAnnotation(Controller.class);
+			if(controller!=null&&controller.singleton()){
+				instance = controllerContext.get(((ControllerClassInfo)index).getUrl());
+				if(instance!=null){
+					return instance;
+				}
+			}
+		}
 		if(index == null){
-			index = IocContextIndex.getController(name);
+			index = IocContextIndex.getService(name);
 		}
 		if(index!=null){
 			instance = buildInstance(index);

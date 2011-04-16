@@ -24,4 +24,10 @@ public @interface Controller {
 	 */
 	String url();
 	
+	/**
+	 * 是否是单例模式
+	 * @return
+	 */
+	boolean singleton() default true;
+	
 }
