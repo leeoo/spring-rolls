@@ -11,6 +11,10 @@ public class Test {
 
 	public static void main(String[] args) throws Exception {
 		new Thread(new PoolThread()).start();
+		new Thread(new PoolThread()).start();
+		new Thread(new PoolThread()).start();
+		new Thread(new PoolThread()).start();
+		new Thread(new PoolThread()).start();
 	}
 	
 	private static class PoolThread implements Runnable {
