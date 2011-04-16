@@ -87,13 +87,14 @@ public class Transaction {
 	}
 	
 	/**
-	 * 关闭连接
+	 * 连接结束,不要轻易手动关闭connection
 	 * @throws SQLException
 	 */
-	public void close() throws SQLException{
+	public void over() throws SQLException{
 		if(connection!=null&&!connection.isClosed()){
-			connection.close();
-			logger.debug("CONNECTION#"+this.connection.hashCode()+" IS CLOSE!");
+			//connection.close();
+			connection.setAutoCommit(true);//无需手动关闭连接
+			//logger.debug("CONNECTION#"+this.connection.hashCode()+" IS CLOSE!");
 		}
 	}
 

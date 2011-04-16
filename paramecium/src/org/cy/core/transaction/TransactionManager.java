@@ -112,7 +112,7 @@ public class TransactionManager {
 					}else{
 						transaction.commit();
 					}
-					transaction.close();
+					transaction.over();
 				} catch (Exception e) {
 					e.printStackTrace();
 					logger.error(e);

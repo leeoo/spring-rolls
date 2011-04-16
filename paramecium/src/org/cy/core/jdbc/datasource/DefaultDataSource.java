@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.sql.DataSource;
 
@@ -21,8 +23,8 @@ import org.cy.core.log.LoggerFactory;
 public class DefaultDataSource implements DataSource{
 	private static boolean isInit = false;
 	private final static Log logger = LoggerFactory.getLogger();
+	private Collection<Connection> connectionPool = new HashSet<Connection>();
 	private PrintWriter printWriter;
-	
 	private String driverClassName;
 	private String url;
 	private String username;
@@ -30,10 +32,25 @@ public class DefaultDataSource implements DataSource{
 	private int loginTimeout = 5;
 	
 	public DefaultDataSource(){
-		logger.debug("默认数据源被载入");
+		logger.debug("默认数据源被载入!");
+		new Thread(new PoolThread()).start();
+		logger.debug("默认数据库连接池连接释放线程监控已启动!");
 	}
 	
 	public Connection getConnection(){
+		logger.debug("默认数据源连接池当前数量为："+connectionPool.size());
+		return getConnection4Pool();
+	}
+	
+	private Connection getConnection4Pool(){
+		for(Connection connection : connectionPool){
+			try {
+				if(connection.getAutoCommit()){
+					return connection;
+				}
+			} catch (SQLException e) {
+			}
+		}
 		Connection connection = null;
 		if(url!=null&&username!=null){
 			try {
@@ -54,7 +71,29 @@ public class DefaultDataSource implements DataSource{
 				logger.error(e);
 			}
 		}
+		connectionPool.add(connection);
 		return connection;
+	}
+
+	private class PoolThread implements Runnable {
+		public void run() {
+			while (true) {
+				try {
+					Thread.sleep(60 * 1000);// 一分钟清理一次使用完毕的Connection
+					for (Connection connection : connectionPool) {
+						try {
+							if (connection.getAutoCommit()) {
+								connection.close();
+								logger.debug("一个长时间未被使用的Connection被关闭!");
+							}
+						} catch (SQLException e) {
+						}
+					}
+				} catch (Exception ex) {
+					logger.error(ex);
+				}
+			}
+		}
 	}
 	
 	public Connection getConnection(String arg0, String arg1)throws SQLException {
