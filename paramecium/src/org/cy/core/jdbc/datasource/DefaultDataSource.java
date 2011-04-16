@@ -91,7 +91,7 @@ public class DefaultDataSource implements DataSource{
 			while (true) {
 				try {
 					logger.debug("默认数据源连接池当前数量为："+connectionPool.size());
-					Thread.sleep(60 * 1000);// 一分钟清理一次使用完毕的Connection
+					Thread.sleep(30 * 1000);// 指定轮询间隔清理使用完毕的Connection
 					if(connectionPool.isEmpty()){
 						continue;
 					}
