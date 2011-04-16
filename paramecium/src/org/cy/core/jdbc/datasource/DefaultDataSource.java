@@ -38,7 +38,6 @@ public class DefaultDataSource implements DataSource{
 	}
 	
 	public Connection getConnection(){
-		logger.debug("默认数据源连接池当前数量为："+connectionPool.size());
 		return getConnection4Pool();
 	}
 	
@@ -66,6 +65,7 @@ public class DefaultDataSource implements DataSource{
 				connection = DriverManager.getConnection(url, username, password);
 				DriverManager.setLoginTimeout(getLoginTimeout());
 				connection.setAutoCommit(true);
+				connection.setReadOnly(false);
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e);
@@ -79,15 +79,22 @@ public class DefaultDataSource implements DataSource{
 		public void run() {
 			while (true) {
 				try {
+					logger.debug("默认数据源连接池当前数量为："+connectionPool.size());
 					Thread.sleep(60 * 1000);// 一分钟清理一次使用完毕的Connection
+					Collection<Connection> closedConnections = new HashSet<Connection>();
 					for (Connection connection : connectionPool) {
 						try {
 							if (connection.getAutoCommit()) {
 								connection.close();
+								closedConnections.add(connection);
 								logger.debug("一个长时间未被使用的Connection被关闭!");
 							}
 						} catch (SQLException e) {
 						}
+					}
+					for(Connection connection : closedConnections){
+						connectionPool.remove(connection);
+						logger.debug("一个被关闭的Connection从连接池中清除!");
 					}
 				} catch (Exception ex) {
 					logger.error(ex);

@@ -94,6 +94,7 @@ public class Transaction {
 		if(connection!=null&&!connection.isClosed()){
 			//connection.close();
 			connection.setAutoCommit(true);//无需手动关闭连接
+			connection.setReadOnly(false);
 			//logger.debug("CONNECTION#"+this.connection.hashCode()+" IS CLOSE!");
 		}
 	}
