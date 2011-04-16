@@ -61,7 +61,7 @@ public class MultiDataSourceFactory {
 	}
 	
 	/**
-	 * 根据指定数据源名称获得数据源
+	 * 根据指定数据源名称获得数据源,此处性能高，不过在高并发时会出现connection多操作情况，建议此处每次生成新的DataSource
 	 * @param dataSourceName
 	 * @return
 	 */
