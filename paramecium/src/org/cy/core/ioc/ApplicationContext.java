@@ -116,7 +116,9 @@ public class ApplicationContext {
 			if(controller!=null&&controller.singleton()){
 				instance = controllerContext.get(((ControllerClassInfo)index).getUrl());
 				if(instance!=null){
-					return instance;
+					synchronized (instance) {
+						return instance;
+					}
 				}
 			}
 		}
