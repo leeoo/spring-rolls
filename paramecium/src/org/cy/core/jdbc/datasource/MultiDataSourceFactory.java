@@ -61,14 +61,6 @@ public class MultiDataSourceFactory {
 	}
 	
 	/**
-	 * 获得多数据源默认的数据源，如果只有一个返回当前
-	 * @return
-	 */
-	public static DataSource getDataSource(){
-		return multiDataSource.values().iterator().next();
-	}
-
-	/**
 	 * 根据指定数据源名称获得数据源
 	 * @param dataSourceName
 	 * @return
