@@ -11,7 +11,7 @@ public class Test {
 
 	public static void main(String[] args) throws Exception {
 		LoggerService loggerService = (LoggerService) ApplicationContext.getBean("loggerService");
-		for(int i=0;i<10000;i++){
+		for(int i=0;i<50;i++){
 			Logger logger = new Logger();
 			logger.setInfo("测试一2下");
 			logger.setDate(DateUtils.getCurrentDateTime());

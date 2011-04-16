@@ -9,6 +9,7 @@ import java.util.HashSet;
 
 import javax.sql.DataSource;
 
+import org.cy.core.commons.DateUtils;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 
@@ -24,6 +25,7 @@ public class DefaultDataSource implements DataSource{
 	private static boolean isInit = false;
 	private final static Log logger = LoggerFactory.getLogger();
 	private Collection<Connection> connectionPool = new HashSet<Connection>();
+	private long lastGetConnectionTime = DateUtils.getCurrentDateTime().getTime();
 	private PrintWriter printWriter;
 	private String driverClassName;
 	private String url;
@@ -38,6 +40,7 @@ public class DefaultDataSource implements DataSource{
 	}
 	
 	public Connection getConnection(){
+		this.lastGetConnectionTime = DateUtils.getCurrentDateTime().getTime();
 		return getConnection4Pool();
 	}
 	
@@ -76,11 +79,27 @@ public class DefaultDataSource implements DataSource{
 	}
 
 	private class PoolThread implements Runnable {
+		
 		public void run() {
+			clearPool();
+		}
+		
+		/**
+		 * 清理连接池
+		 */
+		private void clearPool(){
 			while (true) {
 				try {
 					logger.debug("默认数据源连接池当前数量为："+connectionPool.size());
 					Thread.sleep(60 * 1000);// 一分钟清理一次使用完毕的Connection
+					if(connectionPool.isEmpty()){
+						continue;
+					}
+					long currentTime = DateUtils.getCurrentDateTime().getTime();
+					int bw = (int)((currentTime-lastGetConnectionTime)/1000);//最近一次获得连接时间距现在有多久
+					if(bw<3){//如果间隔时间小于3秒钟,说明使用较为频繁,暂不做清理
+						continue;
+					}
 					Collection<Connection> closedConnections = new HashSet<Connection>();
 					for (Connection connection : connectionPool) {
 						try {
@@ -101,6 +120,7 @@ public class DefaultDataSource implements DataSource{
 				}
 			}
 		}
+		
 	}
 	
 	public Connection getConnection(String arg0, String arg1)throws SQLException {
