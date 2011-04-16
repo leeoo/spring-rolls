@@ -33,7 +33,7 @@ public class Transaction {
 	 * @throws SQLException
 	 */
 	public Connection getCurrentConnection() throws SQLException {
-		if(this.connection!=null&&!this.connection.isClosed()){
+		if(this.connection!=null&&!this.connection.isClosed()&&!this.connection.getAutoCommit()){
 			return this.connection;
 		}
 		throw new SQLException("EN:connection fail!CN:数据库连接错误!");
@@ -44,6 +44,8 @@ public class Transaction {
 			throw new SQLException("EN:connection fail!CN:数据库连接错误!");
 		}else if(this.connection.isClosed()){
 			throw new SQLException("EN:connection closed!CN:数据库连接已关闭!");
+		}else if(this.connection.getAutoCommit()){
+			throw new SQLException("EN:connection valid!CN:数据库连接已过期!");
 		}
 	}
 	
@@ -91,12 +93,10 @@ public class Transaction {
 	 * @throws SQLException
 	 */
 	public void over() throws SQLException{
-		if(connection!=null&&!connection.isClosed()){
-			//connection.close();
-			connection.setAutoCommit(true);//无需手动关闭连接
-			connection.setReadOnly(false);
-			//logger.debug("CONNECTION#"+this.connection.hashCode()+" IS CLOSE!");
-		}
+		connectionLife();
+		connection.setAutoCommit(true);//无需手动关闭连接
+		connection.setReadOnly(false);
+		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OVER!");
 	}
 
 	public boolean isException() {
