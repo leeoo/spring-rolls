@@ -5,7 +5,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.sql.DataSource;
 
@@ -24,9 +27,10 @@ import org.cy.core.log.LoggerFactory;
 public class DefaultDataSource implements DataSource{
 	private static boolean isInit = false;
 	private final static Log logger = LoggerFactory.getLogger();
-	private Collection<Connection> connectionPool = new HashSet<Connection>();
-	private long lastGetConnectionTime = DateUtils.getCurrentDateTime().getTime();
+	private final static ConcurrentMap<String,ConcurrentMap<Connection,Date>> connectionPool = new ConcurrentHashMap<String,ConcurrentMap<Connection,Date>>();
 	private PrintWriter printWriter;
+	private int poolMax = 5;//最大连接数
+	private String ds;
 	private String driverClassName;
 	private String url;
 	private String username;
@@ -35,50 +39,88 @@ public class DefaultDataSource implements DataSource{
 	
 	public DefaultDataSource(){
 		logger.debug("默认数据源被载入!");
-		new Thread(new PoolThread()).start();
+		new Thread(new PoolHandlerThread()).start();
 		logger.debug("默认数据库连接池连接释放线程监控已启动!");
 	}
 	
-	public Connection getConnection(){
-		this.lastGetConnectionTime = DateUtils.getCurrentDateTime().getTime();
-		return getConnection4Pool();
+	/**
+	 * 每次初始化指定书目的连接入池
+	 */
+	private synchronized void init(){
+		for(int i = 0;i<poolMax;i++){
+			Connection connection = null;
+			if(url!=null&&username!=null){
+				try {
+					if(!isInit){
+						try {
+							Class.forName(driverClassName);
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+							logger.error(e);
+						}
+						isInit= true;
+					}
+					connection = DriverManager.getConnection(url, username, password);
+					DriverManager.setLoginTimeout(getLoginTimeout());
+					connection.setAutoCommit(true);
+					connection.setReadOnly(false);
+					connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.error(e);
+				}
+			}
+		}
 	}
 	
+	public Connection getConnection(){
+		if(connectionPool.get(ds)==null){//由于是运行时构建数据源实例，很多属性需要之后填充,之所以不把此处放在构造方法中，是因为当时ds还没有被赋值.
+			connectionPool.put(ds, new ConcurrentHashMap<Connection, Date>());
+		}
+		synchronized (connectionPool.get(ds)) {
+			if(connectionPool.get(ds).isEmpty()){
+				init();
+			}
+			Connection connection = getConnection4Pool();
+			if(connection==null){
+				connection = getConnection();
+			}
+			connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
+			return connection;
+		}
+	}
+	
+	/**
+	 * 获得连接池
+	 * @return
+	 */
 	private Connection getConnection4Pool(){
-		for(Connection connection : connectionPool){
-			try {
-				if(connection.getAutoCommit()){
-					return connection;
-				}
-			} catch (SQLException e) {
-			}
-		}
-		Connection connection = null;
-		if(url!=null&&username!=null){
-			try {
-				if(!isInit){
-					try {
-						Class.forName(driverClassName);
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-						logger.error(e);
+		synchronized(connectionPool.get(ds)){
+			for(Connection connection : connectionPool.get(ds).keySet()){
+				try {
+					if (!connection.getAutoCommit()) {//查看是否正在使用，如果多线程的话可能会出现失误，不过没关系，下面仍有处理
+						continue;
 					}
-					isInit= true;
+					long currentTime = DateUtils.getCurrentDateTime().getTime();
+					long lastUseTime = connectionPool.get(ds).get(connection).getTime();
+					if((currentTime-lastUseTime)>3*poolMax){//只要有间隔，可错开多线程
+						return connection;
+					}
+				} catch (Exception e) {
 				}
-				connection = DriverManager.getConnection(url, username, password);
-				DriverManager.setLoginTimeout(getLoginTimeout());
-				connection.setAutoCommit(true);
-				connection.setReadOnly(false);
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(e);
 			}
+			try {
+				Thread.sleep(1);//如果上面没有找到可用连接，稍等片刻，重现递归调用
+			} catch (Exception e) {
+			}
+			return getConnection4Pool();
 		}
-		connectionPool.add(connection);
-		return connection;
 	}
 
-	private class PoolThread implements Runnable {
+	/**
+	 * 数据源服务线程
+	 */
+	private class PoolHandlerThread implements Runnable {
 		
 		public void run() {
 			clearPool();
@@ -86,35 +128,40 @@ public class DefaultDataSource implements DataSource{
 		
 		/**
 		 * 清理连接池
+		 * 一分钟之内没有人使用连接池，将会把所有连接关闭，并清空连接池
 		 */
 		private void clearPool(){
 			while (true) {
 				try {
-					logger.debug("默认数据源连接池当前数量为："+connectionPool.size());
-					Thread.sleep(30 * 1000);// 指定轮询间隔清理使用完毕的Connection
-					if(connectionPool.isEmpty()){
+					Thread.sleep(35 * 1000);// 指定轮询间隔清理使用完毕的Connection
+					if(connectionPool.get(ds)==null||connectionPool.get(ds).isEmpty()){
 						continue;
 					}
+					logger.debug("默认数据源连接池当前数量为："+connectionPool.get(ds).size());
 					long currentTime = DateUtils.getCurrentDateTime().getTime();
-					int bw = (int)((currentTime-lastGetConnectionTime)/1000);//最近一次获得连接时间距现在有多久
-					if(bw<3){//如果间隔时间小于3秒钟,说明使用较为频繁,暂不做清理
-						continue;
-					}
-					Collection<Connection> closedConnections = new HashSet<Connection>();
-					for (Connection connection : connectionPool) {
+					Collection<Connection> tempConnections = new HashSet<Connection>();
+					for (Connection connection : connectionPool.get(ds).keySet()) {
 						try {
+							if(!connection.getAutoCommit()){
+								continue;
+							}
+							int bw = (int)((currentTime-(connectionPool.get(ds).get(connection)).getTime())/1000);//最近一次获得连接时间距现在有多久
+							if(bw<62){//如果间隔时间小于约一分钟,说明使用较为频繁,暂不做清理
+								continue;
+							}
 							if (connection.getAutoCommit()) {
 								connection.close();
-								closedConnections.add(connection);
-								logger.debug("一个长时间未被使用的Connection被关闭!");
+								tempConnections.add(connection);
+								logger.debug("EN:A long time not use connection is colse! CN:一个长时间未被使用的Connection被关闭!");
 							}
 						} catch (SQLException e) {
 						}
 					}
-					for(Connection connection : closedConnections){
-						connectionPool.remove(connection);
-						logger.debug("一个被关闭的Connection从连接池中清除!");
+					for(Connection connection : tempConnections){
+						connectionPool.get(ds).remove(connection);
+						logger.debug("EN:A closed connection is clean from pool! CN:一个被关闭的Connection从连接池中清除!");
 					}
+					tempConnections.clear();
 				} catch (Exception ex) {
 					logger.error(ex);
 				}

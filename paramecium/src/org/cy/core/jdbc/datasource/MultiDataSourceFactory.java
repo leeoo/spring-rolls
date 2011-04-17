@@ -28,11 +28,12 @@ public class MultiDataSourceFactory {
 	static{
 		Map<String,Map<String,String>> map = PropertiesUitls.getByType("/database.properties");
 		for(String key : map.keySet()){
-			Map<String,String> propery = map.get(key);
+			Map<String,String> propery = map.get(key);//获取.后内容
 			String dataSourceClass = propery.get("dataSourceClass");
 			JdbcTemplateFactory.dbTypes.put(key, propery.get("dbType"));
 			propery.remove("dataSourceClass");//移除，对实例化数据源无用
 			propery.remove("dbType");//移除，对实例化数据源无用
+			propery.put("ds", key);
 			Object dataSource = null;
 			try {
 				Class<?> clazz = Class.forName(dataSourceClass);

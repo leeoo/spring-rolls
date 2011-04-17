@@ -3,7 +3,9 @@ package org.cy.core.transaction;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.cy.core.jdbc.datasource.DefaultDataSource;
 import org.cy.core.jdbc.datasource.MultiDataSourceFactory;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
@@ -105,14 +107,19 @@ public class TransactionManager {
 	public static void end() {
 		Map<String,Transaction> transactionMap = transactionThreadLocal.get();
 		if(transactionMap!=null){
-			for(Transaction transaction : transactionMap.values()){
+			for(Entry<String,Transaction> entry : transactionMap.entrySet()){
+				Transaction transaction = entry.getValue();
 				try {
 					if(transaction.isException()){
 						transaction.rollback();
 					}else{
 						transaction.commit();
 					}
-					transaction.over();
+					if(MultiDataSourceFactory.getDataSource(entry.getKey()) instanceof DefaultDataSource){//判断是否为默认数据源
+						transaction.over();//如果是默认数据源，内部连接池来管理Connection的关闭，无需手动关闭.
+					}else{
+						transaction.close();//其他数据源默认关闭
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 					logger.error(e);

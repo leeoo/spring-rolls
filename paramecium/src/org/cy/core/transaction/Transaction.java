@@ -45,7 +45,7 @@ public class Transaction {
 		}else if(this.connection.isClosed()){
 			throw new SQLException("EN:connection closed!CN:数据库连接已关闭!");
 		}else if(this.connection.getAutoCommit()){
-			throw new SQLException("EN:connection valid!CN:数据库连接已过期!");
+			throw new SQLException("EN:connection valid!CN:数据库连接出现变更!");
 		}
 	}
 	
@@ -89,15 +89,28 @@ public class Transaction {
 	}
 	
 	/**
-	 * 连接结束,不要轻易手动关闭connection
+	 * 连接结束
 	 * @throws SQLException
 	 */
 	public void over() throws SQLException{
 		connectionLife();
-		connection.setAutoCommit(true);//无需手动关闭连接
+		connection.setAutoCommit(true);
 		connection.setReadOnly(false);
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OVER!");
 	}
+
+	/**
+	 * 连接关闭
+	 * @throws SQLException
+	 */
+	public void close() throws SQLException{
+		if(!connection.isClosed()){
+			connection.close();
+		}
+		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS CLOSE!");
+	}
+	
+	
 
 	public boolean isException() {
 		return isException;
