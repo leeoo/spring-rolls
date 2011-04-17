@@ -30,6 +30,7 @@ public class DefaultDataSource implements DataSource{
 	private final static ConcurrentMap<String,ConcurrentMap<Connection,Date>> connectionPool = new ConcurrentHashMap<String,ConcurrentMap<Connection,Date>>();
 	private PrintWriter printWriter;
 	private int poolMax = 5;//最大连接数
+	private int poolBase = 3;//控制并发基数
 	private String ds;
 	private String driverClassName;
 	private String url;
@@ -103,7 +104,7 @@ public class DefaultDataSource implements DataSource{
 					}
 					long currentTime = DateUtils.getCurrentDateTime().getTime();
 					long lastUseTime = connectionPool.get(ds).get(connection).getTime();
-					if((currentTime-lastUseTime)>3*poolMax){//只要有间隔，可错开多线程
+					if((currentTime-lastUseTime)>poolBase*poolMax){//只要有间隔，可错开多线程
 						return connection;
 					}
 				} catch (Exception e) {
