@@ -9,97 +9,15 @@ import com.cy.app.service.LoggerService;
 
 public class Test {
 
+	/**
+	 * 模拟300个用户高并发循环操作(增删改查分页)数据库
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
-		new Thread(new PoolThread()).start();
+		for(int i=0;i<300;i++){
+			new Thread(new PoolThread()).start();
+		}
 	}
 	
 	private static class PoolThread implements Runnable {
