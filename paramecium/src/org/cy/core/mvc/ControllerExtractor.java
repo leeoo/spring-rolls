@@ -1,5 +1,7 @@
 package org.cy.core.mvc;
 
+import java.lang.reflect.Method;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,6 +10,7 @@ import org.cy.core.ioc.ControllerClassInfo;
 import org.cy.core.ioc.IocContextIndex;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
+import org.cy.core.mvc.annotation.MappingMethod;
 /**
  * 功 能 描 述:<br>
  * 通过Servlet提取Controller所需的信息
@@ -31,17 +34,34 @@ public class ControllerExtractor {
 			String servletPath = request.getServletPath();
 			String[] URIStrs = getURIStrs(servletPath);
 			if(URIStrs==null){
+				logger.warn("非法请求地址:"+servletPath);
 				return;
 			}
-			ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
-			if(classInfo==null){
+			try{
+				ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
+				if(classInfo==null){
+					logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
+					return;
+				}
+				Object controller = ApplicationContext.getBean(classInfo.getNamespace());
+				if(controller==null){
+					logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
+					return;
+				}
+				Method[] methods = classInfo.getClazz().getMethods();
+				for(Method method : methods){
+					MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
+					if(mappingMethod==null){
+						continue;
+					}
+					if(){
+						
+					}
+				}
+			}catch (Exception e) {
+				logger.warn(e);
 				return;
 			}
-			Object controller = ApplicationContext.getBean(classInfo.getNamespace());
-			if(controller==null){
-				return;
-			}
-			
 		}
 	}
 	
