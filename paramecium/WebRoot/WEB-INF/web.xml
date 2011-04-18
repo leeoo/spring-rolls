@@ -4,6 +4,11 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	
 	<display-name>paramecium</display-name>
+	
+	<listener>
+		<display-name>applicationContextListener</display-name>
+		<listener-class>org.cy.core.ioc.ApplicationContextListener</listener-class>
+	</listener>
 
 	<servlet>
 		<servlet-name>controller</servlet-name>

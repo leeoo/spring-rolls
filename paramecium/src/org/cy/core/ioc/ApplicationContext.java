@@ -29,6 +29,13 @@ public class ApplicationContext {
 	}
 	
 	/**
+	 * 第一次加载
+	 */
+	public static void init(){
+		//空方法，目的为了唤醒此类
+	}
+	
+	/**
 	 * 根据索引构建所需应用实例<br>
 	 * 如果是首层事务的service，其中包含的service属性声明无需自动注入，可以通过new方式得到。<br>
 	 * 如果已经加入@AutoInject自动注入声明，其其下所有service属性实例将不会被声明为Transaction,统统交由最高层service事务代理<br>
