@@ -18,7 +18,7 @@ import org.cy.core.transaction.TransactionAutoProxy;
  */
 public class ApplicationContext {
 	
-	private volatile static ConcurrentMap<String, Object> controllerContext = new ConcurrentHashMap<String, Object>();
+	private final static ConcurrentMap<String, Object> controllerContext = new ConcurrentHashMap<String, Object>();
 	
 	static{
 		try {

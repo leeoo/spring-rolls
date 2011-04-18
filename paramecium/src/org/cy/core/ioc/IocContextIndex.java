@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class IocContextIndex {
 	
-	private static ConcurrentHashMap<String, ControllerClassInfo> controllerClassInfos = new ConcurrentHashMap<String, ControllerClassInfo>();
-	private static ConcurrentHashMap<String, ServiceClassInfo> serviceClassInfos = new ConcurrentHashMap<String, ServiceClassInfo>();
+	private final static ConcurrentHashMap<String, ControllerClassInfo> controllerClassInfos = new ConcurrentHashMap<String, ControllerClassInfo>();
+	private final static ConcurrentHashMap<String, ServiceClassInfo> serviceClassInfos = new ConcurrentHashMap<String, ServiceClassInfo>();
 	
 	public static Collection<ControllerClassInfo> getControllers(){
 		return controllerClassInfos.values();
