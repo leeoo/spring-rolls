@@ -17,10 +17,10 @@ import javax.servlet.ServletResponse;
  */
 public class EncodingFilter implements Filter{
 	
-	private static String encoding = "UTF-8";
+	private String encoding = "UTF-8";
 
 	public void init(FilterConfig config) throws ServletException {
-		encoding = config.getInitParameter("encoding");
+		this.encoding = config.getInitParameter("encoding");
 	}
 	
 	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {

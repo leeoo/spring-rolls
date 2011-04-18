@@ -6,7 +6,7 @@
 	<display-name>paramecium</display-name>
 	
 	<filter>
-		<display-name>encodingFilter</display-name>
+		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.cy.core.mvc.EncodingFilter</filter-class>
 		<init-param>
 			<param-name>encoding</param-name>
@@ -20,7 +20,6 @@
 	</filter-mapping>
 	
 	<listener>
-		<display-name>applicationContextListener</display-name>
 		<listener-class>org.cy.core.ioc.ApplicationContextListener</listener-class>
 	</listener>
 
