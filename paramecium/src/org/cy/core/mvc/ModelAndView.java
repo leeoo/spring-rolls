@@ -1,6 +1,7 @@
 package org.cy.core.mvc;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.cy.core.commons.BeanUitls;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 /**
@@ -30,9 +30,53 @@ public class ModelAndView {
 		this.response = response;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public Object getValue(Class<?> clazz){
-		return BeanUitls.map2Bean(clazz, request.getParameterMap(), false);
+	public Object getBean(String beanName,Class<?> clazz){
+		String bn = beanName.concat(".");
+		Object bean = null;
+		try {
+			bean = clazz.newInstance();
+			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+				Field[] fields = superClass.getDeclaredFields();
+				for(Field field : fields){
+					field.setAccessible(true);
+					try {
+						String name = bn.concat(field.getName());
+						if(request.getParameterMap().get(name)!=null){
+							field.set(bean,request.getParameterMap().get(name));
+						}
+					} catch (Exception e) {
+						logger.warn(e);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bean;
+	}
+
+	public Object getBean(Class<?> clazz){
+		Object bean = null;
+		try {
+			bean = clazz.newInstance();
+			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+				Field[] fields = superClass.getDeclaredFields();
+				for(Field field : fields){
+					field.setAccessible(true);
+					try {
+						String name = field.getName();
+						if(request.getParameterMap().get(name)!=null){
+							field.set(bean,request.getParameterMap().get(name));
+						}
+					} catch (Exception e) {
+						logger.warn(e);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bean;
 	}
 	
 	/**

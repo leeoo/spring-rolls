@@ -11,7 +11,7 @@ public class Logger {
 	
 	@PrimaryKey
 	@Column
-	private int id;
+	private Integer id;
 	
 	@Column(fieldName="log_info")
 	private String info;
@@ -19,11 +19,11 @@ public class Logger {
 	@Column(fieldName="log_date")
 	private Date date;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
