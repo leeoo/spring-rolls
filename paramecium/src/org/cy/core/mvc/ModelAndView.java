@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.cy.core.commons.BeanUitls;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 /**
@@ -27,6 +28,11 @@ public class ModelAndView {
 	public ModelAndView(final HttpServletRequest request,final HttpServletResponse response){
 		this.request = request;
 		this.response = response;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Object getValue(Class<?> clazz){
+		return BeanUitls.map2Bean(clazz, request.getParameterMap(), false);
 	}
 	
 	/**
