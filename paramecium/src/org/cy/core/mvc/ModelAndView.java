@@ -6,6 +6,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
@@ -79,6 +80,10 @@ public class ModelAndView {
 
 	public HttpServletResponse getResponse() {
 		return response;
+	}
+	
+	public HttpSession getSession() {
+		return request.getSession();
 	}
 	
 }
