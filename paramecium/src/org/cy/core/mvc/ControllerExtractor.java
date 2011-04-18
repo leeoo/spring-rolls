@@ -61,11 +61,11 @@ public class ControllerExtractor {
 					if(!mappingMethod.url().isEmpty()){
 						if(mappingMethod.url().equals(URIStrs[1])){
 							method.invoke(controller, new ModelAndView(request, response));
-							break;
+							return;
 						}
 					}else if((ControllerExtractor.lineStr+method.getName()).equals(URIStrs[1])){
 						method.invoke(controller, new ModelAndView(request, response));
-						break;
+						return;
 					}
 				}
 			}catch (Exception e) {

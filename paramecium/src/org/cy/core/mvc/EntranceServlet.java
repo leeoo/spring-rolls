@@ -19,37 +19,30 @@ public class EntranceServlet extends HttpServlet{
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ControllerExtractor.extract(request, response);
-		super.doGet(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ControllerExtractor.extract(request, response);
-		super.doPost(request, response);
 	}
 	
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ControllerExtractor.extract(request, response);
-		super.doPut(request, response);
 	}
 
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ControllerExtractor.extract(request, response);
-		super.doDelete(request, response);
 	}
 	
 	protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ControllerExtractor.extract(request, response);
-		super.doHead(request, response);
 	}
 	
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ControllerExtractor.extract(request, response);
-		super.doOptions(request, response);
 	}
 	
 	protected void doTrace(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ControllerExtractor.extract(request, response);
-		super.doTrace(request, response);
 	}
 	
 }
