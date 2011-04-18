@@ -17,7 +17,7 @@ public class ControllerClassInfo extends BaseClassInfo {
 	}
 
 	public void setNamespace(String namespace) {
-		this.namespace = namespace.toLowerCase();
+		this.namespace = namespace;
 	}
 
 }
