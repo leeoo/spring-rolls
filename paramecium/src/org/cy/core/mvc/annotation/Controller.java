@@ -19,10 +19,10 @@ import java.lang.annotation.Target;
 public @interface Controller {
 	
 	/**
-	 * 进入该Controller的url地址
+	 * 进入该Controller的url命名空间
 	 * @return
 	 */
-	String url();
+	String namespace();
 	
 	/**
 	 * 是否是单例模式

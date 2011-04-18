@@ -17,32 +17,39 @@ public class EntranceServlet extends HttpServlet{
 
 	private static final long serialVersionUID = 5244417460801082069L;
 	
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		super.doGet(req, resp);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ControllerExtractor.extract(request, response);
+		super.doGet(request, response);
 	}
 
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		super.doPost(req, resp);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ControllerExtractor.extract(request, response);
+		super.doPost(request, response);
 	}
 	
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		super.doPut(req, resp);
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ControllerExtractor.extract(request, response);
+		super.doPut(request, response);
 	}
 
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		super.doDelete(req, resp);
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ControllerExtractor.extract(request, response);
+		super.doDelete(request, response);
 	}
 	
-	protected void doHead(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		super.doHead(req, resp);
+	protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ControllerExtractor.extract(request, response);
+		super.doHead(request, response);
 	}
 	
-	protected void doOptions(HttpServletRequest arg0, HttpServletResponse arg1) throws ServletException, IOException {
-		super.doOptions(arg0, arg1);
+	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ControllerExtractor.extract(request, response);
+		super.doOptions(request, response);
 	}
 	
-	protected void doTrace(HttpServletRequest arg0, HttpServletResponse arg1) throws ServletException, IOException {
-		super.doTrace(arg0, arg1);
+	protected void doTrace(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ControllerExtractor.extract(request, response);
+		super.doTrace(request, response);
 	}
 	
 }
