@@ -19,7 +19,7 @@ import org.cy.core.transaction.TransactionManager;
  */
 public class GenericJdbcDao {
 	
-	private static Log logger = LoggerFactory.getLogger();
+	private final static Log logger = LoggerFactory.getLogger();
 	
 	private JdbcTemplate jdbcTemplate;
 	

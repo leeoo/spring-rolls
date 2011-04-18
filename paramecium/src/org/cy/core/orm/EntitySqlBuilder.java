@@ -17,7 +17,7 @@ import org.cy.core.orm.annotation.PrimaryKey.AUTO_GENERATE_MODE;
 
 public class EntitySqlBuilder {
 	
-	private static ConcurrentMap<String, String> sqlCache = new ConcurrentHashMap<String, String>();
+	private final static ConcurrentMap<String, String> sqlCache = new ConcurrentHashMap<String, String>();
 	
 	public static String getInsertSql(Object bean){
 		String key = bean.getClass().getName()+":insert";

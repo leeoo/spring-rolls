@@ -18,7 +18,7 @@ import org.cy.core.log.handler.FileLogHandler;
  */
 public class LoggerFactory {
 	private static LogHandler logHandler;
-	private static Map<String,Integer> levelMap = new HashMap<String,Integer>();
+	private final static Map<String,Integer> levelMap = new HashMap<String,Integer>();
 	private static int currentLevel = Log.LEVEL_INFO;
 	public static String loggerFileName;
 	public static String loggerDbInterface;

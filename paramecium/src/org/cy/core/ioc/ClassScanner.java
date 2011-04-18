@@ -20,7 +20,7 @@ import org.cy.core.transaction.annotation.Transactional;
  */
 public class ClassScanner {
 	
-	private static Log logger = LoggerFactory.getLogger();
+	private final static Log logger = LoggerFactory.getLogger();
 	public static String iocScanBasePackage;
 	private static Collection<String> classes = new ArrayList<String>();
 	

@@ -27,7 +27,7 @@ import org.cy.core.log.LoggerFactory;
  */
 public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	
-	private static Log logger = LoggerFactory.getLogger();
+	private final static Log logger = LoggerFactory.getLogger();
 
 	private Boolean isManyTable = new Boolean(false);
 

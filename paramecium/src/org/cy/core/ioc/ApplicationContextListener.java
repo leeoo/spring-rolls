@@ -15,7 +15,7 @@ import org.cy.core.log.LoggerFactory;
  */
 public class ApplicationContextListener implements ServletContextListener {
 	
-	private static Log logger = LoggerFactory.getLogger();
+	private final static Log logger = LoggerFactory.getLogger();
 	private static boolean isInit = true;
 
 	public void contextInitialized(ServletContextEvent event) {
