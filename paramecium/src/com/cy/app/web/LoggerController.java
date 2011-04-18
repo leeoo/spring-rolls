@@ -42,6 +42,8 @@ public class LoggerController {
 		try {
 			if(logger.getId()==null){
 				loggerService.save(logger);
+			}else{
+				loggerService.update(logger);
 			}
 		} catch (SQLException e) {
 			mv.addValue("logger", logger);
@@ -53,6 +55,13 @@ public class LoggerController {
 	
 	@MappingMethod
 	public void delete(ModelAndView mv){
+		Integer id = (Integer) mv.getValue("id");
+		try {
+			if(id==null){
+				loggerService.delete(id);
+			}
+		} catch (SQLException e) {
+		}
 		mv.redirect("/WEB-INF/logger/list.jsp");
 	}
 	
