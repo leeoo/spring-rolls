@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ActionServlet extends HttpServlet{
+public class EntranceServlet extends HttpServlet{
 
 	private static final long serialVersionUID = 5244417460801082069L;
 	

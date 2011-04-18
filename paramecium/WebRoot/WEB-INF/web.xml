@@ -7,7 +7,8 @@
 
 	<servlet>
 		<servlet-name>controller</servlet-name>
-		<servlet-class>org.cy.core.mvc.ActionServlet</servlet-class>
+		<servlet-class>org.cy.core.mvc.EntranceServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 	<servlet-mapping>
