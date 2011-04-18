@@ -71,7 +71,7 @@ public class ClassScanner {
 		}else if(controller!=null){
 			ControllerClassInfo classInfo = new ControllerClassInfo();
 			classInfo.setClazz(clazz);
-			classInfo.setUrl(controller.namespace());
+			classInfo.setNamespace(controller.namespace());
 			classInfo.setSecurity(false);
 			IocContextIndex.setController(classInfo);
 			logger.debug(clazz.getName()+" 被载入");

@@ -10,14 +10,14 @@ package org.cy.core.ioc;
  */
 public class ControllerClassInfo extends BaseClassInfo {
 
-	private String url;
+	private String namespace;
 
-	public String getUrl() {
-		return url;
+	public String getNamespace() {
+		return namespace;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setNamespace(String namespace) {
+		this.namespace = namespace.toLowerCase();
 	}
 
 }

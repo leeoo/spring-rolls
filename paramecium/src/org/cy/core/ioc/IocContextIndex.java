@@ -24,7 +24,7 @@ public class IocContextIndex {
 	}
 	
 	public static void setController(ControllerClassInfo classInfo){
-		controllerClassInfos.put(classInfo.getUrl(), classInfo);
+		controllerClassInfos.put(classInfo.getNamespace(), classInfo);
 	}
 	
 	public static void setService(ServiceClassInfo classInfo){

@@ -67,7 +67,7 @@ public class ApplicationContext {
 					}
 				}
 			}
-			controllerContext.put(controllerClassInfo.getUrl(), instance);
+			controllerContext.put(controllerClassInfo.getNamespace(), instance);
 		}
 		return instance;
 	}
@@ -114,7 +114,7 @@ public class ApplicationContext {
 		if(index!=null){
 			Controller controller = index.getClazz().getAnnotation(Controller.class);
 			if(controller!=null&&controller.singleton()){
-				instance = controllerContext.get(((ControllerClassInfo)index).getUrl());
+				instance = controllerContext.get(((ControllerClassInfo)index).getNamespace());
 				if(instance!=null){
 					synchronized (instance) {
 						return instance;
