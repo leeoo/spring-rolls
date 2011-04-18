@@ -72,6 +72,7 @@ public class DefaultDataSource implements DataSource{
 				}
 			}
 		}
+		logger.debug("数据库连接池重新初始化！连接数："+connectionPool.get(ds).size());
 	}
 	
 	public Connection getConnection(){

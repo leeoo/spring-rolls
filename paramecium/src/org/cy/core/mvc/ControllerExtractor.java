@@ -49,13 +49,23 @@ public class ControllerExtractor {
 					return;
 				}
 				Method[] methods = classInfo.getClazz().getMethods();
+				if(methods==null){
+					logger.warn(classInfo.getClazz().getName()+"没有相符合的处理方法!");
+					return;
+				}
 				for(Method method : methods){
 					MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
 					if(mappingMethod==null){
 						continue;
 					}
-					if(){
-						
+					if(!mappingMethod.url().isEmpty()){
+						if(mappingMethod.url().equals(URIStrs[1])){
+							Object result = method.invoke(controller, request,response);
+							break;
+						}
+					}else if((ControllerExtractor.lineStr+method.getName()).equals(URIStrs[1])){
+						Object result = method.invoke(controller, request,response);
+						break;
 					}
 				}
 			}catch (Exception e) {

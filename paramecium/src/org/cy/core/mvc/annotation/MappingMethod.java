@@ -17,6 +17,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface MappingMethod {
 	
-	String mappingUrl() default "";
+	String url() default "";
 	
 }
