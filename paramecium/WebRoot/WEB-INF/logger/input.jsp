@@ -17,7 +17,7 @@
 			<input type="hidden" name="logger.id" value="${logger.id}"/>
 		</c:if>
 		<label>信息</label><input name="logger.info" value="${logger.info}"/><br>
-		<label>日期</label><input name="logger.date" value="<fmt:formatDate value="${logger.date}" pattern="yyyy-MM-dd"/>"/><br>
+		<label>日期</label><input name="logger.date" value="<fmt:formatDate value='${logger.date}' pattern='yyyy-MM-dd'/>"/><br>
 		<label><button type="submit">提交</button></label>
 	</form>
 	</div>

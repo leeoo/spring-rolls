@@ -5,6 +5,7 @@ import java.util.Date;
 import org.cy.core.orm.annotation.Column;
 import org.cy.core.orm.annotation.Entity;
 import org.cy.core.orm.annotation.PrimaryKey;
+import org.cy.core.orm.annotation.VirtualColumn;
 
 @Entity(tableName="t_logger_info")
 public class Logger {
@@ -13,7 +14,7 @@ public class Logger {
 	@Column
 	private Integer id;
 	
-	@Column(fieldName="log_info")
+	@Column(fieldName="log_info",comparison=VirtualColumn.DYNAMIC_WHERE_COMPARISON.LIKE)
 	private String info;
 	
 	@Column(fieldName="log_date")

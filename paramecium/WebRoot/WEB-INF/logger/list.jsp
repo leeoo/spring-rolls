@@ -13,7 +13,10 @@
 	</div>
 	<div style="background-color: #FFFFFF;width: 100%;height: 100%;">
 		<form action="${base}logger/list.jhtml" method="post">
-			<label>日期范围</label><input name="logger.startDate"/>~<input name="logger.endDate"/><label>日志内容</label><input name="logger.info"/>
+			<label>日期范围</label>
+			<input name="logger.startDate" value="<fmt:formatDate value='${logger.startDate}' pattern='yyyy-MM-dd'/>"/>
+			~<input name="logger.endDate" value="<fmt:formatDate value='${logger.endDate}' pattern='yyyy-MM-dd'/>"/>
+			<label>日志内容</label><input name="logger.info" value="${logger.info}"/>
 			<button type="submit">查找</button>
 		</form>
 		<table border="1">

@@ -21,9 +21,13 @@ public class LoggerController {
 	@MappingMethod(url="/list")
 	public void index(ModelAndView mv){
 		Page page = (Page) mv.getBean("page",Page.class);
-		LoggerWhere where = (LoggerWhere) mv.getBean("logger",LoggerWhere.class);
+		LoggerWhere loggerWhere = (LoggerWhere) mv.getBean("logger",LoggerWhere.class);
+		if(loggerWhere!=null&&loggerWhere.getInfo()!=null&&!loggerWhere.getInfo().isEmpty()){
+			loggerWhere.setInfo("%"+loggerWhere.getInfo()+"%");
+		}
 		page.setPageSize(5);
-		page = loggerService.getAll(page,where);
+		page = loggerService.getAll(page,loggerWhere);
+		mv.addValue("logger", loggerWhere);
 		mv.addValue("page", page);
 		mv.forward("/WEB-INF/logger/list.jsp");
 	}

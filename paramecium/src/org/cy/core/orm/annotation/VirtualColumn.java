@@ -29,11 +29,30 @@ public @interface VirtualColumn {
 	 * 动态查询比较常量
 	 */
 	public static class DYNAMIC_WHERE_COMPARISON{
+		/**
+		 * 等于
+		 */
 		public static final String EQUAL = " = ";
+		/**
+		 * 大于
+		 */
 		public static final String THAN = " > ";
+		/**
+		 * 大于或等于
+		 */
 		public static final String THAN_EQUAL = " >= ";
+		/**
+		 * 小于
+		 */
 		public static final String LESS = " < ";
+		/**
+		 * 小于或等于
+		 */
 		public static final String LESS_EQUAL = " <= ";
+		/**
+		 * Like相似
+		 */
+		public static final String LIKE = " LIKE ";
 	}
 	
 	/**
