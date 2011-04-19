@@ -12,6 +12,10 @@
 		<hr width="100%"/>
 	</div>
 	<div style="background-color: #FFFFFF;width: 100%;height: 100%;">
+		<form action="${base}logger/list.jhtml" method="post">
+			<label>日期范围</label><input name="logger.startDate"/>~<input name="logger.endDate"/><label>日志内容</label><input name="logger.info"/>
+			<button type="submit">查找</button>
+		</form>
 		<table border="1">
 			<tr><th>日志时间</th><th>日志内容</th><th nowrap="nowrap">操作</th></tr>
 			<c:forEach var="logger" items="${page.result}">

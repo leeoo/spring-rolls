@@ -9,6 +9,7 @@ import org.cy.core.mvc.annotation.Controller;
 import org.cy.core.mvc.annotation.MappingMethod;
 
 import com.cy.app.entity.Logger;
+import com.cy.app.entity.LoggerWhere;
 import com.cy.app.service.LoggerService;
 
 @Controller(namespace="/logger")
@@ -20,8 +21,9 @@ public class LoggerController {
 	@MappingMethod(url="/list")
 	public void index(ModelAndView mv){
 		Page page = (Page) mv.getBean("page",Page.class);
+		LoggerWhere where = (LoggerWhere) mv.getBean("logger",LoggerWhere.class);
 		page.setPageSize(5);
-		page = loggerService.getAll(page);
+		page = loggerService.getAll(page,where);
 		mv.addValue("page", page);
 		mv.forward("/WEB-INF/logger/list.jsp");
 	}
