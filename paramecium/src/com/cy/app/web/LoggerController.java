@@ -22,11 +22,13 @@ public class LoggerController {
 	public void index(ModelAndView mv){
 		Page page = (Page) mv.getBean("page",Page.class);
 		LoggerWhere loggerWhere = (LoggerWhere) mv.getBean("logger",LoggerWhere.class);
-		if(loggerWhere.getInfo()!=null&&loggerWhere.getInfo().indexOf("%")<0){
-			loggerWhere.setInfo("%"+loggerWhere.getInfo()+"%");
+		String old = loggerWhere.getInfo();
+		if(loggerWhere.getInfo()!=null&&!loggerWhere.getInfo().isEmpty()){
+			loggerWhere.setInfo("%"+old+"%");
 		}
 		page.setPageSize(5);
 		page = loggerService.getAll(page,loggerWhere);
+		loggerWhere.setInfo(old);
 		mv.addValue("logger", loggerWhere);
 		mv.addValue("page", page);
 		mv.forward("/WEB-INF/logger/list.jsp");
