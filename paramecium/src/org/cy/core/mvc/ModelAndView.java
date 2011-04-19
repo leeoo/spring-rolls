@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.cy.core.commons.BeanUitls;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 /**
@@ -41,9 +42,8 @@ public class ModelAndView {
 					field.setAccessible(true);
 					try {
 						String name = bn.concat(field.getName());
-						if(request.getParameterMap().get(name)!=null){
-							field.set(bean,request.getParameterMap().get(name));
-						}
+						String value = request.getParameter(name);
+						BeanUitls.setFieldValue(field, value, bean);
 					} catch (Exception e) {
 						logger.warn(e);
 					}

@@ -1,6 +1,7 @@
 package org.cy.core.commons;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 /**
@@ -15,6 +16,27 @@ public abstract class DateUtils {
 	public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd",java.util.Locale.CHINA);
 	public static final DateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss",java.util.Locale.CHINA);	
 	public static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",java.util.Locale.CHINA);
+	
+	/**
+	 * 把字符变成时间
+	 * @return 返回当前时间
+	 */
+	public static Date parse(String str) {
+		Date date = null;
+		try {
+			date = DATE_FORMAT.parse(str);
+		} catch (ParseException e) {
+		}
+		try {
+			date = DATE_TIME_FORMAT.parse(str);
+		} catch (ParseException e) {
+		}
+		try {
+			date = TIME_FORMAT.parse(str);
+		} catch (ParseException e) {
+		}
+		return date;
+	}
 	
 	/**
 	 * 获得当前日期时间

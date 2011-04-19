@@ -1,6 +1,7 @@
 package org.cy.core.commons;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,37 @@ import org.cy.core.log.LoggerFactory;
 public abstract class BeanUitls {
 	
 	private final static Log logger = LoggerFactory.getLogger();
+	
+	public static void setFieldValue(Field field,String value,Object bean){
+		try{
+			Class<?> clazz = field.getType();
+			if (String.class.equals(clazz)){
+				field.set(bean,value);
+			}else if (boolean.class.equals(clazz) || Boolean.class.equals(clazz)) {
+				field.set(bean,Boolean.parseBoolean(value));
+			}else if (byte.class.equals(clazz) || Byte.class.equals(clazz)) {
+				field.set(bean,Byte.parseByte(value));
+			}else if (short.class.equals(clazz) || Short.class.equals(clazz)) {
+				field.set(bean,Short.parseShort(value));
+			}else if (int.class.equals(clazz) || Integer.class.equals(clazz)) {
+				field.set(bean,Integer.parseInt(value));
+			}else if (long.class.equals(clazz) || Long.class.equals(clazz)) {
+				field.set(bean,Long.parseLong(value));
+			}else if (float.class.equals(clazz) || Float.class.equals(clazz)) {
+				field.set(bean,Float.parseFloat(value));
+			}else if (double.class.equals(clazz) || Double.class.equals(clazz) || Number.class.equals(clazz)) {
+				field.set(bean,Double.parseDouble(value));
+			}else if (byte[].class.equals(clazz)) {
+				field.set(bean,value.getBytes());
+			}else if (java.util.Date.class.equals(clazz)) {
+				field.set(bean,DateUtils.parse(value));
+			}else if (BigDecimal.class.equals(clazz)) {
+				field.set(bean,value);
+			}
+		}catch (Exception e) {
+			logger.warn(e.fillInStackTrace());
+		}
+	}
 	
 	/**
 	 * bean实例转换为Map实例

@@ -7,11 +7,6 @@
 <title>首页</title>
 </head>
 <body>
-<div align="center" id="center" >
-	<div>
-		<a href="${base}/logger/index.jhtml">forward</a><br>
-		<a href="${base}/logger/save.jhtml">redirect</a>
-	</div>
-</div>
+	<div><a href="${base}/logger/list.jhtml">simple</a></div>
 </body>
 </html>

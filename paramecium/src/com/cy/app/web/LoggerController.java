@@ -29,11 +29,11 @@ public class LoggerController {
 	@MappingMethod
 	public void input(ModelAndView mv){
 		Integer id = (Integer) mv.getValue("id");
-		if(id==null){
+		if(id!=null){
 			Logger logger = loggerService.get(id);
 			mv.addValue("logger", logger);
 		}
-		mv.forward("/WEB-INF/logger/save.jsp");
+		mv.forward("/WEB-INF/logger/input.jsp");
 	}
 	
 	@MappingMethod
@@ -47,10 +47,10 @@ public class LoggerController {
 			}
 		} catch (SQLException e) {
 			mv.addValue("logger", logger);
-			mv.forward("/WEB-INF/logger/save.jsp");
+			mv.forward("/WEB-INF/logger/input.jsp");
 			return;
 		}
-		mv.redirect("/WEB-INF/logger/list.jsp");
+		mv.redirect("/logger/list.jhtml");
 	}
 	
 	@MappingMethod
@@ -62,7 +62,7 @@ public class LoggerController {
 			}
 		} catch (SQLException e) {
 		}
-		mv.redirect("/WEB-INF/logger/list.jsp");
+		mv.redirect("/logger/list.jhtml");
 	}
 	
 }
