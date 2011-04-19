@@ -1,0 +1,3 @@
+04-19 21:42:14 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "T_LOGGER_INFO" not found; SQL statement:
+SELECT COUNT(0)  FROM t_logger_info [42102-154]
