@@ -83,6 +83,9 @@ public class ModelAndView {
 	 */
 	public Object getValue(String name,Class<?> clazz){
 		String value = request.getParameter(name);
+		if(value==null){
+			return null;
+		}
 		if (String.class.equals(clazz)){
 			return value;
 		}else if (int.class.equals(clazz) || Integer.class.equals(clazz)) {

@@ -20,6 +20,9 @@ public abstract class BeanUitls {
 	
 	public static void setFieldValue(Field field,String value,Object bean){
 		try{
+			if(value==null||bean==null){
+				return;
+			}
 			Class<?> clazz = field.getType();
 			if (String.class.equals(clazz)){
 				field.set(bean,value);
