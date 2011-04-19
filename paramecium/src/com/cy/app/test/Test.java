@@ -20,7 +20,7 @@ public class Test {
 		}
 		/*Connection connection = MultiDataSourceFactory.getDataSource("ds1").getConnection();
 		Statement st=  connection.createStatement();
-		st.execute("CREATE TABLE t_logger_info(int INT PRIMARY KEY AUTO_INCREMENT, log_info VARCHAR(255) , log_date DATE)");*/
+		st.execute("CREATE TABLE t_logger_info(id INT PRIMARY KEY AUTO_INCREMENT, log_info VARCHAR(255) , log_date DATE)");*/
 	}
 	
 	private static class PoolThread implements Runnable {
