@@ -8,10 +8,10 @@ import org.cy.core.orm.annotation.VirtualColumn;
 @Entity(tableName="t_logger_info")
 public class LoggerWhere extends Logger{
 	
-	@VirtualColumn(comparison=">=",comparisonColumn="log_date")
+	@VirtualColumn(comparison="<=",comparisonColumn="log_date")
 	private Date startDate;
 	
-	@VirtualColumn(comparison="<=",comparisonColumn="log_date")
+	@VirtualColumn(comparison=">=",comparisonColumn="log_date")
 	private Date endDate;
 
 	public Date getStartDate() {
