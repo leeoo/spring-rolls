@@ -6,7 +6,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 <title>首页</title>
 </head>
-<body>
-	<div><a href="${base}/logger/list.jhtml">simple</a></div>
+<body style="background-color:#AABBBB;height: 100%">
+	<div style="background-color: #AABBBB;width: 100%;">
+		<img alt="logo" src="${base}/commons/images/logo.gif" height="70" width="110"/>
+		<hr width="100%"/>
+	</div>
+	<div style="background-color: #FFFFFF;width: 100%;height: 100%;">
+		<a href="${base}/logger/list.jhtml">simple</a>
+	</div>
 </body>
 </html>
