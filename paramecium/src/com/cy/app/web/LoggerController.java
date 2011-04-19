@@ -22,6 +22,9 @@ public class LoggerController {
 	public void index(ModelAndView mv){
 		Page page = (Page) mv.getBean("page",Page.class);
 		LoggerWhere loggerWhere = (LoggerWhere) mv.getBean("logger",LoggerWhere.class);
+		if(loggerWhere.getInfo()!=null&&loggerWhere.getInfo().indexOf("%")<0){
+			loggerWhere.setInfo("%"+loggerWhere.getInfo()+"%");
+		}
 		page.setPageSize(5);
 		page = loggerService.getAll(page,loggerWhere);
 		mv.addValue("logger", loggerWhere);
