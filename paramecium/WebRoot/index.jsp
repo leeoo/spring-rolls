@@ -12,7 +12,7 @@
 		<hr width="100%"/>
 	</div>
 	<div style="background-color: #FFFFFF;width: 100%;height: 100%;">
-		<a href="${base}/logger/list.jhtml">simple</a>
+		<a href="${base}/logger/list.jhtml">简单演示</a>
 	</div>
 </body>
 </html>
