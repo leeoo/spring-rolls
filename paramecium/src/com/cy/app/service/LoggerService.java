@@ -15,7 +15,6 @@ import com.cy.app.entity.LoggerWhere;
 public class LoggerService {
 	
 	private GenericOrmDao<Logger, Integer> ormDao = new GenericOrmDao<Logger, Integer>("ds1", Logger.class);
-	private GenericOrmDao<Logger, Integer> ormDao2 = new GenericOrmDao<Logger, Integer>("ds2", Logger.class);
 	
 	public int save(Logger logger) throws SQLException{
 		return ormDao.insert(logger).intValue();
@@ -36,12 +35,12 @@ public class LoggerService {
 	
 	@Transactional(readOnly=true)
 	public Page getAll(Page page,LoggerWhere loggerWhere){
-		return ormDao2.select(page,loggerWhere);
+		return ormDao.select(page,loggerWhere);
 	}
 	
 	@Transactional(readOnly=true)
 	public Page getAll(Page page){
-		return ormDao2.select(page);
+		return ormDao.select(page);
 	}
 	
 }
