@@ -23,7 +23,7 @@
 		<tr>
 		<td colspan="7" align="left">
 			第${page.pageNo}页, 共${page.totalPages}页 
-			<c:set var="actionName" value="${base}/logger/list.jhtml?page.pageNo="></c:set>
+			<c:set var="actionName" value="${base}logger/list.jhtml?page.pageNo="></c:set>
 			<a href="${actionName}1">首页</a>
 			<c:if test="${page.pageNo-3>0}">
 				...&nbsp;

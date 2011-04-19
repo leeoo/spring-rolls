@@ -56,15 +56,14 @@ public class LoggerController {
 	@MappingMethod
 	public void delete(ModelAndView mv){
 		Integer id = (Integer) mv.getValue("id",Integer.class);
+		Page page = (Page) mv.getBean("page",Page.class);
 		try {
 			if(id!=null){
 				loggerService.delete(id);
-				/*Page page = (Page) mv.getBean("page",Page.class);
-				mv.addValue("page", page);*/
 			}
 		} catch (SQLException e) {
 		}
-		mv.redirect("/logger/list.jhtml");
+		mv.redirect("/logger/list.jhtml?page.pageNo="+page.getPageNo());
 	}
 	
 }
