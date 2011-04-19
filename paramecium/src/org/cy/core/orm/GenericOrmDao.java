@@ -127,7 +127,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		sql = sql.substring(0, start);
 		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
 		if(where==null||where.isEmpty()){
-			return page;
+			return select(page);
 		}
 		sql = sql.concat(" WHERE ").concat(where);
 		Entity entity = clazz.getAnnotation(Entity.class);
