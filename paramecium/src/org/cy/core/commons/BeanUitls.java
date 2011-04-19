@@ -23,26 +23,26 @@ public abstract class BeanUitls {
 			Class<?> clazz = field.getType();
 			if (String.class.equals(clazz)){
 				field.set(bean,value);
+			}else if (int.class.equals(clazz) || Integer.class.equals(clazz)) {
+				field.set(bean,Integer.parseInt(value));
+			}else if (java.util.Date.class.equals(clazz)) {
+				field.set(bean,DateUtils.parse(value));
+			}else if (long.class.equals(clazz) || Long.class.equals(clazz)) {
+				field.set(bean,Long.parseLong(value));
 			}else if (boolean.class.equals(clazz) || Boolean.class.equals(clazz)) {
 				field.set(bean,Boolean.parseBoolean(value));
 			}else if (byte.class.equals(clazz) || Byte.class.equals(clazz)) {
 				field.set(bean,Byte.parseByte(value));
 			}else if (short.class.equals(clazz) || Short.class.equals(clazz)) {
 				field.set(bean,Short.parseShort(value));
-			}else if (int.class.equals(clazz) || Integer.class.equals(clazz)) {
-				field.set(bean,Integer.parseInt(value));
-			}else if (long.class.equals(clazz) || Long.class.equals(clazz)) {
-				field.set(bean,Long.parseLong(value));
 			}else if (float.class.equals(clazz) || Float.class.equals(clazz)) {
 				field.set(bean,Float.parseFloat(value));
 			}else if (double.class.equals(clazz) || Double.class.equals(clazz) || Number.class.equals(clazz)) {
 				field.set(bean,Double.parseDouble(value));
 			}else if (byte[].class.equals(clazz)) {
 				field.set(bean,value.getBytes());
-			}else if (java.util.Date.class.equals(clazz)) {
-				field.set(bean,DateUtils.parse(value));
 			}else if (BigDecimal.class.equals(clazz)) {
-				field.set(bean,value);
+				field.set(bean,new BigDecimal(value));
 			}
 		}catch (Exception e) {
 		}

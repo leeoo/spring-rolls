@@ -28,7 +28,7 @@ public class LoggerController {
 	
 	@MappingMethod
 	public void input(ModelAndView mv){
-		Integer id = (Integer) mv.getValue("id");
+		Integer id = (Integer) mv.getValue("id",Integer.class);
 		if(id!=null){
 			Logger logger = loggerService.get(id);
 			mv.addValue("logger", logger);
@@ -55,7 +55,7 @@ public class LoggerController {
 	
 	@MappingMethod
 	public void delete(ModelAndView mv){
-		Integer id = (Integer) mv.getValue("id");
+		Integer id = (Integer) mv.getValue("id",Integer.class);
 		try {
 			if(id!=null){
 				loggerService.delete(id);
