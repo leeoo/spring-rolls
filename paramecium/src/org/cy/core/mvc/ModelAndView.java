@@ -33,6 +33,12 @@ public class ModelAndView {
 		this.response = response;
 	}
 	
+	/**
+	 * 根据提交的name构建bean,表单中beanName.propertyName格式将被构建。
+	 * @param beanName
+	 * @param clazz
+	 * @return
+	 */
 	public Object getBean(String beanName,Class<?> clazz){
 		String bn = beanName.concat(".");
 		Object bean = null;
@@ -55,6 +61,11 @@ public class ModelAndView {
 		return bean;
 	}
 
+	/**
+	 * 构建没有beanName.的表单数据成实体
+	 * @param clazz
+	 * @return
+	 */
 	public Object getBean(Class<?> clazz){
 		Object bean = null;
 		try {
@@ -77,7 +88,7 @@ public class ModelAndView {
 	}
 	
 	/**
-	 * 获得值
+	 * 获得单值
 	 * @param name
 	 * @return
 	 */
@@ -113,7 +124,7 @@ public class ModelAndView {
 	}
 	
 	/**
-	 * 添加值
+	 * 添加数据
 	 * @param name
 	 * @param value
 	 */

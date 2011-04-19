@@ -257,7 +257,7 @@ public class EntitySqlBuilder {
 			for(Field field : fields){
 				field.setAccessible(true);
 				try {
-					if(field.get(dynamicWhereBean)==null){
+					if(field.get(dynamicWhereBean)==null||field.get(dynamicWhereBean).toString().isEmpty()){
 						continue;
 					}
 					if(entity!=null){

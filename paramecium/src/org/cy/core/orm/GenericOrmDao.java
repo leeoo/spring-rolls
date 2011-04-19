@@ -117,6 +117,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @return
 	 */
 	public Page select(Page page,T whereBean){
+		if(whereBean==null){
+			return select(page);
+		}
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
 		int start =sql.indexOf(" WHERE ");
 		sql = sql.substring(0, start);
