@@ -47,8 +47,11 @@ public class DefaultDataSource implements DataSource{
 	/**
 	 * 每次初始化指定书目的连接入池
 	 */
-	private synchronized void init(){
-		for(int i = 0;i<poolMax;i++){
+	private synchronized void init(int start){
+		if(start>=poolMax){
+			return;
+		}
+		for(int i = start;i<poolMax;i++){
 			Connection connection = null;
 			if(url!=null&&username!=null){
 				try {
@@ -80,12 +83,10 @@ public class DefaultDataSource implements DataSource{
 			connectionPool.put(ds, new ConcurrentHashMap<Connection, Date>());
 		}
 		synchronized (connectionPool.get(ds)) {
-			if(connectionPool.get(ds).isEmpty()){
-				init();
-			}
+			init(connectionPool.get(ds).size());
 			Connection connection = getConnection4Pool();
 			if(connection==null){
-				connection = getConnection();
+				connection = getConnection();//递归
 			}
 			connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
 			return connection;
