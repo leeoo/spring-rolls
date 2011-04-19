@@ -45,7 +45,6 @@ public abstract class BeanUitls {
 				field.set(bean,value);
 			}
 		}catch (Exception e) {
-			logger.warn(e.fillInStackTrace());
 		}
 	}
 	

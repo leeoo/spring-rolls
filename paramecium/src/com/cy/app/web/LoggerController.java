@@ -57,8 +57,10 @@ public class LoggerController {
 	public void delete(ModelAndView mv){
 		Integer id = (Integer) mv.getValue("id");
 		try {
-			if(id==null){
+			if(id!=null){
 				loggerService.delete(id);
+				/*Page page = (Page) mv.getBean("page",Page.class);
+				mv.addValue("page", page);*/
 			}
 		} catch (SQLException e) {
 		}

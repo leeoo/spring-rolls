@@ -8,14 +8,14 @@
 </head>
 <body>
 <div>
-	<table>
+	<table border="1">
 		<tr><th>日志时间</th><th>日志内容</th><th nowrap="nowrap">操作</th></tr>
 		<c:forEach var="logger" items="${page.result}">
 			<tr>
-				<td><fmt:formatDate value="${logger.date}" pattern="yyyy年MM月dd日HH时mm分ss秒"/></td>
+				<td><fmt:formatDate value="${logger.date}" pattern="yyyy年MM月dd日"/></td>
 				<td>${logger.info}</td>
 				<td>
-					<a href="${base}logger/delete.jhtml?page.pageNo=${page.pageNo}&logger.id=${logger.id}">删除</a>
+					<a href="${base}logger/delete.jhtml?page.pageNo=${page.pageNo}&id=${logger.id}">删除</a>
 					<a href="${base}logger/input.jhtml?id=${logger.id}">修改</a>
 				</td>
 			</tr>

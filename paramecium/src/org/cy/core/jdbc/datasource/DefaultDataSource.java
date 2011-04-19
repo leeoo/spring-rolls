@@ -148,7 +148,7 @@ public class DefaultDataSource implements DataSource{
 								continue;
 							}
 							int bw = (int)((currentTime-(connectionPool.get(ds).get(connection)).getTime())/1000);//最近一次获得连接时间距现在有多久
-							if(bw<62){//如果间隔时间小于约一分钟,说明使用较为频繁,暂不做清理
+							if(bw<200){//如果间隔时间小于指定时间,说明使用较为频繁,暂不做清理
 								continue;
 							}
 							if (connection.getAutoCommit()) {

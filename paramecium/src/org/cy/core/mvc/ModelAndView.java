@@ -45,12 +45,10 @@ public class ModelAndView {
 						String value = request.getParameter(name);
 						BeanUitls.setFieldValue(field, value, bean);
 					} catch (Exception e) {
-						logger.warn(e);
 					}
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return bean;
 	}
@@ -65,16 +63,13 @@ public class ModelAndView {
 					field.setAccessible(true);
 					try {
 						String name = field.getName();
-						if(request.getParameterMap().get(name)!=null){
-							field.set(bean,request.getParameterMap().get(name));
-						}
+						String value = request.getParameter(name);
+						BeanUitls.setFieldValue(field, value, bean);
 					} catch (Exception e) {
-						logger.warn(e);
 					}
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return bean;
 	}
@@ -85,7 +80,7 @@ public class ModelAndView {
 	 * @return
 	 */
 	public Object getValue(String name){
-		return request.getAttribute(name);
+		return request.getParameter(name);
 	}
 	
 	/**
