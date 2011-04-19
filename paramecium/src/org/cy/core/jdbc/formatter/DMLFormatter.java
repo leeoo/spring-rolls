@@ -103,9 +103,13 @@ public class DMLFormatter{
 				lcToken = token.toLowerCase();
 
 				if ( "'".equals( token ) ) {
-					String t;
+					String t = "";
 					do {
-						t = tokens.nextToken();
+						try{
+							t = tokens.nextToken();
+						}catch (Exception e) {
+						}
+						
 						token += t;
 					}
 					while ( !"'".equals( t ) && tokens.hasMoreTokens() ); // cannot handle single quotes
