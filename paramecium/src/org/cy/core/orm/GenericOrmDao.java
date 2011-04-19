@@ -79,8 +79,10 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		int start = sql.indexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
-		sql = sql.concat(" WHERE ").concat(where);
-		genericJdbcDao.executeDMLByBean(sql, whereBean);
+		if(where!=null&&!where.isEmpty()){
+			sql = sql.concat(" WHERE ").concat(where);
+			genericJdbcDao.executeDMLByBean(sql, whereBean);
+		}
 	}
 	
 	/**
@@ -124,6 +126,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		int start =sql.indexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
+		if(where==null||where.isEmpty()){
+			return page;
+		}
 		sql = sql.concat(" WHERE ").concat(where);
 		Entity entity = clazz.getAnnotation(Entity.class);
 		if(entity!=null&&!entity.orderBy().isEmpty()){
@@ -139,10 +144,16 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<T> select(T whereBean){
+		if(whereBean==null){
+			return null;
+		}
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
 		int start =sql.indexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
+		if(where==null||where.isEmpty()){
+			return null;
+		}
 		sql = sql.concat(" WHERE ").concat(where);
 		Entity entity = clazz.getAnnotation(Entity.class);
 		if(entity!=null&&!entity.orderBy().isEmpty()){
