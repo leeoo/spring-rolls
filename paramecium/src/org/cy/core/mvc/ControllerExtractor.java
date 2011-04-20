@@ -48,7 +48,7 @@ public class ControllerExtractor {
 					logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
 					return;
 				}
-				Method[] methods = classInfo.getClazz().getMethods();
+				Method[] methods = classInfo.getClazz().getMethods();//只返回public，如果需要private可用getDeclaredMethods
 				if(methods==null){
 					logger.warn(classInfo.getClazz().getName()+"没有相符合的处理方法!");
 					return;
