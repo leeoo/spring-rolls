@@ -15,15 +15,15 @@ public class Test {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		for(int i=0;i<1000;i++){
+		/*for(int i=0;i<1000;i++){
 			new Thread(new PoolThread()).start();
-		}
+		}*/
 		/*Connection connection = MultiDataSourceFactory.getDataSource("ds1").getConnection();
 		Statement st=  connection.createStatement();
-		st.execute("CREATE TABLE t_logger_info(id INT PRIMARY KEY AUTO_INCREMENT, log_info VARCHAR(255) , log_date DATE)");*/
+		st.execute("CREATE TABLE t_logger_info(id INT PRIMARY KEY AUTO_INCREMENT, log_info VARCHAR(255) , log_date TIMESTAMP)");*/
 	}
 	
-	private static class PoolThread implements Runnable {
+	static class PoolThread implements Runnable {
 		
 		public void run() {
 			while (true) {
