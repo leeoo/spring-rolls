@@ -55,10 +55,11 @@ public class ClassScanner {
 		if(service!=null){
 			ServiceClassInfo classInfo = new ServiceClassInfo();
 			classInfo.setClazz(clazz);
-			String uniqueName = clazz.getSimpleName().substring(0, 1).toLowerCase()+clazz.getSimpleName().substring(1, clazz.getSimpleName().length());
-			classInfo.setUniqueName(uniqueName);
 			if(!service.uniqueName().isEmpty()){
 				classInfo.setUniqueName(service.uniqueName());
+			}else{
+				String uniqueName = clazz.getSimpleName().substring(0, 1).toLowerCase()+clazz.getSimpleName().substring(1, clazz.getSimpleName().length());
+				classInfo.setUniqueName(uniqueName);
 			}
 			classInfo.setSecurity(false);
 			classInfo.setTransactional(false);
