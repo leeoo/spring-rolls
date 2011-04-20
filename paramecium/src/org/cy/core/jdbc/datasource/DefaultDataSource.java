@@ -25,7 +25,7 @@ import org.cy.core.log.LoggerFactory;
  * <br>包及类名(Package Class): <b>org.cy.core.jdbc.datasource.DefaultDataSource.java</b>
  */
 public class DefaultDataSource implements DataSource{
-	private static boolean isInit = false;
+	private boolean isInit = false;//判断是否实例化后被使用过
 	private final static Log logger = LoggerFactory.getLogger();
 	private final static ConcurrentMap<String,ConcurrentMap<Connection,Date>> connectionPool = new ConcurrentHashMap<String,ConcurrentMap<Connection,Date>>();
 	private PrintWriter printWriter;
@@ -46,37 +46,35 @@ public class DefaultDataSource implements DataSource{
 	}
 	
 	/**
-	 * 每次初始化指定书目的连接入池
+	 * 构建新连接到连接池中
 	 */
-	private synchronized void init(int start){
-		if(start>=poolMax){
+	private synchronized void buildNewConnectionToPool(){
+		if(connectionPool.get(ds).size()>=poolMax){
 			return;
 		}
-		for(int i = start;i<poolMax;i++){
-			Connection connection = null;
-			if(url!=null&&username!=null){
-				try {
-					if(!isInit){
-						try {
-							Class.forName(driverClassName);
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-							logger.error(e);
-						}
-						isInit= true;
+		Connection connection = null;
+		if(url!=null&&username!=null){
+			try {
+				if(!isInit){
+					try {
+						Class.forName(driverClassName);
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+						logger.error(e);
 					}
-					connection = DriverManager.getConnection(url, username, password);
-					DriverManager.setLoginTimeout(getLoginTimeout());
-					connection.setAutoCommit(true);
-					connection.setReadOnly(false);
-					connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
-				} catch (Exception e) {
-					e.printStackTrace();
-					logger.error(e);
+					isInit= true;
 				}
+				connection = DriverManager.getConnection(url, username, password);
+				DriverManager.setLoginTimeout(getLoginTimeout());
+				connection.setAutoCommit(true);
+				connection.setReadOnly(false);
+				connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e);
 			}
 		}
-		logger.debug("数据库连接池重新初始化！连接数："+connectionPool.get(ds).size());
+		logger.debug("新的连接被放入连接池,当前连接数："+connectionPool.get(ds).size());
 	}
 	
 	public Connection getConnection(){
@@ -84,11 +82,7 @@ public class DefaultDataSource implements DataSource{
 			connectionPool.put(ds, new ConcurrentHashMap<Connection, Date>());
 		}
 		synchronized (connectionPool.get(ds)) {
-			init(connectionPool.get(ds).size());
 			Connection connection = getConnection4Pool();
-			if(connection==null){
-				connection = getConnection();//递归
-			}
 			connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
 			return connection;
 		}
@@ -115,9 +109,10 @@ public class DefaultDataSource implements DataSource{
 			}
 			try {
 				Thread.sleep(1);//如果上面没有找到可用连接，稍等片刻，重现递归调用
+				buildNewConnectionToPool();//休息片刻初始化一下连接池，看看还有没有可用的新连接可以创建
 			} catch (Exception e) {
 			}
-			return getConnection4Pool();
+			return getConnection4Pool();//
 		}
 	}
 
