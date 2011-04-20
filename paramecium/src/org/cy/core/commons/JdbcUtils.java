@@ -122,7 +122,7 @@ public abstract class JdbcUtils {
 					columnLabel = resultSetMetaData.getTableName(column).concat(".").concat(columnLabel);
 				}
 				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
+				map.put(columnLabel.toLowerCase(), columnValue);
 			}
 			collection.add(map);
 		}
@@ -148,7 +148,7 @@ public abstract class JdbcUtils {
 			for (int column = 1; column <= columnCount; column++) {
 				String columnLabel = resultSetMetaData.getColumnLabel(column);
 				Object columnValue = resultSet.getObject(columnLabel);
-				map.put(columnLabel, columnValue);
+				map.put(columnLabel.toLowerCase(), columnValue);
 			}
 			bean = BeanUitls.map2Bean(clazz, map, true);
 			collection.add(bean);
