@@ -31,6 +31,7 @@ public class DefaultDataSource implements DataSource{
 	private PrintWriter printWriter;
 	private int poolMax = 5;//最大连接数
 	private int poolBase = 3;//控制并发基数
+	private int connectLife = 120;//连接生命长度(秒)
 	private String ds;
 	private String driverClassName;
 	private String url;
@@ -131,12 +132,12 @@ public class DefaultDataSource implements DataSource{
 		
 		/**
 		 * 清理连接池
-		 * 一分钟之内没有人使用连接池，将会把所有连接关闭，并清空连接池
+		 * 一定时间之内没有人使用连接池，将会把所有连接关闭，并清空连接池
 		 */
 		private void clearPool(){
 			while (true) {
 				try {
-					Thread.sleep(35 * 1000);// 指定轮询间隔清理使用完毕的Connection
+					Thread.sleep(60 * 1000);// 指定轮询间隔清理使用完毕的Connection
 					if(connectionPool.get(ds)==null||connectionPool.get(ds).isEmpty()){
 						continue;
 					}
@@ -149,7 +150,7 @@ public class DefaultDataSource implements DataSource{
 								continue;
 							}
 							int bw = (int)((currentTime-(connectionPool.get(ds).get(connection)).getTime())/1000);//最近一次获得连接时间距现在有多久
-							if(bw<200){//如果间隔时间小于指定时间,说明使用较为频繁,暂不做清理
+							if(bw<connectLife){//如果间隔时间小于指定时间,说明使用较为频繁,暂不做清理
 								continue;
 							}
 							if (connection.getAutoCommit()) {
