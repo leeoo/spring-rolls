@@ -48,7 +48,7 @@ public class DefaultDataSource implements DataSource{
 	/**
 	 * 构建新连接到连接池中
 	 */
-	private synchronized void buildNewConnectionToPool(){
+	private synchronized void buildConnectionToPool(){
 		if(connectionPool.get(ds).size()>=poolMax){
 			return;
 		}
@@ -77,22 +77,25 @@ public class DefaultDataSource implements DataSource{
 		logger.debug("新的连接被放入连接池,当前连接数："+connectionPool.get(ds).size());
 	}
 	
+	/**
+	 * 获得连接
+	 */
 	public Connection getConnection(){
 		if(connectionPool.get(ds)==null){//由于是运行时构建数据源实例，很多属性需要之后填充,之所以不把此处放在构造方法中，是因为当时ds还没有被赋值.
 			connectionPool.put(ds, new ConcurrentHashMap<Connection, Date>());
 		}
 		synchronized (connectionPool.get(ds)) {
-			Connection connection = getConnection4Pool();
+			Connection connection = getConnectionFromPool();
 			connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
 			return connection;
 		}
 	}
 	
 	/**
-	 * 获得连接池
+	 * 从连接池中获得连接
 	 * @return
 	 */
-	private Connection getConnection4Pool(){
+	private Connection getConnectionFromPool(){
 		synchronized(connectionPool.get(ds)){
 			for(Connection connection : connectionPool.get(ds).keySet()){
 				try {
@@ -109,10 +112,10 @@ public class DefaultDataSource implements DataSource{
 			}
 			try {
 				Thread.sleep(1);//如果上面没有找到可用连接，稍等片刻，重现递归调用
-				buildNewConnectionToPool();//休息片刻初始化一下连接池，看看还有没有可用的新连接可以创建
+				buildConnectionToPool();//休息片刻初始化一下连接池，看看还有没有可用的新连接可以创建
 			} catch (Exception e) {
 			}
-			return getConnection4Pool();//
+			return getConnectionFromPool();//
 		}
 	}
 
