@@ -18,6 +18,12 @@ public abstract class BeanUitls {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	
+	/**
+	 * 设置字段值
+	 * @param field
+	 * @param value
+	 * @param bean
+	 */
 	public static void setFieldValue(Field field,String value,Object bean){
 		try{
 			if(value==null||bean==null){
@@ -49,6 +55,39 @@ public abstract class BeanUitls {
 			}
 		}catch (Exception e) {
 		}
+	}
+	
+	/**
+	 * 根据字符串获得值
+	 * @param value
+	 * @param clazz
+	 * @return
+	 */
+	public static Object getValueByClass(String value,Class<?> clazz){
+		if (String.class.equals(clazz)){
+			return value;
+		}else if (int.class.equals(clazz) || Integer.class.equals(clazz)) {
+			return Integer.parseInt(value);
+		}else if (java.util.Date.class.equals(clazz)) {
+			return DateUtils.parse(value);
+		}else if (long.class.equals(clazz) || Long.class.equals(clazz)) {
+			return Long.parseLong(value);
+		}else if (boolean.class.equals(clazz) || Boolean.class.equals(clazz)) {
+			return Boolean.parseBoolean(value);
+		}else if (byte.class.equals(clazz) || Byte.class.equals(clazz)) {
+			return Byte.parseByte(value);
+		}else if (short.class.equals(clazz) || Short.class.equals(clazz)) {
+			return Short.parseShort(value);
+		}else if (float.class.equals(clazz) || Float.class.equals(clazz)) {
+			return Float.parseFloat(value);
+		}else if (double.class.equals(clazz) || Double.class.equals(clazz) || Number.class.equals(clazz)) {
+			return Double.parseDouble(value);
+		}else if (byte[].class.equals(clazz)) {
+			return value.getBytes();
+		}else if (BigDecimal.class.equals(clazz)) {
+			return new BigDecimal(value);
+		}
+		return null;
 	}
 	
 	/**

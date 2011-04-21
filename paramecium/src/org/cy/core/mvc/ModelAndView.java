@@ -2,7 +2,8 @@ package org.cy.core.mvc;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.cy.core.commons.BeanUitls;
-import org.cy.core.commons.DateUtils;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 /**
@@ -97,30 +97,24 @@ public class ModelAndView {
 		if(value==null){
 			return null;
 		}
-		if (String.class.equals(clazz)){
-			return value;
-		}else if (int.class.equals(clazz) || Integer.class.equals(clazz)) {
-			return Integer.parseInt(value);
-		}else if (java.util.Date.class.equals(clazz)) {
-			return DateUtils.parse(value);
-		}else if (long.class.equals(clazz) || Long.class.equals(clazz)) {
-			return Long.parseLong(value);
-		}else if (boolean.class.equals(clazz) || Boolean.class.equals(clazz)) {
-			return Boolean.parseBoolean(value);
-		}else if (byte.class.equals(clazz) || Byte.class.equals(clazz)) {
-			return Byte.parseByte(value);
-		}else if (short.class.equals(clazz) || Short.class.equals(clazz)) {
-			return Short.parseShort(value);
-		}else if (float.class.equals(clazz) || Float.class.equals(clazz)) {
-			return Float.parseFloat(value);
-		}else if (double.class.equals(clazz) || Double.class.equals(clazz) || Number.class.equals(clazz)) {
-			return Double.parseDouble(value);
-		}else if (byte[].class.equals(clazz)) {
-			return value.getBytes();
-		}else if (BigDecimal.class.equals(clazz)) {
-			return new BigDecimal(value);
+		return BeanUitls.getValueByClass(value, clazz);
+	}
+
+	/**
+	 * 获得多值
+	 * @param name
+	 * @return
+	 */
+	public Collection<?> getValues(String name,Class<?> clazz){
+		String[] values = request.getParameterValues(name);
+		if(values==null||values.length==0){
+			return null;
 		}
-		return null;
+		Collection<Object> list = new HashSet<Object>();
+		for(String value : values){
+			list.add(BeanUitls.getValueByClass(value, clazz));
+		}
+		return list;
 	}
 	
 	/**
