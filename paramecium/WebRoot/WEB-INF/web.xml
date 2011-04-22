@@ -23,6 +23,10 @@
 		<listener-class>org.cy.core.ioc.ApplicationContextListener</listener-class>
 	</listener>
 
+	<listener>
+		<listener-class>org.cy.core.security.SessionListener</listener-class>
+	</listener>
+
 	<servlet>
 		<servlet-name>controller</servlet-name>
 		<servlet-class>org.cy.core.mvc.EntranceServlet</servlet-class>
