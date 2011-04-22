@@ -45,7 +45,7 @@ public class TransactionAutoProxy {
 			int level = Connection.TRANSACTION_READ_COMMITTED;
 			Transactional serviceTransaction = service.getClass().getAnnotation(Transactional.class);
 			if(serviceTransaction==null){
-				return service;
+				return proxy.invokeSuper(service, parameters);
 			}
 			readOnly = serviceTransaction.readOnly();
 			level = serviceTransaction.transactionLevel();
