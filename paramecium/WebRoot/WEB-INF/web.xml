@@ -13,10 +13,44 @@
 			<param-value>UTF-8</param-value>
 		</init-param>
 	</filter>
+
+	<filter>
+		<filter-name>gzipFilter</filter-name>
+		<filter-class>org.cy.core.mvc.GZipFilter</filter-class>
+	</filter>
 	
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>*.jhtml</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.htm</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>gzipFilter</filter-name>
+		<url-pattern>*.jhtml</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>gzipFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>gzipFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>gzipFilter</filter-name>
+		<url-pattern>*.htm</url-pattern>
 	</filter-mapping>
 	
 	<listener>
@@ -38,9 +72,7 @@
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
+		<welcome-file>index.jhtml</welcome-file>
 	</welcome-file-list>
 	
 </web-app>
