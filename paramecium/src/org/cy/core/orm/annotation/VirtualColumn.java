@@ -73,10 +73,4 @@ public @interface VirtualColumn {
 	 */
 	String comparisonColumn();
 	
-	/**
-	 * 可用于扩展页面显示组件
-	 * @return UI显示
-	 */
-	String showLabel() default "";
-
 }

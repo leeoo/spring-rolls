@@ -29,12 +29,6 @@ public @interface Column {
 	String fieldName() default "" ;
 	
 	/**
-	 * 可用于扩展页面显示组件
-	 * @return UI显示
-	 */
-	String showLabel() default "";
-	
-	/**
 	 * 是否参与动态查询
 	 * @return
 	 */

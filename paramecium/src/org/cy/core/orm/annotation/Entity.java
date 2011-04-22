@@ -24,12 +24,6 @@ public @interface Entity {
 	String tableName();
 
 	/**
-	 * 可用于扩展页面显示组件
-	 * @return UI显示
-	 */
-	String showLabel() default "";
-	
-	/**
 	 * 排序实例：“id DESC , name ASC”
 	 * @return 合成语句
 	 */
