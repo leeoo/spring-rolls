@@ -18,5 +18,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD,ElementType.TYPE,ElementType.METHOD})
 public @interface ShowLabel {
-
+	
+	/**
+	 * 名称
+	 * @return
+	 */
+	String name();
+	
 }
