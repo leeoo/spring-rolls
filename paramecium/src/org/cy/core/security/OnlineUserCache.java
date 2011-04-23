@@ -40,12 +40,12 @@ public class OnlineUserCache {
 	}
 	
 	/**
-	 * 用户是否在线
+	 * 获得某用户信息
 	 * @param username
 	 * @return
 	 */
-	public static boolean isOnline(String username){
-		return onlineUsers.get(username)!=null;
+	public static UserDetails getOnlineUser(String username){
+		return onlineUsers.get(username);
 	}
 	
 }

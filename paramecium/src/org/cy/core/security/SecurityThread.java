@@ -12,30 +12,32 @@ import org.cy.core.security.exception.UserKickException;
  */
 public class SecurityThread {
 	
-	private final static ThreadLocal<UserDetails> transactionThreadLocal = new ThreadLocal<UserDetails>();
+	private final static ThreadLocal<String> transactionThreadLocal = new ThreadLocal<String>();
 	
 	
 	public static void put(UserDetails details){
-		transactionThreadLocal.set(details);
+		transactionThreadLocal.set(details.getUsername());
 		OnlineUserCache.login(details);
 	}
 	
 	public static UserDetails get() throws UserKickException,UserDisabledException{
-		UserDetails details = transactionThreadLocal.get();
-		if(details!=null){
-			if(!OnlineUserCache.isOnline(details.getUsername())){//如果在线用户列表不存在该用户，而该用户线程仍有信息，被视为强制被踢出(一般管理员可用使用该权限)
+		String username = transactionThreadLocal.get();
+		if(username!=null){
+			UserDetails userDetails = OnlineUserCache.getOnlineUser(username);
+			if(userDetails==null){//如果在线用户列表不存在该用户，而该用户线程仍有信息，被视为强制被踢出(一般管理员可用使用该权限)
 				transactionThreadLocal.remove();
 				throw new UserKickException("用户已经被强制踢出!");
-			}else if(!details.isEnable()){//如果账户是被冻结的，抛出异常
+			}else if(!userDetails.isEnable()){//如果账户是被冻结的，抛出异常
 				transactionThreadLocal.remove();
 				throw new UserDisabledException("用户已经被冻结!");
 			}
+			return userDetails;
 		}
-		return details;
+		return null;
 	}
 	
 	public static void remove(){
-		OnlineUserCache.logout(transactionThreadLocal.get().getUsername());
+		OnlineUserCache.logout(transactionThreadLocal.get());
 		transactionThreadLocal.remove();
 	}
 	
