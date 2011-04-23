@@ -17,7 +17,7 @@ public class SecurityThread {
 	
 	public static void put(UserDetails details){
 		transactionThreadLocal.set(details);
-		OnlineUserCache.login(details.getUsername());
+		OnlineUserCache.login(details);
 	}
 	
 	public static UserDetails get() throws UserKickException,UserDisabledException{

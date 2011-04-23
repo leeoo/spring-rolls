@@ -13,14 +13,14 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class OnlineUserCache {
 	
-	private final static ConcurrentMap<String, Boolean> onlineUsers = new ConcurrentHashMap<String, Boolean>();
+	private final static ConcurrentMap<String, UserDetails> onlineUsers = new ConcurrentHashMap<String, UserDetails>();
 	
 	/**
 	 * 用户登录
-	 * @param username
+	 * @param details
 	 */
-	public static void login(String username){
-		onlineUsers.put(username, true);
+	public static void login(UserDetails details){
+		onlineUsers.put(details.getUsername(), details);
 	}
 	
 	/**
@@ -35,8 +35,8 @@ public class OnlineUserCache {
 	 * 获得所有在线用户列表
 	 * @return
 	 */
-	public static Collection<String> getAllOnlineUsers(){
-		return onlineUsers.keySet();
+	public static Collection<UserDetails> getAllOnlineUsers(){
+		return onlineUsers.values();
 	}
 	
 	/**
