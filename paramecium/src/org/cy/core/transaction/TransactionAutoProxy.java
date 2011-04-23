@@ -1,7 +1,6 @@
 package org.cy.core.transaction;
 
 import java.lang.reflect.Method;
-import java.sql.Connection;
 
 import org.cy.core.aop.cglib.Enhancer;
 import org.cy.core.aop.cglib.MethodInterceptor;
@@ -41,17 +40,17 @@ public class TransactionAutoProxy {
 		}
 		
 		public Object intercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
-			boolean readOnly = false;
-			int level = Connection.TRANSACTION_READ_COMMITTED;
+			if(!method.isAccessible()){
+				return proxy.invokeSuper(service, parameters);
+			}
 			Transactional serviceTransaction = service.getClass().getAnnotation(Transactional.class);
 			if(serviceTransaction==null){
 				return proxy.invokeSuper(service, parameters);
 			}
-			readOnly = serviceTransaction.readOnly();
-			level = serviceTransaction.transactionLevel();
-			
 			TransactionManager.begin();
 			Transactional methodTransaction = method.getAnnotation(Transactional.class);
+			boolean readOnly = serviceTransaction.readOnly();
+			int level = serviceTransaction.transactionLevel();
 			if(methodTransaction!=null){
 				readOnly = methodTransaction.readOnly();
 				level = methodTransaction.transactionLevel();

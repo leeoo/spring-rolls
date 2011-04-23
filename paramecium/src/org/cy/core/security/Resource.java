@@ -17,6 +17,10 @@ public class Resource implements Serializable{
 	private String lastResource;
 	
 	private String showLabel;
+	
+	public String toString() {
+		return firstResource+"#"+lastResource;
+	}
 
 	public String getShowLabel() {
 		return showLabel;
