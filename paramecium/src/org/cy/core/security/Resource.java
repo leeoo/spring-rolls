@@ -12,17 +12,11 @@ public class Resource implements Serializable{
 
 	private static final long serialVersionUID = 5410454114477519189L;
 	
-	private String resourceName;
+	private String firstResource;
+
+	private String lastResource;
 	
 	private String showLabel;
-
-	public String getResourceName() {
-		return resourceName;
-	}
-
-	public void setResourceName(String resourceName) {
-		this.resourceName = resourceName;
-	}
 
 	public String getShowLabel() {
 		return showLabel;
@@ -30,6 +24,22 @@ public class Resource implements Serializable{
 
 	public void setShowLabel(String showLabel) {
 		this.showLabel = showLabel;
+	}
+
+	public String getFirstResource() {
+		return firstResource;
+	}
+
+	public void setFirstResource(String firstResource) {
+		this.firstResource = firstResource;
+	}
+
+	public String getLastResource() {
+		return lastResource;
+	}
+
+	public void setLastResource(String lastResource) {
+		this.lastResource = lastResource;
 	}
 
 }
