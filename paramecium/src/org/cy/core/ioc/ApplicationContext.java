@@ -96,6 +96,7 @@ public class ApplicationContext {
 				}
 				try {
 					Object fieldInstance = serviceClassInfo.getClazz().newInstance();
+					fieldInstance = SecurityProxy.getSecurityInstance(fieldInstance);
 					loopInject(fieldInstance);
 					field.set(instance, fieldInstance);
 				} catch (Exception e) {
