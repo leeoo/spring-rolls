@@ -40,7 +40,8 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 			}
 			UserDetails user = SecurityThread.get();
 			if(user==null){
-				return proxy.invokeSuper(new AnonymousException("匿名用户没有登录！"), parameters);
+				return proxy.invokeSuper(service, parameters);
+				//throw new AnonymousException("匿名用户没有登录！");
 			}
 			Resource resource = buildResource(service.getClass(), method);
 			for(Resource userResource:user.getResources()){
@@ -48,7 +49,8 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 					return nextIntercept(service, method, parameters, proxy);
 				}
 			}
-			return proxy.invokeSuper(new AuthorizationException("该资源没有对该用户授权！"), parameters);
+			return proxy.invokeSuper(service, parameters);
+			//throw new AuthorizationException("该资源没有对此用户授权！");
 		}
 		return nextIntercept(service, method, parameters, proxy);
 	}
@@ -64,7 +66,13 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 	 */
 	public abstract Object nextIntercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable;
 	
-	static Resource buildResource(Class<?> clazz,Method method){
+	/**
+	 * 根据拦截到的实例和方法构建授权资源
+	 * @param clazz
+	 * @param method
+	 * @return
+	 */
+	private static Resource buildResource(Class<?> clazz,Method method){
 		Resource resource = mappingResources.get(clazz.getName()+method.getName());
 		if(resource!=null){
 			return resource;
@@ -76,7 +84,9 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 			if(!service.uniqueName().isEmpty()){
 				resource.setFirstResource(service.uniqueName());
 			}else{
-				resource.setFirstResource(clazz.getSimpleName().substring(0, 1).toLowerCase()+clazz.getSimpleName().substring(1, clazz.getSimpleName().length()));
+				Class<?> superClass = clazz.getSuperclass();
+				String uniqueName = superClass.getSimpleName().substring(0, 1).toLowerCase()+superClass.getSimpleName().substring(1, superClass.getSimpleName().length());
+				resource.setFirstResource(uniqueName);
 			}
 		}else if(controller!=null){
 			resource.setFirstResource(controller.namespace());

@@ -7,7 +7,7 @@ package org.cy.core.security.exception;
  * <br>项目名称(Project Name): <b>paramecium</b>
  * <br>包及类名(Package Class): <b>org.cy.core.security.exception.AuthorizationException.java</b>
  */
-public class AuthorizationException extends Exception{
+public class AuthorizationException extends RuntimeException{
 
 	private static final long serialVersionUID = 2705429570579315374L;
 	

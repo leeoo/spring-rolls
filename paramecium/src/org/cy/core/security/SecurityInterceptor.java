@@ -13,6 +13,10 @@ import org.cy.core.aop.cglib.MethodProxy;
  */
 public class SecurityInterceptor extends BaseSecurityInterceptor {
 	
+	public Object intercept(Object service, Method method, Object[] parameters,MethodProxy proxy) throws Throwable {
+		return super.intercept(service, method, parameters, proxy);
+	}
+	
 	public Object nextIntercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
 		return proxy.invokeSuper(service, parameters);
 	}

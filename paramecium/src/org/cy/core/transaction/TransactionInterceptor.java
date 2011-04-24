@@ -14,6 +14,9 @@ import org.cy.core.transaction.annotation.Transactional;
  */
 public class TransactionInterceptor extends BaseSecurityInterceptor {
 	
+	public Object intercept(Object service, Method method, Object[] parameters,MethodProxy proxy) throws Throwable {
+		return super.intercept(service, method, parameters, proxy);
+	}
 	
 	public Object nextIntercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
 		Transactional serviceTransaction = service.getClass().getAnnotation(Transactional.class);

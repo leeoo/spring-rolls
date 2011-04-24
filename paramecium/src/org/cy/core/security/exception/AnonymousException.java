@@ -7,7 +7,7 @@ package org.cy.core.security.exception;
  * <br>项目名称(Project Name): <b>paramecium</b>
  * <br>包及类名(Package Class): <b>org.cy.core.security.exception.AnonymousException.java</b>
  */
-public class AnonymousException extends Exception{
+public class AnonymousException extends RuntimeException{
 
 	private static final long serialVersionUID = 6492898999740339810L;
 

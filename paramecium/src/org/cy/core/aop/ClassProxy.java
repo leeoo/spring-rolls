@@ -23,8 +23,9 @@ public class ClassProxy {
 	/**
 	 * 获得实例
 	 * @return
+	 * @throws Throwable 
 	 */
-	public Object getClassInstance(){
+	public Object getClassInstance() throws RuntimeException{
 		return enhancer.create();
 	}
 	
