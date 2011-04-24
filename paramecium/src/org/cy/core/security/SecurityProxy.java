@@ -24,15 +24,13 @@ import org.cy.core.security.exception.AuthorizationException;
  */
 public class SecurityProxy {
 	
-	private final static ConcurrentMap<String, Resource> mappingResources = new ConcurrentHashMap<String, Resource>();
-	
 	/**
 	 * 获得需要代理的service实例
 	 * @param serviceClass实现类类型
 	 * @return
 	 */
 	public static Object getSecurityInstance(Object instance){
-		if(!ClassScanner.iocSecurity){
+		if(!ClassScanner.iocSecurity||instance.getClass().getAnnotation(Security.class)==null){
 			return instance;
 		}
 		try{
@@ -47,6 +45,8 @@ public class SecurityProxy {
 	}
 	
 	private static class SecurityInterceptor implements MethodInterceptor{
+		
+		private final static ConcurrentMap<String, Resource> mappingResources = new ConcurrentHashMap<String, Resource>();
 		
 		public SecurityInterceptor() {
 			
