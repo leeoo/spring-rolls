@@ -53,9 +53,6 @@ public class SecurityProxy {
 		}
 		
 		public Object intercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
-			if(!method.isAccessible()){
-				return proxy.invokeSuper(service, parameters);
-			}
 			Security classSecurity = service.getClass().getAnnotation(Security.class);
 			Security methodSecurity = method.getClass().getAnnotation(Security.class);
 			if(classSecurity!=null&&classSecurity.protecting()){

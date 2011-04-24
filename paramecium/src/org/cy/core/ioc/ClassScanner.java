@@ -29,7 +29,7 @@ public class ClassScanner {
 		Map<String,String> properties = PropertiesUitls.get("/context.properties");
 		iocScanBasePackage = properties.get("iocScanBasePackage");
 		String iocSecurityStr = properties.get("iocSecurity");
-		iocSecurity = iocSecurityStr!=null?Boolean.getBoolean(iocSecurityStr):false;
+		iocSecurity = iocSecurityStr!=null?Boolean.parseBoolean(iocSecurityStr):false;
 		init();
 	}
 	

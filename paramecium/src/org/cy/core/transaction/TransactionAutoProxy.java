@@ -40,9 +40,6 @@ public class TransactionAutoProxy {
 		}
 		
 		public Object intercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
-			if(!method.isAccessible()){
-				return proxy.invokeSuper(service, parameters);
-			}
 			Transactional serviceTransaction = service.getClass().getAnnotation(Transactional.class);
 			if(serviceTransaction==null){
 				return proxy.invokeSuper(service, parameters);
