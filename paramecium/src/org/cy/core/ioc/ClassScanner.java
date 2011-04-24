@@ -1,15 +1,22 @@
 package org.cy.core.ioc;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.cy.core.commons.PropertiesUitls;
 import org.cy.core.ioc.annotation.Service;
+import org.cy.core.ioc.annotation.ShowLabel;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 import org.cy.core.mvc.annotation.Controller;
+import org.cy.core.mvc.annotation.MappingMethod;
+import org.cy.core.security.AuthorizationMenu;
+import org.cy.core.security.Resource;
+import org.cy.core.security.annotation.Security;
 import org.cy.core.transaction.annotation.Transactional;
 /**
  * 功 能 描 述:<br>
@@ -46,6 +53,7 @@ public class ClassScanner {
 			} catch (ClassNotFoundException e) {
 			}
 		}
+		classes.clear();//物理类文件信息可以清空了
 	}
 	
 	/**
@@ -55,10 +63,12 @@ public class ClassScanner {
 	public static void putIocContext(Class<?> clazz){
 		Service service = clazz.getAnnotation(Service.class);
 		Controller controller = clazz.getAnnotation(Controller.class);
+		Security security = clazz.getAnnotation(Security.class);
+		String iocUniqueName = getIocUniqueName(clazz);
 		if(service!=null){
 			ServiceClassInfo classInfo = new ServiceClassInfo();
 			classInfo.setClazz(clazz);
-			classInfo.setUniqueName(getIocUniqueName(clazz));
+			classInfo.setUniqueName(iocUniqueName);
 			classInfo.setTransactional(false);
 			Transactional transactional = clazz.getAnnotation(Transactional.class);
 			if(transactional!=null){
@@ -69,9 +79,38 @@ public class ClassScanner {
 		}else if(controller!=null){
 			ControllerClassInfo classInfo = new ControllerClassInfo();
 			classInfo.setClazz(clazz);
-			classInfo.setNamespace(getIocUniqueName(clazz));
+			classInfo.setNamespace(iocUniqueName);
 			IocContextIndex.setController(classInfo);
 			logger.debug(clazz.getName()+" 被载入");
+		}
+		if(security!=null){
+			Resource resource = new Resource();
+			resource.setFirstResource(iocUniqueName);
+			ShowLabel showLabel = clazz.getAnnotation(ShowLabel.class);
+			if(showLabel!=null){
+				resource.setShowLabel(showLabel.name());
+			}
+			Collection<Resource> resources = new HashSet<Resource>();
+			for(Method method : clazz.getMethods()){
+				Security methodMecurity = method.getAnnotation(Security.class);
+				if(methodMecurity!=null&&!methodMecurity.protecting()){
+					continue;
+				}
+				Resource subResource = new Resource();
+				subResource.setFirstResource(iocUniqueName);
+				showLabel = method.getAnnotation(ShowLabel.class);
+				if(showLabel!=null){
+					subResource.setShowLabel(showLabel.name());
+				}
+				MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
+				if(mappingMethod!=null){
+					subResource.setLastResource(mappingMethod.url());
+				}else{
+					subResource.setLastResource(method.getName());
+				}
+				resources.add(subResource);
+			}
+			AuthorizationMenu.put(resource, resources);
 		}
 	}
 	
