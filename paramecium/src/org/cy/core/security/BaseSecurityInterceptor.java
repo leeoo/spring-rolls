@@ -7,8 +7,6 @@ import java.util.concurrent.ConcurrentMap;
 import org.cy.core.aop.cglib.MethodInterceptor;
 import org.cy.core.aop.cglib.MethodProxy;
 import org.cy.core.ioc.ClassScanner;
-import org.cy.core.ioc.annotation.Service;
-import org.cy.core.mvc.annotation.Controller;
 import org.cy.core.mvc.annotation.MappingMethod;
 import org.cy.core.security.annotation.Security;
 import org.cy.core.security.exception.AnonymousException;
@@ -79,19 +77,7 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 			return resource;
 		}
 		resource = new Resource();
-		Service service = clazz.getAnnotation(Service.class);
-		Controller controller = clazz.getAnnotation(Controller.class);
-		if(service!=null){
-			if(!service.uniqueName().isEmpty()){
-				resource.setFirstResource(service.uniqueName());
-			}else{
-				Class<?> superClass = clazz.getSuperclass();
-				String uniqueName = superClass.getSimpleName().substring(0, 1).toLowerCase()+superClass.getSimpleName().substring(1, superClass.getSimpleName().length());
-				resource.setFirstResource(uniqueName);
-			}
-		}else if(controller!=null){
-			resource.setFirstResource(controller.namespace());
-		}
+		resource.setFirstResource(ClassScanner.getIocUniqueName(clazz));
 		MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
 		if(mappingMethod!=null){
 			resource.setLastResource(mappingMethod.url());

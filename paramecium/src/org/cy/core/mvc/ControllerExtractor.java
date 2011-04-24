@@ -75,7 +75,7 @@ public class ControllerExtractor {
 					System.err.println("AnonymousException");
 				}else if(e.getCause() instanceof AuthorizationException){
 					System.err.println("AuthorizationException");
-				}else if(/*继续扩展，可在配置文件中加入更多异常*/){
+				}else if(true/*继续扩展，可在配置文件中加入更多异常*/){
 					
 				}
 				return;

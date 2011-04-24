@@ -58,12 +58,7 @@ public class ClassScanner {
 		if(service!=null){
 			ServiceClassInfo classInfo = new ServiceClassInfo();
 			classInfo.setClazz(clazz);
-			if(!service.uniqueName().isEmpty()){
-				classInfo.setUniqueName(service.uniqueName());
-			}else{
-				String uniqueName = clazz.getSimpleName().substring(0, 1).toLowerCase()+clazz.getSimpleName().substring(1, clazz.getSimpleName().length());
-				classInfo.setUniqueName(uniqueName);
-			}
+			classInfo.setUniqueName(getIocUniqueName(clazz));
 			classInfo.setTransactional(false);
 			Transactional transactional = clazz.getAnnotation(Transactional.class);
 			if(transactional!=null){
@@ -74,10 +69,32 @@ public class ClassScanner {
 		}else if(controller!=null){
 			ControllerClassInfo classInfo = new ControllerClassInfo();
 			classInfo.setClazz(clazz);
-			classInfo.setNamespace(controller.namespace());
+			classInfo.setNamespace(getIocUniqueName(clazz));
 			IocContextIndex.setController(classInfo);
 			logger.debug(clazz.getName()+" 被载入");
 		}
+	}
+	
+	/**
+	 * 获得IOC容器中的类唯一标示
+	 * @param clazz
+	 * @return
+	 */
+	public static String getIocUniqueName(Class<?> clazz){
+		Service service = clazz.getAnnotation(Service.class);
+		Controller controller = clazz.getAnnotation(Controller.class);
+		if(service!=null){
+			if(!service.uniqueName().isEmpty()){
+				return service.uniqueName();
+			}else{
+				Class<?> superClass = clazz.getSuperclass();
+				String uniqueName = superClass.getSimpleName().substring(0, 1).toLowerCase()+superClass.getSimpleName().substring(1, superClass.getSimpleName().length());
+				return uniqueName;
+			}
+		}else if(controller!=null){
+			return controller.namespace();
+		}
+		return null;
 	}
 	
 	/**

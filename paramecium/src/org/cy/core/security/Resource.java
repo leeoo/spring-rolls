@@ -23,7 +23,14 @@ public class Resource implements Serializable{
 	}
 
 	public String getShowLabel() {
-		return showLabel;
+		if(showLabel!=null){
+			return showLabel;
+		}else if(firstResource!=null&&lastResource==null){
+			return firstResource;
+		}else if(firstResource==null&&lastResource!=null){
+			return lastResource;
+		}
+		return toString();
 	}
 
 	public void setShowLabel(String showLabel) {
