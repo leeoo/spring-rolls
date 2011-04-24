@@ -12,22 +12,12 @@ public abstract class BaseClassInfo {
 
 	private Class<?> clazz = null;
 
-	private boolean security = false;
-
 	public Class<?> getClazz() {
 		return clazz;
 	}
 
 	public void setClazz(Class<?> clazz) {
 		this.clazz = clazz;
-	}
-
-	public boolean isSecurity() {
-		return security;
-	}
-
-	public void setSecurity(boolean security) {
-		this.security = security;
 	}
 
 }

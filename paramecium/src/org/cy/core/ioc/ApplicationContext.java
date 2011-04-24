@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.cy.core.ioc.annotation.AutoInject;
 import org.cy.core.mvc.annotation.Controller;
+import org.cy.core.security.SecurityProxy;
 import org.cy.core.transaction.TransactionAutoProxy;
 
 /**
@@ -124,7 +125,7 @@ public class ApplicationContext {
 				instance = controllerContext.get(((ControllerClassInfo)index).getNamespace());
 				if(instance!=null){
 					synchronized (instance) {
-						return instance;
+						return SecurityProxy.getSecurityInstance(instance);
 					}
 				}
 			}
@@ -135,7 +136,7 @@ public class ApplicationContext {
 		if(index!=null){
 			instance = buildInstance(index);
 		}
-		return instance;
+		return SecurityProxy.getSecurityInstance(instance);
 	}
 	
 }

@@ -22,11 +22,14 @@ public class ClassScanner {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	public static String iocScanBasePackage;
+	public static boolean iocSecurity = false;
 	private static Collection<String> classes = new ArrayList<String>();
 	
 	static{
 		Map<String,String> properties = PropertiesUitls.get("/context.properties");
 		iocScanBasePackage = properties.get("iocScanBasePackage");
+		String iocSecurityStr = properties.get("iocSecurity");
+		iocSecurity = iocSecurityStr!=null?Boolean.getBoolean(iocSecurityStr):false;
 		init();
 	}
 	
@@ -61,7 +64,6 @@ public class ClassScanner {
 				String uniqueName = clazz.getSimpleName().substring(0, 1).toLowerCase()+clazz.getSimpleName().substring(1, clazz.getSimpleName().length());
 				classInfo.setUniqueName(uniqueName);
 			}
-			classInfo.setSecurity(false);
 			classInfo.setTransactional(false);
 			Transactional transactional = clazz.getAnnotation(Transactional.class);
 			if(transactional!=null){
@@ -73,7 +75,6 @@ public class ClassScanner {
 			ControllerClassInfo classInfo = new ControllerClassInfo();
 			classInfo.setClazz(clazz);
 			classInfo.setNamespace(controller.namespace());
-			classInfo.setSecurity(false);
 			IocContextIndex.setController(classInfo);
 			logger.debug(clazz.getName()+" 被载入");
 		}

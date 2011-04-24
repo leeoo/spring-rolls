@@ -1,15 +1,19 @@
 package org.cy.core.security;
 
 import java.lang.reflect.Method;
-import java.security.GeneralSecurityException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.cy.core.aop.cglib.Enhancer;
 import org.cy.core.aop.cglib.MethodInterceptor;
 import org.cy.core.aop.cglib.MethodProxy;
+import org.cy.core.ioc.ClassScanner;
 import org.cy.core.ioc.annotation.Service;
 import org.cy.core.mvc.annotation.Controller;
 import org.cy.core.mvc.annotation.MappingMethod;
 import org.cy.core.security.annotation.Security;
+import org.cy.core.security.exception.AnonymousException;
+import org.cy.core.security.exception.AuthorizationException;
 /**
  * 功能描述(Description):<br><b>
  * 安全代理
@@ -20,22 +24,26 @@ import org.cy.core.security.annotation.Security;
  */
 public class SecurityProxy {
 	
+	private final static ConcurrentMap<String, Resource> mappingResources = new ConcurrentHashMap<String, Resource>();
+	
 	/**
 	 * 获得需要代理的service实例
 	 * @param serviceClass实现类类型
 	 * @return
 	 */
-	public static Object getServiceInstance(Class<?> serviceClass){
-		Object service = null;
+	public static Object getSecurityInstance(Object instance){
+		if(!ClassScanner.iocSecurity){
+			return instance;
+		}
 		try{
 			Enhancer enhancer = new Enhancer();
-	        enhancer.setSuperclass(serviceClass);
+	        enhancer.setSuperclass(instance.getClass());
 	        enhancer.setCallback(new SecurityInterceptor());
-	        service = enhancer.create();
+	        instance = enhancer.create();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return service;
+		return instance;
 	}
 	
 	private static class SecurityInterceptor implements MethodInterceptor{
@@ -48,17 +56,33 @@ public class SecurityProxy {
 			if(!method.isAccessible()){
 				return proxy.invokeSuper(service, parameters);
 			}
-			Security security = service.getClass().getAnnotation(Security.class);
-			if(security!=null&&security.protecting()){
+			Security classSecurity = service.getClass().getAnnotation(Security.class);
+			Security methodSecurity = method.getClass().getAnnotation(Security.class);
+			if(classSecurity!=null&&classSecurity.protecting()){
+				if(methodSecurity!=null&&!methodSecurity.protecting()){
+					return proxy.invokeSuper(service, parameters);
+				}
+				UserDetails user = SecurityThread.get();
+				if(user==null){
+					throw new AnonymousException("匿名用户没有登录！");
+				}
 				Resource resource = buildResource(service.getClass(), method);
-				//此处需要日后验证是否安全
-				throw new GeneralSecurityException();
+				for(Resource userResource:user.getResources()){
+					if(userResource.equals(resource)){
+						return proxy.invokeSuper(service, parameters);
+					}
+				}
+				throw new AuthorizationException("该资源没有对该用户授权！");
 			}
 			return proxy.invokeSuper(service, parameters);
 		}
 		
 		private static Resource buildResource(Class<?> clazz,Method method){
-			Resource resource = new Resource();
+			Resource resource = mappingResources.get(clazz.getName()+method.getName());
+			if(resource!=null){
+				return resource;
+			}
+			resource = new Resource();
 			Service service = clazz.getAnnotation(Service.class);
 			Controller controller = clazz.getAnnotation(Controller.class);
 			if(service!=null){
@@ -76,6 +100,7 @@ public class SecurityProxy {
 			}else{
 				resource.setLastResource(method.getName());
 			}
+			mappingResources.put(clazz.getName()+method.getName(), resource);
 			return resource;
 		}
 
