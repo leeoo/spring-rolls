@@ -49,12 +49,14 @@ public class ApplicationContext {
 			ServiceClassInfo serviceClassInfo = (ServiceClassInfo)classInfo;
 			if(serviceClassInfo.isTransactional()){
 				instance = TransactionAutoProxy.getServiceInstance(serviceClassInfo.getClazz());
+				instance = SecurityProxy.getSecurityInstance(instance);
 				loopInject(instance);
 			}
 		}else if(classInfo instanceof ControllerClassInfo){
 			ControllerClassInfo controllerClassInfo = (ControllerClassInfo)classInfo;
 			try {
 				instance = controllerClassInfo.getClazz().newInstance();
+				instance = SecurityProxy.getSecurityInstance(instance);
 			} catch (Exception e) {
 			}
 			Field[] fields = controllerClassInfo.getClazz().getDeclaredFields();
@@ -69,6 +71,7 @@ public class ApplicationContext {
 					}
 					try {
 						Object fieldInstance = TransactionAutoProxy.getServiceInstance(serviceClassInfo.getClazz());
+						fieldInstance = SecurityProxy.getSecurityInstance(fieldInstance);
 						loopInject(fieldInstance);
 						field.set(instance, fieldInstance);
 					} catch (Exception e) {
@@ -125,7 +128,7 @@ public class ApplicationContext {
 				instance = controllerContext.get(((ControllerClassInfo)index).getNamespace());
 				if(instance!=null){
 					synchronized (instance) {
-						return SecurityProxy.getSecurityInstance(instance);
+						return instance;
 					}
 				}
 			}
@@ -136,7 +139,7 @@ public class ApplicationContext {
 		if(index!=null){
 			instance = buildInstance(index);
 		}
-		return SecurityProxy.getSecurityInstance(instance);
+		return instance;
 	}
 	
 }
