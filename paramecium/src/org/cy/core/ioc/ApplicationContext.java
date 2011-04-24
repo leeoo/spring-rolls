@@ -4,10 +4,11 @@ import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.cy.core.aop.ClassProxy;
 import org.cy.core.ioc.annotation.AutoInject;
 import org.cy.core.mvc.annotation.Controller;
-import org.cy.core.security.SecurityProxy;
-import org.cy.core.transaction.TransactionAutoProxy;
+import org.cy.core.security.SecurityInterceptor;
+import org.cy.core.transaction.TransactionInterceptor;
 
 /**
  * 功能描述(Description):<br><b>
@@ -48,15 +49,15 @@ public class ApplicationContext {
 		if(classInfo instanceof ServiceClassInfo){
 			ServiceClassInfo serviceClassInfo = (ServiceClassInfo)classInfo;
 			if(serviceClassInfo.isTransactional()){
-				instance = TransactionAutoProxy.getServiceInstance(serviceClassInfo.getClazz());
-				//instance = SecurityProxy.getSecurityInstance(instance);
+				ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
+				instance = proxy.getClassInstance();
 				loopInject(instance);
 			}
 		}else if(classInfo instanceof ControllerClassInfo){
 			ControllerClassInfo controllerClassInfo = (ControllerClassInfo)classInfo;
 			try {
-				instance = controllerClassInfo.getClazz().newInstance();
-				instance = SecurityProxy.getSecurityInstance(instance);
+				ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),controllerClassInfo.getClazz());
+				instance = proxy.getClassInstance();
 			} catch (Exception e) {
 			}
 			Field[] fields = controllerClassInfo.getClazz().getDeclaredFields();
@@ -70,8 +71,8 @@ public class ApplicationContext {
 						throw new InjectException(fieldName+"注入时,请用@Service声明!");
 					}
 					try {
-						Object fieldInstance = TransactionAutoProxy.getServiceInstance(serviceClassInfo.getClazz());
-						//fieldInstance = SecurityProxy.getSecurityInstance(fieldInstance);
+						ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
+						Object fieldInstance = proxy.getClassInstance();
 						loopInject(fieldInstance);
 						field.set(instance, fieldInstance);
 					} catch (Exception e) {
@@ -95,8 +96,8 @@ public class ApplicationContext {
 					throw new InjectException(fieldName+"注入时,请用@Service声明!");
 				}
 				try {
-					Object fieldInstance = serviceClassInfo.getClazz().newInstance();
-					//fieldInstance = SecurityProxy.getSecurityInstance(fieldInstance);
+					ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),serviceClassInfo.getClazz());
+					Object fieldInstance = proxy.getClassInstance();
 					loopInject(fieldInstance);
 					field.set(instance, fieldInstance);
 				} catch (Exception e) {
