@@ -84,6 +84,10 @@ public class ApplicationContext {
 		return instance;
 	}
 	
+	/**
+	 * 递归注入
+	 * @param instance
+	 */
 	private static void loopInject(Object instance){
 		Field[] fields = instance.getClass().getDeclaredFields();
 		for(Field field : fields){
