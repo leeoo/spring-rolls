@@ -11,6 +11,8 @@ import org.cy.core.ioc.IocContextIndex;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 import org.cy.core.mvc.annotation.MappingMethod;
+import org.cy.core.security.exception.AnonymousException;
+import org.cy.core.security.exception.AuthorizationException;
 /**
  * 功 能 描 述:<br>
  * 通过Servlet提取Controller所需的信息
@@ -69,7 +71,13 @@ public class ControllerExtractor {
 					}
 				}
 			}catch (Exception e) {
-				logger.warn(e);
+				if(e.getCause() instanceof AnonymousException){
+					System.err.println("AnonymousException");
+				}else if(e.getCause() instanceof AuthorizationException){
+					System.err.println("AuthorizationException");
+				}else if(/*继续扩展，可在配置文件中加入更多异常*/){
+					
+				}
 				return;
 			}
 		}
