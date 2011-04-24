@@ -28,6 +28,9 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 	public BaseSecurityInterceptor() {
 	}
 	
+	/**
+	 * 首先要拦截的安全验证,其他需要继承此抽象类后，实现nextIntercept方法
+	 */
 	public Object intercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
 		if(!ClassScanner.iocSecurity){
 			return nextIntercept(service, method, parameters, proxy);
