@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import org.cy.core.ioc.annotation.Service;
 import org.cy.core.jdbc.dialect.Page;
 import org.cy.core.orm.GenericOrmDao;
+import org.cy.core.security.annotation.Security;
 import org.cy.core.transaction.annotation.Transactional;
 
 import com.cy.app.entity.Logger;
@@ -12,6 +13,7 @@ import com.cy.app.entity.LoggerWhere;
 
 @Service
 @Transactional
+@Security
 public class LoggerService {
 	
 	private GenericOrmDao<Logger, Integer> ormDao = new GenericOrmDao<Logger, Integer>("ds1", Logger.class);
