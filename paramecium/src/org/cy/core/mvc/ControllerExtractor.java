@@ -86,8 +86,8 @@ public class ControllerExtractor {
 					}
 				}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
 					try {
-						SecurityThread.remove(request.getSession().getId());
-						request.getSession().invalidate();
+						//SecurityThread.remove(request.getSession().getId());
+						//request.getSession().invalidate();//可以不用清除
 						response.sendRedirect(SecurityConfig.authorizationExceptionPage);
 					} catch (IOException e1) {
 					}
