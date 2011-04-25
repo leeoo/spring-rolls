@@ -12,7 +12,11 @@
 		<hr width="100%"/>
 	</div>
 	<div style="background-color: #FFFFFF;width: 100%;height: 100%;">
-		<a href="${base}/logger/list.jhtml">简单演示</a>
+		<form action="${base}/login.jhtml" method="post">
+			账号<input type='text' name='username'/><br/>
+			密码<input type='password' name="password"/><br/>
+			<button type="submit">登录</button>
+		</form>
 	</div>
 </body>
 </html>
