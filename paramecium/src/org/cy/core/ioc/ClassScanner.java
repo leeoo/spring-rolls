@@ -16,6 +16,7 @@ import org.cy.core.mvc.annotation.Controller;
 import org.cy.core.mvc.annotation.MappingMethod;
 import org.cy.core.security.AuthorizationMenu;
 import org.cy.core.security.Resource;
+import org.cy.core.security.SecurityConfig;
 import org.cy.core.security.annotation.Security;
 import org.cy.core.transaction.annotation.Transactional;
 /**
@@ -29,14 +30,16 @@ public class ClassScanner {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	public static String iocScanBasePackage;
-	public static boolean iocSecurity = false;
 	private static Collection<String> classes = new ArrayList<String>();
 	
 	static{
 		Map<String,String> properties = PropertiesUitls.get("/context.properties");
 		iocScanBasePackage = properties.get("iocScanBasePackage");
+		properties = PropertiesUitls.get("/security.properties");
 		String iocSecurityStr = properties.get("iocSecurity");
-		iocSecurity = iocSecurityStr!=null?Boolean.parseBoolean(iocSecurityStr):false;
+		SecurityConfig.iocSecurity = iocSecurityStr!=null?Boolean.parseBoolean(iocSecurityStr):false;
+		SecurityConfig.anonymousExceptionPage = properties.get("anonymousExceptionPage");
+		SecurityConfig.authorizationExceptionPage = properties.get("authorizationExceptionPage");
 		init();
 	}
 	

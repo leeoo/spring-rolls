@@ -1,5 +1,6 @@
 package org.cy.core.mvc;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.cy.core.ioc.IocContextIndex;
 import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 import org.cy.core.mvc.annotation.MappingMethod;
+import org.cy.core.security.SecurityConfig;
 import org.cy.core.security.exception.AnonymousException;
 import org.cy.core.security.exception.AuthorizationException;
 /**
@@ -72,12 +74,16 @@ public class ControllerExtractor {
 				}
 			}catch (Exception e) {
 				if(e.getCause() instanceof AnonymousException){
-					System.err.println("AnonymousException");
+					try {
+						response.sendRedirect(SecurityConfig.anonymousExceptionPage);
+					} catch (IOException e1) {
+					}
 				}else if(e.getCause() instanceof AuthorizationException){
-					System.err.println("AuthorizationException");
-				}else if(true/*继续扩展，可在配置文件中加入更多异常*/){
-					
-				}
+					try {
+						response.sendRedirect(SecurityConfig.authorizationExceptionPage);
+					} catch (IOException e1) {
+					}
+				}/*继续扩展，可在配置文件中加入更多异常*/
 				return;
 			}
 		}
