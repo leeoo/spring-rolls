@@ -17,6 +17,7 @@ import org.cy.core.security.SecurityThread;
 import org.cy.core.security.exception.AnonymousException;
 import org.cy.core.security.exception.AuthorizationException;
 import org.cy.core.security.exception.SessionExpiredException;
+import org.cy.core.security.exception.UserDisabledException;
 import org.cy.core.security.exception.UserKickException;
 /**
  * 功 能 描 述:<br>
@@ -98,7 +99,7 @@ public class ControllerExtractor {
 						response.sendRedirect(SecurityConfig.userKickExceptionPage);
 					} catch (IOException e1) {
 					}
-				}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
+				}else if(e.getCause() instanceof UserDisabledException||e instanceof UserDisabledException){
 					try {
 						SecurityThread.remove(request.getSession().getId());
 						request.getSession().invalidate();

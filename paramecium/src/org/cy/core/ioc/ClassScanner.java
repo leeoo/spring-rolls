@@ -40,6 +40,7 @@ public class ClassScanner {
 		String sessionControlStr = properties.get("sessionControl");
 		SecurityConfig.iocSecurity = iocSecurityStr!=null?Boolean.parseBoolean(iocSecurityStr):false;
 		SecurityConfig.sessionControl = sessionControlStr!=null?Boolean.parseBoolean(sessionControlStr):false;
+		SecurityConfig.loginExceptionPage = properties.get("loginExceptionPage");
 		SecurityConfig.anonymousExceptionPage = properties.get("anonymousExceptionPage");
 		SecurityConfig.authorizationExceptionPage = properties.get("authorizationExceptionPage");
 		SecurityConfig.userKickExceptionPage = properties.get("userKickExceptionPage");

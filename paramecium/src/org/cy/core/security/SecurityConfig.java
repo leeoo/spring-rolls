@@ -19,6 +19,11 @@ public class SecurityConfig {
 	public static boolean sessionControl = false;
 	
 	/**
+	 * 登录错误页面
+	 */
+	public static String loginExceptionPage;
+
+	/**
 	 * 匿名用户错误页面
 	 */
 	public static String anonymousExceptionPage;
