@@ -75,7 +75,6 @@ public class ControllerExtractor {
 					}
 				}
 			}catch (Exception e) {
-				e.printStackTrace();
 				if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 					try {
 						response.sendRedirect(SecurityConfig.anonymousExceptionPage);
