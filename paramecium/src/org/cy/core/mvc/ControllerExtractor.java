@@ -77,7 +77,6 @@ public class ControllerExtractor {
 					}
 				}
 			}catch (Exception e) {
-				e.getCause().printStackTrace();
 				if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 					try {
 						SecurityThread.remove(request.getSession().getId());
