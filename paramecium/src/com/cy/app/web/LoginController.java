@@ -18,6 +18,8 @@ public class LoginController {
 		if(username.equals("admin")){
 			user.setEnable(true);
 			user.setResources(AuthorizationMenu.getAllAuthorizationMenu());
+		}else if(username.equals("user")){
+			user.setEnable(true);
 		}else{
 			user.setEnable(false);
 		}
@@ -28,7 +30,7 @@ public class LoginController {
 	@MappingMethod
 	public void logout(ModelAndView mv){
 		SecurityThread.remove();
-		mv.redirect("/logger/list.jhtml");
+		mv.redirect("/index.jsp");
 	}
 	
 }
