@@ -44,9 +44,11 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 				throw new AnonymousException("匿名用户没有登录！");
 			}
 			Resource resource = buildResource(service.getClass(), method);
-			for(Resource userResource:user.getResources()){
-				if(userResource.toString().equals(resource.toString())){
-					return nextIntercept(service, method, parameters, proxy);
+			if(user.getResources()!=null){
+				for(Resource userResource:user.getResources()){
+					if(userResource.toString().equals(resource.toString())){
+						return nextIntercept(service, method, parameters, proxy);
+					}
 				}
 			}
 			throw new AuthorizationException("该资源没有对此用户授权！");
