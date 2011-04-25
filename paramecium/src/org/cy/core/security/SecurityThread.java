@@ -60,10 +60,8 @@ public class SecurityThread {
 		if(sessionId!=null){
 			UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
 			if(userDetails==null){//如果在线用户列表不存在该用户，而该用户线程仍有信息，被视为强制被踢出(一般管理员可用使用该权限)
-				remove();
 				throw new UserKickException("用户已经被强制退出!");
 			}else if(!userDetails.isEnable()){//如果账户是被冻结的，抛出异常
-				remove();
 				throw new UserDisabledException("用户已经被冻结!");
 			}
 			return userDetails;
@@ -116,7 +114,6 @@ public class SecurityThread {
 	private static void initSessionId(HttpSession session){
 		if(sessionThreadLocal.get()==null){
 			session.invalidate();
-			initSessionId(session);
 		}
 		return;
 	}
