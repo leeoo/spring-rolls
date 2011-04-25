@@ -79,36 +79,31 @@ public class ControllerExtractor {
 			}catch (Exception e) {
 				if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 					try {
-						SecurityThread.remove(request.getSession().getId());
-						request.getSession().invalidate();
+						SecurityThread.remove(request.getSession());
 						response.sendRedirect(SecurityConfig.anonymousExceptionPage);
 					} catch (IOException e1) {
 					}
 				}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
 					try {
-						//SecurityThread.remove(request.getSession().getId());
-						//request.getSession().invalidate();//可以不用清除
+						//SecurityThread.remove(request.getSession());//可以不用清除
 						response.sendRedirect(SecurityConfig.authorizationExceptionPage);
 					} catch (IOException e1) {
 					}
 				}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
 					try {
-						SecurityThread.remove(request.getSession().getId());
-						request.getSession().invalidate();
+						SecurityThread.remove(request.getSession());
 						response.sendRedirect(SecurityConfig.userKickExceptionPage);
 					} catch (IOException e1) {
 					}
 				}else if(e.getCause() instanceof UserDisabledException||e instanceof UserDisabledException){
 					try {
-						SecurityThread.remove(request.getSession().getId());
-						request.getSession().invalidate();
+						SecurityThread.remove(request.getSession());
 						response.sendRedirect(SecurityConfig.userDisabledExceptionPage);
 					} catch (IOException e1) {
 					}
 				}else if(e.getCause() instanceof SessionExpiredException||e instanceof SessionExpiredException){
 					try {
-						SecurityThread.remove(request.getSession().getId());
-						request.getSession().invalidate();
+						SecurityThread.remove(request.getSession());
 						response.sendRedirect(SecurityConfig.sessionExpiredExceptionPage);
 					} catch (IOException e1) {
 					}
