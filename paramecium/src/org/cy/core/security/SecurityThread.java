@@ -38,11 +38,11 @@ public class SecurityThread {
 		userDetails.setSessionId(sessionThreadLocal.get());
 		if(SecurityConfig.sessionControl){//判断是否是同一session登录
 			for(UserDetails onlineUser : OnlineUserCache.getAllOnlineUsers()){
-				if(onlineUser.getUsername().equals(userDetails.getUsername())&&!onlineUser.getSessionId().equals(userDetails.getSessionId())){
-					remove(onlineUser.getSessionId());
+				if(onlineUser.getUsername().equals(userDetails.getUsername())&&!onlineUser.getSessionId().equals(userDetails.getSessionId())){//用户信息相同,Session不同,说明用户出现重复登录或盗用,前者的在线用户信息删除
+					OnlineUserCache.logout(onlineUser.getSessionId());
 					break;
-				}else if(onlineUser.getSessionId().equals(userDetails.getSessionId())&&!onlineUser.getUsername().equals(userDetails.getUsername())){
-					remove(onlineUser.getSessionId());
+				}else if(onlineUser.getSessionId().equals(userDetails.getSessionId())&&!onlineUser.getUsername().equals(userDetails.getUsername())){//Session相同,用户信息不同，说明用户用相同浏览器重新登录,Session保存，之前在线用户信息删除
+					OnlineUserCache.logout(onlineUser.getSessionId());
 					break;
 				}
 			}
