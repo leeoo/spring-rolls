@@ -37,5 +37,10 @@ public class SecurityConfig {
 	 * 用户失效错误页面
 	 */
 	public static String userDisabledExceptionPage;
+
+	/**
+	 * session过期错误页面
+	 */
+	public static String sessionExpiredExceptionPage;
 	
 }

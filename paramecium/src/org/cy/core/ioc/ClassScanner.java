@@ -44,6 +44,7 @@ public class ClassScanner {
 		SecurityConfig.authorizationExceptionPage = properties.get("authorizationExceptionPage");
 		SecurityConfig.userKickExceptionPage = properties.get("userKickExceptionPage");
 		SecurityConfig.userDisabledExceptionPage = properties.get("userDisabledExceptionPage");
+		SecurityConfig.sessionExpiredExceptionPage = properties.get("sessionExpiredExceptionPage");
 		init();
 	}
 	
@@ -99,6 +100,12 @@ public class ClassScanner {
 			}
 			Collection<Resource> resources = new HashSet<Resource>();
 			for(Method method : clazz.getMethods()){
+				if(method.getName().equals("wait")||method.getName().equals("equals")
+						||method.getName().equals("getClass")||method.getName().equals("toString")
+						||method.getName().equals("hashCode")||method.getName().equals("notify")
+						||method.getName().equals("notifyAll")){
+					continue;
+				}
 				Security methodMecurity = method.getAnnotation(Security.class);
 				if(methodMecurity!=null&&!methodMecurity.protecting()){
 					continue;

@@ -1,5 +1,8 @@
 package org.cy.core.security;
 
+import org.cy.core.log.Log;
+import org.cy.core.log.LoggerFactory;
+import org.cy.core.security.exception.SessionExpiredException;
 import org.cy.core.security.exception.UserDisabledException;
 import org.cy.core.security.exception.UserKickException;
 
@@ -12,22 +15,27 @@ import org.cy.core.security.exception.UserKickException;
  */
 public class SecurityThread {
 	
+	private final static Log logger = LoggerFactory.getLogger();
 	public final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();
 	
-	public static void put(UserDetails details){
-		details.setSessionId(sessionThreadLocal.get());
+	public static void put(UserDetails userDetails){
+		if(sessionThreadLocal.get()==null){
+			throw new SessionExpiredException("当前 Session已经过期!");
+		}
+		userDetails.setSessionId(sessionThreadLocal.get());
 		if(SecurityConfig.sessionControl){//判断是否是同一session登录
 			for(UserDetails onlineUser : OnlineUserCache.getAllOnlineUsers()){
-				if(onlineUser.getUsername().equals(details.getUsername())&&!onlineUser.getSessionId().equals(details.getSessionId())){
+				if(onlineUser.getUsername().equals(userDetails.getUsername())&&!onlineUser.getSessionId().equals(userDetails.getSessionId())){
 					OnlineUserCache.logout(onlineUser.getSessionId());
 					break;
 				}
 			}
 		}
-		OnlineUserCache.login(details);
+		OnlineUserCache.login(userDetails);
+		logger.debug(userDetails.getUsername()+"登录成功!");
 	}
 	
-	public static UserDetails get() throws RuntimeException{
+	public static UserDetails get() {
 		String sessionId = sessionThreadLocal.get();
 		if(sessionId!=null){
 			UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
@@ -40,12 +48,21 @@ public class SecurityThread {
 			}
 			return userDetails;
 		}
-		return null;
+		throw new SessionExpiredException("当前 Session已经过期!");
 	}
 	
 	public static void remove(){
-		OnlineUserCache.logout(sessionThreadLocal.get());
+		remove(sessionThreadLocal.get());
 		sessionThreadLocal.remove();
+	}
+
+	public static void remove(String sessionId){
+		UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
+		if(userDetails==null){
+			return;
+		}
+		OnlineUserCache.logout(sessionId);
+		logger.debug(userDetails.getUsername()+"退出成功!");
 	}
 	
 

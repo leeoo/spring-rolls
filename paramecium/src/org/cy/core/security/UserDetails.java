@@ -21,6 +21,10 @@ public class UserDetails implements Serializable{
 	
 	private Collection<Resource> resources;
 	
+	public UserDetails(){
+		
+	}
+	
 	public UserDetails(String username,String sessionId,boolean enable,Collection<Resource> resources){
 		this.username = username;
 		this.sessionId = sessionId;

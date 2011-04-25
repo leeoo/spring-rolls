@@ -15,6 +15,7 @@ import org.cy.core.mvc.annotation.MappingMethod;
 import org.cy.core.security.SecurityConfig;
 import org.cy.core.security.exception.AnonymousException;
 import org.cy.core.security.exception.AuthorizationException;
+import org.cy.core.security.exception.SessionExpiredException;
 import org.cy.core.security.exception.UserKickException;
 /**
  * 功 能 描 述:<br>
@@ -74,6 +75,7 @@ public class ControllerExtractor {
 					}
 				}
 			}catch (Exception e) {
+				e.printStackTrace();
 				if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 					try {
 						response.sendRedirect(SecurityConfig.anonymousExceptionPage);
@@ -92,6 +94,11 @@ public class ControllerExtractor {
 				}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
 					try {
 						response.sendRedirect(SecurityConfig.userDisabledExceptionPage);
+					} catch (IOException e1) {
+					}
+				}else if(e.getCause() instanceof SessionExpiredException||e instanceof SessionExpiredException){
+					try {
+						response.sendRedirect(SecurityConfig.sessionExpiredExceptionPage);
 					} catch (IOException e1) {
 					}
 				}/*继续扩展，可在配置文件中加入更多异常*/
