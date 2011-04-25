@@ -26,7 +26,10 @@ public class SecurityThread {
 		if(SecurityConfig.sessionControl){//判断是否是同一session登录
 			for(UserDetails onlineUser : OnlineUserCache.getAllOnlineUsers()){
 				if(onlineUser.getUsername().equals(userDetails.getUsername())&&!onlineUser.getSessionId().equals(userDetails.getSessionId())){
-					OnlineUserCache.logout(onlineUser.getSessionId());
+					remove(onlineUser.getSessionId());
+					break;
+				}else if(onlineUser.getSessionId().equals(userDetails.getSessionId())&&!onlineUser.getUsername().equals(userDetails.getUsername())){
+					remove(onlineUser.getSessionId());
 					break;
 				}
 			}
@@ -52,11 +55,13 @@ public class SecurityThread {
 	}
 	
 	public static void remove(){
-		remove(sessionThreadLocal.get());
-		sessionThreadLocal.remove();
+		if(sessionThreadLocal.get()!=null){
+			remove(sessionThreadLocal.get());
+		}
 	}
 
 	public static void remove(String sessionId){
+		sessionThreadLocal.remove();
 		UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
 		if(userDetails==null){
 			return;

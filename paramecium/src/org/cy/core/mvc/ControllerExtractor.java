@@ -13,6 +13,7 @@ import org.cy.core.log.Log;
 import org.cy.core.log.LoggerFactory;
 import org.cy.core.mvc.annotation.MappingMethod;
 import org.cy.core.security.SecurityConfig;
+import org.cy.core.security.SecurityThread;
 import org.cy.core.security.exception.AnonymousException;
 import org.cy.core.security.exception.AuthorizationException;
 import org.cy.core.security.exception.SessionExpiredException;
@@ -75,28 +76,39 @@ public class ControllerExtractor {
 					}
 				}
 			}catch (Exception e) {
+				e.getCause().printStackTrace();
 				if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 					try {
+						SecurityThread.remove(request.getSession().getId());
+						request.getSession().invalidate();
 						response.sendRedirect(SecurityConfig.anonymousExceptionPage);
 					} catch (IOException e1) {
 					}
 				}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
 					try {
+						SecurityThread.remove(request.getSession().getId());
+						request.getSession().invalidate();
 						response.sendRedirect(SecurityConfig.authorizationExceptionPage);
 					} catch (IOException e1) {
 					}
 				}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
 					try {
+						SecurityThread.remove(request.getSession().getId());
+						request.getSession().invalidate();
 						response.sendRedirect(SecurityConfig.userKickExceptionPage);
 					} catch (IOException e1) {
 					}
 				}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
 					try {
+						SecurityThread.remove(request.getSession().getId());
+						request.getSession().invalidate();
 						response.sendRedirect(SecurityConfig.userDisabledExceptionPage);
 					} catch (IOException e1) {
 					}
 				}else if(e.getCause() instanceof SessionExpiredException||e instanceof SessionExpiredException){
 					try {
+						SecurityThread.remove(request.getSession().getId());
+						request.getSession().invalidate();
 						response.sendRedirect(SecurityConfig.sessionExpiredExceptionPage);
 					} catch (IOException e1) {
 					}
@@ -105,6 +117,8 @@ public class ControllerExtractor {
 			}
 		}
 	}
+	
+	
 	
 	/**
 	 * 根据请求拆分Controller所需的索引
