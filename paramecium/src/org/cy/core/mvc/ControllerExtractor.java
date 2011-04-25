@@ -15,6 +15,7 @@ import org.cy.core.mvc.annotation.MappingMethod;
 import org.cy.core.security.SecurityConfig;
 import org.cy.core.security.exception.AnonymousException;
 import org.cy.core.security.exception.AuthorizationException;
+import org.cy.core.security.exception.UserKickException;
 /**
  * 功 能 描 述:<br>
  * 通过Servlet提取Controller所需的信息
@@ -81,6 +82,16 @@ public class ControllerExtractor {
 				}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
 					try {
 						response.sendRedirect(SecurityConfig.authorizationExceptionPage);
+					} catch (IOException e1) {
+					}
+				}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
+					try {
+						response.sendRedirect(SecurityConfig.userKickExceptionPage);
+					} catch (IOException e1) {
+					}
+				}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
+					try {
+						response.sendRedirect(SecurityConfig.userDisabledExceptionPage);
 					} catch (IOException e1) {
 					}
 				}/*继续扩展，可在配置文件中加入更多异常*/

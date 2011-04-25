@@ -15,12 +15,15 @@ public class UserDetails implements Serializable{
 	
 	private String username;
 	
+	private String sessionId;
+	
 	private boolean enable;
 	
 	private Collection<Resource> resources;
 	
-	public UserDetails(String username,boolean enable,Collection<Resource> resources){
+	public UserDetails(String username,String sessionId,boolean enable,Collection<Resource> resources){
 		this.username = username;
+		this.sessionId = sessionId;
 		this.enable = enable;
 		this.resources = resources;
 	}
@@ -47,6 +50,14 @@ public class UserDetails implements Serializable{
 
 	public void setResources(Collection<Resource> resources) {
 		this.resources = resources;
+	}
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 
 }

@@ -20,15 +20,15 @@ public class OnlineUserCache {
 	 * @param details
 	 */
 	public static void login(UserDetails details){
-		onlineUsers.put(details.getUsername(), details);
+		onlineUsers.put(details.getSessionId(), details);
 	}
 	
 	/**
 	 * 用户退出
 	 * @param username
 	 */
-	public static void logout(String username){
-		onlineUsers.remove(username);
+	public static void logout(String sessionId){
+		onlineUsers.remove(sessionId);
 	}
 	
 	/**
@@ -44,8 +44,8 @@ public class OnlineUserCache {
 	 * @param username
 	 * @return
 	 */
-	public static UserDetails getOnlineUser(String username){
-		return onlineUsers.get(username);
+	public static UserDetails getOnlineUser(String sessionId){
+		return onlineUsers.get(sessionId);
 	}
 	
 }

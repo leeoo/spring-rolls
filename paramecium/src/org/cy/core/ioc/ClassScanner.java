@@ -37,9 +37,13 @@ public class ClassScanner {
 		iocScanBasePackage = properties.get("iocScanBasePackage");
 		properties = PropertiesUitls.get("/security.properties");
 		String iocSecurityStr = properties.get("iocSecurity");
+		String sessionControlStr = properties.get("sessionControl");
 		SecurityConfig.iocSecurity = iocSecurityStr!=null?Boolean.parseBoolean(iocSecurityStr):false;
+		SecurityConfig.sessionControl = sessionControlStr!=null?Boolean.parseBoolean(sessionControlStr):false;
 		SecurityConfig.anonymousExceptionPage = properties.get("anonymousExceptionPage");
 		SecurityConfig.authorizationExceptionPage = properties.get("authorizationExceptionPage");
+		SecurityConfig.userKickExceptionPage = properties.get("userKickExceptionPage");
+		SecurityConfig.userDisabledExceptionPage = properties.get("userDisabledExceptionPage");
 		init();
 	}
 	

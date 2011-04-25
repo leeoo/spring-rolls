@@ -7,7 +7,7 @@ public class SessionListener implements HttpSessionListener{
 	
 	
 	public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-		//SecurityThread.put(str);
+		SecurityThread.sessionThreadLocal.set(httpSessionEvent.getSession().getId());
 	}
 
 	public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
