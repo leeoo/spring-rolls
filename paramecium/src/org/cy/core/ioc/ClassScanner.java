@@ -129,8 +129,7 @@ public class ClassScanner {
 			if(!service.uniqueName().isEmpty()){
 				return service.uniqueName();
 			}else{
-				Class<?> superClass = clazz.getSuperclass();
-				String uniqueName = superClass.getSimpleName().substring(0, 1).toLowerCase()+superClass.getSimpleName().substring(1, superClass.getSimpleName().length());
+				String uniqueName = clazz.getSimpleName().substring(0, 1).toLowerCase()+clazz.getSimpleName().substring(1, clazz.getSimpleName().length());
 				return uniqueName;
 			}
 		}else if(controller!=null){

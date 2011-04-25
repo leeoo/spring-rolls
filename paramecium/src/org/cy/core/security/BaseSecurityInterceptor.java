@@ -77,7 +77,7 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 			return resource;
 		}
 		resource = new Resource();
-		resource.setFirstResource(ClassScanner.getIocUniqueName(clazz));
+		resource.setFirstResource(ClassScanner.getIocUniqueName(clazz.getSuperclass()));
 		MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
 		if(mappingMethod!=null){
 			resource.setLastResource(mappingMethod.url());

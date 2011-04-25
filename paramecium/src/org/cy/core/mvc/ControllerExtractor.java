@@ -73,12 +73,13 @@ public class ControllerExtractor {
 					}
 				}
 			}catch (Exception e) {
-				if(e.getCause() instanceof AnonymousException){
+				e.printStackTrace();
+				if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 					try {
 						response.sendRedirect(SecurityConfig.anonymousExceptionPage);
 					} catch (IOException e1) {
 					}
-				}else if(e.getCause() instanceof AuthorizationException){
+				}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
 					try {
 						response.sendRedirect(SecurityConfig.authorizationExceptionPage);
 					} catch (IOException e1) {
