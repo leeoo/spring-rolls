@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="paramecium">
+        <wb-resource deploy-path="/" source-path="/WebRoot"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/config"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/demo/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/core/config"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/demo/test"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/demo/config"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/core/test"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/core/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/server/webapps"/>
+        <property name="context-root" value="paramecium"/>
+        <property name="java-output-path"/>
+    </wb-module>
+</project-modules>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/demo/java"/>
+	<classpathentry kind="src" path="server/webapps"/>
+	<classpathentry kind="src" path="src/demo/test"/>
+	<classpathentry kind="src" path="src/demo/config"/>
+	<classpathentry kind="src" path="src/core/test"/>
+	<classpathentry kind="src" path="src/core/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="server/lib/catalina-optional.jar"/>
+	<classpathentry kind="lib" path="server/lib/catalina.jar"/>
+	<classpathentry kind="lib" path="server/lib/commons-el.jar"/>
+	<classpathentry kind="lib" path="server/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="server/lib/commons-modeler-2.0.1.jar"/>
+	<classpathentry kind="lib" path="server/lib/jasper-compiler-jdt.jar"/>
+	<classpathentry kind="lib" path="server/lib/jasper-compiler.jar"/>
+	<classpathentry kind="lib" path="server/lib/jasper-runtime.jar"/>
+	<classpathentry kind="lib" path="server/lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="server/lib/jstl-1.1.2.jar"/>
+	<classpathentry kind="lib" path="server/lib/naming-factory.jar"/>
+	<classpathentry kind="lib" path="server/lib/naming-resources.jar"/>
+	<classpathentry kind="lib" path="server/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="server/lib/servlets-default.jar"/>
+	<classpathentry kind="lib" path="server/lib/standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="server/lib/tomcat-coyote.jar"/>
+	<classpathentry kind="lib" path="server/lib/tomcat-http.jar"/>
+	<classpathentry kind="lib" path="server/lib/tomcat-util.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/h2-latest.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jstl-1.1.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/standard-1.1.2.jar"/>
+	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
+</classpath>
