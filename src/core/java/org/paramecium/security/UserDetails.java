@@ -17,6 +17,8 @@ public class UserDetails implements Serializable{
 	
 	private String sessionId;
 	
+	private String address;
+	
 	private boolean enable;
 	
 	private Collection<Resource> resources;
@@ -62,6 +64,14 @@ public class UserDetails implements Serializable{
 
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }
