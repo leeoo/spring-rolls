@@ -254,7 +254,7 @@ public class ModelAndView {
 	}
 	
 	public HttpSession getSession() {
-		return request.getSession();
+		return request.getSession(false);
 	}
 	
 }

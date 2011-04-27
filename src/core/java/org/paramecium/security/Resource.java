@@ -23,7 +23,7 @@ public class Resource implements Serializable{
 			Resource resource2 = (Resource)obj;
 			if(this.firstResource.equals(resource2.getFirstResource())){
 				if(this.lastResource.equals(resource2.getLastResource())){
-					return false;
+					return true;
 				}
 			}
 		}

@@ -1,7 +1,5 @@
 package org.paramecium.security;
 
-import javax.servlet.http.HttpSession;
-
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.exception.SessionExpiredException;
@@ -23,19 +21,8 @@ public class SecurityThread {
 	/**
 	 * 将登录正确的用户放入系统安全验证
 	 * @param userDetails
-	 * @param session
-	 */
-	public static void put(UserDetails userDetails,HttpSession session){
-		initSessionId(session);
-		put(userDetails);
-	}
-	
-	/**
-	 * 将登录正确的用户放入系统安全验证
-	 * @param userDetails
 	 */
 	public static void put(UserDetails userDetails){
-		userDetails.setSessionId(sessionThreadLocal.get());
 		if(SecurityConfig.sessionControl){//判断是否是同一session登录
 			for(UserDetails onlineUser : OnlineUserCache.getAllOnlineUsers()){
 				if(onlineUser.getUsername().equals(userDetails.getUsername())&&!onlineUser.getSessionId().equals(userDetails.getSessionId())){//用户信息相同,Session不同,说明用户出现重复登录或盗用,前者的在线用户信息删除
@@ -57,6 +44,7 @@ public class SecurityThread {
 	 */
 	public static UserDetails get() {
 		String sessionId = sessionThreadLocal.get();
+		sessionThreadLocal.remove();
 		if(sessionId!=null){
 			UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
 			if(userDetails==null){//如果在线用户列表不存在该用户，而该用户线程仍有信息，被视为强制被踢出(一般管理员可用使用该权限)
@@ -69,21 +57,12 @@ public class SecurityThread {
 		throw new SessionExpiredException("当前 Session已经过期!");
 	}
 	
-	/**
-	 * 移除用户登录信息
-	 */
-	public static void remove(){
-		if(sessionThreadLocal.get()!=null){
-			remove(sessionThreadLocal.get());
-		}
-	}
 
 	/**
 	 * 移除用户登录信息
 	 * @param sessionId
 	 */
 	public static void remove(String sessionId){
-		sessionThreadLocal.remove();
 		UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
 		if(userDetails==null){
 			return;
@@ -92,30 +71,4 @@ public class SecurityThread {
 		logger.debug(userDetails.getUsername()+"退出成功!");
 	}
 
-	/**
-	 * 移除用户登录信息
-	 * @param session
-	 */
-	public static void remove(HttpSession session){
-		sessionThreadLocal.remove();
-		UserDetails userDetails = OnlineUserCache.getOnlineUser(session.getId());
-		if(userDetails==null){
-			return;
-		}
-		OnlineUserCache.logout(session.getId());
-		session.invalidate();
-		logger.debug(userDetails.getUsername()+"退出成功!");
-	}
-	
-	/**
-	 * 初始化sessionID
-	 * @param session
-	 */
-	private static void initSessionId(HttpSession session){
-		if(sessionThreadLocal.get()==null){
-			session.invalidate();
-		}
-		return;
-	}
-	
 }

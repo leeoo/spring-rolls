@@ -13,7 +13,6 @@ import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.SecurityConfig;
-import org.paramecium.security.SecurityThread;
 import org.paramecium.security.exception.AnonymousException;
 import org.paramecium.security.exception.AuthorizationException;
 import org.paramecium.security.exception.SessionExpiredException;
@@ -39,6 +38,9 @@ public class ControllerExtractor {
 	 */
 	public static void extract(final HttpServletRequest request,final HttpServletResponse response){
 		synchronized (request) {
+			if(request.getSession(false)==null){
+				request.getSession();
+			}
 			String servletPath = request.getServletPath();
 			String[] URIStrs = getURIStrs(servletPath);
 			if(URIStrs==null){
@@ -51,7 +53,7 @@ public class ControllerExtractor {
 					logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
 					return;
 				}
-				Object controller = ApplicationContext.getBean(classInfo.getNamespace());
+				Object controller = ApplicationContext.getBean(classInfo.getNamespace(),request);
 				if(controller==null){
 					logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
 					return;
@@ -77,37 +79,20 @@ public class ControllerExtractor {
 					}
 				}
 			}catch (Exception e) {
-				if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
-					try {
-						SecurityThread.remove(request.getSession());
+				try {
+					if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 						response.sendRedirect(SecurityConfig.anonymousExceptionPage);
-					} catch (IOException e1) {
-					}
-				}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
-					try {
-						//SecurityThread.remove(request.getSession());//可以不用清除
+					}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
 						response.sendRedirect(SecurityConfig.authorizationExceptionPage);
-					} catch (IOException e1) {
-					}
-				}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
-					try {
-						SecurityThread.remove(request.getSession());
+					}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
 						response.sendRedirect(SecurityConfig.userKickExceptionPage);
-					} catch (IOException e1) {
-					}
-				}else if(e.getCause() instanceof UserDisabledException||e instanceof UserDisabledException){
-					try {
-						SecurityThread.remove(request.getSession());
+					}else if(e.getCause() instanceof UserDisabledException||e instanceof UserDisabledException){
 						response.sendRedirect(SecurityConfig.userDisabledExceptionPage);
-					} catch (IOException e1) {
-					}
-				}else if(e.getCause() instanceof SessionExpiredException||e instanceof SessionExpiredException){
-					try {
-						SecurityThread.remove(request.getSession());
+					}else if(e.getCause() instanceof SessionExpiredException||e instanceof SessionExpiredException){
 						response.sendRedirect(SecurityConfig.sessionExpiredExceptionPage);
-					} catch (IOException e1) {
-					}
-				}/*继续扩展，可在配置文件中加入更多异常*/
+					}/*继续扩展，可在配置文件中加入更多异常*/
+				} catch (IOException e1) {
+				}
 				return;
 			}
 		}

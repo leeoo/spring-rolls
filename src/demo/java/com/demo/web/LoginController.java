@@ -33,13 +33,14 @@ public class LoginController {
 		}else{
 			user.setEnable(false);
 		}
-		SecurityThread.put(user,mv.getSession());
+		user.setSessionId(mv.getSession().getId());
+		SecurityThread.put(user);
 		mv.redirect("/logger/list.jhtml");
 	}
 	
 	@MappingMethod
 	public void logout(ModelAndView mv){
-		SecurityThread.remove(mv.getSession());
+		mv.getSession().invalidate();
 		mv.redirect("/index.jsp");
 	}
 	

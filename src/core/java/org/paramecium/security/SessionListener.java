@@ -18,8 +18,7 @@ public class SessionListener implements HttpSessionListener{
 	private final static Log logger = LoggerFactory.getLogger();
 	
 	public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-		logger.debug("创建一个新的SessionID:"+httpSessionEvent.getSession().getId());
-		SecurityThread.sessionThreadLocal.set(httpSessionEvent.getSession().getId());
+		logger.debug("创建新会话的SessionID:"+httpSessionEvent.getSession().getId());
 	}
 
 	public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
