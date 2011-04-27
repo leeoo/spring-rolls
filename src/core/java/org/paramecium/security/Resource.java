@@ -18,6 +18,18 @@ public class Resource implements Serializable{
 	
 	private String showLabel;
 	
+	public boolean equals(Object obj){
+		if(obj instanceof Resource){
+			Resource resource2 = (Resource)obj;
+			if(this.firstResource.equals(resource2.getFirstResource())){
+				if(this.lastResource.equals(resource2.getLastResource())){
+					return false;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public String toString() {
 		return firstResource+"#"+lastResource;
 	}

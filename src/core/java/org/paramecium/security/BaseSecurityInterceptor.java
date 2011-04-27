@@ -46,7 +46,7 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 			Resource resource = buildResource(service.getClass(), method);
 			if(user.getResources()!=null){
 				for(Resource userResource:user.getResources()){
-					if(userResource.toString().equals(resource.toString())){
+					if(userResource.equals(resource)){
 						return nextIntercept(service, method, parameters, proxy);
 					}
 				}
