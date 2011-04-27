@@ -1,6 +1,8 @@
 package org.paramecium.mvc;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashSet;
@@ -149,6 +151,96 @@ public class ModelAndView {
 		try {
 			response.sendRedirect(redirectUrl);
 		} catch (IOException e) {
+			logger.error(e);
+		}
+	}
+	
+	/**
+	 * 提供下载功能
+	 * @param file
+	 */
+	public void download(byte[] file){
+		download(file, null);
+	}
+	
+	/**
+	 * 下载功能
+	 * @param file
+	 * @param fileName
+	 */
+	public void download(byte[] file,String fileName){
+		download(file, fileName, null);
+	}
+	
+	/**
+	 * 下载功能
+	 * @param file
+	 * @param fileName
+	 * @param encoding
+	 */
+	public void download(byte[] file,String fileName,String encoding){
+		encoding = encoding!=null?encoding:"utf-8";
+		fileName = fileName!=null?fileName:"file";
+		response.setContentType("application/octet-stream;charset="+encoding);
+		response.setHeader( "Content-Disposition", "attachment;filename="+fileName);
+		try{
+			OutputStream outStream = response.getOutputStream();
+			outStream.write(file);
+			outStream.flush();
+			outStream.close();
+		}catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	/**
+	 * 输出xml
+	 * @param xml
+	 */
+	public void printXML(String xml){
+		printXML(xml,null);
+	}
+	
+	/**
+	 * 输出xml
+	 * @param xml
+	 * @param encoding
+	 */
+	public void printXML(String xml,String encoding){
+		encoding = encoding!=null?encoding:"utf-8";
+		response.setContentType("text/xml;charset="+encoding);
+		try{
+			PrintWriter writer = response.getWriter();
+			writer.write(xml);
+			writer.flush();
+			writer.close();
+		}catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	/**
+	 * 输出json
+	 * @param json
+	 */
+	public void printJSON(String json){
+		printJSON(json,null);
+	}
+	
+	/**
+	 * 输出json
+	 * @param json
+	 * @param encoding
+	 */
+	public void printJSON(String json,String encoding){
+		encoding = encoding!=null?encoding:"utf-8";
+		response.setContentType("text/html;charset="+encoding);
+		try{
+			PrintWriter writer = response.getWriter();
+			writer.write(json);
+			writer.flush();
+			writer.close();
+		}catch (Exception e) {
 			logger.error(e);
 		}
 	}
