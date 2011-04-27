@@ -21,6 +21,7 @@ public class LoggerFactory {
 	private final static Map<String,Integer> levelMap = new HashMap<String,Integer>();
 	private static int currentLevel = Log.LEVEL_INFO;
 	public static String loggerFileName;
+	public static int loggerFileMax = 5;
 	public static String loggerDbInterface;
 	public static boolean sqlIsFormat = false;
 	
@@ -43,6 +44,8 @@ public class LoggerFactory {
 			if(loggerMode.indexOf("file")>-1){
 				logHandler = new FileLogHandler();
 				loggerFileName = properties.get("loggerFileName");
+				String loggerFileMaxStr = properties.get("loggerFileMax");
+				loggerFileMax = loggerFileMaxStr!=null?Integer.parseInt(loggerFileMaxStr):5;
 			}else if(loggerMode.indexOf("db")>-1||loggerMode.indexOf("database")>-1){
 				logHandler = new DataBaseLogHandler();
 				loggerDbInterface = properties.get("loggerDbInterface");
