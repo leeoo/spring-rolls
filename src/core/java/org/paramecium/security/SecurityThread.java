@@ -1,5 +1,7 @@
 package org.paramecium.security;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.exception.SessionExpiredException;
@@ -16,7 +18,41 @@ import org.paramecium.security.exception.UserKickException;
 public class SecurityThread {
 	
 	private final static Log logger = LoggerFactory.getLogger();
-	public final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();
+	private final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();
+	
+	/**
+	 * 开启本次线程
+	 * @param request
+	 */
+	public static void startThread(HttpServletRequest request){
+		if(request.getSession(false)!=null){
+			sessionThreadLocal.set(request.getSession(false).getId());
+			return;
+		}
+		throw new SessionExpiredException("当前 Session已经过期!");
+	}
+	
+	/**
+	 * 结束本次线程
+	 */
+	public static void endThread(){
+		sessionThreadLocal.remove();
+	}
+	
+	/**
+	 * 将登录正确的用户放入系统安全验证
+	 * @param userDetails
+	 * @param request
+	 */
+	public static void put(UserDetails userDetails,HttpServletRequest request){
+		if(request.getSession(false)!=null){
+			userDetails.setSessionId(request.getSession(false).getId());
+			userDetails.setAddress(request.getRemoteAddr());
+			put(userDetails);
+			return;
+		}
+		throw new SessionExpiredException("当前 Session已经过期!");
+	}
 	
 	/**
 	 * 将登录正确的用户放入系统安全验证

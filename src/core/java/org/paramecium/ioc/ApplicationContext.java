@@ -4,13 +4,10 @@ import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.paramecium.aop.ClassProxy;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.security.SecurityInterceptor;
-import org.paramecium.security.SecurityThread;
 import org.paramecium.transaction.TransactionInterceptor;
 
 /**
@@ -121,20 +118,6 @@ public class ApplicationContext {
 	    	 super(message);
 	    }
 
-	}
-	
-	/**
-	 * 根据web信息获得实例
-	 * @param name
-	 * @param request
-	 * @return
-	 */
-	public static Object getBean(String name,final HttpServletRequest request){
-		synchronized (request) {
-			SecurityThread.sessionThreadLocal.set(request.getSession(false).getId());
-			Object object = getBean(name);
-			return object;
-		}
 	}
 	
 	/**

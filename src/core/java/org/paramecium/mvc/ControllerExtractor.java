@@ -42,6 +42,7 @@ public class ControllerExtractor {
 			if(request.getSession(false)==null){
 				request.getSession();
 			}
+			start(request);
 			String servletPath = request.getServletPath();
 			String[] URIStrs = getURIStrs(servletPath);
 			if(URIStrs==null){
@@ -56,7 +57,7 @@ public class ControllerExtractor {
 					end();
 					return;
 				}
-				Object controller = ApplicationContext.getBean(classInfo.getNamespace(),request);
+				Object controller = ApplicationContext.getBean(classInfo.getNamespace());
 				if(controller==null){
 					logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
 					end();
@@ -107,7 +108,11 @@ public class ControllerExtractor {
 	}
 	
 	private static void end(){
-		SecurityThread.sessionThreadLocal.remove();
+		SecurityThread.endThread();
+	}
+
+	private static void start(HttpServletRequest request){
+		SecurityThread.startThread(request);
 	}
 	
 	/**

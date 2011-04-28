@@ -33,8 +33,7 @@ public class LoginController {
 		}else{
 			user.setEnable(false);
 		}
-		user.setSessionId(mv.getSession().getId());
-		SecurityThread.put(user);
+		SecurityThread.put(user,mv.getRequest());
 		mv.redirect("/logger/list.jhtml");
 	}
 	
