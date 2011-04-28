@@ -44,7 +44,6 @@ public class SecurityThread {
 	 */
 	public static UserDetails get() {
 		String sessionId = sessionThreadLocal.get();
-		sessionThreadLocal.remove();
 		if(sessionId!=null){
 			UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
 			if(userDetails==null){//如果在线用户列表不存在该用户，而该用户线程仍有信息，被视为强制被踢出(一般管理员可用使用该权限)

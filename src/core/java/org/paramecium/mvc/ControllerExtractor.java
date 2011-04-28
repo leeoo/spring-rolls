@@ -13,6 +13,7 @@ import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.SecurityConfig;
+import org.paramecium.security.SecurityThread;
 import org.paramecium.security.exception.AnonymousException;
 import org.paramecium.security.exception.AuthorizationException;
 import org.paramecium.security.exception.SessionExpiredException;
@@ -45,22 +46,26 @@ public class ControllerExtractor {
 			String[] URIStrs = getURIStrs(servletPath);
 			if(URIStrs==null){
 				logger.warn("非法请求地址:"+servletPath);
+				end();
 				return;
 			}
 			try{
 				ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
 				if(classInfo==null){
 					logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
+					end();
 					return;
 				}
 				Object controller = ApplicationContext.getBean(classInfo.getNamespace(),request);
 				if(controller==null){
 					logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
+					end();
 					return;
 				}
 				Method[] methods = classInfo.getClazz().getMethods();//只返回public，如果需要private可用getDeclaredMethods
 				if(methods==null){
 					logger.warn(classInfo.getClazz().getName()+"没有相符合的处理方法!");
+					end();
 					return;
 				}
 				for(Method method : methods){
@@ -71,10 +76,12 @@ public class ControllerExtractor {
 					if(!mappingMethod.url().isEmpty()){
 						if(mappingMethod.url().equals(URIStrs[1])){
 							method.invoke(controller, new ModelAndView(request, response));
+							end();
 							return;
 						}
 					}else if((ControllerExtractor.lineStr+method.getName()).equals(URIStrs[1])){
 						method.invoke(controller, new ModelAndView(request, response));
+						end();
 						return;
 					}
 				}
@@ -93,12 +100,15 @@ public class ControllerExtractor {
 					}/*继续扩展，可在配置文件中加入更多异常*/
 				} catch (IOException e1) {
 				}
+				end();
 				return;
 			}
 		}
 	}
 	
-	
+	private static void end(){
+		SecurityThread.sessionThreadLocal.remove();
+	}
 	
 	/**
 	 * 根据请求拆分Controller所需的索引
