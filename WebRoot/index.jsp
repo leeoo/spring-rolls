@@ -13,6 +13,12 @@
 		<hr width="100%"/>
 	</div>
 	<div style="background-color: #FFFFFF;width: 100%;height: 100%;">
+		<ul>
+			<li>完全授权的用户——账号:admin 密码:任意非空</li>
+			<li>部分授权的用户——账号:user 密码:任意非空</li>
+			<li>被冻结的用户——账号:任意非空  密码:任意非空</li>
+			<li>登录失败的用户——账号:空  或 密码:空</li>
+		</ul>
 		<form action="${base}/login.jhtml" method="post">
 			账号<input type='text' name='username'/><br/>
 			密码<input type='password' name="password"/><br/>
