@@ -8,6 +8,7 @@ import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.AuthorizationMenu;
 import org.paramecium.security.Resource;
+import org.paramecium.security.SecurityConfig;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
 
@@ -17,6 +18,11 @@ public class LoginController {
 	@MappingMethod
 	public void login(ModelAndView mv){
 		String username = (String) mv.getValue("username", String.class);
+		String password = (String) mv.getValue("password", String.class);
+		if(password==null||username==null||username.isEmpty()||password.isEmpty()){
+			mv.redirect(SecurityConfig.loginExceptionPage);
+			return;
+		}
 		UserDetails user = new UserDetails();
 		user.setUsername(username);
 		if(username.equals("admin")){
