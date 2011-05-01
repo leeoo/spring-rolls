@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery.easyui.min.js"></script>
 </head>
 <body class="easyui-layout">
-	<div region="north" border="false" style="height:70px;background-image: url('/commons/images/head.gif');background-color: #FFF;background-repeat: no-repeat;">
+	<div region="north" border="false" style="height:70px;background-image: url('/commons/images/head.gif');background-color: #EEF9FB;background-repeat: no-repeat;">
 		<img alt="logo" src="${base}/commons/images/logo.gif" height="65" width="100" style="padding-left: 10px;"/>
 	</div>
 	<div region="west" split="true" icon="icon-search" title="功能菜单" style="width:200px;padding1:1px;overflow:hidden;">
