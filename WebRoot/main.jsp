@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 <title>首页</title>
-	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/gray/easyui.css">
 	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/icon.css">
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery-1.4.4.min.js"></script>
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery.easyui.min.js"></script>
