@@ -7,7 +7,7 @@
 <title>日志列表</title>
 </head>
 <body>
-<div id="list"></div>
+<table id="list"></table>
 <script>
 	$(function(){
 		$('#list').datagrid({
@@ -28,23 +28,15 @@
 						{field:'date',title:'日志日期',width:200,align:'center'},
 						{field:'opt',title:'操作',width:100,align:'center',
 							formatter:function(value,rec){
-								return '<span style="color:red">Edit Delete</span>';
+								return '<span style="color:red">下载 冻结 历史日志</span>';
 							}
 						}
 					]],
 			pagination:true
 		});
-       	 $('#list').datagrid('getPager').pagination({
-           	 displayMsg:'当前显示从{from}到{to}共{total}记录',
-           	 onBeforeRefresh:function(pageNumber){
- 				$(this).pagination('loading');
- 				$('#list').datagrid({
- 					url:'${base}/logger/data.json?page.pageNo='+pageNumber
- 				});
- 				alert(pageNumber);
- 				$(this).pagination('loaded');
- 			 }
-            });
+		 	$('#list').datagrid('getPager').pagination({
+			    displayMsg:'当前显示从{from}到{to}共{total}记录'
+			});
 	});
 </script>
 </body>
