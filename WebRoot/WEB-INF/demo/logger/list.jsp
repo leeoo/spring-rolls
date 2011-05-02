@@ -7,8 +7,7 @@
 <title>日志列表</title>
 </head>
 <body>
-<table id="list"></table>
-<div id="pager" style="background:#efefef;border:1px solid #ccc;"></div>
+<div id="list"></div>
 <script>
 	$(function(){
 		$('#list').datagrid({
@@ -16,8 +15,11 @@
 			striped: true,
 			collapsible:true,
 			fitColumns: true,
+			rownumbers: true,
+			pageList:[20],
 			url:'${base}/logger/data.json',
 			idField:'id',
+			loadMsg:'数据载入中...',
 			frozenColumns:[[
 		                    {field:'id',checkbox:true}
 		                ]],
@@ -29,40 +31,20 @@
 								return '<span style="color:red">Edit Delete</span>';
 							}
 						}
-					]]
-			//pagination:true,
-			//rownumbers:true,
+					]],
+			pagination:true
 		});
-		$(function(){
-			$('#pager').pagination({
-				total:108,
-				pageSize:20,
-				pageList:[20],
-				buttons:[{
-					iconCls:'icon-add',
-					handler:function(){
-						alert('add');
-					}
-				},{
-					iconCls:'icon-cut',
-					handler:function(){
-						alert('cut');
-					}
-				},{
-					iconCls:'icon-cancel',
-					handler:function(){
-						alert('save');
-					}
-				}],
-				onSelectPage:function(pageNumber){
-					$(this).pagination('loading');
-					$('#list').datagrid({
-						url:'${base}/logger/data.json?page.pageNo='+pageNumber
-					});
-					$(this).pagination('loaded');
-				}
-			});
-		});
+       	 $('#list').datagrid('getPager').pagination({
+           	 displayMsg:'当前显示从{from}到{to}共{total}记录',
+           	 onBeforeRefresh:function(pageNumber){
+ 				$(this).pagination('loading');
+ 				$('#list').datagrid({
+ 					url:'${base}/logger/data.json?page.pageNo='+pageNumber
+ 				});
+ 				alert(pageNumber);
+ 				$(this).pagination('loaded');
+ 			 }
+            });
 	});
 </script>
 </body>
