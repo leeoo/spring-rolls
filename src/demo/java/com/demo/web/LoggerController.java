@@ -36,10 +36,11 @@ public class LoggerController {
 	
 	@MappingMethod
 	public void data(ModelAndView mv){
-		Page page = (Page) mv.getBean("page",Page.class);
+		int pageNo = (Integer) mv.getValue("page", Integer.class);
+		Page page = new Page();
+		page.setPageNo(pageNo);
 		page.setPageSize(20);
 		page = loggerService.getAll(page);
-		mv.addValue("page", page);
 		String json = JsonUitls.getBeansJson(page.getResult(),false);
 		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
 		mv.printJSON(json);
