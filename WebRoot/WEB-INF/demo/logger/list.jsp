@@ -6,13 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 <title>日志列表</title>
 </head>
-<body style="background-color:#AABBBB;height: 100%">
-	<div style="background-color: #AABBBB;width: 100%;">
-		<img alt="logo" src="${base}/commons/images/logo.gif" height="70" width="110"/>
-		<a href="${base}/logout.jhtml">退出</a>
-		<hr width="100%"/>
-	</div>
-	<div style="background-color: #FFFFFF;width: 100%;height: 100%;">
+<body>
 		<form action="${base}logger/list.jhtml" method="post">
 			<label>日期范围</label>
 			<input name="logger.startDate" value="<fmt:formatDate value='${logger.startDate}' pattern='yyyy-MM-dd'/>"/>
@@ -69,6 +63,5 @@
 			</td>
 			</tr>
 		</table>
-	</div>
 </body>
 </html>
