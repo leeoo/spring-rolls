@@ -25,12 +25,14 @@ public abstract class JsonUitls {
 	 * @param beans
 	 * @return
 	 */
-	public static String getBeansJson(Collection<?> beans){
+	public static String getBeansJson(Collection<?> beans,boolean startAndEndMaker){
 		if(beans==null||beans.isEmpty()){
 			return null;
 		}
 		StringBuffer sb = new StringBuffer();
-		sb.append('{');
+		if(startAndEndMaker){
+			sb.append('{');
+		}
 		for(Object bean : beans){
 			sb.append('{');
 			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -38,11 +40,11 @@ public abstract class JsonUitls {
 				for(Field field : fields){
 					field.setAccessible(true);
 					try {
-						sb.append("'").append(field.getName()).append("':");
+						sb.append("\"").append(field.getName()).append("\":");
 						if(field.get(bean)==null){
-							sb.append("'',");
+							sb.append("\"\",");
 						}else{
-							sb.append("'").append(field.get(bean)).append("',");
+							sb.append("\"").append(field.get(bean)).append("\",");
 						}
 					} catch (Exception e) {
 						logger.warn(e.fillInStackTrace());
@@ -53,7 +55,9 @@ public abstract class JsonUitls {
 			sb.append('}').append(',');
 		}
 		sb.delete(sb.length()-1, sb.length());
-		sb.append('}');
+		if(startAndEndMaker){
+			sb.append('}');
+		}
 		return sb.toString();
 	}
 	
@@ -62,27 +66,31 @@ public abstract class JsonUitls {
 	 * @param maps
 	 * @return
 	 */
-	public static String getMapsJson(Collection<Map<String,Object>> maps){
+	public static String getMapsJson(Collection<Map<String,Object>> maps,boolean startAndEndMaker){
 		if(maps==null||maps.isEmpty()){
 			return null;
 		}
 		StringBuffer sb = new StringBuffer();
-		sb.append('{');
+		if(startAndEndMaker){
+			sb.append('{');
+		}
 		for(Map<String,Object> map : maps){
 			sb.append('{');
 			for(Entry<String, Object> entry : map.entrySet()){
-				sb.append("'").append(entry.getKey()).append("':");
+				sb.append("\"").append(entry.getKey()).append("\":");
 				if(entry.getValue()==null){
-					sb.append("'',");
+					sb.append("\"\",");
 				}else{
-					sb.append("'").append(entry.getValue()).append("',");
+					sb.append("\"").append(entry.getValue()).append("\",");
 				}
 			}
 			sb.delete(sb.length()-1, sb.length());
 			sb.append('}').append(',');
 		}
 		sb.delete(sb.length()-1, sb.length());
-		sb.append('}');
+		if(startAndEndMaker){
+			sb.append('}');
+		}
 		return sb.toString();
 	}
 	

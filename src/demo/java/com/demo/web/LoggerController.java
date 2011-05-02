@@ -2,6 +2,7 @@ package com.demo.web;
 
 import java.sql.SQLException;
 
+import org.paramecium.commons.JsonUitls;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.mvc.ModelAndView;
@@ -9,7 +10,6 @@ import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
 
 import com.demo.entity.Logger;
-import com.demo.entity.LoggerWhere;
 import com.demo.service.LoggerService;
 
 @Controller(namespace="/logger")
@@ -20,7 +20,7 @@ public class LoggerController {
 	
 	@MappingMethod(url="/list")
 	public void index(ModelAndView mv){
-		Page page = (Page) mv.getBean("page",Page.class);
+		/*Page page = (Page) mv.getBean("page",Page.class);
 		LoggerWhere loggerWhere = (LoggerWhere) mv.getBean("logger",LoggerWhere.class);
 		String old = loggerWhere.getInfo();
 		if(loggerWhere.getInfo()!=null&&!loggerWhere.getInfo().isEmpty()){
@@ -30,8 +30,19 @@ public class LoggerController {
 		page = loggerService.getAll(page,loggerWhere);
 		loggerWhere.setInfo(old);
 		mv.addValue("logger", loggerWhere);
-		mv.addValue("page", page);
+		mv.addValue("page", page);*/
 		mv.forward("/WEB-INF/demo/logger/list.jsp");
+	}
+	
+	@MappingMethod
+	public void data(ModelAndView mv){
+		Page page = (Page) mv.getBean("page",Page.class);
+		page.setPageSize(20);
+		page = loggerService.getAll(page);
+		mv.addValue("page", page);
+		String json = JsonUitls.getBeansJson(page.getResult(),false);
+		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
+		mv.printJSON(json);
 	}
 	
 	@MappingMethod
