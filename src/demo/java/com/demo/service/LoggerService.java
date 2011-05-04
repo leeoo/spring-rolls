@@ -29,6 +29,12 @@ public class LoggerService {
 	public void delete(int id) throws SQLException{
 		ormDao.delete(id);
 	}
+
+	public void delete(String[] ids) throws SQLException{
+		for(String id : ids){
+			ormDao.delete(Integer.parseInt(id));
+		}
+	}
 	
 	@Transactional(readOnly=true)
 	public Logger get(int id){

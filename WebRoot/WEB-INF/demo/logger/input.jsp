@@ -7,13 +7,26 @@
 <title>日志信息维护</title>
 </head>
 <body>
-	<form id="testForm" action="${base}logger/save.jhtml" method="post">
+	<form id="loggerForm" action="${base}logger/save.jhtml" method="post">
 		<c:if test="${logger.id!=null}">
 			<input type="hidden" name="logger.id" value="${logger.id}"/>
 		</c:if>
-		<label>信息</label><input name="logger.info" value="${logger.info}"/><br>
-		<label>日期</label><input name="logger.date" value="<fmt:formatDate value='${logger.date}' pattern='yyyy-MM-dd'/>"/><br>
-		<label><button type="submit">提交</button></label>
+		<div>
+			<table>
+				<tr>
+					<td>信息:</td>
+					<td><textarea name="logger.info" class="easyui-validatebox" required="true" validType="length[2,50]" style="height:100px;width: 300px;">${logger.info}</textarea></td>
+				</tr>
+				<tr>
+					<td>日期:</td>
+					<td><input name="logger.date" class="easyui-datebox" value="<fmt:formatDate value='${logger.date}' pattern='yyyy-MM-dd'/>"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
+				</tr>
+			</table>
+		</div>
 	</form>
 </body>
 </html>

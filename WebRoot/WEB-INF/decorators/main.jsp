@@ -10,14 +10,24 @@
 	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/icon.css">
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery-1.4.4.min.js"></script>
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery.easyui.min.js"></script>
+	<script>
+		function isExit(){
+			$.messager.confirm('提示','是否确认退出本系统?',function(d){
+	            if(d){
+	            	location.href ='${base}/logout.jhtml';
+	            }
+	        });
+		}
+	</script>
 	<decorator:head></decorator:head>
 </head>
 <body class="easyui-layout">
 	<div region="north" border="false" style="height:80px;background-image: url('/commons/images/head.gif');background-color: #EEF9FB;background-repeat: no-repeat;">
 		<div align="right" style="padding-right: 10px;padding-top: 5px;">
-			<a href="${base}/logout.jhtml" class="easyui-linkbutton" plain="false" iconCls="icon-save">信息</a>
-			<a href="${base}/logout.jhtml" class="easyui-linkbutton" plain="false" iconCls="icon-help">帮助</a>
-			<a href="${base}/logout.jhtml" class="easyui-linkbutton" plain="false" iconCls="icon-undo">退出</a>
+			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search">在线用户</a>
+			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-print">短消息</a>
+			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-help">帮助</a>
+			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-undo" onclick="return isExit();">退出</a>
 		</div>
 	</div>
 	<div region="west" split="true" icon="icon-search" title="功能菜单" style="width:200px;padding1:1px;overflow:hidden;">

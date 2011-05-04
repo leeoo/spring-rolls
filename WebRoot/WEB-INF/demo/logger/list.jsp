@@ -19,7 +19,6 @@
 			pageList:[20],
 			url:'${base}/logger/data.json',
 			idField:'id',
-			loadMsg:'数据正在载入...',
 			frozenColumns:[[
 		                    {field:'id',checkbox:true}
 		                ]],
@@ -37,29 +36,57 @@
 			            text: '修改',
 			            iconCls: 'icon-edit',
 			            handler:function(){
-							$('#btnsave').linkbutton('enable');
-							alert('add');
+				        	var ids = [];
+							var rows = $('#list').datagrid('getSelections');
+							if(rows.length!=1){
+								$.messager.alert('提示','必须选择一行!','warning');
+								$('#list').datagrid('clearSelections');
+								return false;
+							}
+							location.href ='${base}/logger/input.jhtml?id='+rows[0].id;
 						}
 			        }, '-', {
 			            text: '删除',
 			            iconCls: 'icon-cancel',
 			            handler:function(){
-							$('#btnsave').linkbutton('enable');
-							alert('add');
+				        	var ids = [];
+							var rows = $('#list').datagrid('getSelections');
+							if(rows.length<1){
+								$.messager.alert('提示','至少选择一行!','warning');
+								return false;
+							}
+							for(var i=0;i<rows.length;i++){
+								ids.push(rows[i].id);
+							}
+							$.messager.confirm('提示','确认删除吗?',function(d){
+					            if(d){
+					            	$.ajax({
+										   type: "get",
+										   url: "${base}/logger/delete.jhtml",
+										   data: "ids="+ids.join(','),
+										   success: function(msg){
+											   $.messager.show({
+													title:'提示',
+													msg:'删除成功！',
+													timeout:3000,
+													showType:'slide'
+												});
+										   }
+									});
+									$('#list').datagrid('reload');
+									$('#list').datagrid('clearSelections');
+					            }
+					        });
 						}
 			        }, '-', {
 			            text: '查找',
 			            iconCls: 'icon-search',
 			            handler:function(){
-							$('#btnsave').linkbutton('enable');
-							alert('add');
+							alert('查找');
 						}
 			        }],
 			pagination:true
 		});
-		 	$('#list').datagrid('getPager').pagination({
-			    displayMsg:'本页从{from}到{to}条/共{total}条记录'
-			});
 	});
 </script>
 </body>
