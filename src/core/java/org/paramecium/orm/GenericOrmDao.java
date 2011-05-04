@@ -107,7 +107,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		sql = sql.substring(0, start);
 		Entity entity = clazz.getAnnotation(Entity.class);
 		if(entity!=null&&!entity.orderBy().isEmpty()){
-			sql = sql.concat(" ODER BY "+entity.orderBy());
+			sql = sql.concat(" ORDER BY "+entity.orderBy());
 		}
 		return genericJdbcDao.queryPageBeansByArray(sql, clazz, page);
 	}
@@ -132,7 +132,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		sql = sql.concat(" WHERE ").concat(where);
 		Entity entity = clazz.getAnnotation(Entity.class);
 		if(entity!=null&&!entity.orderBy().isEmpty()){
-			sql = sql.concat(" ODER BY "+entity.orderBy());
+			sql = sql.concat(" ORDER BY "+entity.orderBy());
 		}
 		return genericJdbcDao.queryPageBeansByBean(sql, clazz, page,whereBean);
 	}
@@ -157,7 +157,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		sql = sql.concat(" WHERE ").concat(where);
 		Entity entity = clazz.getAnnotation(Entity.class);
 		if(entity!=null&&!entity.orderBy().isEmpty()){
-			sql = sql.concat(" ODER BY "+entity.orderBy());
+			sql = sql.concat(" ORDER BY "+entity.orderBy());
 		}
 		return (Collection<T>) genericJdbcDao.queryByBean(sql, clazz, whereBean);
 	}
