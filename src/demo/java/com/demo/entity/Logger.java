@@ -7,7 +7,7 @@ import org.paramecium.orm.annotation.Entity;
 import org.paramecium.orm.annotation.PrimaryKey;
 import org.paramecium.orm.annotation.VirtualColumn;
 
-@Entity(tableName="t_logger_info")
+@Entity(tableName="t_logger_info",orderBy="id DESC")
 public class Logger {
 	
 	@PrimaryKey
