@@ -13,7 +13,7 @@
 	<decorator:head></decorator:head>
 </head>
 <body class="easyui-layout">
-	<div region="north" border="false" style="height:52px;background-image: url('/commons/images/head.gif');background-color: #EEF9FB;background-repeat: no-repeat;">
+	<div region="north" border="false" style="height:80px;background-image: url('/commons/images/head.gif');background-color: #EEF9FB;background-repeat: no-repeat;">
 		<div align="right" style="padding-right: 10px;padding-top: 5px;">
 			<a href="${base}/logout.jhtml" class="easyui-linkbutton" plain="false" iconCls="icon-save">信息</a>
 			<a href="${base}/logout.jhtml" class="easyui-linkbutton" plain="false" iconCls="icon-help">帮助</a>
