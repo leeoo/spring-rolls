@@ -19,23 +19,46 @@
 			pageList:[20],
 			url:'${base}/logger/data.json',
 			idField:'id',
-			loadMsg:'数据载入中...',
+			loadMsg:'数据正在载入...',
 			frozenColumns:[[
 		                    {field:'id',checkbox:true}
 		                ]],
 			columns:[[
 						{field:'info',title:'日志信息',width:200},
-						{field:'date',title:'日志日期',width:200,align:'center'},
-						{field:'opt',title:'操作',width:100,align:'center',
-							formatter:function(value,rec){
-								return '<span style="color:red">下载 冻结 历史日志</span>';
-							}
-						}
+						{field:'date',title:'日志日期',width:200,align:'center'}
 					]],
+					toolbar: [{
+			            text: '新增',
+			            iconCls: 'icon-add',
+			            handler:function(){
+							location.href ='${base}/logger/input.jhtml';
+						}
+			        }, '-', {
+			            text: '修改',
+			            iconCls: 'icon-edit',
+			            handler:function(){
+							$('#btnsave').linkbutton('enable');
+							alert('add');
+						}
+			        }, '-', {
+			            text: '删除',
+			            iconCls: 'icon-cancel',
+			            handler:function(){
+							$('#btnsave').linkbutton('enable');
+							alert('add');
+						}
+			        }, '-', {
+			            text: '查找',
+			            iconCls: 'icon-search',
+			            handler:function(){
+							$('#btnsave').linkbutton('enable');
+							alert('add');
+						}
+			        }],
 			pagination:true
 		});
 		 	$('#list').datagrid('getPager').pagination({
-			    displayMsg:'当前显示从{from}到{to}共{total}记录'
+			    displayMsg:'本页从{from}到{to}条/共{total}条记录'
 			});
 	});
 </script>
