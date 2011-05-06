@@ -28,11 +28,11 @@
 		<table>
 				<tr>
 					<td>账号:</td>
-					<td><input type='text' name='username' class="easyui-validatebox" required="true" validType="length[2,20]"/></td>
+					<td><input type='text' name='username' style="width: 150px;" class="easyui-validatebox" required="true" validType="length[2,20]"/></td>
 				</tr>
 				<tr>
 					<td>密码:</td>
-					<td><input type='password' name="password" class="easyui-validatebox" required="true" validType="length[2,20]"/></td>
+					<td><input type='password' name="password" style="width: 150px;" class="easyui-validatebox" required="true" validType="length[2,20]"/></td>
 				</tr>
 				<tr>
 					<td></td>
@@ -45,17 +45,17 @@
 <script>
 	var error = <%=request.getParameter("error")%>;
 	if(error==0){
-		$.messager.alert('提示','登录名或密码错误!','error');
+		$.messager.show({title:'提示',msg:'登录名或密码错误!',timeout:3000,showType:'slide'});
 	}else if(error==1){
-		$.messager.alert('提示','请您登录后访问!','warning');
+		$.messager.show({title:'提示',msg:'请您登录后访问!',timeout:3000,showType:'slide'});
 	}else if(error==3){
-		$.messager.alert('提示','该资源受保护,请用合法用户登录再试!','warning');
+		$.messager.show({title:'提示',msg:'该资源受保护,请用合法用户登录再试!',timeout:3000,showType:'slide'});
 	}else if(error==5){
-		$.messager.alert('提示','您的账户在其他地点登录,请重新登录!','warning');
+		$.messager.show({title:'提示',msg:'您的账户在其他地点登录,请重新登录!',timeout:3000,showType:'slide'});
 	}else if(error==7){
-		$.messager.alert('提示','您的账户被冻结,请联系管理员!','error');
+		$.messager.show({title:'提示',msg:'您的账户被冻结,请联系管理员!',timeout:3000,showType:'slide'});
 	}else if(error==9){
-		$.messager.alert('提示','您在登录后长时间没有操作,请重新登录!','warning');
+		$.messager.show({title:'提示',msg:'您在登录后长时间没有操作,请重新登录!',timeout:3000,showType:'slide'});
 	}
 </script>
 </html>
