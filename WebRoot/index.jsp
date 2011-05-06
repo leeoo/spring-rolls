@@ -44,18 +44,22 @@
 </body>
 <script>
 	var error = <%=request.getParameter("error")%>;
+	var msg = '';
 	if(error==0){
-		$.messager.show({title:'提示',msg:'登录名或密码错误!',timeout:3000,showType:'slide'});
+		msg = '登录名或密码错误!';
 	}else if(error==1){
-		$.messager.show({title:'提示',msg:'请您登录后访问!',timeout:3000,showType:'slide'});
+		msg = '请您登录后访问!';
 	}else if(error==3){
-		$.messager.show({title:'提示',msg:'该资源受保护,请用合法用户登录再试!',timeout:3000,showType:'slide'});
+		msg = '该资源受保护,请用合法用户登录再试!';
 	}else if(error==5){
-		$.messager.show({title:'提示',msg:'您的账户在其他地点登录,请重新登录!',timeout:3000,showType:'slide'});
+		msg = '您的账户在其他地点登录,请重新登录!';
 	}else if(error==7){
-		$.messager.show({title:'提示',msg:'您的账户被冻结,请联系管理员!',timeout:3000,showType:'slide'});
+		msg = '您的账户被冻结,请联系管理员!';
 	}else if(error==9){
-		$.messager.show({title:'提示',msg:'您在登录后长时间没有操作,请重新登录!',timeout:3000,showType:'slide'});
+		msg = '您在登录后长时间没有操作,请重新登录!';
+	}
+	if(msg!=''){
+		$.messager.show({title:'提示',msg:msg,timeout:3000,showType:'slide'});
 	}
 </script>
 </html>
