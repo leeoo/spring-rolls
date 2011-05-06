@@ -24,15 +24,15 @@
 <body class="easyui-layout">
 	<div region="north" border="false" style="height:80px;background-image: url('/commons/images/head.gif');background-color: #EEF9FB;background-repeat: no-repeat;">
 		<div align="right" style="padding-right: 10px;padding-top: 5px;">
-			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search">在线用户</a>
-			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-print">短消息</a>
+			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-group">在线用户</a>
+			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-msg">短消息</a>
 			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-help">帮助</a>
 			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-undo" onclick="return isExit();">退出</a>
 		</div>
 	</div>
-	<div region="west" split="true" icon="icon-search" title="功能菜单" style="width:200px;padding1:1px;overflow:hidden;">
+	<div region="west" split="true" icon="icon-cl" title="功能菜单" style="width:200px;padding1:1px;overflow:hidden;">
 		<div class="easyui-accordion" fit="true" border="false">
-			<div title="系统管理" icon="icon-save" selected="true" style="overflow:auto;padding-left: 20px;padding-top: 10px;">
+			<div title="系统管理" icon="icon-tools" selected="true" style="overflow:auto;padding-left: 20px;padding-top: 10px;">
 				<p>角色设定</p>
 				<p>登录账户</p>
 				<p>菜单权限</p>
@@ -42,21 +42,21 @@
 				<p>日志管理</p>
 				<p>任务调度</p>
 			</div>
-			<div title="服务管理" icon="icon-print" style="padding-left: 10px;padding-top: 20px;">
+			<div title="服务管理" icon="icon-db" style="padding-left: 10px;padding-top: 20px;">
 				<p>服务设定1</p>
 				<p>服务设定2</p>
 				<p>服务设定3</p>
 				<p>服务设定4</p>
 				<p>服务设定5</p>
 			</div>
-			<div title="上行短信统计" icon="icon-cut" style="padding-left: 10px;padding-top: 20px;">
+			<div title="上行短信统计" icon="icon-mobile" style="padding-left: 10px;padding-top: 20px;">
 				<p>服务设定1</p>
 				<p>服务设定2</p>
 				<p>服务设定3</p>
 				<p>服务设定4</p>
 				<p>服务设定5</p>
 			</div>
-			<div title="历史报表" icon="icon-sum" style="padding-left: 10px;padding-top: 20px;">
+			<div title="历史报表" icon="icon-report" style="padding-left: 10px;padding-top: 20px;">
 				<p>服务设定1</p>
 				<p>服务设定2</p>
 				<p>服务设定3</p>
