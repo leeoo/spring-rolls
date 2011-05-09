@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.paramecium.aop.cglib.MethodInterceptor;
 import org.paramecium.aop.cglib.MethodProxy;
+import org.paramecium.ioc.ApplicationContext;
 import org.paramecium.ioc.ClassScanner;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.annotation.Security;
@@ -31,6 +32,8 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 	 */
 	public Object intercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
 		if(!SecurityConfig.iocSecurity){
+			return nextIntercept(service, method, parameters, proxy);
+		}else if(ApplicationContext.isSecurityThreadLocal.get()!=null&&!ApplicationContext.isSecurityThreadLocal.get()){
 			return nextIntercept(service, method, parameters, proxy);
 		}
 		Security classSecurity = service.getClass().getAnnotation(Security.class);

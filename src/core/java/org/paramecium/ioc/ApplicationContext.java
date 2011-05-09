@@ -21,6 +21,7 @@ import org.paramecium.transaction.TransactionInterceptor;
 public class ApplicationContext {
 	
 	private final static ConcurrentMap<String, Object> controllerContext = new ConcurrentHashMap<String, Object>();
+	public final static ThreadLocal<Boolean> isSecurityThreadLocal = new ThreadLocal<Boolean>();
 	
 	static{
 		try {
@@ -118,6 +119,16 @@ public class ApplicationContext {
 	    	 super(message);
 	    }
 
+	}
+	
+	/**
+	 * 获得不受安全拦截的实例
+	 * @param name
+	 * @return
+	 */
+	public static Object getNotSecurityBean(String name){
+		isSecurityThreadLocal.set(false);
+		return getBean(name);
 	}
 	
 	/**
