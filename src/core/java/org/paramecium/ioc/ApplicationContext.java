@@ -132,6 +132,13 @@ public class ApplicationContext {
 	}
 	
 	/**
+	 * 销毁不受安全拦截产生的线程引用
+	 */
+	public static void destroy(){
+		isSecurityThreadLocal.remove();
+	}
+	
+	/**
 	 * 根据唯一标示获得实例
 	 * @param name
 	 * @return

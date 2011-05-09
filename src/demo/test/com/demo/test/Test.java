@@ -28,7 +28,7 @@ public class Test {
 		public void run() {
 			while (true) {
 				try{
-					LoggerService loggerService = (LoggerService) ApplicationContext.getBean("loggerService");
+					LoggerService loggerService = (LoggerService) ApplicationContext.getNotSecurityBean("loggerService");
 					Logger logger = new Logger();
 					logger.setInfo("测试一2下");
 					logger.setDate(DateUtils.getCurrentDateTime());
@@ -39,6 +39,7 @@ public class Test {
 					loggerService.delete(id);
 					Page page = new Page(5);
 					page = loggerService.getAll(page);
+					ApplicationContext.destroy();
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
