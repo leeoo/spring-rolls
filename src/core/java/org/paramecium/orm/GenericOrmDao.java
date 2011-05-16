@@ -28,6 +28,10 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		this.clazz = clazz;
 	}
 
+	public GenericJdbcDao getGenericJdbcDao() {
+		return genericJdbcDao;
+	}
+
 	/**
 	 * 插入新实体，如果有自动生成序号，则返回。
 	 * @param bean
