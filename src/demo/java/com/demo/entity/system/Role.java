@@ -1,6 +1,7 @@
 package com.demo.entity.system;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
@@ -20,6 +21,8 @@ public class Role implements Serializable{
 	
 	@Column
 	private String name;
+	
+	private Collection<String> auth;
 
 	public Integer getId() {
 		return id;
@@ -43,6 +46,14 @@ public class Role implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Collection<String> getAuth() {
+		return auth;
+	}
+
+	public void setAuth(Collection<String> auth) {
+		this.auth = auth;
 	}
 	
 

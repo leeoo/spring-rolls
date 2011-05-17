@@ -33,8 +33,8 @@
 	<div region="west" split="true" icon="icon-cl" title="功能菜单" style="width:200px;padding1:1px;overflow:hidden;">
 		<div class="easyui-accordion" fit="true" border="false">
 			<div title="系统管理" icon="icon-tools" selected="true" style="overflow:auto;padding-left: 20px;padding-top: 10px;">
-				<p>角色设定</p>
-				<p>登录账户</p>
+				<p><a href="${base}/system/role/list.jhtml" class="easyui-linkbutton" plain="true" iconCls="icon-user">角色设定</a></p>
+				<p><a href="${base}/system/user/list.jhtml" class="easyui-linkbutton" plain="true" iconCls="icon-security">登录账户</a></p>
 				<p>菜单权限</p>
 				<p>机构管理</p>
 				<p>数据字典</p>
