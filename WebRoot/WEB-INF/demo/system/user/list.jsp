@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-<title>日志列表</title>
+<title>用户列表</title>
 </head>
 <body>
 <table id="list"></table>
@@ -17,20 +17,21 @@
 			fitColumns: true,
 			rownumbers: true,
 			pageList:[20],
-			url:'${base}/logger/data.json',
+			url:'${base}/system/user/data.json',
 			idField:'id',
 			frozenColumns:[[
 		                    {field:'id',checkbox:true}
 		                ]],
 			columns:[[
-						{field:'info',title:'日志信息',width:200},
-						{field:'date',title:'日志日期',width:200,align:'center'}
+						{field:'username',title:'登录账号',width:200},
+						{field:'name',title:'姓名',width:200,align:'center'},
+						{field:'enabled',title:'状态',width:200,align:'center'}
 					]],
 					toolbar: [{
 			            text: '新增',
 			            iconCls: 'icon-add',
 			            handler:function(){
-							location.href ='${base}/logger/input.jhtml';
+							location.href ='${base}/system/user/input.jhtml';
 						}
 			        }, '-', {
 			            text: '修改',
@@ -43,7 +44,7 @@
 								$('#list').datagrid('clearSelections');
 								return false;
 							}
-							location.href ='${base}/logger/input.jhtml?id='+rows[0].id;
+							location.href ='${base}/system/user/input.jhtml?id='+rows[0].id;
 						}
 			        }, '-', {
 			            text: '删除',
@@ -62,12 +63,78 @@
 					            if(d){
 					            	$.ajax({
 										   type: "get",
-										   url: "${base}/logger/delete.jhtml",
+										   url: "${base}/system/user/delete.jhtml",
 										   data: "ids="+ids.join(','),
 										   success: function(msg){
 											   $.messager.show({
 													title:'提示',
 													msg:'删除成功！',
+													timeout:3000,
+													showType:'slide'
+												});
+										   }
+									});
+									$('#list').datagrid('reload');
+									$('#list').datagrid('clearSelections');
+					            }
+					        });
+						}
+			        }, '-', {
+			            text: '冻结',
+			            iconCls: 'icon-stop',
+			            handler:function(){
+				        	var ids = [];
+							var rows = $('#list').datagrid('getSelections');
+							if(rows.length<1){
+								$.messager.alert('提示','至少选择一行!','warning');
+								return false;
+							}
+							for(var i=0;i<rows.length;i++){
+								ids.push(rows[i].id);
+							}
+							$.messager.confirm('提示','确认冻结吗?',function(d){
+					            if(d){
+					            	$.ajax({
+										   type: "get",
+										   url: "${base}/system/user/disabled.jhtml",
+										   data: "ids="+ids.join(','),
+										   success: function(msg){
+											   $.messager.show({
+													title:'提示',
+													msg:'冻结成功！',
+													timeout:3000,
+													showType:'slide'
+												});
+										   }
+									});
+									$('#list').datagrid('reload');
+									$('#list').datagrid('clearSelections');
+					            }
+					        });
+						}
+			        }, '-', {
+			            text: '解冻',
+			            iconCls: 'icon-play',
+			            handler:function(){
+				        	var ids = [];
+							var rows = $('#list').datagrid('getSelections');
+							if(rows.length<1){
+								$.messager.alert('提示','至少选择一行!','warning');
+								return false;
+							}
+							for(var i=0;i<rows.length;i++){
+								ids.push(rows[i].id);
+							}
+							$.messager.confirm('提示','确认解冻吗?',function(d){
+					            if(d){
+					            	$.ajax({
+										   type: "get",
+										   url: "${base}/system/user/enabled.jhtml",
+										   data: "ids="+ids.join(','),
+										   success: function(msg){
+											   $.messager.show({
+													title:'提示',
+													msg:'解冻成功！',
 													timeout:3000,
 													showType:'slide'
 												});

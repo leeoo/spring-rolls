@@ -4,22 +4,50 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-<title>日志信息维护</title>
+<title>用户信息维护</title>
 </head>
 <body>
-	<form id="loggerForm" action="${base}logger/save.jhtml" method="post">
-		<c:if test="${logger.id!=null}">
-			<input type="hidden" name="logger.id" value="${logger.id}"/>
+	<form id="userForm" action="${base}system/user/save.jhtml" method="post">
+		<c:if test="${user.id!=null}">
+			<input type="hidden" name="user.id" value="${user.id}"/>
+			<input type="hidden" name="user.enabled" value="${user.enabled}"/>
 		</c:if>
+		<input type="hidden" name="user.enabled" value="true"/>
 		<div>
 			<table>
 				<tr>
-					<td>信息:</td>
-					<td><textarea name="logger.info" class="easyui-validatebox" required="true" validType="length[2,50]" style="height:100px;width: 300px;">${logger.info}</textarea></td>
+					<td nowrap="nowrap">用户姓名:</td>
+					<td><input name="user.name" class="easyui-validatebox" required="true" validType="length[2,50]" style="width: 300px;" value="${user.name}"/></td>
 				</tr>
 				<tr>
-					<td>日期:</td>
-					<td><input name="logger.date" class="easyui-datebox" value="<fmt:formatDate value='${logger.date}' pattern='yyyy-MM-dd'/>"></td>
+					<td>登录账户:</td>
+					<td><input name="user.username" class="easyui-validatebox" required="true" validType="length[2,50]" style="width: 300px;" value="${user.username}"/></td>
+				</tr>
+				<tr>
+					<td>登录密码:</td>
+					<td><input name="user.password" type="password" class="easyui-validatebox" required="true" validType="length[2,50]" style="width: 300px;" value="${user.password}"/></td>
+				</tr>
+				<tr>
+					<td>赋予角色:</td>
+					<td>
+						<c:forEach items="${roles}" var="role">
+							<c:if test="${user==null || user.roles==null}">
+								<label><input type="checkbox" name="roles" value="${role.rolename}">${role.name}</label>&nbsp;
+							</c:if>
+							<c:set var="sign" value="0"></c:set>
+							<c:if test="${user!=null && user.roles!=null}">
+								<c:forEach items="${user.roles}" var="checkRole">
+									<c:if test="${role.rolename==checkRole.rolename}">
+										<label><input type="checkbox" name="roles" value="${role.rolename}" checked="checked">${role.name}</label>&nbsp;
+										<c:set var="sign" value="1"></c:set>
+									</c:if>
+						 		</c:forEach>
+						 		<c:if test="${sign==0}">
+						 			<label><input type="checkbox" name="roles" value="${role.rolename}">${role.name}</label>&nbsp;
+						 		</c:if>
+							</c:if>
+						 </c:forEach>
+					</td>
 				</tr>
 				<tr>
 					<td></td>

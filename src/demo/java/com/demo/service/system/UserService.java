@@ -52,6 +52,20 @@ public class UserService {
 			ormDao.delete(Integer.parseInt(id));
 		}
 	}
+
+	@ShowLabel(name="冻结用户")
+	public void disabled(String[] ids) throws SQLException{
+		for(String id : ids){
+			ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_security_user SET enabled=0 WHERE id=?",Integer.parseInt(id));
+		}
+	}
+
+	@ShowLabel(name="解冻用户")
+	public void enabled(String[] ids) throws SQLException{
+		for(String id : ids){
+			ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_security_user SET enabled=1 WHERE id=?",Integer.parseInt(id));
+		}
+	}
 	
 	@ShowLabel(name="获取用户详情")
 	@SuppressWarnings("unchecked")

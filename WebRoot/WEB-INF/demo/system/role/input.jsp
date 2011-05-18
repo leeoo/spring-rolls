@@ -40,7 +40,7 @@
 						 			<label><input type="checkbox" name="auth" value="${resource}">${resource.showLabel}</label>&nbsp;
 						 		</c:if>
 							</c:if>
-						 </c:forEach>
+						</c:forEach>
 					</td>
 				</tr>
 				<tr>

@@ -117,3 +117,9 @@
 .icon-user{
 	background:url('icons/user.png') no-repeat;
 }
+.icon-stop{
+	background:url('icons/stop.png') no-repeat;
+}
+.icon-play{
+	background:url('icons/play.png') no-repeat;
+}

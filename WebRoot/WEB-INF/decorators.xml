@@ -4,7 +4,6 @@
 
     <excludes>
         <pattern>/login.*</pattern>
-        <pattern>/index.*</pattern>
     </excludes>
     
     <decorator name="demo" page="main.jsp">

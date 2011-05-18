@@ -40,7 +40,7 @@ public class LoginController {
 			user.setEnable(false);
 		}
 		SecurityThread.put(user,mv.getRequest());
-		mv.redirect("/logger/list.jhtml");
+		mv.redirect("/system/index.jhtml");
 	}
 	
 	@MappingMethod
