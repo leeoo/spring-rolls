@@ -2,6 +2,9 @@ package org.paramecium.security;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
+
+import org.paramecium.commons.DateUtils;
 /**
  * 功 能 描 述:<br>
  * 用户安全信息
@@ -15,6 +18,10 @@ public class UserDetails implements Serializable{
 	
 	private String username;
 	
+	private String name;
+	
+	private Date loginDate;
+	
 	private String sessionId;
 	
 	private String address;
@@ -24,15 +31,17 @@ public class UserDetails implements Serializable{
 	private Collection<Resource> resources;
 	
 	public UserDetails(){
-		
+		this.loginDate = DateUtils.getCurrentDateTime();
 	}
 	
-	public UserDetails(String username,String sessionId,String address,boolean enable,Collection<Resource> resources){
+	public UserDetails(String username,String sessionId,String address,boolean enable,String name,Collection<Resource> resources){
 		this.username = username;
 		this.sessionId = sessionId;
 		this.address = address;
 		this.enable = enable;
 		this.resources = resources;
+		this.name = name;
+		this.loginDate = DateUtils.getCurrentDateTime();
 	}
 
 	public String getUsername() {
@@ -73,6 +82,22 @@ public class UserDetails implements Serializable{
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getLoginDate() {
+		return loginDate;
+	}
+
+	public void setLoginDate(Date loginDate) {
+		this.loginDate = loginDate;
 	}
 
 }
