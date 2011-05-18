@@ -48,8 +48,8 @@ public class UserService {
 	@ShowLabel(name="删除用户")
 	public void delete(String[] ids) throws SQLException{
 		for(String id : ids){
+			ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_user_role WHERE username IN(SELECT su.username FROM t_security_user su WHERE su.id=?)",Integer.parseInt(id));
 			ormDao.delete(Integer.parseInt(id));
-			ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_user_role ur WHERE ur.username IN(SELECT su.username FROM t_security_user su WHERE su.id=?)",id);
 		}
 	}
 	

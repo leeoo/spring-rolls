@@ -49,8 +49,8 @@ public class RoleService {
 	@ShowLabel(name="删除角色")
 	public void delete(String[] ids) throws SQLException{
 		for(String id : ids){
+			ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_role_auth WHERE rolename IN(SELECT sr.rolename FROM t_security_role sr WHERE sr.id=?)",Integer.parseInt(id));
 			ormDao.delete(Integer.parseInt(id));
-			ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_role_auth ra WHERE ra.rolename IN(SELECT sr.rolename FROM t_security_role sr WHERE sr.id=?)",id);
 		}
 	}
 	

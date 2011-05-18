@@ -7,8 +7,8 @@
 <title>角色信息维护</title>
 </head>
 <body>
-	<form id="loggerForm" action="${base}system/role/save.jhtml" method="post">
-		<c:if test="${logger.id!=null}">
+	<form id="roleForm" action="${base}system/role/save.jhtml" method="post">
+		<c:if test="${role.id!=null}">
 			<input type="hidden" name="role.id" value="${role.id}"/>
 		</c:if>
 		<div>
@@ -25,19 +25,19 @@
 					<td>授权信息:</td>
 					<td>
 						<c:forEach items="${resources}" var="resource">
-							<c:if test="${role==null || role.resources==null}">
-								<input type="checkbox" name="auth" value="${resource}">${resource.showLabel}&nbsp;
+							<c:if test="${role==null || role.auth==null}">
+								<label><input type="checkbox" name="auth" value="${resource}">${resource.showLabel}</label>&nbsp;
 							</c:if>
 							<c:set var="sign" value="0"></c:set>
 							<c:if test="${role!=null && role.auth!=null}">
 								<c:forEach items="${role.auth}" var="checkResource">
 									<c:if test="${resource==checkResource}">
-										<input type="checkbox" name="auth" value="${resource}" checked="checked">${resource.showLabel}&nbsp;
+										<label><input type="checkbox" name="auth" value="${resource}" checked="checked">${resource.showLabel}</label>&nbsp;
 										<c:set var="sign" value="1"></c:set>
 									</c:if>
 						 		</c:forEach>
 						 		<c:if test="${sign==0}">
-						 			<input type="checkbox" name="auth" value="${resource}">${resource.showLabel}&nbsp;
+						 			<label><input type="checkbox" name="auth" value="${resource}">${resource.showLabel}</label>&nbsp;
 						 		</c:if>
 							</c:if>
 						 </c:forEach>

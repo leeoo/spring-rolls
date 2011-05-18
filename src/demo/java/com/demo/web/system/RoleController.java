@@ -83,6 +83,7 @@ public class RoleController {
 				roleService.delete(ids);
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	

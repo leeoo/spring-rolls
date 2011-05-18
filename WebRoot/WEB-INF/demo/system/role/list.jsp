@@ -23,8 +23,8 @@
 		                    {field:'id',checkbox:true}
 		                ]],
 			columns:[[
-						{field:'info',title:'角色描述',width:200},
-						{field:'date',title:'角色标志',width:200,align:'center'}
+						{field:'name',title:'角色描述',width:200},
+						{field:'rolename',title:'角色标志',width:200,align:'center'}
 					]],
 					toolbar: [{
 			            text: '新增',
