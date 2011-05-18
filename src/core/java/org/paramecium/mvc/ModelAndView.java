@@ -41,7 +41,8 @@ public class ModelAndView {
 	 * @param clazz
 	 * @return
 	 */
-	public Object getBean(String beanName,Class<?> clazz){
+	@SuppressWarnings("unchecked")
+	public <T>T getBean(String beanName,Class<?> clazz){
 		String bn = beanName.concat(".");
 		Object bean = null;
 		try {
@@ -60,7 +61,7 @@ public class ModelAndView {
 			}
 		} catch (Exception e) {
 		}
-		return bean;
+		return (T)bean;
 	}
 
 	/**
@@ -68,7 +69,8 @@ public class ModelAndView {
 	 * @param clazz
 	 * @return
 	 */
-	public Object getBean(Class<?> clazz){
+	@SuppressWarnings("unchecked")
+	public <T>T getBean(Class<?> clazz){
 		Object bean = null;
 		try {
 			bean = clazz.newInstance();
@@ -86,7 +88,7 @@ public class ModelAndView {
 			}
 		} catch (Exception e) {
 		}
-		return bean;
+		return (T)bean;
 	}
 	
 	/**
@@ -94,12 +96,13 @@ public class ModelAndView {
 	 * @param name
 	 * @return
 	 */
-	public Object getValue(String name,Class<?> clazz){
+	@SuppressWarnings("unchecked")
+	public <T>T getValue(String name,Class<?> clazz){
 		String value = request.getParameter(name);
 		if(value==null){
 			return null;
 		}
-		return BeanUitls.getValueByClass(value, clazz);
+		return (T)BeanUitls.getValueByClass(value, clazz);
 	}
 
 	/**

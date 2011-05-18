@@ -28,7 +28,7 @@ public class RoleController {
 	
 	@MappingMethod
 	public void data(ModelAndView mv){
-		int pageNo = (Integer) mv.getValue("page", Integer.class);
+		int pageNo = mv.getValue("page", Integer.class);
 		Page page = new Page();
 		page.setPageNo(pageNo);
 		page.setPageSize(20);
@@ -40,7 +40,7 @@ public class RoleController {
 	
 	@MappingMethod
 	public void input(ModelAndView mv){
-		Integer id = (Integer) mv.getValue("id",Integer.class);
+		Integer id = mv.getValue("id",Integer.class);
 		if(id!=null){
 			Role role = roleService.get(id);
 			mv.addValue("role", role);
@@ -53,7 +53,7 @@ public class RoleController {
 	@SuppressWarnings("unchecked")
 	@MappingMethod
 	public void save(ModelAndView mv){
-		Role role = (Role) mv.getBean("role",Role.class);
+		Role role = mv.getBean("role",Role.class);
 		Collection<String> auth = (Collection<String>) mv.getValues("auth", String.class);
 		if(role!=null){
 			role.setAuth(auth);
@@ -76,7 +76,7 @@ public class RoleController {
 	
 	@MappingMethod
 	public void delete(ModelAndView mv){
-		String idstr = (String) mv.getValue("ids",String.class);
+		String idstr = mv.getValue("ids",String.class);
 		try {
 			if(idstr!=null){
 				String[] ids = idstr.split(",");

@@ -32,7 +32,7 @@ public class UserController {
 	
 	@MappingMethod
 	public void data(ModelAndView mv){
-		int pageNo = (Integer) mv.getValue("page", Integer.class);
+		int pageNo = mv.getValue("page", Integer.class);
 		Page page = new Page();
 		page.setPageNo(pageNo);
 		page.setPageSize(20);
@@ -44,7 +44,7 @@ public class UserController {
 	
 	@MappingMethod
 	public void input(ModelAndView mv){
-		Integer id = (Integer) mv.getValue("id",Integer.class);
+		Integer id = mv.getValue("id",Integer.class);
 		if(id!=null){
 			User user = userService.get(id);
 			mv.addValue("user", user);
@@ -57,7 +57,7 @@ public class UserController {
 	@SuppressWarnings("unchecked")
 	@MappingMethod
 	public void save(ModelAndView mv){
-		User user = (User) mv.getBean("user",User.class);
+		User user = mv.getBean("user",User.class);
 		Collection<String> rolenames = (Collection<String>) mv.getValues("roles", String.class);
 		if(rolenames!=null){
 			Collection<Role> roles = new HashSet<Role>();
@@ -86,7 +86,7 @@ public class UserController {
 	
 	@MappingMethod
 	public void delete(ModelAndView mv){
-		String idstr = (String) mv.getValue("ids",String.class);
+		String idstr = mv.getValue("ids",String.class);
 		try {
 			if(idstr!=null){
 				String[] ids = idstr.split(",");
@@ -98,7 +98,7 @@ public class UserController {
 	
 	@MappingMethod
 	public void disabled(ModelAndView mv){
-		String idstr = (String) mv.getValue("ids",String.class);
+		String idstr = mv.getValue("ids",String.class);
 		try {
 			if(idstr!=null){
 				String[] ids = idstr.split(",");
@@ -110,7 +110,7 @@ public class UserController {
 
 	@MappingMethod
 	public void enabled(ModelAndView mv){
-		String idstr = (String) mv.getValue("ids",String.class);
+		String idstr = mv.getValue("ids",String.class);
 		try {
 			if(idstr!=null){
 				String[] ids = idstr.split(",");
