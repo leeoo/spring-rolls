@@ -18,6 +18,18 @@ public class Resource implements Serializable{
 	
 	private String showLabel;
 	
+	public Resource(){
+	}
+	
+	public Resource(String auth){
+		if(auth!=null&&!auth.isEmpty()&&auth.indexOf('#')>0){
+			this.firstResource = auth.substring(0, auth.indexOf('#'));
+			this.lastResource = auth.substring(auth.indexOf('#'),auth.length());
+			return;
+		}
+		throw new RuntimeException("构造函数参数为空!");
+	}
+	
 	public boolean equals(Object obj){
 		if(obj instanceof Resource){
 			Resource resource2 = (Resource)obj;

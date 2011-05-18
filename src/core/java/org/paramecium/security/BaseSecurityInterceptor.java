@@ -37,7 +37,7 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 			return nextIntercept(service, method, parameters, proxy);
 		}
 		Security classSecurity = service.getClass().getAnnotation(Security.class);
-		Security methodSecurity = method.getClass().getAnnotation(Security.class);
+		Security methodSecurity = method.getAnnotation(Security.class);
 		if(classSecurity!=null&&classSecurity.protecting()){
 			if(methodSecurity!=null&&!methodSecurity.protecting()){
 				return nextIntercept(service, method, parameters, proxy);

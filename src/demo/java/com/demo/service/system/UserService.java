@@ -2,11 +2,14 @@ package com.demo.service.system;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
 
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.orm.GenericOrmDao;
+import org.paramecium.security.Resource;
 import org.paramecium.security.annotation.Security;
 import org.paramecium.transaction.annotation.Transactional;
 
@@ -75,6 +78,24 @@ public class UserService {
 		Collection<Role> roles = (Collection<Role>) ormDao.getGenericJdbcDao().queryByArray("SELECT * FROM t_security_role sr WHERE sr.rolename IN(SELECT ur.rolename FROM t_user_role ur WHERE ur.username IN(SELECT su.username FROM t_security_user su WHERE su.id=?))", Role.class, id);
 		user.setRoles(roles);
 		return user;
+	}
+	
+	@Transactional(readOnly=true)
+	@Security(protecting=false)
+	public User getUser(String username){
+		return (User)ormDao.getGenericJdbcDao().queryUniqueByArray("SELECT * FROM t_security_user WHERE username=?", User.class,username);
+	}
+
+	@Transactional(readOnly=true)
+	@Security(protecting=false)
+	public Collection<Resource> getUserAuth(String username){
+		Collection<Map<String, Object>> maps = ormDao.getGenericJdbcDao().queryByArray("SELECT auth FROM t_role_auth ra WHERE ra.rolename IN(SELECT ur.rolename FROM t_user_role ur WHERE ur.username)", username);
+		Collection<Resource> resources = new HashSet<Resource>();
+		for(Map<String,Object> map : maps){
+			Resource resource = new Resource((String)map.get("auth"));
+			resources.add(resource);
+		}
+		return resources;
 	}
 	
 	@ShowLabel(name="获取用户分页信息")

@@ -1,20 +1,23 @@
 package com.demo.web;
 
-import java.util.Collection;
-import java.util.HashSet;
-
+import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.AuthorizationMenu;
-import org.paramecium.security.Resource;
 import org.paramecium.security.SecurityConfig;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
 
+import com.demo.entity.system.User;
+import com.demo.service.system.UserService;
+
 @Controller(namespace="/")
 public class LoginController {
 
+	@AutoInject
+	private UserService userService;
+	
 	@MappingMethod
 	public void login(ModelAndView mv){
 		String username = (String) mv.getValue("username", String.class);
@@ -23,23 +26,24 @@ public class LoginController {
 			mv.redirect(SecurityConfig.loginExceptionPage);
 			return;
 		}
-		UserDetails user = new UserDetails();
-		user.setUsername(username);
-		if(username.equals("admin")){
-			user.setEnable(true);
-			user.setResources(AuthorizationMenu.getAllAuthorizationMenu());
-		}else if(username.equals("user")){
-			user.setEnable(true);
-			Collection<Resource> resources = new HashSet<Resource>();
-			Resource resource = new Resource();
-			resource.setFirstResource("loggerService");
-			resource.setLastResource("getAll");
-			resources.add(resource);
-			user.setResources(resources);
+		UserDetails userDetails = new UserDetails();
+		userDetails.setUsername(username);
+		userDetails.setAddress(mv.getRequest().getRemoteAddr());
+		if(username.equals("admin")&&password.equals("admin")){
+			userDetails.setEnable(true);
+			userDetails.setName("系统固化管理员");
+			userDetails.setResources(AuthorizationMenu.getAllAuthorizationMenu());
 		}else{
-			user.setEnable(false);
+			User user = userService.getUser(username);
+			if(user==null||!user.getPassword().equals(password)){
+				mv.redirect(SecurityConfig.loginExceptionPage);
+				return;
+			}
+			userDetails.setEnable(user.isEnabled());
+			userDetails.setName(user.getName());
+			userDetails.setResources(userService.getUserAuth(username));
 		}
-		SecurityThread.put(user,mv.getRequest());
+		SecurityThread.put(userDetails,mv.getRequest());
 		mv.redirect("/system/index.jhtml");
 	}
 	
