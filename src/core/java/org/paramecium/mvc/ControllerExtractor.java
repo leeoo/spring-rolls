@@ -55,18 +55,21 @@ public class ControllerExtractor {
 				if(classInfo==null){
 					logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
 					end();
+					response.setStatus(404);
 					return true;
 				}
 				Object controller = ApplicationContext.getBean(classInfo.getNamespace());
 				if(controller==null){
 					logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
 					end();
+					response.setStatus(404);
 					return true;
 				}
 				Method[] methods = classInfo.getClazz().getMethods();//只返回public，如果需要private可用getDeclaredMethods
-				if(methods==null){
-					logger.warn(classInfo.getClazz().getName()+"没有相符合的处理方法!");
+				if(methods==null||methods.length<1){
+					logger.warn(classInfo.getClazz().getName()+"没有定义相关的处理方法!");
 					end();
+					response.setStatus(404);
 					return true;
 				}
 				ModelAndView mv = new ModelAndView(request, response);
@@ -92,6 +95,7 @@ public class ControllerExtractor {
 					if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 						response.sendRedirect(SecurityConfig.anonymousExceptionPage);
 					}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
+						response.setStatus(403);
 						response.sendRedirect(SecurityConfig.authorizationExceptionPage);
 					}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
 						response.sendRedirect(SecurityConfig.userKickExceptionPage);
@@ -105,8 +109,11 @@ public class ControllerExtractor {
 				end();
 				return false;
 			}
+			logger.warn("该资源没有与之对应的处理方法!");
+			end();
+			response.setStatus(404);
+			return true;
 		}
-		return true;
 	}
 	
 	private static void end(){
