@@ -27,6 +27,7 @@ import org.paramecium.log.LoggerFactory;
 public class ModelAndView {
 	
 	private final static Log logger = LoggerFactory.getLogger();
+	private boolean redirect = false;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	
@@ -106,7 +107,7 @@ public class ModelAndView {
 	}
 
 	/**
-	 * 获得多值
+	 * 获得多值,类型为基本数据类型
 	 * @param name
 	 * @return
 	 */
@@ -153,6 +154,7 @@ public class ModelAndView {
 	public void redirect(String redirectUrl){
 		try {
 			response.sendRedirect(redirectUrl);
+			redirect = true;
 		} catch (IOException e) {
 			logger.error(e);
 		}
@@ -258,6 +260,14 @@ public class ModelAndView {
 	
 	public HttpSession getSession() {
 		return request.getSession(false);
+	}
+
+	public boolean isRedirect() {
+		return redirect;
+	}
+
+	public void setRedirect(boolean redirect) {
+		this.redirect = redirect;
 	}
 	
 }

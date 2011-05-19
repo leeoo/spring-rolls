@@ -37,7 +37,7 @@ public class ControllerExtractor {
 	 * @param request
 	 * @param response
 	 */
-	public static void extract(final HttpServletRequest request,final HttpServletResponse response){
+	public static boolean extract(final HttpServletRequest request,final HttpServletResponse response){
 		synchronized (request) {
 			if(request.getSession(false)==null){
 				request.getSession();
@@ -48,27 +48,28 @@ public class ControllerExtractor {
 			if(URIStrs==null){
 				logger.warn("非法请求地址:"+servletPath);
 				end();
-				return;
+				return true;
 			}
 			try{
 				ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
 				if(classInfo==null){
 					logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
 					end();
-					return;
+					return true;
 				}
 				Object controller = ApplicationContext.getBean(classInfo.getNamespace());
 				if(controller==null){
 					logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
 					end();
-					return;
+					return true;
 				}
 				Method[] methods = classInfo.getClazz().getMethods();//只返回public，如果需要private可用getDeclaredMethods
 				if(methods==null){
 					logger.warn(classInfo.getClazz().getName()+"没有相符合的处理方法!");
 					end();
-					return;
+					return true;
 				}
+				ModelAndView mv = new ModelAndView(request, response);
 				for(Method method : methods){
 					MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
 					if(mappingMethod==null){
@@ -76,14 +77,14 @@ public class ControllerExtractor {
 					}
 					if(!mappingMethod.url().isEmpty()){
 						if(mappingMethod.url().equals(URIStrs[1])){
-							method.invoke(controller, new ModelAndView(request, response));
+							method.invoke(controller, mv);
 							end();
-							return;
+							return !mv.isRedirect();
 						}
 					}else if((ControllerExtractor.lineStr+method.getName()).equals(URIStrs[1])){
-						method.invoke(controller, new ModelAndView(request, response));
+						method.invoke(controller, mv);
 						end();
-						return;
+						return !mv.isRedirect();
 					}
 				}
 			}catch (Exception e) {
@@ -102,9 +103,10 @@ public class ControllerExtractor {
 				} catch (IOException e1) {
 				}
 				end();
-				return;
+				return false;
 			}
 		}
+		return true;
 	}
 	
 	private static void end(){

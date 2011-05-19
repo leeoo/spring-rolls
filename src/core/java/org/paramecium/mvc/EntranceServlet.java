@@ -18,31 +18,45 @@ public class EntranceServlet extends HttpServlet{
 	private static final long serialVersionUID = 5244417460801082069L;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ControllerExtractor.extract(request, response);
+		if(ControllerExtractor.extract(request, response)){
+			doGet(request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ControllerExtractor.extract(request, response);
+		if(ControllerExtractor.extract(request, response)){
+			doPost(request, response);
+		}
 	}
 	
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ControllerExtractor.extract(request, response);
+		if(ControllerExtractor.extract(request, response)){
+			doPut(request, response);
+		}
 	}
 
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ControllerExtractor.extract(request, response);
+		if(ControllerExtractor.extract(request, response)){
+			doDelete(request, response);
+		}
 	}
 	
 	protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ControllerExtractor.extract(request, response);
+		if(ControllerExtractor.extract(request, response)){
+			doHead(request, response);
+		}
 	}
 	
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ControllerExtractor.extract(request, response);
+		if(ControllerExtractor.extract(request, response)){
+			doOptions(request, response);
+		}
 	}
 	
 	protected void doTrace(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ControllerExtractor.extract(request, response);
+		if(ControllerExtractor.extract(request, response)){
+			doTrace(request, response);
+		}
 	}
 	
 }
