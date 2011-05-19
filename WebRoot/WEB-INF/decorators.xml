@@ -7,7 +7,7 @@
     </excludes>
     
     <decorator name="demo" page="main.jsp">
-        <pattern>*.jhtml</pattern>
+        <pattern>/system/*</pattern>
     </decorator>
     
 </decorators>
