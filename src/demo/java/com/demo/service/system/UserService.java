@@ -89,7 +89,7 @@ public class UserService {
 	@Transactional(readOnly=true)
 	@Security(protecting=false)
 	public Collection<Resource> getUserAuth(String username){
-		Collection<Map<String, Object>> maps = ormDao.getGenericJdbcDao().queryByArray("SELECT auth FROM t_role_auth ra WHERE ra.rolename IN(SELECT ur.rolename FROM t_user_role ur WHERE ur.username)", username);
+		Collection<Map<String, Object>> maps = ormDao.getGenericJdbcDao().queryByArray("SELECT ra.auth auth FROM t_role_auth ra WHERE ra.rolename IN(SELECT ur.rolename FROM t_user_role ur WHERE ur.username=?)", username);
 		Collection<Resource> resources = new HashSet<Resource>();
 		for(Map<String,Object> map : maps){
 			Resource resource = new Resource((String)map.get("auth"));
