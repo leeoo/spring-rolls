@@ -17,6 +17,13 @@ public class EntranceServlet extends HttpServlet{
 
 	private static final long serialVersionUID = 5244417460801082069L;
 	
+	public EntranceServlet(){
+	}
+	
+	public void goGet(HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {
+		doPost(request,response);
+	}
+	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ControllerExtractor.extract(request, response);
 	}
