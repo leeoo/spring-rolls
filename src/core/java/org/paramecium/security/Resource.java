@@ -24,7 +24,7 @@ public class Resource implements Serializable{
 	public Resource(String auth){
 		if(auth!=null&&!auth.isEmpty()&&auth.indexOf('#')>0){
 			this.firstResource = auth.substring(0, auth.indexOf('#'));
-			this.lastResource = auth.substring(auth.indexOf('#'),auth.length());
+			this.lastResource = auth.substring(auth.indexOf('#')+1,auth.length());
 			return;
 		}
 		throw new RuntimeException("构造函数参数为空!");
