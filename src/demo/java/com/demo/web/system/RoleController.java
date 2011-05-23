@@ -2,6 +2,7 @@ package com.demo.web.system;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Map;
 
 import org.paramecium.commons.JsonUitls;
 import org.paramecium.ioc.annotation.AutoInject;
@@ -45,7 +46,7 @@ public class RoleController {
 			Role role = roleService.get(id);
 			mv.addValue("role", role);
 		}
-		Collection<Resource> resources = AuthorizationMenu.getAllAuthorizationMenu();
+		Map<Resource, Collection<Resource>> resources = AuthorizationMenu.getAuthorMenu();
 		mv.addValue("resources", resources);
 		mv.forward("/WEB-INF/demo/system/role/input.jsp");
 	}
@@ -66,7 +67,7 @@ public class RoleController {
 			}
 		} catch (SQLException e) {
 			mv.addValue("role", role);
-			Collection<Resource> resources = AuthorizationMenu.getAllAuthorizationMenu();
+			Map<Resource, Collection<Resource>> resources = AuthorizationMenu.getAuthorMenu();
 			mv.addValue("resources", resources);
 			mv.forward("/WEB-INF/demo/system/role/input.jsp");
 			return;

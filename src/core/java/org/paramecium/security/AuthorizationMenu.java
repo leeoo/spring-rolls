@@ -2,6 +2,7 @@ package org.paramecium.security;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -31,6 +32,10 @@ public class AuthorizationMenu{
 			allMenu.addAll(resources);
 		}
 		return allMenu;
+	}
+	
+	public static Map<Resource, Collection<Resource>> getAuthorMenu(){
+		return authorizationMenu;
 	}
 	
 }

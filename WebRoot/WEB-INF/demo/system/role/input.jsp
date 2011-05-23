@@ -24,22 +24,26 @@
 				<tr>
 					<td>授权信息:</td>
 					<td>
-						<c:forEach items="${resources}" var="resource">
-							<c:if test="${role==null || role.auth==null}">
-								<label><input type="checkbox" name="auth" value="${resource}">${resource.showLabel}</label>&nbsp;
-							</c:if>
-							<c:set var="sign" value="0"></c:set>
-							<c:if test="${role!=null && role.auth!=null}">
-								<c:forEach items="${role.auth}" var="checkResource">
-									<c:if test="${resource==checkResource}">
-										<label><input type="checkbox" name="auth" value="${resource}" checked="checked">${resource.showLabel}</label>&nbsp;
-										<c:set var="sign" value="1"></c:set>
+						<c:forEach items="${resources}" var="resourceKey">
+							<b>${resourceKey.key.showLabel}</b><br>&nbsp;&nbsp;&nbsp;&nbsp;
+								<c:forEach items="${resourceKey.value}" var="resource">
+									<c:if test="${role==null || role.auth==null}">
+										<label><input type="checkbox" name="auth" value="${resource}">${resource.showLabel}</label>&nbsp;
 									</c:if>
-						 		</c:forEach>
-						 		<c:if test="${sign==0}">
-						 			<label><input type="checkbox" name="auth" value="${resource}">${resource.showLabel}</label>&nbsp;
-						 		</c:if>
-							</c:if>
+									<c:set var="sign" value="0"></c:set>
+									<c:if test="${role!=null && role.auth!=null}">
+										<c:forEach items="${role.auth}" var="checkResource">
+											<c:if test="${resource==checkResource}">
+												<label><input type="checkbox" name="auth" value="${resource}" checked="checked">${resource.showLabel}</label>&nbsp;
+												<c:set var="sign" value="1"></c:set>
+											</c:if>
+								 		</c:forEach>
+								 		<c:if test="${sign==0}">
+								 			<label><input type="checkbox" name="auth" value="${resource}">${resource.showLabel}</label>&nbsp;
+								 		</c:if>
+									</c:if>
+								</c:forEach>
+							<br>
 						</c:forEach>
 					</td>
 				</tr>
