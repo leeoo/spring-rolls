@@ -7,6 +7,7 @@
 <title>角色信息维护</title>
 </head>
 <body>
+<div region="center" title="角色信息维护">
 	<form id="roleForm" action="${base}system/role/save.jhtml" method="post">
 		<c:if test="${role.id!=null}">
 			<input type="hidden" name="role.id" value="${role.id}"/>
@@ -54,5 +55,6 @@
 			</table>
 		</div>
 	</form>
+</div>
 </body>
 </html>

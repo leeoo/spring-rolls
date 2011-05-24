@@ -7,7 +7,9 @@
 <title>角色列表</title>
 </head>
 <body>
-<table id="list"></table>
+<div region="center" title="角色列表">
+	<table id="list"></table>
+</div>
 <script>
 	$(function(){
 		$('#list').datagrid({

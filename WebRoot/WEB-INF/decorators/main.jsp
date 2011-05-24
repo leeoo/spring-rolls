@@ -74,8 +74,6 @@
 			</div>
 		</div>
 	</div>
-	<div region="center" title="<decorator:title></decorator:title>">
-		<decorator:body></decorator:body>
-	</div>
+	<decorator:body></decorator:body>
 </body>
 </html>
