@@ -20,10 +20,6 @@ public class EntranceServlet extends HttpServlet{
 	public EntranceServlet(){
 	}
 	
-	public void goGet(HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {
-		doPost(request,response);
-	}
-	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ControllerExtractor.extract(request, response);
 	}
