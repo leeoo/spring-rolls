@@ -6,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 <title>Paramecium开发平台演示——<decorator:title></decorator:title></title>
+	<link rel="shortcut icon" href="${base}/commons/images/xeyes.png" type="image/x-icon" /> 
 	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/gray/easyui.css">
 	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/icon.css">
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery-1.4.4.min.js"></script>
