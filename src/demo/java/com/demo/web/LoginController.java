@@ -20,8 +20,8 @@ public class LoginController {
 	
 	@MappingMethod
 	public void login(ModelAndView mv){
-		String username = (String) mv.getValue("username", String.class);
-		String password = (String) mv.getValue("password", String.class);
+		String username = mv.getValue("username", String.class);
+		String password = mv.getValue("password", String.class);
 		if(password==null||username==null||username.isEmpty()||password.isEmpty()){
 			mv.redirect(SecurityConfig.loginExceptionPage);
 			return;
