@@ -80,7 +80,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	public void delete(T whereBean)throws SQLException {
 		String sql = EntitySqlBuilder.getDeleteSql(clazz);
-		int start = sql.indexOf(" WHERE ");
+		int start =sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
 		if(where!=null&&!where.isEmpty()){
@@ -107,7 +107,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	public Page select(Page page){
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
-		int start =sql.indexOf(" WHERE ");
+		int start =sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		Entity entity = clazz.getAnnotation(Entity.class);
 		if(entity!=null&&!entity.orderBy().isEmpty()){
@@ -127,7 +127,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			return select(page);
 		}
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
-		int start =sql.indexOf(" WHERE ");
+		int start =sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
 		if(where==null||where.isEmpty()){
@@ -152,7 +152,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			return null;
 		}
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
-		int start =sql.indexOf(" WHERE ");
+		int start =sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
 		if(where==null||where.isEmpty()){
