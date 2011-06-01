@@ -39,9 +39,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public Number insert(T bean) throws SQLException {
-		Boolean isAuto = new Boolean(true);
+		boolean[] isAuto = {true};
 		String sql = EntitySqlBuilder.getInsertSql(bean,isAuto);
-		if(isAuto){
+		if(isAuto[0]){
 			return genericJdbcDao.insertGetGeneratedKeyByBean(sql, bean);
 		}
 		genericJdbcDao.executeDMLByBean(sql, bean);
@@ -54,7 +54,8 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void insert(Collection<T> beans) throws SQLException {
-		String sql = EntitySqlBuilder.getInsertSql(beans.iterator().next(),true);
+		boolean[] isAuto = {true};
+		String sql = EntitySqlBuilder.getInsertSql(beans.iterator().next(),isAuto);
 		genericJdbcDao.executeBatchDMLByBeans(sql, beans);
 	}
 
