@@ -19,7 +19,7 @@ public class EntitySqlBuilder {
 	
 	private final static ConcurrentMap<String, String> sqlCache = new ConcurrentHashMap<String, String>();
 	
-	public static String getInsertSql(Object bean){
+	public static String getInsertSql(Object bean,Boolean isAuto){
 		String key = bean.getClass().getName()+":insert";
 		String sql = sqlCache.get(key);
 		if(sql!=null){
@@ -48,6 +48,7 @@ public class EntitySqlBuilder {
 								columns.add(BeanUitls.getDbFieldName(field.getName()));
 								propertys.add(mark.concat(field.getName()));
 							}
+							isAuto = new Boolean(false);
 						}else if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.NATIVE_SEQUENCE){
 							if(column!=null&&!column.fieldName().isEmpty()){
 								columns.add(column.fieldName());
@@ -210,15 +211,15 @@ public class EntitySqlBuilder {
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 						if(primaryKey!=null&&wheres.isEmpty()){
 							if(column!=null&&!column.fieldName().isEmpty()){
-								wheres.add(column.fieldName()+"=?");
+								wheres.add("base."+column.fieldName()+"=?");
 							}else{
-								wheres.add(BeanUitls.getDbFieldName(field.getName())+"=?");
+								wheres.add("base."+BeanUitls.getDbFieldName(field.getName())+"=?");
 							}
 						}
 						if(column!=null&&!column.fieldName().isEmpty()){
-							columns.add(column.fieldName()+" "+field.getName());
+							columns.add("base."+column.fieldName()+" "+field.getName());
 						}else if(column!=null&&column.fieldName().isEmpty()){
-							columns.add(BeanUitls.getDbFieldName(field.getName()));
+							columns.add("base."+BeanUitls.getDbFieldName(field.getName()));
 						}else if(referenceColumn!=null&&referenceColumn.subSelectSql()!=null&&!referenceColumn.subSelectSql().isEmpty()){
 							columns.add(referenceColumn.subSelectSql());
 						}
@@ -234,7 +235,7 @@ public class EntitySqlBuilder {
 			}
 		}
 		sb.delete(sb.length()-1, sb.length());
-		sb.append(" FROM ").append(tableName);
+		sb.append(" FROM ").append(tableName+" base");
 		if(!wheres.isEmpty()){
 			sb.append(" WHERE ");
 			for(String where : wheres){
