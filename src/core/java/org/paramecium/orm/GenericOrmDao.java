@@ -33,25 +33,20 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	}
 
 	/**
-	 * 插入新实体，自动生成序号，并返回。
+	 * 插入新实体，自动判断是否生成自增数据，如果有则返回。
 	 * @param bean
 	 * @return
 	 * @throws SQLException
 	 */
 	public Number insert(T bean) throws SQLException {
 		String sql = EntitySqlBuilder.getInsertSql(bean);
-		return genericJdbcDao.insertGetGeneratedKeyByBean(sql, bean);
-	}
-
-	/**
-	 * 插入新实体，需手动生成主键
-	 * @param bean
-	 * @return
-	 * @throws SQLException
-	 */
-	public void insertManualPK(T bean) throws SQLException {
-		String sql = EntitySqlBuilder.getInsertSql(bean);
-		genericJdbcDao.executeDMLByBean(sql, bean);
+		String isAuto = sql.substring(0, 1);
+		if(isAuto.equals("A")){
+			return genericJdbcDao.insertGetGeneratedKeyByBean(sql.substring(1, sql.length()), bean);
+		}else if(isAuto.equals("M")){
+			genericJdbcDao.executeDMLByBean(sql.substring(1, sql.length()), bean);
+		}
+		return null;
 	}
 
 	/**
@@ -61,7 +56,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	public void insert(Collection<T> beans) throws SQLException {
 		String sql = EntitySqlBuilder.getInsertSql(beans.iterator().next());
-		genericJdbcDao.executeBatchDMLByBeans(sql, beans);
+		genericJdbcDao.executeBatchDMLByBeans(sql.substring(1, sql.length()), beans);
 	}
 
 	/**

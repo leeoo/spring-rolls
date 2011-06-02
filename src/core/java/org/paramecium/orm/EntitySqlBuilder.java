@@ -32,6 +32,7 @@ public class EntitySqlBuilder {
 		Collection<String> propertys = new ArrayList<String>();
 		Class<?> clazz = bean.getClass();
 		String mark = ":";
+		boolean isAuto = true;
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
@@ -48,6 +49,7 @@ public class EntitySqlBuilder {
 								columns.add(BeanUitls.getDbFieldName(field.getName()));
 								propertys.add(mark.concat(field.getName()));
 							}
+							isAuto = false;
 						}else if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.NATIVE_SEQUENCE){
 							if(column!=null&&!column.fieldName().isEmpty()){
 								columns.add(column.fieldName());
@@ -56,6 +58,7 @@ public class EntitySqlBuilder {
 								columns.add(BeanUitls.getDbFieldName(field.getName()));
 								propertys.add(primaryKey.sequenceName());
 							}
+							isAuto = false;
 						}else if(primaryKey==null){
 							if(column!=null&&!column.fieldName().isEmpty()){
 								columns.add(column.fieldName());
@@ -69,6 +72,11 @@ public class EntitySqlBuilder {
 				} catch (Exception e) {
 				}
 			}
+		}
+		if(isAuto){//判断是否为自增
+			sb.append("A");
+		}else{
+			sb.append("M");
 		}
 		sb.append("INSERT INTO ").append(tableName).append("(");
 		for(String column : columns){
