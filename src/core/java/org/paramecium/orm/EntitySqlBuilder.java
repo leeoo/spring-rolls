@@ -19,7 +19,7 @@ public class EntitySqlBuilder {
 	
 	private final static ConcurrentMap<String, String> sqlCache = new ConcurrentHashMap<String, String>();
 	
-	public static String getInsertSql(Object bean,boolean[] isAuto){
+	public static String getInsertSql(Object bean){
 		String key = bean.getClass().getName()+":insert";
 		String sql = sqlCache.get(key);
 		if(sql!=null){
@@ -48,7 +48,6 @@ public class EntitySqlBuilder {
 								columns.add(BeanUitls.getDbFieldName(field.getName()));
 								propertys.add(mark.concat(field.getName()));
 							}
-							isAuto[0] = false;
 						}else if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.NATIVE_SEQUENCE){
 							if(column!=null&&!column.fieldName().isEmpty()){
 								columns.add(column.fieldName());
