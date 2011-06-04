@@ -101,6 +101,9 @@ public class ClassScanner {
 			}
 			Collection<Resource> resources = new HashSet<Resource>();
 			for(Method method : clazz.getMethods()){
+				/*if(Modifier.isStatic(method.getModifiers())){
+					continue;//如果该方法为静态则过滤不计
+				}*/
 				if(method.getName().equals("wait")||method.getName().equals("equals")
 						||method.getName().equals("getClass")||method.getName().equals("toString")
 						||method.getName().equals("hashCode")||method.getName().equals("notify")
