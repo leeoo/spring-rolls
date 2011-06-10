@@ -90,7 +90,7 @@ public class ApplicationContext {
 	 * @param instance
 	 */
 	private static void loopInject(Object instance){
-		Field[] fields = instance.getClass().getDeclaredFields();
+		Field[] fields = instance.getClass().getSuperclass().getDeclaredFields();
 		for(Field field : fields){
 			field.setAccessible(true);
 			AutoInject autoInject = field.getAnnotation(AutoInject.class);
