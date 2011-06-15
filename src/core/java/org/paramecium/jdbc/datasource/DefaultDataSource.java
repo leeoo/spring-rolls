@@ -68,10 +68,20 @@ public class DefaultDataSource implements DataSource{
 				DriverManager.setLoginTimeout(getLoginTimeout());
 				connection.setAutoCommit(true);
 				connection.setReadOnly(false);
-				connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
-			} catch (Exception e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 				logger.error(e);
+				connection = null;
+				try {//如果连接失败，等待10秒钟再次连接
+					Thread.sleep(10000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+					logger.error(e1);
+				}
+				return;
+			}
+			if(connection!=null){
+				connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
 			}
 		}
 		logger.debug("新的连接被放入连接池,当前连接数："+connectionPool.get(ds).size());
