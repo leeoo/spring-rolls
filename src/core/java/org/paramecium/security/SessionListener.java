@@ -2,9 +2,6 @@ package org.paramecium.security;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-
-import org.paramecium.log.Log;
-import org.paramecium.log.LoggerFactory;
 /**
  * 功能描述(Description):<br><b>
  * Session监听器
@@ -15,14 +12,11 @@ import org.paramecium.log.LoggerFactory;
  */
 public class SessionListener implements HttpSessionListener{
 	
-	private final static Log logger = LoggerFactory.getLogger();
 	
 	public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-		logger.debug("创建新会话的SessionID:"+httpSessionEvent.getSession().getId());
 	}
 
 	public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-		logger.debug("销毁当前的SessionID:"+httpSessionEvent.getSession().getId());
 		SecurityThread.remove(httpSessionEvent.getSession().getId());
 	}
 
