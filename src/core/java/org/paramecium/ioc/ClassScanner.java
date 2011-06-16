@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.paramecium.commons.PathUtils;
 import org.paramecium.commons.PropertiesUitls;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
@@ -160,7 +161,7 @@ public class ClassScanner {
 		for(String baesPackage:iocScanBasePackage.split(",")){
 			if(baesPackage!=null&&!baesPackage.trim().isEmpty()){
 				String baesPath = baesPackage.replaceAll("\\.", "//").trim();
-				String filePath = System.class.getResource("/").getFile()+baesPath;
+				String filePath = PathUtils.getClassRootPath()+baesPath;
 				readClassFile(filePath,baesPackage.trim());
 			}
 		}

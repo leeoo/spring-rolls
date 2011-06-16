@@ -27,7 +27,7 @@ public abstract class PropertiesUitls {
 	public static Map<String,Map<String,String>> getByType(String propertiesName){
 		Map<String,Map<String,String>> map = new HashMap<String, Map<String,String>>();
 		Properties properties = new Properties();
-		InputStream inputStream = System.class.getResourceAsStream(propertiesName);
+		InputStream inputStream = PathUtils.getClassFileStream(propertiesName);
 		try {
 			properties.load(inputStream);
 		} catch (IOException e) {
@@ -58,7 +58,7 @@ public abstract class PropertiesUitls {
 	public static Map<String,String> get(String propertiesName){
 		Map<String,String> map = new HashMap<String, String>();
 		Properties properties = new Properties();
-		InputStream inputStream = System.class.getResourceAsStream(propertiesName);
+		InputStream inputStream = PathUtils.getClassFileStream(propertiesName);
 		try {
 			properties.load(inputStream);
 		} catch (IOException e) {
