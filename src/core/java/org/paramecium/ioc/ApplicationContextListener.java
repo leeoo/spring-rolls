@@ -3,8 +3,7 @@ package org.paramecium.ioc;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.paramecium.log.Log;
-import org.paramecium.log.LoggerFactory;
+import org.paramecium.commons.PathUtils;
 
 /**
  * 功 能 描 述:<br>
@@ -15,14 +14,13 @@ import org.paramecium.log.LoggerFactory;
  */
 public class ApplicationContextListener implements ServletContextListener {
 	
-	private final static Log logger = LoggerFactory.getLogger();
 	private static boolean isInit = true;
 
 	public void contextInitialized(ServletContextEvent event) {
 		if(isInit){
+			PathUtils.webClassRootPath = event.getServletContext().getRealPath("/WEB-INF")+"/classes";
 			ApplicationContext.init();
 			isInit = false;
-			logger.debug("ApplicationContext已经加载...");
 		}
 	}
 	

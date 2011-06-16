@@ -161,7 +161,7 @@ public class ClassScanner {
 		for(String baesPackage:iocScanBasePackage.split(",")){
 			if(baesPackage!=null&&!baesPackage.trim().isEmpty()){
 				String baesPath = baesPackage.replaceAll("\\.", "//").trim();
-				String filePath = PathUtils.getClassRootPath()+baesPath;
+				String filePath = PathUtils.getClassRootPath()+"//"+baesPath;
 				readClassFile(filePath,baesPackage.trim());
 			}
 		}
