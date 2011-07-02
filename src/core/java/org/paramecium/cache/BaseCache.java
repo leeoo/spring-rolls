@@ -3,6 +3,7 @@ package org.paramecium.cache;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -16,7 +17,7 @@ public abstract class BaseCache implements Cache,Cloneable, Serializable {
 
 	private static final long serialVersionUID = 8139192731446878665L;
 
-	protected ConcurrentHashMap<Object,Element> map = new ConcurrentHashMap<Object, Element>();
+	protected Map<Object,Element> map = new ConcurrentHashMap<Object, Element>();
 	
 	public int maxSize = 500;
 	
