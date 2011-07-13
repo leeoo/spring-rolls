@@ -1,5 +1,6 @@
 package com.wisdom.core.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -100,11 +101,10 @@ public class Page extends QueryParameter {
 	 */
 	@SuppressWarnings("unchecked")
 	public List getResult() {
-		if(result != null && !result.isEmpty()){
-			return result;
-		}else{
-			return null;
+		if(result==null){
+			return new ArrayList();
 		}
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
