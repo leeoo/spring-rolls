@@ -65,29 +65,31 @@ public class ControllerExtractor {
 					response.setStatus(404);
 					return true;
 				}
-				Method[] methods = classInfo.getClazz().getMethods();//只返回public，如果需要private可用getDeclaredMethods
-				if(methods==null||methods.length<1){
-					logger.warn(classInfo.getClazz().getName()+"没有定义相关的处理方法!");
-					end();
-					response.setStatus(404);
-					return true;
-				}
-				ModelAndView mv = new ModelAndView(request, response);
-				for(Method method : methods){
-					MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
-					if(mappingMethod==null){
-						continue;
+				for (Class<?> clazz = classInfo.getClazz(); clazz != Object.class; clazz = clazz.getSuperclass()) {
+					Method[] methods = clazz.getMethods();//只返回public，如果需要private可用getDeclaredMethods
+					if(methods==null||methods.length<1){
+						logger.warn(classInfo.getClazz().getName()+"没有定义相关的处理方法!");
+						end();
+						response.setStatus(404);
+						return true;
 					}
-					if(!mappingMethod.url().isEmpty()){
-						if(mappingMethod.url().equals(URIStrs[1])){
+					ModelAndView mv = new ModelAndView(request, response);
+					for(Method method : methods){
+						MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
+						if(mappingMethod==null){
+							continue;
+						}
+						if(!mappingMethod.url().isEmpty()){
+							if(mappingMethod.url().equals(URIStrs[1])){
+								method.invoke(controller, mv);
+								end();
+								return !mv.isRedirect();
+							}
+						}else if((ControllerExtractor.lineStr+method.getName()).equals(URIStrs[1])){
 							method.invoke(controller, mv);
 							end();
 							return !mv.isRedirect();
 						}
-					}else if((ControllerExtractor.lineStr+method.getName()).equals(URIStrs[1])){
-						method.invoke(controller, mv);
-						end();
-						return !mv.isRedirect();
 					}
 				}
 			}catch (Exception e) {
