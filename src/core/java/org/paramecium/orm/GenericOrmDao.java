@@ -13,6 +13,8 @@ import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.nosql.mongodb.GenericMonogDBNativeDao;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
+import org.paramecium.orm.annotation.NotUpdate;
+import org.paramecium.orm.annotation.PrimaryKey;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -88,7 +90,6 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	private Number insertMongo(T bean){
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
 		String tableName = entity.tableName();
-		Class<?> clazz = bean.getClass();
 		DBObject object = new BasicDBObject();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
@@ -133,7 +134,6 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	private void insertMongo(Collection<T> beans){
 		Entity entity = beans.iterator().next().getClass().getAnnotation(Entity.class);
 		String tableName = entity.tableName();
-		Class<?> clazz = beans.iterator().next().getClass();
 		List<DBObject> objects = new ArrayList<DBObject>();
 		for(T bean : beans){
 			DBObject object = new BasicDBObject();
@@ -165,11 +165,56 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void update(T bean) throws SQLException {
+		if(useNoSql){
+			updateMongo(bean);
+			return;
+		}
 		String sql = EntitySqlBuilder.getUpdateSql(bean);
 		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
 	
-	
+	/**
+	 * mongoDB修改数据
+	 * @param bean
+	 * @return
+	 */
+	private void updateMongo(T bean){
+		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		DBObject object = new BasicDBObject();
+		DBObject where = new BasicDBObject();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(entity!=null){
+						NotUpdate notUpdate = field.getAnnotation(NotUpdate.class);
+						if(notUpdate!=null){
+							continue;
+						}
+						Column column = field.getAnnotation(Column.class);
+						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+						if(primaryKey!=null){
+							if(column!=null&&!column.fieldName().isEmpty()){
+								where.put(field.getName(), field.get(bean));
+							}else{
+								where.put(BeanUitls.getDbFieldName(field.getName()),field.get(bean));
+							}
+						}else if(primaryKey==null){
+							if(column!=null&&!column.fieldName().isEmpty()){
+								object.put(column.fieldName(), field.get(bean));
+							}else if(column!=null&&column.fieldName().isEmpty()){
+								object.put(BeanUitls.getDbFieldName(field.getName()), field.get(bean));
+							}
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		mongoDao.update(tableName, where , object);
+	}
 	
 	/**
 	 * 根据单一主键删除实体
@@ -177,8 +222,44 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void delete(PK primaryKey)throws SQLException {
+		if(useNoSql){
+			deleteMongo(primaryKey);
+			return;
+		}
 		String sql = EntitySqlBuilder.getDeleteSql(clazz);
 		genericJdbcDao.executeDMLByArray(sql, primaryKey);
+	}
+	
+	/**
+	 * mongoDB删除数据
+	 * @param bean
+	 * @return
+	 */
+	private void deleteMongo(PK primaryKey){
+		Entity entity = clazz.getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		DBObject where = new BasicDBObject();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(entity!=null){
+						Column column = field.getAnnotation(Column.class);
+						PrimaryKey primaryKey$ = field.getAnnotation(PrimaryKey.class);
+						if(primaryKey$!=null){
+							if(column!=null&&!column.fieldName().isEmpty()){
+								where.put(field.getName(), primaryKey);
+							}else{
+								where.put(BeanUitls.getDbFieldName(field.getName()),primaryKey);
+							}
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		mongoDao.remove(tableName, where);
 	}
 
 	/**
@@ -187,6 +268,10 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void delete(T whereBean)throws SQLException {
+		if(useNoSql){
+			deleteMongo(whereBean);
+			return;
+		}
 		String sql = EntitySqlBuilder.getDeleteSql(clazz);
 		int start =sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
@@ -195,6 +280,74 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			sql = sql.concat(" WHERE ").concat(where);
 			genericJdbcDao.executeDMLByBean(sql, whereBean);
 		}
+	}
+	
+	/**
+	 * 带条件mongoDB删除数据
+	 * @param bean
+	 * @return
+	 */
+	private void deleteMongo(T whereBean){
+		Entity entity = clazz.getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		DBObject where = buildWhere(whereBean);
+		mongoDao.remove(tableName, where);
+	}
+	
+	/**
+	 * 构建MongoDB的where条件
+	 * @param whereBean
+	 * @return
+	 */
+	private static DBObject buildWhere(Object whereBean){
+		Entity entity = whereBean.getClass().getAnnotation(Entity.class);
+		DBObject where = new BasicDBObject();
+		for (Class<?> superClass = whereBean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(field.get(whereBean)==null||field.get(whereBean).toString().isEmpty()){
+						continue;
+					}
+					if(entity!=null){
+						Column column = field.getAnnotation(Column.class);
+						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+						String comparison = column.comparison().trim();
+						if(comparison.equals("<")){
+							comparison = "$lt";
+						}else if(comparison.equals("<=")){
+							comparison = "$lte";
+						}else if(comparison.equals(">")){
+							comparison = "$gt";
+						}else if(comparison.equals(">=")){
+							comparison = "$gte";
+						}else if(comparison.equals("LIKE")){
+							continue;
+						}
+						BasicDBObject query = (BasicDBObject) where.get(field.getName());
+						if(column!=null&&(column.isDynamicWhere()||primaryKey!=null)){
+							String filedName = column.fieldName();
+							if(filedName.isEmpty()){
+								filedName = BeanUitls.getDbFieldName(field.getName());
+							}
+							if(query!=null){
+								query.append(comparison, field.get(whereBean));
+								where.put(filedName, query);
+							}else{
+								if(comparison.equals("=")){
+									where.put(filedName, field.get(whereBean));
+								}else{
+									where.put(filedName, new BasicDBObject(comparison, field.get(whereBean)));
+								}
+							}
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		return where;
 	}
 	
 	/**
