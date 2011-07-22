@@ -1,12 +1,22 @@
 package org.paramecium.orm;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import org.paramecium.commons.BeanUitls;
 import org.paramecium.jdbc.GenericJdbcDao;
 import org.paramecium.jdbc.dialect.Page;
+import org.paramecium.nosql.mongodb.GenericMonogDBNativeDao;
+import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.WriteResult;
 /**
  * 功 能 描 述:<br>
  * 通用ORM数据操作，功能类似hiberante
@@ -18,7 +28,25 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	
 	private GenericJdbcDao genericJdbcDao;
 	
+	private GenericMonogDBNativeDao mongoDao; 
+	
+	private boolean useNoSql = false;
+	
 	private Class<T> clazz;
+	
+	/**
+	 * 默认构造方法会自动加载事务线程
+	 * 如果启用NoSql，将会自动使用MongoDB。
+	 */
+	public GenericOrmDao(final String dataSourceName,Class<T> clazz,boolean useNoSql){
+		this.useNoSql = useNoSql;
+		if(useNoSql){
+			mongoDao = new GenericMonogDBNativeDao(dataSourceName);
+		}else{
+			genericJdbcDao = new GenericJdbcDao(dataSourceName);
+		}
+		this.clazz = clazz;
+	}
 	
 	/**
 	 * 默认构造方法会自动加载事务线程
@@ -39,6 +67,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public Number insert(T bean) throws SQLException {
+		if(useNoSql){
+			return insertMongo(bean);
+		}
 		String sql = EntitySqlBuilder.getInsertSql(bean);
 		String isAuto = sql.substring(0, 1);
 		if(isAuto.equals("A")){
@@ -48,6 +79,37 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		}
 		return null;
 	}
+	
+	/**
+	 * mongoDB保存数据
+	 * @param bean
+	 * @return
+	 */
+	private Number insertMongo(T bean){
+		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		Class<?> clazz = bean.getClass();
+		DBObject object = new BasicDBObject();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(entity!=null){
+						Column column = field.getAnnotation(Column.class);
+						if(column!=null&&!column.fieldName().isEmpty()){
+							object.put(column.fieldName(), field.get(bean));
+						}else if(column!=null&&column.fieldName().isEmpty()){
+							object.put(BeanUitls.getDbFieldName(field.getName()), field.get(bean));
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		WriteResult result = mongoDao.save(tableName, object);
+		return result.getN();
+	}
 
 	/**
 	 * 批量插入
@@ -55,8 +117,46 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @throws SQLException
 	 */
 	public void insert(Collection<T> beans) throws SQLException {
+		if(useNoSql){
+			insertMongo(beans);
+			return;
+		}
 		String sql = EntitySqlBuilder.getInsertSql(beans.iterator().next());
 		genericJdbcDao.executeBatchDMLByBeans(sql.substring(1, sql.length()), beans);
+	}
+	
+	/**
+	 * mongoDB批量保存数据
+	 * @param bean
+	 * @return
+	 */
+	private void insertMongo(Collection<T> beans){
+		Entity entity = beans.iterator().next().getClass().getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		Class<?> clazz = beans.iterator().next().getClass();
+		List<DBObject> objects = new ArrayList<DBObject>();
+		for(T bean : beans){
+			DBObject object = new BasicDBObject();
+			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+				Field[] fields = superClass.getDeclaredFields();
+				for(Field field : fields){
+					field.setAccessible(true);
+					try {
+						if(entity!=null){
+							Column column = field.getAnnotation(Column.class);
+							if(column!=null&&!column.fieldName().isEmpty()){
+								object.put(column.fieldName(), field.get(bean));
+							}else if(column!=null&&column.fieldName().isEmpty()){
+								object.put(BeanUitls.getDbFieldName(field.getName()), field.get(bean));
+							}
+						}
+					} catch (Exception e) {
+					}
+				}
+			}
+			objects.add(object);
+		}
+		mongoDao.insert(tableName, objects);
 	}
 
 	/**
@@ -68,6 +168,8 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		String sql = EntitySqlBuilder.getUpdateSql(bean);
 		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
+	
+	
 	
 	/**
 	 * 根据单一主键删除实体
@@ -170,6 +272,10 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			sql = sql.concat(" ORDER BY "+entity.orderBy());
 		}
 		return (Collection<T>) genericJdbcDao.queryByBean(sql, clazz, whereBean);
+	}
+
+	public void setUseNoSql(boolean useNoSql) {
+		this.useNoSql = useNoSql;
 	}
 
 }
