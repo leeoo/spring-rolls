@@ -14,13 +14,13 @@ import com.mongodb.WriteResult;
  * 通用的MongoDB操作数据操作类，可操作原生MongoDB。
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2011-7-22上午09:51:26
- * <br>项 目 信 息:paramecium:org.paramecium.nosql.mongodb.GenericMonogDBDao.java
+ * <br>项 目 信 息:paramecium:org.paramecium.nosql.mongodb.GenericMonogDBNativeDao.java
  */
-public class GenericMonogDBDao {
+public class GenericMonogDBNativeDao {
 
 	private DB mongoDB;
 	
-	public GenericMonogDBDao(String mongoDBName){
+	public GenericMonogDBNativeDao(String mongoDBName){
 		this.mongoDB = MongoDBManager.getMongoDB(mongoDBName);
 	}
 	
