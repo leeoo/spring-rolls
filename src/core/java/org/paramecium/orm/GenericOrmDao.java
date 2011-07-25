@@ -304,6 +304,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 					}
 					if(entity!=null){
 						Column column = field.getAnnotation(Column.class);
+						if(column==null){
+							continue;
+						}
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 						String comparison = column.comparison().trim();
 						String fieldName = getFieldName(field);
@@ -407,7 +410,6 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @param page
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	private Page selectMongo(Page page){
 		Entity entity = clazz.getAnnotation(Entity.class);
 		String tableName = entity.tableName();
@@ -427,12 +429,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		}else{
 			dbCursor = mongoDao.find(tableName, page.getPageSize(), page.getFirst());
 		}
-		Collection<T> beans = new ArrayList<T>();
-		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
-			DBObject object = it.next();
-			beans.add((T) BeanUitls.map2Bean(clazz, object.toMap(), true));
-		}
-		page.setResult(beans);
+		page.setResult(buildCollection(dbCursor));
 		return page;
 	}
 	
@@ -472,7 +469,6 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @param whereBean
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	private Page selectMongo(Page page,T whereBean){
 		Entity entity = clazz.getAnnotation(Entity.class);
 		String tableName = entity.tableName();
@@ -489,16 +485,12 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			}else if(filed.indexOf("asc")>0){
 				filed = entity.orderBy().substring(0,filed.indexOf("asc")).trim();
 			}
+			
 			dbCursor = mongoDao.find(tableName , where ,new BasicDBObject(filed,sort), page.getPageSize(), page.getFirst());
 		}else{
 			dbCursor = mongoDao.find(tableName, where , page.getPageSize(), page.getFirst());
 		}
-		Collection<T> beans = new ArrayList<T>();
-		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
-			DBObject object = it.next();
-			beans.add((T) BeanUitls.map2Bean(clazz, object.toMap(), true));
-		}
-		page.setResult(beans);
+		page.setResult(buildCollection(dbCursor));
 		return page;
 	}
 	
@@ -535,7 +527,6 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @param whereBean
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public Collection<T> selectMongo(T whereBean){
 		Entity entity = clazz.getAnnotation(Entity.class);
 		String tableName = entity.tableName();
@@ -554,12 +545,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		}else{
 			dbCursor = mongoDao.find(tableName , where);
 		}
-		Collection<T> beans = new ArrayList<T>();
-		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
-			DBObject object = it.next();
-			beans.add((T) BeanUitls.map2Bean(clazz, object.toMap(), true));
-		}
-		return beans;
+		return buildCollection(dbCursor);
 	}
 
 	public void setUseNoSql(boolean useNoSql) {
@@ -574,6 +560,19 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		}else{
 			return BeanUitls.getDbFieldName(field.getName());
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Collection<T> buildCollection(DBCursor dbCursor){
+		if(dbCursor==null||dbCursor.itcount()<1){
+			return null;
+		}
+		Collection<T> beans = new ArrayList<T>();
+		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
+			DBObject object = it.next();
+			beans.add((T) BeanUitls.map2Bean(clazz, object.toMap(), true));
+		}
+		return beans;
 	}
 	
 }

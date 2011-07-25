@@ -189,7 +189,7 @@ public class GenericMonogDBNativeDao {
 	 * @return
 	 */
 	public DBCursor find(String collName,DBObject where,DBObject orderBy,int limit,int skip){
-		return find(collName,where,orderBy).limit(limit).skip(skip);
+		return find(collName,where,orderBy).limit(getPageNumber(limit)).skip(getPageNumber(skip));
 	}
 	
 	/**
@@ -200,7 +200,7 @@ public class GenericMonogDBNativeDao {
 	 * @return
 	 */
 	public DBCursor find(String collName,int limit,int skip){
-		return find(collName).limit(limit).skip(skip);
+		return find(collName).limit(getPageNumber(limit)).skip(getPageNumber(skip));
 	}
 	
 	/**
@@ -211,7 +211,7 @@ public class GenericMonogDBNativeDao {
 	 * @return
 	 */
 	public DBCursor find(String collName,int limit,int skip,DBObject orderBy){
-		return find(orderBy,collName).limit(limit).skip(skip);
+		return find(orderBy,collName).limit(getPageNumber(limit)).skip(getPageNumber(skip));
 	}
 	
 	/**
@@ -222,7 +222,7 @@ public class GenericMonogDBNativeDao {
 	 * @return
 	 */
 	public DBCursor find(String collName,DBObject where,int limit,int skip){
-		return find(collName,where).limit(limit).skip(skip);
+		return find(collName,where).limit(getPageNumber(limit)).skip(getPageNumber(skip));
 	}
 	
 	/**
@@ -262,6 +262,13 @@ public class GenericMonogDBNativeDao {
 			return coll.distinct(key);
 		}
 		return coll.distinct(key,where);
+	}
+	
+	private static int getPageNumber(int number){
+		if(number<0){
+			return 0;
+		}
+		return number;
 	}
 	
 }

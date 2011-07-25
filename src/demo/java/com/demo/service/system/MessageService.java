@@ -37,4 +37,8 @@ public class MessageService {
 		return ormDao.select(page);
 	}
 	
+	public Page get(Page page,Message message){
+		return ormDao.select(page, message);
+	}
+	
 }
