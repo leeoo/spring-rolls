@@ -64,6 +64,10 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		return genericJdbcDao;
 	}
 
+	public GenericMonogDBNativeDao getMongoDao() {
+		return mongoDao;
+	}
+	
 	/**
 	 * 插入新实体，自动判断是否生成自增数据，如果有则返回。
 	 * @param bean

@@ -9,14 +9,11 @@ public class PathUtils {
 		if(webClassRootPath!=null){
 			return webClassRootPath;
 		}
-		return PathUtils.class.getResource("//").getFile();
+		return System.class.getResource("/").getFile();
 	}
 	
 	public static String getClassFile(String fileName){
-		if(webClassRootPath!=null){
-			return webClassRootPath+fileName;
-		}
-		return PathUtils.class.getResource("//").getFile()+fileName;
+		return getClassRootPath()+fileName;
 	}
 
 }
