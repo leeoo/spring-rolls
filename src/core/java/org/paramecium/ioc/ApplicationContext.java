@@ -53,6 +53,15 @@ public class ApplicationContext {
 				ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
 				instance = proxy.getClassInstance();
 				loopInject(instance);
+			}else{
+				try {
+					instance = serviceClassInfo.getClazz().newInstance();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+				loopInjectNoSecurity(instance);
 			}
 		}else if(classInfo instanceof ControllerClassInfo){
 			ControllerClassInfo controllerClassInfo = (ControllerClassInfo)classInfo;
@@ -104,6 +113,31 @@ public class ApplicationContext {
 					ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),serviceClassInfo.getClazz());
 					Object fieldInstance = proxy.getClassInstance();
 					loopInject(fieldInstance);
+					field.set(instance, fieldInstance);
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 递归注入
+	 * @param instance
+	 */
+	private static void loopInjectNoSecurity(Object instance){
+		Field[] fields = instance.getClass().getSuperclass().getDeclaredFields();
+		for(Field field : fields){
+			field.setAccessible(true);
+			AutoInject autoInject = field.getAnnotation(AutoInject.class);
+			if(autoInject!=null){
+				String fieldName = field.getName();
+				ServiceClassInfo serviceClassInfo = IocContextIndex.getService(fieldName);
+				if(serviceClassInfo==null){
+					throw new InjectException(fieldName+"注入时,请用@Service声明!");
+				}
+				try {
+					Object fieldInstance = serviceClassInfo.getClazz().newInstance();
+					loopInjectNoSecurity(fieldInstance);
 					field.set(instance, fieldInstance);
 				} catch (Exception e) {
 				}
