@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.paramecium.commons.BeanUitls;
@@ -17,6 +18,7 @@ import org.paramecium.orm.annotation.NotUpdate;
 import org.paramecium.orm.annotation.PrimaryKey;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
 /**
@@ -357,8 +359,45 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	@SuppressWarnings("unchecked")
 	public T select(PK primaryKey){
+		if(useNoSql){
+			return selectMongo(primaryKey);
+		}
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
 		return (T) genericJdbcDao.queryUniqueByArray(sql, clazz, primaryKey);
+	}
+	
+	/**
+	 * 根据单一主键获得实体信息
+	 * @param primaryKey
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private T selectMongo(PK primaryKey){
+		Entity entity = clazz.getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		DBObject where = new BasicDBObject();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(entity!=null){
+						Column column = field.getAnnotation(Column.class);
+						PrimaryKey primaryKey$ = field.getAnnotation(PrimaryKey.class);
+						if(primaryKey$!=null){
+							if(column!=null&&!column.fieldName().isEmpty()){
+								where.put(field.getName(), primaryKey);
+							}else{
+								where.put(BeanUitls.getDbFieldName(field.getName()),primaryKey);
+							}
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		DBObject object = mongoDao.findOne(tableName, where);
+		return (T) BeanUitls.map2Bean(clazz, object.toMap(), true);
 	}
 
 	/**
@@ -367,6 +406,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @return
 	 */
 	public Page select(Page page){
+		if(useNoSql){
+			return selectMongo(page);
+		}
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
 		int start =sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
@@ -376,6 +418,42 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		}
 		return genericJdbcDao.queryPageBeansByArray(sql, clazz, page);
 	}
+	
+	/**
+	 * 获得mongo分页信息
+	 * @param page
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private Page selectMongo(Page page){
+		Entity entity = clazz.getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		long count = mongoDao.count(tableName);
+		page.setTotalCount((int)count);
+		DBCursor dbCursor = null;
+		if(entity!=null&&!entity.orderBy().isEmpty()){
+			int sort = 1;
+			String filed = entity.orderBy().toLowerCase().trim();
+			if(entity.orderBy().toLowerCase().indexOf("desc")>0){
+				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("desc")).trim();
+				sort = 0;
+			}else if(entity.orderBy().toLowerCase().indexOf("asc")>0){
+				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("asc")).trim();
+			}
+			dbCursor = mongoDao.find(tableName, page.getFirst(), page.getPageSize(),new BasicDBObject(filed,sort));
+		}else{
+			dbCursor = mongoDao.find(tableName, page.getFirst(), page.getPageSize());
+		}
+		Collection<T> beans = new ArrayList<T>();
+		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
+			DBObject object = it.next();
+			beans.add((T) BeanUitls.map2Bean(clazz, object.toMap(), true));
+		}
+		page.setResult(beans);
+		return page;
+	}
+	
+	
 
 	/**
 	 * 根据动态查询条件获得分页信息
@@ -384,6 +462,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @return
 	 */
 	public Page select(Page page,T whereBean){
+		if(useNoSql){
+			return selectMongo(page,whereBean);
+		}
 		if(whereBean==null){
 			return select(page);
 		}
@@ -403,12 +484,51 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	}
 	
 	/**
+	 * mongo根据动态查询条件获得分页信息
+	 * @param page
+	 * @param whereBean
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private Page selectMongo(Page page,T whereBean){
+		Entity entity = clazz.getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		DBObject where = buildWhere(whereBean);
+		long count = mongoDao.count(tableName,where);
+		page.setTotalCount((int)count);
+		DBCursor dbCursor = null;
+		if(entity!=null&&!entity.orderBy().isEmpty()){
+			int sort = 1;
+			String filed = entity.orderBy().toLowerCase().trim();
+			if(entity.orderBy().toLowerCase().indexOf("desc")>0){
+				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("desc")).trim();
+				sort = 0;
+			}else if(entity.orderBy().toLowerCase().indexOf("asc")>0){
+				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("asc")).trim();
+			}
+			dbCursor = mongoDao.find(tableName , where ,new BasicDBObject(filed,sort), page.getFirst(), page.getPageSize());
+		}else{
+			dbCursor = mongoDao.find(tableName, where , page.getFirst(), page.getPageSize());
+		}
+		Collection<T> beans = new ArrayList<T>();
+		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
+			DBObject object = it.next();
+			beans.add((T) BeanUitls.map2Bean(clazz, object.toMap(), true));
+		}
+		page.setResult(beans);
+		return page;
+	}
+	
+	/**
 	 * 根据动态条件获得所有相符的实体集合
 	 * @param whereBean
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<T> select(T whereBean){
+		if(useNoSql){
+			return selectMongo(whereBean);
+		}
 		if(whereBean==null){
 			return null;
 		}
@@ -425,6 +545,38 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			sql = sql.concat(" ORDER BY "+entity.orderBy());
 		}
 		return (Collection<T>) genericJdbcDao.queryByBean(sql, clazz, whereBean);
+	}
+	
+	/**
+	 * mongo根据动态条件获得所有相符的实体集合
+	 * @param whereBean
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<T> selectMongo(T whereBean){
+		Entity entity = clazz.getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		DBObject where = buildWhere(whereBean);
+		DBCursor dbCursor = null;
+		if(entity!=null&&!entity.orderBy().isEmpty()){
+			int sort = 1;
+			String filed = entity.orderBy().toLowerCase().trim();
+			if(entity.orderBy().toLowerCase().indexOf("desc")>0){
+				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("desc")).trim();
+				sort = 0;
+			}else if(entity.orderBy().toLowerCase().indexOf("asc")>0){
+				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("asc")).trim();
+			}
+			dbCursor = mongoDao.find(tableName , where ,new BasicDBObject(filed,sort));
+		}else{
+			dbCursor = mongoDao.find(tableName , where);
+		}
+		Collection<T> beans = new ArrayList<T>();
+		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
+			DBObject object = it.next();
+			beans.add((T) BeanUitls.map2Bean(clazz, object.toMap(), true));
+		}
+		return beans;
 	}
 
 	public void setUseNoSql(boolean useNoSql) {
