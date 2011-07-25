@@ -13,6 +13,10 @@ public class MessageService {
 
 	private GenericOrmDao<Message, Long> ormDao = new GenericOrmDao<Message, Long>("mg1", Message.class,true);
 	
+	public void clear(){
+		ormDao.getMongoDao().getDB().getCollection("t_message").drop();
+	}
+	
 	public long save(Message message) throws SQLException{
 		return ormDao.insert(message).longValue();
 	}

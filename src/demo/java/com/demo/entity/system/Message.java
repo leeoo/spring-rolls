@@ -6,11 +6,11 @@ import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
 import org.paramecium.orm.annotation.PrimaryKey;
 
-@Entity(tableName="t_message",orderBy="id DESC")
+@Entity(tableName="t_message",orderBy="publish_date DESC")
 public class Message {
 
 	@PrimaryKey
-	@Column(fieldName = "_id")
+	@Column
 	private Long id;
 	
 	@Column

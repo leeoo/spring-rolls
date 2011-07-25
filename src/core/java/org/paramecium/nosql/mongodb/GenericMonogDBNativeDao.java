@@ -33,6 +33,14 @@ public class GenericMonogDBNativeDao {
 	}
 	
 	/**
+	 * 获取所在DB
+	 * @return
+	 */
+	public DB getDB(){
+		return mongoDB;
+	}
+	
+	/**
 	 * 运行CMD命令行或Shell脚本命令行
 	 * @param cmd
 	 * @return

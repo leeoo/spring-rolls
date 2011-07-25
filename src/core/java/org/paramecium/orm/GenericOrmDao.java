@@ -14,13 +14,12 @@ import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.nosql.mongodb.GenericMonogDBNativeDao;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
-import org.paramecium.orm.annotation.NotUpdate;
 import org.paramecium.orm.annotation.PrimaryKey;
+import org.paramecium.orm.annotation.PrimaryKey.AUTO_GENERATE_MODE;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.WriteResult;
 /**
  * 功 能 描 述:<br>
  * 通用ORM数据操作，功能类似hiberante
@@ -97,25 +96,32 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
 		String tableName = entity.tableName();
 		DBObject object = new BasicDBObject();
+		long id = 0;
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
 				field.setAccessible(true);
 				try {
 					if(entity!=null){
-						Column column = field.getAnnotation(Column.class);
-						if(column!=null&&!column.fieldName().isEmpty()){
-							object.put(column.fieldName(), field.get(bean));
-						}else if(column!=null&&column.fieldName().isEmpty()){
-							object.put(BeanUitls.getDbFieldName(field.getName()), field.get(bean));
+						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+						String fieldName = getFieldName(field);
+						if(primaryKey!=null){
+							if(primaryKey.autoGenerateMode() == AUTO_GENERATE_MODE.NATIVE){
+								id = System.currentTimeMillis();
+							}else{
+								id = (Long)field.get(bean);
+							}
+							object.put(fieldName, id);
+							continue;
 						}
+						object.put(fieldName, field.get(bean));
 					}
 				} catch (Exception e) {
 				}
 			}
 		}
-		WriteResult result = mongoDao.save(tableName, object);
-		return result.getN();
+		mongoDao.save(tableName, object);
+		return id;
 	}
 
 	/**
@@ -149,12 +155,8 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 					field.setAccessible(true);
 					try {
 						if(entity!=null){
-							Column column = field.getAnnotation(Column.class);
-							if(column!=null&&!column.fieldName().isEmpty()){
-								object.put(column.fieldName(), field.get(bean));
-							}else if(column!=null&&column.fieldName().isEmpty()){
-								object.put(BeanUitls.getDbFieldName(field.getName()), field.get(bean));
-							}
+							String fieldName = getFieldName(field);
+							object.put(fieldName, field.get(bean));
 						}
 					} catch (Exception e) {
 					}
@@ -195,25 +197,13 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 				field.setAccessible(true);
 				try {
 					if(entity!=null){
-						NotUpdate notUpdate = field.getAnnotation(NotUpdate.class);
-						if(notUpdate!=null){
-							continue;
-						}
-						Column column = field.getAnnotation(Column.class);
+						String fieldName = getFieldName(field);
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+						Object value = field.get(bean);
 						if(primaryKey!=null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								where.put(field.getName(), field.get(bean));
-							}else{
-								where.put(BeanUitls.getDbFieldName(field.getName()),field.get(bean));
-							}
-						}else if(primaryKey==null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								object.put(column.fieldName(), field.get(bean));
-							}else if(column!=null&&column.fieldName().isEmpty()){
-								object.put(BeanUitls.getDbFieldName(field.getName()), field.get(bean));
-							}
+							where.put(fieldName, value);
 						}
+						object.put(fieldName, value);//无需判断，更新需要全部更新，不能局部更新
 					}
 				} catch (Exception e) {
 				}
@@ -251,14 +241,10 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 				field.setAccessible(true);
 				try {
 					if(entity!=null){
-						Column column = field.getAnnotation(Column.class);
+						String fieldName = getFieldName(field);
 						PrimaryKey primaryKey$ = field.getAnnotation(PrimaryKey.class);
 						if(primaryKey$!=null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								where.put(field.getName(), primaryKey);
-							}else{
-								where.put(BeanUitls.getDbFieldName(field.getName()),primaryKey);
-							}
+							where.put(fieldName, primaryKey);
 						}
 					}
 				} catch (Exception e) {
@@ -320,6 +306,7 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 						Column column = field.getAnnotation(Column.class);
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 						String comparison = column.comparison().trim();
+						String fieldName = getFieldName(field);
 						if(comparison.equals("<")){
 							comparison = "$lt";
 						}else if(comparison.equals("<=")){
@@ -331,20 +318,16 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 						}else if(comparison.equals("LIKE")){
 							continue;
 						}
-						BasicDBObject query = (BasicDBObject) where.get(field.getName());
+						BasicDBObject query = (BasicDBObject) where.get(fieldName);
 						if(column!=null&&(column.isDynamicWhere()||primaryKey!=null)){
-							String filedName = column.fieldName();
-							if(filedName.isEmpty()){
-								filedName = BeanUitls.getDbFieldName(field.getName());
-							}
 							if(query!=null){
 								query.append(comparison, field.get(whereBean));
-								where.put(filedName, query);
+								where.put(fieldName, query);
 							}else{
 								if(comparison.equals("=")){
-									where.put(filedName, field.get(whereBean));
+									where.put(fieldName, field.get(whereBean));
 								}else{
-									where.put(filedName, new BasicDBObject(comparison, field.get(whereBean)));
+									where.put(fieldName, new BasicDBObject(comparison, field.get(whereBean)));
 								}
 							}
 						}
@@ -386,14 +369,10 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 				field.setAccessible(true);
 				try {
 					if(entity!=null){
-						Column column = field.getAnnotation(Column.class);
 						PrimaryKey primaryKey$ = field.getAnnotation(PrimaryKey.class);
+						String fieldName = getFieldName(field);
 						if(primaryKey$!=null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								where.put(field.getName(), primaryKey);
-							}else{
-								where.put(BeanUitls.getDbFieldName(field.getName()),primaryKey);
-							}
+							where.put(fieldName, primaryKey);
 						}
 					}
 				} catch (Exception e) {
@@ -438,15 +417,15 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		if(entity!=null&&!entity.orderBy().isEmpty()){
 			int sort = 1;
 			String filed = entity.orderBy().toLowerCase().trim();
-			if(entity.orderBy().toLowerCase().indexOf("desc")>0){
-				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("desc")).trim();
+			if(filed.indexOf("desc")>0){
+				filed = entity.orderBy().substring(0,filed.indexOf("desc")).trim();
 				sort = 0;
-			}else if(entity.orderBy().toLowerCase().indexOf("asc")>0){
-				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("asc")).trim();
+			}else if(filed.indexOf("asc")>0){
+				filed = entity.orderBy().substring(0,filed.indexOf("asc")).trim();
 			}
-			dbCursor = mongoDao.find(tableName, page.getFirst(), page.getPageSize(),new BasicDBObject(filed,sort));
+			dbCursor = mongoDao.find(tableName, page.getPageSize(), page.getFirst(),new BasicDBObject(filed,sort));
 		}else{
-			dbCursor = mongoDao.find(tableName, page.getFirst(), page.getPageSize());
+			dbCursor = mongoDao.find(tableName, page.getPageSize(), page.getFirst());
 		}
 		Collection<T> beans = new ArrayList<T>();
 		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
@@ -504,15 +483,15 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		if(entity!=null&&!entity.orderBy().isEmpty()){
 			int sort = 1;
 			String filed = entity.orderBy().toLowerCase().trim();
-			if(entity.orderBy().toLowerCase().indexOf("desc")>0){
-				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("desc")).trim();
+			if(filed.indexOf("desc")>0){
+				filed = entity.orderBy().substring(0,filed.indexOf("desc")).trim();
 				sort = 0;
-			}else if(entity.orderBy().toLowerCase().indexOf("asc")>0){
-				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("asc")).trim();
+			}else if(filed.indexOf("asc")>0){
+				filed = entity.orderBy().substring(0,filed.indexOf("asc")).trim();
 			}
-			dbCursor = mongoDao.find(tableName , where ,new BasicDBObject(filed,sort), page.getFirst(), page.getPageSize());
+			dbCursor = mongoDao.find(tableName , where ,new BasicDBObject(filed,sort), page.getPageSize(), page.getFirst());
 		}else{
-			dbCursor = mongoDao.find(tableName, where , page.getFirst(), page.getPageSize());
+			dbCursor = mongoDao.find(tableName, where , page.getPageSize(), page.getFirst());
 		}
 		Collection<T> beans = new ArrayList<T>();
 		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
@@ -565,11 +544,11 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		if(entity!=null&&!entity.orderBy().isEmpty()){
 			int sort = 1;
 			String filed = entity.orderBy().toLowerCase().trim();
-			if(entity.orderBy().toLowerCase().indexOf("desc")>0){
-				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("desc")).trim();
+			if(filed.indexOf("desc")>0){
+				filed = entity.orderBy().substring(0,filed.indexOf("desc")).trim();
 				sort = 0;
-			}else if(entity.orderBy().toLowerCase().indexOf("asc")>0){
-				filed = entity.orderBy().substring(0,entity.orderBy().toLowerCase().indexOf("asc")).trim();
+			}else if(filed.indexOf("asc")>0){
+				filed = entity.orderBy().substring(0,filed.indexOf("asc")).trim();
 			}
 			dbCursor = mongoDao.find(tableName , where ,new BasicDBObject(filed,sort));
 		}else{
@@ -587,4 +566,14 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 		this.useNoSql = useNoSql;
 	}
 
+	private static String getFieldName(Field field){
+		field.setAccessible(true);
+		Column column = field.getAnnotation(Column.class);
+		if(column!=null&&!column.fieldName().isEmpty()){
+			return column.fieldName();
+		}else{
+			return BeanUitls.getDbFieldName(field.getName());
+		}
+	}
+	
 }
