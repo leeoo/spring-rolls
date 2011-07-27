@@ -33,5 +33,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jstl-1.1.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/standard-1.1.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sitemesh-2.4.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-2.6.3.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
