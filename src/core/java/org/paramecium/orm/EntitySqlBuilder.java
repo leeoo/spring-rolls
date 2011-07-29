@@ -152,6 +152,63 @@ public class EntitySqlBuilder {
 		return sb.toString();
 	}
 	
+	public static String getUpdateSqlNotNull(Object bean){
+		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		String tableName = entity.tableName();
+		StringBuffer sb = new StringBuffer();
+		Collection<String> sets = new ArrayList<String>();
+		Collection<String> wheres = new ArrayList<String>();
+		Class<?> clazz = bean.getClass();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(entity!=null){
+						if(field.get(bean)==null){
+							continue;
+						}
+						NotUpdate notUpdate = field.getAnnotation(NotUpdate.class);
+						if(notUpdate!=null){
+							continue;
+						}
+						Column column = field.getAnnotation(Column.class);
+						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+						if(primaryKey!=null){
+							if(column!=null&&!column.fieldName().isEmpty()){
+								wheres.add(column.fieldName()+"=:"+field.getName()+" AND ");
+							}else{
+								wheres.add(BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
+							}
+						}else if(primaryKey==null){
+							if(column!=null&&!column.fieldName().isEmpty()){
+								sets.add(column.fieldName()+"=:"+field.getName()+",");
+							}else if(column!=null&&column.fieldName().isEmpty()){
+								sets.add(BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName()+",");
+							}
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		sb.append("UPDATE ").append(tableName).append(" SET ");
+		for(String set : sets){
+			sb.append(set);
+		}
+		sb.delete(sb.length()-1, sb.length());
+		if(!wheres.isEmpty()){
+			sb.append(" WHERE ");
+			for(String where : wheres){
+				sb.append(where);
+			}
+			sb.delete(sb.length()-5, sb.length());
+		}else{
+			return null;
+		}
+		return sb.toString();
+	}
+	
 	public static String getDeleteSql(Class<?> clazz){
 		String key = clazz.getName()+":delete";
 		String sql = sqlCache.get(key);

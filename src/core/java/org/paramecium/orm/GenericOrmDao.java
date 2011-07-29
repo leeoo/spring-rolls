@@ -94,6 +94,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	private Number insertMongo(T bean){
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		if(entity==null){
+			throw new RuntimeException("实体没有声明标注@Entity并配置");
+		}
 		String tableName = entity.tableName();
 		DBObject object = new BasicDBObject();
 		long id = 0;
@@ -102,20 +105,18 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			for(Field field : fields){
 				field.setAccessible(true);
 				try {
-					if(entity!=null){
-						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-						String fieldName = getFieldName(field);
-						if(primaryKey!=null){
-							if(primaryKey.autoGenerateMode() == AUTO_GENERATE_MODE.NATIVE){
-								id = System.currentTimeMillis();
-							}else{
-								id = (Long)field.get(bean);
-							}
-							object.put(fieldName, id);
-							continue;
+					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+					String fieldName = getFieldName(field);
+					if(primaryKey!=null){
+						if(primaryKey.autoGenerateMode() == AUTO_GENERATE_MODE.NATIVE){
+							id = System.currentTimeMillis();
+						}else{
+							id = (Long)field.get(bean);
 						}
-						object.put(fieldName, field.get(bean));
+						object.put(fieldName, id);
+						continue;
 					}
+						object.put(fieldName, field.get(bean));
 				} catch (Exception e) {
 				}
 			}
@@ -145,6 +146,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	private void insertMongo(Collection<T> beans){
 		Entity entity = beans.iterator().next().getClass().getAnnotation(Entity.class);
+		if(entity==null){
+			throw new RuntimeException("实体没有声明标注@Entity并配置");
+		}
 		String tableName = entity.tableName();
 		List<DBObject> objects = new ArrayList<DBObject>();
 		for(T bean : beans){
@@ -154,10 +158,8 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 				for(Field field : fields){
 					field.setAccessible(true);
 					try {
-						if(entity!=null){
-							String fieldName = getFieldName(field);
-							object.put(fieldName, field.get(bean));
-						}
+						String fieldName = getFieldName(field);
+						object.put(fieldName, field.get(bean));
 					} catch (Exception e) {
 					}
 				}
@@ -174,10 +176,24 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	public void update(T bean) throws SQLException {
 		if(useNoSql){
-			updateMongo(bean);
+			updateMongo(bean,false);
 			return;
 		}
 		String sql = EntitySqlBuilder.getUpdateSql(bean);
+		genericJdbcDao.executeDMLByBean(sql, bean);
+	}
+	
+	/**
+	 * 只修改实体非空字段的数据
+	 * @param bean
+	 * @throws SQLException
+	 */
+	public void updateNotNull(T bean) throws SQLException {
+		if(useNoSql){
+			updateMongo(bean,true);
+			return;
+		}
+		String sql = EntitySqlBuilder.getUpdateSqlNotNull(bean);
 		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
 	
@@ -186,8 +202,11 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * @param bean
 	 * @return
 	 */
-	private void updateMongo(T bean){
+	private void updateMongo(T bean,boolean isNoNull){
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		if(entity==null){
+			throw new RuntimeException("实体没有声明标注@Entity并配置");
+		}
 		String tableName = entity.tableName();
 		DBObject object = new BasicDBObject();
 		DBObject where = new BasicDBObject();
@@ -196,15 +215,16 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			for(Field field : fields){
 				field.setAccessible(true);
 				try {
-					if(entity!=null){
-						String fieldName = getFieldName(field);
-						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-						Object value = field.get(bean);
-						if(primaryKey!=null){
-							where.put(fieldName, value);
-						}
-						object.put(fieldName, value);//无需判断，更新需要全部更新，不能局部更新
+					Object value = field.get(bean);
+					if(value==null&&isNoNull){
+						continue;
 					}
+					String fieldName = getFieldName(field);
+					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+					if(primaryKey!=null){
+						where.put(fieldName, value);
+					}
+					object.put(fieldName, value);//无需判断，更新需要全部更新，不能局部更新
 				} catch (Exception e) {
 				}
 			}
@@ -233,6 +253,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	private void deleteMongo(PK primaryKey){
 		Entity entity = clazz.getAnnotation(Entity.class);
+		if(entity==null){
+			throw new RuntimeException("实体没有声明标注@Entity并配置");
+		}
 		String tableName = entity.tableName();
 		DBObject where = new BasicDBObject();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -240,12 +263,10 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			for(Field field : fields){
 				field.setAccessible(true);
 				try {
-					if(entity!=null){
-						String fieldName = getFieldName(field);
-						PrimaryKey primaryKey$ = field.getAnnotation(PrimaryKey.class);
-						if(primaryKey$!=null){
-							where.put(fieldName, primaryKey);
-						}
+					String fieldName = getFieldName(field);
+					PrimaryKey primaryKey$ = field.getAnnotation(PrimaryKey.class);
+					if(primaryKey$!=null){
+						where.put(fieldName, primaryKey);
 					}
 				} catch (Exception e) {
 				}
@@ -294,6 +315,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	private static DBObject buildWhere(Object whereBean){
 		Entity entity = whereBean.getClass().getAnnotation(Entity.class);
 		DBObject where = new BasicDBObject();
+		if(entity==null){
+			throw new RuntimeException("实体没有声明标注@Entity并配置");
+		}
 		for (Class<?> superClass = whereBean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
@@ -302,36 +326,34 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 					if(field.get(whereBean)==null||field.get(whereBean).toString().isEmpty()){
 						continue;
 					}
-					if(entity!=null){
-						Column column = field.getAnnotation(Column.class);
-						if(column==null){
-							continue;
-						}
-						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-						String comparison = column.comparison().trim();
-						String fieldName = getFieldName(field);
-						if(comparison.equals("<")){
-							comparison = "$lt";
-						}else if(comparison.equals("<=")){
-							comparison = "$lte";
-						}else if(comparison.equals(">")){
-							comparison = "$gt";
-						}else if(comparison.equals(">=")){
-							comparison = "$gte";
-						}else if(comparison.equals("LIKE")){
-							continue;
-						}
-						BasicDBObject query = (BasicDBObject) where.get(fieldName);
-						if(column!=null&&(column.isDynamicWhere()||primaryKey!=null)){
-							if(query!=null){
-								query.append(comparison, field.get(whereBean));
-								where.put(fieldName, query);
+					Column column = field.getAnnotation(Column.class);
+					if(column==null){
+						continue;
+					}
+					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+					String comparison = column.comparison().trim();
+					String fieldName = getFieldName(field);
+					if(comparison.equals("<")){
+						comparison = "$lt";
+					}else if(comparison.equals("<=")){
+						comparison = "$lte";
+					}else if(comparison.equals(">")){
+						comparison = "$gt";
+					}else if(comparison.equals(">=")){
+						comparison = "$gte";
+					}else if(comparison.equals("LIKE")){
+						continue;
+					}
+					BasicDBObject query = (BasicDBObject) where.get(fieldName);
+					if(column!=null&&(column.isDynamicWhere()||primaryKey!=null)){
+						if(query!=null){
+							query.append(comparison, field.get(whereBean));
+							where.put(fieldName, query);
+						}else{
+							if(comparison.equals("=")){
+								where.put(fieldName, field.get(whereBean));
 							}else{
-								if(comparison.equals("=")){
-									where.put(fieldName, field.get(whereBean));
-								}else{
-									where.put(fieldName, new BasicDBObject(comparison, field.get(whereBean)));
-								}
+								where.put(fieldName, new BasicDBObject(comparison, field.get(whereBean)));
 							}
 						}
 					}
@@ -364,6 +386,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	@SuppressWarnings("unchecked")
 	private T selectMongo(PK primaryKey){
 		Entity entity = clazz.getAnnotation(Entity.class);
+		if(entity==null){
+			throw new RuntimeException("实体没有声明标注@Entity并配置");
+		}
 		String tableName = entity.tableName();
 		DBObject where = new BasicDBObject();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -371,12 +396,10 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 			for(Field field : fields){
 				field.setAccessible(true);
 				try {
-					if(entity!=null){
-						PrimaryKey primaryKey$ = field.getAnnotation(PrimaryKey.class);
-						String fieldName = getFieldName(field);
-						if(primaryKey$!=null){
-							where.put(fieldName, primaryKey);
-						}
+					PrimaryKey primaryKey$ = field.getAnnotation(PrimaryKey.class);
+					String fieldName = getFieldName(field);
+					if(primaryKey$!=null){
+						where.put(fieldName, primaryKey);
 					}
 				} catch (Exception e) {
 				}
@@ -412,11 +435,14 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	private Page selectMongo(Page page){
 		Entity entity = clazz.getAnnotation(Entity.class);
+		if(entity==null){
+			throw new RuntimeException("实体没有声明标注@Entity并配置");
+		}
 		String tableName = entity.tableName();
 		long count = mongoDao.count(tableName);
 		page.setTotalCount((int)count);
 		DBCursor dbCursor = null;
-		if(entity!=null&&!entity.orderBy().isEmpty()){
+		if(!entity.orderBy().isEmpty()){
 			int sort = 1;
 			String filed = entity.orderBy().toLowerCase().trim();
 			if(filed.indexOf("desc")>0){
@@ -471,12 +497,15 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	private Page selectMongo(Page page,T whereBean){
 		Entity entity = clazz.getAnnotation(Entity.class);
+		if(entity==null){
+			throw new RuntimeException("实体没有声明标注@Entity并配置");
+		}
 		String tableName = entity.tableName();
 		DBObject where = buildWhere(whereBean);
 		long count = mongoDao.count(tableName,where);
 		page.setTotalCount((int)count);
 		DBCursor dbCursor = null;
-		if(entity!=null&&!entity.orderBy().isEmpty()){
+		if(!entity.orderBy().isEmpty()){
 			int sort = 1;
 			String filed = entity.orderBy().toLowerCase().trim();
 			if(filed.indexOf("desc")>0){
@@ -529,10 +558,13 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 */
 	public Collection<T> selectMongo(T whereBean){
 		Entity entity = clazz.getAnnotation(Entity.class);
+		if(entity==null){
+			throw new RuntimeException("实体没有声明标注@Entity并配置");
+		}
 		String tableName = entity.tableName();
 		DBObject where = buildWhere(whereBean);
 		DBCursor dbCursor = null;
-		if(entity!=null&&!entity.orderBy().isEmpty()){
+		if(!entity.orderBy().isEmpty()){
 			int sort = 1;
 			String filed = entity.orderBy().toLowerCase().trim();
 			if(filed.indexOf("desc")>0){
