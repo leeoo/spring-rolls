@@ -6,7 +6,7 @@ package org.paramecium.security.exception;
  * <br>开 发 日 期:2011-4-22下午02:46:51
  * <br>项 目 信 息:paramecium:org.paramecium.security.exception.UserDisabledException.java
  */
-public class UserDisabledException extends RuntimeException{
+public final class UserDisabledException extends SecurityException{
 
 	private static final long serialVersionUID = 4932103474518535972L;
 	

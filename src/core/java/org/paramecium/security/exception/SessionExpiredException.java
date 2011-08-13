@@ -6,7 +6,7 @@ package org.paramecium.security.exception;
  * <br>开 发 日 期:2011-4-25下午01:00:44
  * <br>项 目 信 息:paramecium:org.paramecium.security.exception.SessionExpiredException.java
  */
-public class SessionExpiredException extends RuntimeException{
+public final class SessionExpiredException extends SecurityException{
 
 	private static final long serialVersionUID = 6803062953080817385L;
 
