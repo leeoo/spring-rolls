@@ -4,14 +4,14 @@ import java.sql.SQLException;
 
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.jdbc.dialect.Page;
-import org.paramecium.orm.GenericOrmDao;
+import org.paramecium.orm.NosqlOrmDao;
 
 import com.demo.entity.system.Message;
 
 @Service
 public class MessageService {
 
-	private GenericOrmDao<Message, Long> ormDao = new GenericOrmDao<Message, Long>("mg1", Message.class,true);
+	private NosqlOrmDao<Message, Long> ormDao = new NosqlOrmDao<Message, Long>("mg1", Message.class);
 	
 	public void clear(){
 		ormDao.getMongoDao().getDB().getCollection("t_message").drop();
