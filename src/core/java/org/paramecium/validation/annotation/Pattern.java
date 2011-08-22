@@ -30,7 +30,7 @@ public @interface Pattern{
 	 * 自定义正则表达式
 	 * @return
 	 */
-	String rex();
+	String regex();
 	
 
 }
