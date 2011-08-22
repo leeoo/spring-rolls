@@ -1,6 +1,5 @@
 package com.demo.web.system;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -74,7 +73,7 @@ public class UserController {
 			}else{
 				userService.update(user);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			mv.addValue("user", user);
 			Collection<Role> allRole = roleService.getAll();
 			mv.addValue("roles", allRole);
@@ -92,7 +91,7 @@ public class UserController {
 				String[] ids = idstr.split(",");
 				userService.delete(ids);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 		}
 	}
 	
@@ -104,7 +103,7 @@ public class UserController {
 				String[] ids = idstr.split(",");
 				userService.disabled(ids);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 		}
 	}
 
@@ -116,7 +115,7 @@ public class UserController {
 				String[] ids = idstr.split(",");
 				userService.enabled(ids);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 		}
 	}
 

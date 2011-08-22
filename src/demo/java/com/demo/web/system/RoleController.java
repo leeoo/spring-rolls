@@ -1,6 +1,5 @@
 package com.demo.web.system;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -65,7 +64,7 @@ public class RoleController {
 			}else{
 				roleService.update(role);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			mv.addValue("role", role);
 			Map<Resource, Collection<Resource>> resources = AuthorizationMenu.getAuthorMenu();
 			mv.addValue("resources", resources);
@@ -83,7 +82,7 @@ public class RoleController {
 				String[] ids = idstr.split(",");
 				roleService.delete(ids);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 		}
 	}
 	

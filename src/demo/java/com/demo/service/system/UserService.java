@@ -1,6 +1,5 @@
 package com.demo.service.system;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -25,9 +24,9 @@ public class UserService {
 	private GenericOrmDao<User, Integer> ormDao = new GenericOrmDao<User, Integer>("ds1", User.class);
 	
 	@ShowLabel(name="保存用户")
-	public int save(User user) throws SQLException{
+	public int save(User user) throws Exception{
 		if(user.getRoles()==null||user.getRoles().isEmpty()){
-			new SQLException("创建用户必须选择角色!");
+			new Exception("创建用户必须选择角色!");
 		}
 		int id = ormDao.insert(user).intValue();
 		for(Role role:user.getRoles()){
@@ -37,9 +36,9 @@ public class UserService {
 	}
 	
 	@ShowLabel(name="修改用户")
-	public void update(User user) throws SQLException{
+	public void update(User user) throws Exception{
 		if(user.getRoles()==null||user.getRoles().isEmpty()){
-			new SQLException("修改用户必须选择角色!");
+			new Exception("修改用户必须选择角色!");
 		}
 		ormDao.update(user);
 		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_user_role WHERE username=?",user.getUsername());
@@ -49,7 +48,7 @@ public class UserService {
 	}
 
 	@ShowLabel(name="删除用户")
-	public void delete(String[] ids) throws SQLException{
+	public void delete(String[] ids) throws Exception{
 		for(String id : ids){
 			ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_user_role WHERE username IN(SELECT su.username FROM t_security_user su WHERE su.id=?)",Integer.parseInt(id));
 			ormDao.delete(Integer.parseInt(id));
@@ -57,14 +56,14 @@ public class UserService {
 	}
 
 	@ShowLabel(name="冻结用户")
-	public void disabled(String[] ids) throws SQLException{
+	public void disabled(String[] ids) throws Exception{
 		for(String id : ids){
 			ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_security_user SET enabled=0 WHERE id=?",Integer.parseInt(id));
 		}
 	}
 
 	@ShowLabel(name="解冻用户")
-	public void enabled(String[] ids) throws SQLException{
+	public void enabled(String[] ids) throws Exception{
 		for(String id : ids){
 			ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_security_user SET enabled=1 WHERE id=?",Integer.parseInt(id));
 		}

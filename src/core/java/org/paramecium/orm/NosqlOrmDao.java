@@ -2,7 +2,6 @@ package org.paramecium.orm;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -51,9 +50,9 @@ public class NosqlOrmDao <T , PK extends Serializable>{
 	 * 插入新实体，自动判断是否生成自增数据，如果有则返回。
 	 * @param bean
 	 * @return
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public Number insert(T bean) throws SQLException {
+	public Number insert(T bean) throws Exception {
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
 		if(entity==null){
 			throw new RuntimeException("实体没有声明标注@Entity并配置");
@@ -90,9 +89,9 @@ public class NosqlOrmDao <T , PK extends Serializable>{
 	/**
 	 * 批量插入
 	 * @param bean
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public void insert(Collection<T> beans) throws SQLException {
+	public void insert(Collection<T> beans) throws Exception {
 		Entity entity = beans.iterator().next().getClass().getAnnotation(Entity.class);
 		if(entity==null){
 			throw new RuntimeException("实体没有声明标注@Entity并配置");
@@ -120,18 +119,18 @@ public class NosqlOrmDao <T , PK extends Serializable>{
 	/**
 	 * 修改实体
 	 * @param bean
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public void update(T bean) throws SQLException {
+	public void update(T bean) throws Exception {
 		updateMongo(bean,false);
 	}
 	
 	/**
 	 * 只修改实体非空字段的数据
 	 * @param bean
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public void updateNotNull(T bean) throws SQLException {
+	public void updateNotNull(T bean) throws Exception {
 		updateMongo(bean,true);
 	}
 	
@@ -173,9 +172,9 @@ public class NosqlOrmDao <T , PK extends Serializable>{
 	/**
 	 * 根据单一主键删除实体
 	 * @param primaryKey
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public void delete(PK primaryKey)throws SQLException {
+	public void delete(PK primaryKey)throws Exception {
 		Entity entity = clazz.getAnnotation(Entity.class);
 		if(entity==null){
 			throw new RuntimeException("实体没有声明标注@Entity并配置");
@@ -202,9 +201,9 @@ public class NosqlOrmDao <T , PK extends Serializable>{
 	/**
 	 * 根据动态条件删除实体，联合主键可以使用该方法进行删除实体
 	 * @param whereBean
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public void delete(T whereBean)throws SQLException {
+	public void delete(T whereBean)throws Exception {
 		Entity entity = clazz.getAnnotation(Entity.class);
 		String tableName = entity.tableName();
 		DBObject where = buildWhere(whereBean);

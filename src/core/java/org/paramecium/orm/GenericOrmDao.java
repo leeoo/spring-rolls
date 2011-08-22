@@ -1,7 +1,6 @@
 package org.paramecium.orm;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.Collection;
 
 import org.paramecium.jdbc.GenericJdbcDao;
@@ -36,9 +35,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	 * 插入新实体，自动判断是否生成自增数据，如果有则返回。
 	 * @param bean
 	 * @return
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public Number insert(T bean) throws SQLException {
+	public Number insert(T bean) throws Exception {
 		String sql = EntitySqlBuilder.getInsertSql(bean);
 		String isAuto = sql.substring(0, 1);
 		if(isAuto.equals("A")){
@@ -52,9 +51,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	/**
 	 * 批量插入
 	 * @param bean
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public void insert(Collection<T> beans) throws SQLException {
+	public void insert(Collection<T> beans) throws Exception {
 		String sql = EntitySqlBuilder.getInsertSql(beans.iterator().next());
 		genericJdbcDao.executeBatchDMLByBeans(sql.substring(1, sql.length()), beans);
 	}
@@ -62,9 +61,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	/**
 	 * 修改实体
 	 * @param bean
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public void update(T bean) throws SQLException {
+	public void update(T bean) throws Exception {
 		String sql = EntitySqlBuilder.getUpdateSql(bean);
 		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
@@ -72,9 +71,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	/**
 	 * 只修改实体非空字段的数据
 	 * @param bean
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public void updateNotNull(T bean) throws SQLException {
+	public void updateNotNull(T bean) throws Exception {
 		String sql = EntitySqlBuilder.getUpdateSqlNotNull(bean);
 		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
@@ -82,9 +81,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	/**
 	 * 根据单一主键删除实体
 	 * @param primaryKey
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public void delete(PK primaryKey)throws SQLException {
+	public void delete(PK primaryKey)throws Exception {
 		String sql = EntitySqlBuilder.getDeleteSql(clazz);
 		genericJdbcDao.executeDMLByArray(sql, primaryKey);
 	}
@@ -92,9 +91,9 @@ public final class GenericOrmDao<T , PK extends Serializable>{
 	/**
 	 * 根据动态条件删除实体，联合主键可以使用该方法进行删除实体
 	 * @param whereBean
-	 * @throws SQLException
+	 * @throws Exception
 	 */
-	public void delete(T whereBean)throws SQLException {
+	public void delete(T whereBean)throws Exception {
 		String sql = EntitySqlBuilder.getDeleteSql(clazz);
 		int start =sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);

@@ -1,7 +1,5 @@
 package com.demo.service.system;
 
-import java.sql.SQLException;
-
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.orm.NosqlOrmDao;
@@ -17,15 +15,15 @@ public class MessageService {
 		ormDao.getMongoDao().getDB().getCollection("t_message").drop();
 	}
 	
-	public long save(Message message) throws SQLException{
+	public long save(Message message) throws Exception{
 		return ormDao.insert(message).longValue();
 	}
 	
-	public void update(Message message) throws SQLException{
+	public void update(Message message) throws Exception{
 		ormDao.update(message);
 	}
 	
-	public void delete(long id) throws SQLException{
+	public void delete(long id) throws Exception{
 		ormDao.delete(id);
 	}
 	
