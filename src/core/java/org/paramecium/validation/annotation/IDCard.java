@@ -12,18 +12,18 @@ import java.lang.annotation.Target;
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-8-22下午04:25:58</b>
  * <br>项目名称(Project Name): <b>paramecium</b>
- * <br>包及类名(Package Class): <b>org.paramecium.validation.annotation.IDNumber.java</b>
+ * <br>包及类名(Package Class): <b>org.paramecium.validation.annotation.IDCard.java</b>
  */
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)    
 @Target(ElementType.FIELD)
-public @interface IDNumber{
+public @interface IDCard{
 
 	/**
 	 * 错误消息
 	 * @return
 	 */
-	String message() default "{ShowLabel}的身份证号码格式错误!";
+	String message() default "{ShowLabel}的身份证号码格式错误!例如:'211233198202060616'";
 
 }
