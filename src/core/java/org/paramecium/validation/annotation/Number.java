@@ -40,7 +40,7 @@ public @interface Number{
 	 * <br>项目名称(Project Name): <b>paramecium</b>
 	 * <br>包及类名(Package Class): <b>org.paramecium.validation.annotation.Number.java</b>
 	 */
-	enum NUMBER_TYPE{
+	public enum NUMBER_TYPE{
 		/**
 		 * 所有数值,包括整数，小数等
 		 */
