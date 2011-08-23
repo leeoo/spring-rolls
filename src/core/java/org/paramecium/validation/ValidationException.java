@@ -1,5 +1,6 @@
 package org.paramecium.validation;
 
+
 /**
  * 功能描述(Description):<br><b>
  * 自定义验证错误异常
