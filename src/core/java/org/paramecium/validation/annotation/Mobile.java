@@ -24,6 +24,6 @@ public @interface Mobile{
 	 * 错误消息
 	 * @return
 	 */
-	String message() default "{ShowLabel}的移动电话号码格式错误!例如:'13898812345'";
+	String message() default "移动电话号码的格式错误!例如:'13898812345'";
 
 }

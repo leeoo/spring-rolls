@@ -24,6 +24,6 @@ public @interface IDCard{
 	 * 错误消息
 	 * @return
 	 */
-	String message() default "{ShowLabel}的身份证号码格式错误!例如:'211233198202060616'";
+	String message() default "身份证号码的格式错误!例如:'211233198202060616'";
 
 }

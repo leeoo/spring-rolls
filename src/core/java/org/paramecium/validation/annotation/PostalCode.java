@@ -24,6 +24,6 @@ public @interface PostalCode{
 	 * 错误消息
 	 * @return
 	 */
-	String message() default "{ShowLabel}的邮政编码格式错误!例如:'130055'";
+	String message() default "邮政编码格式错误!例如:'130055'";
 
 }

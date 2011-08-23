@@ -24,6 +24,6 @@ public @interface Email{
 	 * 错误消息
 	 * @return
 	 */
-	String message() default "{ShowLabel}的邮箱地址格式错误!例如:'paramecium@gmail.com'";
+	String message() default "邮箱地址格式错误!例如:'paramecium@gmail.com'";
 
 }

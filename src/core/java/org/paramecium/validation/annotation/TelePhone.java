@@ -24,6 +24,6 @@ public @interface TelePhone{
 	 * 错误消息
 	 * @return
 	 */
-	String message() default "{ShowLabel}的座机电话号码格式错误!例如:'81298899'";
+	String message() default "座机电话号码的格式错误!例如:'81298899'";
 
 }

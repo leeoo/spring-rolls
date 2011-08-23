@@ -24,6 +24,6 @@ public @interface IpV4{
 	 * 错误消息
 	 * @return
 	 */
-	String message() default "{ShowLabel}的IP(V4)地址格式错误!例如:'192.168.1.1'";
+	String message() default "IP(V4)地址格式的错误!例如:'192.168.1.1'";
 
 }
