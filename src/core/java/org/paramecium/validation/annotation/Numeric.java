@@ -12,13 +12,13 @@ import java.lang.annotation.Target;
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-8-22下午04:25:58</b>
  * <br>项目名称(Project Name): <b>paramecium</b>
- * <br>包及类名(Package Class): <b>org.paramecium.validation.annotation.Number.java</b>
+ * <br>包及类名(Package Class): <b>org.paramecium.validation.annotation.Numeric.java</b>
  */
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)    
 @Target(ElementType.FIELD)
-public @interface Number{
+public @interface Numeric{
 
 	/**
 	 * 错误消息

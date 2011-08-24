@@ -1,9 +1,31 @@
 package org.paramecium.validation;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
-import org.paramecium.validation.annotation.Number.NUMBER_TYPE;
+import org.paramecium.ioc.annotation.ShowLabel;
+import org.paramecium.validation.annotation.Chinese;
+import org.paramecium.validation.annotation.Email;
+import org.paramecium.validation.annotation.IDCard;
+import org.paramecium.validation.annotation.IpV4;
+import org.paramecium.validation.annotation.LoginCode;
+import org.paramecium.validation.annotation.Mobile;
+import org.paramecium.validation.annotation.Numeric;
+import org.paramecium.validation.annotation.PostalCode;
+import org.paramecium.validation.annotation.QQ;
+import org.paramecium.validation.annotation.TelePhone;
+import org.paramecium.validation.annotation.Url;
+import org.paramecium.validation.annotation.Numeric.NUMBER_TYPE;
+import org.paramecium.validation.annotation.base.Compare;
+import org.paramecium.validation.annotation.base.DecimalSize;
+import org.paramecium.validation.annotation.base.Length;
+import org.paramecium.validation.annotation.base.NotNull;
+import org.paramecium.validation.annotation.base.Pattern;
+import org.paramecium.validation.annotation.base.Size;
 import org.paramecium.validation.annotation.base.Compare.COMPARISON;
 
 /**
@@ -16,13 +38,61 @@ import org.paramecium.validation.annotation.base.Compare.COMPARISON;
  */
 public class Validator {
 	
+	private final static String SHOWLABEL = "{ShowLabel}";
+	
 	/**
 	 * 验证同时获得错误信息列表，如果没有错误，返回null
 	 * @param bean
 	 * @return
 	 */
 	public static Collection<String> getErrorMessages(Object bean){
-		return null;
+		Collection<String> messages = new LinkedList<String>();
+		Map<String,Collection<Boolean>> chooseOne = new HashMap<String,Collection<Boolean>>();
+		Class<?> clazz = bean.getClass();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					Object value = field.get(bean);
+					ShowLabel showLabel = field.getAnnotation(ShowLabel.class);
+					String show = field.getName();//获取错误消息中字段名称
+					if(showLabel!=null){
+						show = showLabel.name();
+					}
+					//获取相关验证标注
+					NotNull notNull = field.getAnnotation(NotNull.class);
+					Numeric numeric = field.getAnnotation(Numeric.class);
+					Length length = field.getAnnotation(Length.class);
+					Compare compare = field.getAnnotation(Compare.class);
+					DecimalSize decimalSize = field.getAnnotation(DecimalSize.class);
+					Pattern pattern = field.getAnnotation(Pattern.class);
+					Size size = field.getAnnotation(Size.class);
+					Chinese chinese = field.getAnnotation(Chinese.class);
+					Email email = field.getAnnotation(Email.class);
+					IDCard idCard = field.getAnnotation(IDCard.class);
+					IpV4 ipV4 = field.getAnnotation(IpV4.class);
+					LoginCode loginCode = field.getAnnotation(LoginCode.class);
+					Mobile mobile = field.getAnnotation(Mobile.class);
+					PostalCode postalCode = field.getAnnotation(PostalCode.class);
+					QQ qq = field.getAnnotation(QQ.class);
+					TelePhone telePhone = field.getAnnotation(TelePhone.class);
+					Url url = field.getAnnotation(Url.class);
+					//非空验证,最先验证，因为可能会去引起空指针
+					if(notNull!=null){
+						boolean isEmpty = notNull.empty();
+						if((!isNotNull(value))&&(isEmpty&&!isNotEmpty(value))){
+							messages.add(notNull.message().replaceAll(SHOWLABEL, show));
+						}
+					}
+					if(isNotNull(value)){
+						
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		return messages;
 	}
 	
 	/**
