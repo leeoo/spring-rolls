@@ -78,7 +78,7 @@ public class Validator {
 	public static boolean isUrl(String value){
 		boolean y1 = value.matches("[http|https]+[://]+[0-9A-Za-z:/[-]_#[?][=][.]]*");
 		boolean y2 = value.matches("[0-9A-Za-z:/[-]_#[?][=][.]]*");
-		 return y1||y2;
+		return y1||y2;
 	}
 
 	/**
@@ -282,9 +282,6 @@ public class Validator {
 	 */
 	public static boolean compareSize(int value ,int min,int max){
 		return max <= value && value >= min;
-	}
-	
-	public static void main(String[] args) {
 	}
 	
 }
