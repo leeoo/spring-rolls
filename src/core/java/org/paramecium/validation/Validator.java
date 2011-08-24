@@ -38,7 +38,7 @@ import org.paramecium.validation.annotation.base.Compare.COMPARISON;
  */
 public class Validator {
 	
-	private final static String SHOWLABEL = "{ShowLabel}";
+	private final static String SHOWLABEL = "\\{ShowLabel\\}";
 	
 	/**
 	 * 验证同时获得错误信息列表，如果没有错误，返回null
@@ -81,7 +81,7 @@ public class Validator {
 					//非空验证,最先验证，因为可能会去引起空指针
 					if(notNull!=null){
 						boolean isEmpty = notNull.empty();
-						if((!isNotNull(value))&&(isEmpty&&!isNotEmpty(value))){
+						if((!isNotNull(value))||(isEmpty&&!isNotEmpty(value))){
 							messages.add(notNull.message().replaceAll(SHOWLABEL, show));
 						}
 					}
