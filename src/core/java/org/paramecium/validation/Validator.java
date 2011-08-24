@@ -8,7 +8,7 @@ import org.paramecium.validation.annotation.base.Compare.COMPARISON;
 
 /**
  * 功能描述(Description):<br><b>
- * 炎症器
+ * 验证器
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-8-22下午09:46:43</b>
  * <br>项目名称(Project Name): <b>paramecium</b>
