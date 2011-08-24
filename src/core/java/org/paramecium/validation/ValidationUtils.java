@@ -1,8 +1,10 @@
 package org.paramecium.validation;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.paramecium.validation.annotation.Number.NUMBER_TYPE;
+import org.paramecium.validation.annotation.base.Compare.COMPARISON;
 
 /**
  * 功能描述(Description):<br><b>
@@ -210,10 +212,50 @@ public class ValidationUtils {
 	/**
 	 * 比较小数
 	 * @param value
+	 * @param min
+	 * @param max
 	 * @return
 	 */
-	public static boolean compareDecimalSize(double min,double max){
-		return max > min;
+	public static boolean compareDecimalSize(double value ,double min,double max){
+		return max <= value && value >= min;
+	}
+
+	/**
+	 * 比较值
+	 * @param value
+	 * @param compareValue
+	 * @param comparison
+	 * @return
+	 */
+	public static boolean compare(Object value,Object compareValue,String comparison){
+		if(isNotEmpty(value)&&isNotEmpty(compareValue)&&isNotEmpty(comparison)){
+			if(value.getClass() != compareValue.getClass()){
+				return false;
+			}
+			long v = 0;
+			long cv = 0;
+			if(value instanceof Date){
+				v = ((Date)value).getTime();
+				cv = ((Date)compareValue).getTime();
+			}else if(value instanceof Number){
+				v = Long.parseLong(value.toString());
+				cv = Long.parseLong(compareValue.toString());
+			}else{
+				return false;
+			}
+			if(comparison.equals(COMPARISON.EQUAL)){
+				return v == cv;
+			}else if(comparison.equals(COMPARISON.LESS)){
+				return v < cv;
+			}else if(comparison.equals(COMPARISON.LESS_EQUAL)){
+				return v <= cv;
+			}else if(comparison.equals(COMPARISON.THAN)){
+				return v > cv;
+			}else if(comparison.equals(COMPARISON.THAN_EQUAL)){
+				return v >= cv;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -234,14 +276,15 @@ public class ValidationUtils {
 	/**
 	 * 比较整数
 	 * @param value
+	 * @param min
+	 * @param max
 	 * @return
 	 */
-	public static boolean compareSize(int min,int max){
-		return max > min;
+	public static boolean compareSize(int value ,int min,int max){
+		return max <= value && value >= min;
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(isNumber("2",NUMBER_TYPE.NUMERIC));
 	}
 	
 }
