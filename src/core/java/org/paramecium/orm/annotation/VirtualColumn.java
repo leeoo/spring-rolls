@@ -5,8 +5,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.paramecium.validation.annotation.base.Compare.COMPARISON;
 /**
  * 功 能 描 述:<br>
  * 虚拟字段声明，该字段只作为动态查询使用，该字段之负责带值并比较，不负责入库
@@ -30,7 +28,28 @@ public @interface VirtualColumn {
 	/**
 	 * 动态查询比较常量
 	 */
-	public static class DYNAMIC_WHERE_COMPARISON extends COMPARISON{
+	public static class DYNAMIC_WHERE_COMPARISON{
+		
+		/**
+		 * 等于
+		 */
+		public static final String EQUAL = " = ";
+		/**
+		 * 大于
+		 */
+		public static final String THAN = " > ";
+		/**
+		 * 大于或等于
+		 */
+		public static final String THAN_EQUAL = " >= ";
+		/**
+		 * 小于
+		 */
+		public static final String LESS = " < ";
+		/**
+		 * 小于或等于
+		 */
+		public static final String LESS_EQUAL = " <= ";
 		
 		/**
 		 * Like相似

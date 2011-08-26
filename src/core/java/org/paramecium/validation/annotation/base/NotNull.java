@@ -32,16 +32,4 @@ public @interface NotNull {
 	 */
 	boolean empty() default false;
 	
-	/**
-	 * 多个字段任选其一，必须(至少)有一个要填写
-	 * @return
-	 */
-	boolean chooseOne() default false;
-	
-	/**
-	 * 任选其一的字段组名，同一组的有效
-	 * @return
-	 */
-	String chooseOneGroup() default "";
-
 }

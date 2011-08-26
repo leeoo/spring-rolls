@@ -2,10 +2,7 @@ package org.paramecium.validation;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.validation.annotation.Chinese;
@@ -20,13 +17,11 @@ import org.paramecium.validation.annotation.QQ;
 import org.paramecium.validation.annotation.TelePhone;
 import org.paramecium.validation.annotation.Url;
 import org.paramecium.validation.annotation.Numeric.NUMBER_TYPE;
-import org.paramecium.validation.annotation.base.Compare;
 import org.paramecium.validation.annotation.base.DecimalSize;
 import org.paramecium.validation.annotation.base.Length;
 import org.paramecium.validation.annotation.base.NotNull;
 import org.paramecium.validation.annotation.base.Pattern;
 import org.paramecium.validation.annotation.base.Size;
-import org.paramecium.validation.annotation.base.Compare.COMPARISON;
 
 /**
  * 功能描述(Description):<br><b>
@@ -39,6 +34,8 @@ import org.paramecium.validation.annotation.base.Compare.COMPARISON;
 public class Validator {
 	
 	private final static String SHOWLABEL = "\\{ShowLabel\\}";
+	private final static String MAX = "\\{max\\}";
+	private final static String MIN = "\\{min\\}";
 	
 	/**
 	 * 验证同时获得错误信息列表，如果没有错误，返回null
@@ -47,7 +44,6 @@ public class Validator {
 	 */
 	public static Collection<String> getErrorMessages(Object bean){
 		Collection<String> messages = new LinkedList<String>();
-		Map<String,Collection<Boolean>> chooseOne = new HashMap<String,Collection<Boolean>>();
 		Class<?> clazz = bean.getClass();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
@@ -63,11 +59,10 @@ public class Validator {
 					//获取相关验证标注
 					NotNull notNull = field.getAnnotation(NotNull.class);
 					Numeric numeric = field.getAnnotation(Numeric.class);
-					Length length = field.getAnnotation(Length.class);
-					Compare compare = field.getAnnotation(Compare.class);
-					DecimalSize decimalSize = field.getAnnotation(DecimalSize.class);
-					Pattern pattern = field.getAnnotation(Pattern.class);
 					Size size = field.getAnnotation(Size.class);
+					DecimalSize decimalSize = field.getAnnotation(DecimalSize.class);
+					Length length = field.getAnnotation(Length.class);
+					Pattern pattern = field.getAnnotation(Pattern.class);
 					Chinese chinese = field.getAnnotation(Chinese.class);
 					Email email = field.getAnnotation(Email.class);
 					IDCard idCard = field.getAnnotation(IDCard.class);
@@ -86,7 +81,51 @@ public class Validator {
 						}
 					}
 					if(isNotNull(value)){
-						
+						if(numeric!=null&&!isNumber(value, numeric.type())){
+							messages.add(numeric.message().replaceAll(SHOWLABEL, show));
+						}
+						if(size!=null&&!compareSize(Integer.parseInt(value.toString()), size.min(), size.max())){
+							messages.add(size.message().replaceAll(SHOWLABEL, show).replaceAll(MIN, ""+size.min()).replaceAll(MAX, ""+size.max()));
+						}
+						if(decimalSize!=null&&!compareDecimalSize(Double.parseDouble(value.toString()), decimalSize.min(), decimalSize.max())){
+							messages.add(decimalSize.message().replaceAll(SHOWLABEL, show).replaceAll(MIN, ""+decimalSize.min()).replaceAll(MAX, ""+decimalSize.max()));
+						}
+						if(length!=null&&!checkLenth(value, length.min(), length.max())){
+							messages.add(length.message().replaceAll(SHOWLABEL, show).replaceAll(MIN, ""+length.min()).replaceAll(MAX, ""+length.max()));
+						}
+						if(pattern!=null&&!regex(pattern.regex(), value)){
+							messages.add(pattern.message().replaceAll(SHOWLABEL, show));
+						}
+						if(chinese!=null&&!isChinese(value.toString())){
+							messages.add(chinese.message().replaceAll(SHOWLABEL, show));
+						}
+						if(email!=null&&!isEmail(value.toString())){
+							messages.add(email.message());
+						}
+						if(idCard!=null&&!isIdCard(value.toString())){
+							messages.add(idCard.message());
+						}
+						if(ipV4!=null&&!isIP(value.toString())){
+							messages.add(ipV4.message());
+						}
+						if(loginCode!=null&&!isLoginCode(value.toString())){
+							messages.add(loginCode.message().replaceAll(SHOWLABEL, show));
+						}
+						if(mobile!=null&&!isMobile(value.toString())){
+							messages.add(mobile.message());
+						}
+						if(postalCode!=null&&!isPostalCode(value.toString())){
+							messages.add(postalCode.message());
+						}
+						if(qq!=null&&!isQQ(value.toString())){
+							messages.add(qq.message());
+						}
+						if(telePhone!=null&&!isTel(value.toString())){
+							messages.add(telePhone.message());
+						}
+						if(url!=null&&!isUrl(value.toString())){
+							messages.add(url.message());
+						}
 					}
 				} catch (Exception e) {
 				}
@@ -101,7 +140,15 @@ public class Validator {
 	 * @throws ValidationException
 	 */
 	public static void validation(Object bean) throws ValidationException{
-		
+		Collection<String> messages = getErrorMessages(bean);
+		if(messages==null||messages.isEmpty()){
+			return;
+		}
+		StringBuffer sb = new StringBuffer("\r\n");
+		for(String message : messages){
+			sb.append(message).append("\r\n");
+		}
+		throw new ValidationException(sb.toString());
 	}
 	
 	/**
@@ -217,22 +264,6 @@ public class Validator {
 	}
 	
 	/**
-	 * 验证空，至少保证一个不为空
-	 * @param values
-	 * @return
-	 */
-	public static boolean isNotNullChooseOne(Collection<?> values){
-		if(values!=null&&!values.isEmpty()){
-			for(Object value : values){
-				if(isNotNull(value)){
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	/**
 	 * 验证空字符
 	 * @param value
 	 * @return
@@ -244,22 +275,6 @@ public class Validator {
 		return false;
 	}
 
-	/**
-	 * 验证空字符,至少保证一个不为空字符
-	 * @param values
-	 * @return
-	 */
-	public static boolean isNotEmptyChooseOne(Collection<?> values){
-		if(values!=null&&!values.isEmpty()){
-			for(Object value : values){
-				if(isNotEmpty(value)){
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
 	/**
 	 * 验证是否为数值
 	 * @param value
@@ -287,46 +302,9 @@ public class Validator {
 	 * @return
 	 */
 	public static boolean compareDecimalSize(double value ,double min,double max){
-		return max <= value && value >= min;
+		return max >= value && value >= min;
 	}
 
-	/**
-	 * 比较值
-	 * @param value
-	 * @param compareValue
-	 * @param comparison
-	 * @return
-	 */
-	public static boolean compare(Object value,Object compareValue,String comparison){
-		if(isNotEmpty(value)&&isNotEmpty(compareValue)&&isNotEmpty(comparison)){
-			if(value.getClass() != compareValue.getClass()){
-				return false;
-			}
-			long v = 0;
-			long cv = 0;
-			if(value instanceof Date){
-				v = ((Date)value).getTime();
-				cv = ((Date)compareValue).getTime();
-			}else if(value instanceof Number){
-				v = Long.parseLong(value.toString());
-				cv = Long.parseLong(compareValue.toString());
-			}else{
-				return false;
-			}
-			if(comparison.equals(COMPARISON.EQUAL)){
-				return v == cv;
-			}else if(comparison.equals(COMPARISON.LESS)){
-				return v < cv;
-			}else if(comparison.equals(COMPARISON.LESS_EQUAL)){
-				return v <= cv;
-			}else if(comparison.equals(COMPARISON.THAN)){
-				return v > cv;
-			}else if(comparison.equals(COMPARISON.THAN_EQUAL)){
-				return v >= cv;
-			}
-		}
-		return false;
-	}
 	
 	/**
 	 * 验证长度范围
@@ -351,7 +329,7 @@ public class Validator {
 	 * @return
 	 */
 	public static boolean compareSize(int value ,int min,int max){
-		return max <= value && value >= min;
+		return max >= value && value >= min;
 	}
 	
 }
