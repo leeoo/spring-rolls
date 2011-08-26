@@ -164,7 +164,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isEmail(String value){
+	private static boolean isEmail(String value){
 		return value.matches("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
 	}
 	
@@ -173,7 +173,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isTel(String value){
+	private static boolean isTel(String value){
 		return value.matches("^(0[0-9]{2,3}\\-)?([2-9][0-9]{6,7})+(\\-[0-9]{1,4})?$");
 	}
 	
@@ -182,7 +182,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isMobile(String value){
+	private static boolean isMobile(String value){
 		 return value.matches("^[1][3,5,8]+\\d{9}");
 	}
 	
@@ -191,7 +191,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isChinese(String value){
+	private static boolean isChinese(String value){
 		 return value.matches("^[\u4e00-\u9fa5]+$");
 	}
 	
@@ -200,7 +200,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isUrl(String value){
+	private static boolean isUrl(String value){
 		boolean y1 = value.matches("[http|https]+[://]+[0-9A-Za-z:/[-]_#[?][=][.]]*");
 		boolean y2 = value.matches("[0-9A-Za-z:/[-]_#[?][=][.]]*");
 		return y1||y2;
@@ -211,7 +211,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isLoginCode(String value){
+	private static boolean isLoginCode(String value){
 		return value.matches("[a-zA-Z][a-zA-Z0-9_]{4,15}$");
 	}
 
@@ -220,7 +220,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isIdCard(String value){
+	private static boolean isIdCard(String value){
 		return value.matches("^\\d{15}(\\d{2}[A-Za-z0-9])?$");
 	}
 	
@@ -229,7 +229,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isPostalCode(String value){
+	private static boolean isPostalCode(String value){
 		return value.matches("[1-9]\\d{5}(?!\\d)");   
 	}
 	/**
@@ -237,7 +237,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isQQ(String value){
+	private static boolean isQQ(String value){
 		return value.matches("[1-9][0-9]{4,13}");
 	}
 	
@@ -246,7 +246,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isIP(String value){
+	private static boolean isIP(String value){
 		return value.matches("\\b((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\b");
 	}
 	
@@ -255,7 +255,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean regex(String regex,Object value){
+	private static boolean regex(String regex,Object value){
 		if(isNotEmpty(value)){
 			return value.toString().matches(regex);
 		}
@@ -267,7 +267,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isNotNull(Object value){
+	private static boolean isNotNull(Object value){
 		return value != null;
 	}
 	
@@ -276,7 +276,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public static boolean isNotEmpty(Object value){
+	private static boolean isNotEmpty(Object value){
 		if(isNotNull(value)){
 			return !value.toString().trim().isEmpty();
 		}
@@ -289,7 +289,7 @@ public class Validator {
 	 * @return
 	 */
 	@SuppressWarnings("static-access")
-	public static boolean isNumber(Object value,NUMBER_TYPE type){
+	private static boolean isNumber(Object value,NUMBER_TYPE type){
 		if(isNotEmpty(value)){
 			if(type.NUMERIC == type){
 				return value instanceof Number;
@@ -309,7 +309,7 @@ public class Validator {
 	 * @param max
 	 * @return
 	 */
-	public static boolean compareDecimalSize(double value ,double min,double max){
+	private static boolean compareDecimalSize(double value ,double min,double max){
 		return max >= value && value >= min;
 	}
 
@@ -321,7 +321,7 @@ public class Validator {
 	 * @param max
 	 * @return
 	 */
-	public static boolean checkLenth(Object value,int min,int max){
+	private static boolean checkLenth(Object value,int min,int max){
 		if(isNotEmpty(value)){
 			int l = value.toString().length();
 			return l>=min && l<=max;
@@ -336,7 +336,7 @@ public class Validator {
 	 * @param max
 	 * @return
 	 */
-	public static boolean compareSize(int value ,int min,int max){
+	private static boolean compareSize(int value ,int min,int max){
 		return max >= value && value >= min;
 	}
 	
