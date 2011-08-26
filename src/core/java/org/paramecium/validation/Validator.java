@@ -2,7 +2,9 @@ package org.paramecium.validation;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.validation.annotation.Chinese;
@@ -42,14 +44,15 @@ public class Validator {
 	 * @param bean
 	 * @return
 	 */
-	public static Collection<String> getErrorMessages(Object bean){
-		Collection<String> messages = new LinkedList<String>();
+	public static Map<String,Collection<String>> getErrorMessages(Object bean){
+		Map<String,Collection<String>> messagesMap = new LinkedHashMap<String,Collection<String>>();
 		Class<?> clazz = bean.getClass();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
 				field.setAccessible(true);
 				try {
+					Collection<String> messages = new LinkedList<String>();
 					Object value = field.get(bean);
 					ShowLabel showLabel = field.getAnnotation(ShowLabel.class);
 					String show = field.getName();//获取错误消息中字段名称
@@ -127,11 +130,14 @@ public class Validator {
 							messages.add(url.message());
 						}
 					}
+					if(!messages.isEmpty()){
+						messagesMap.put(field.getName(), messages);
+					}
 				} catch (Exception e) {
 				}
 			}
 		}
-		return messages;
+		return messagesMap;
 	}
 	
 	/**
@@ -140,13 +146,15 @@ public class Validator {
 	 * @throws ValidationException
 	 */
 	public static void validation(Object bean) throws ValidationException{
-		Collection<String> messages = getErrorMessages(bean);
-		if(messages==null||messages.isEmpty()){
+		Map<String , Collection<String>> map = getErrorMessages(bean);
+		if(map==null||map.isEmpty()){
 			return;
 		}
 		StringBuffer sb = new StringBuffer("\r\n");
-		for(String message : messages){
-			sb.append(message).append("\r\n");
+		for(Collection<String> messages : map.values()){
+			for(String message : messages){
+				sb.append(message).append("\r\n");
+			}
 		}
 		throw new ValidationException(sb.toString());
 	}
