@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.paramecium.ioc.ClassScanner;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.validation.annotation.Chinese;
 import org.paramecium.validation.annotation.Email;
@@ -47,6 +48,7 @@ public class Validator {
 	public static Map<String,Collection<String>> getErrorMessages(Object bean){
 		Map<String,Collection<String>> messagesMap = new LinkedHashMap<String,Collection<String>>();
 		Class<?> clazz = bean.getClass();
+		String instanceName = ClassScanner.getInstanceName(clazz);
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
@@ -131,7 +133,7 @@ public class Validator {
 						}
 					}
 					if(!messages.isEmpty()){
-						messagesMap.put(field.getName(), messages);
+						messagesMap.put(instanceName+"."+field.getName(), messages);
 					}
 				} catch (Exception e) {
 				}

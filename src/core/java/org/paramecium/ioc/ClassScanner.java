@@ -145,13 +145,21 @@ public class ClassScanner {
 			if(!service.uniqueName().isEmpty()){
 				return service.uniqueName();
 			}else{
-				String uniqueName = clazz.getSimpleName().substring(0, 1).toLowerCase()+clazz.getSimpleName().substring(1, clazz.getSimpleName().length());
-				return uniqueName;
+				return getInstanceName(clazz);
 			}
 		}else if(controller!=null){
 			return controller.namespace();
 		}
 		return null;
+	}
+	
+	/**
+	 * 获得理论实例名
+	 * @param clazz
+	 * @return
+	 */
+	public static String getInstanceName(Class<?> clazz){
+		return clazz.getSimpleName().substring(0, 1).toLowerCase()+clazz.getSimpleName().substring(1, clazz.getSimpleName().length());
 	}
 	
 	/**
