@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.paramecium.ioc.ClassScanner;
 import org.paramecium.ioc.annotation.ShowLabel;
+import org.paramecium.orm.annotation.NotUpdate;
 import org.paramecium.validation.annotation.Chinese;
 import org.paramecium.validation.annotation.Email;
 import org.paramecium.validation.annotation.IDCard;
@@ -45,7 +46,7 @@ public class Validator {
 	 * @param bean
 	 * @return
 	 */
-	public static Map<String,Collection<String>> getErrorMessages(Object bean){
+	public static Map<String,Collection<String>> getErrorMessages(Object bean,boolean isUpdate){
 		Map<String,Collection<String>> messagesMap = new LinkedHashMap<String,Collection<String>>();
 		Class<?> clazz = bean.getClass();
 		String instanceName = ClassScanner.getInstanceName(clazz);
@@ -54,6 +55,9 @@ public class Validator {
 			for(Field field : fields){
 				field.setAccessible(true);
 				try {
+					if(isUpdate && field.getAnnotation(NotUpdate.class)!=null){
+						continue;
+					}
 					Collection<String> messages = new LinkedList<String>();
 					Object value = field.get(bean);
 					ShowLabel showLabel = field.getAnnotation(ShowLabel.class);
@@ -148,7 +152,26 @@ public class Validator {
 	 * @throws ValidationException
 	 */
 	public static void validation(Object bean) throws ValidationException{
-		Map<String , Collection<String>> map = getErrorMessages(bean);
+		Map<String , Collection<String>> map = getErrorMessages(bean,false);
+		if(map==null||map.isEmpty()){
+			return;
+		}
+		StringBuffer sb = new StringBuffer("\r\n");
+		for(Collection<String> messages : map.values()){
+			for(String message : messages){
+				sb.append(message).append("\r\n");
+			}
+		}
+		throw new ValidationException(sb.toString());
+	}
+	
+	/**
+	 * 直接验证，并抛出自定义验证异常,咋更新时候，有些字段无需再次修改或展示给客户，所有验证忽略那些带有@NotUpdate的字段。
+	 * @param bean
+	 * @throws ValidationException
+	 */
+	public static void validationByUpdate(Object bean) throws ValidationException{
+		Map<String , Collection<String>> map = getErrorMessages(bean,true);
 		if(map==null||map.isEmpty()){
 			return;
 		}
