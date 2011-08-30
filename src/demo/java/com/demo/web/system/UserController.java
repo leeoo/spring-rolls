@@ -14,9 +14,10 @@ import com.demo.entity.system.Role;
 import com.demo.entity.system.User;
 import com.demo.service.system.RoleService;
 import com.demo.service.system.UserService;
+import com.demo.web.BaseController;
 
 @Controller(namespace="/system/user")
-public class UserController {
+public class UserController extends BaseController{
 	
 	@AutoInject
 	private UserService userService;
@@ -80,7 +81,7 @@ public class UserController {
 			mv.forward("/WEB-INF/demo/system/user/input.jsp");
 			return;
 		}
-		mv.redirect("/system/user/list.jhtml");
+		mv.redirect(getServletExt("/system/user/list"));
 	}
 	
 	@MappingMethod

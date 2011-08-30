@@ -33,7 +33,7 @@
 			            text: '新增',
 			            iconCls: 'icon-add',
 			            handler:function(){
-							location.href ='${base}/system/user/input.jhtml';
+							location.href ='${base}/system/user/input${ext}';
 						}
 			        }, '-', {
 			            text: '修改',
@@ -46,7 +46,7 @@
 								$('#list').datagrid('clearSelections');
 								return false;
 							}
-							location.href ='${base}/system/user/input.jhtml?id='+rows[0].id;
+							location.href ='${base}/system/user/input${ext}?id='+rows[0].id;
 						}
 			        }, '-', {
 			            text: '删除',
@@ -65,7 +65,7 @@
 					            if(d){
 					            	$.ajax({
 										   type: "get",
-										   url: "${base}/system/user/delete.jhtml",
+										   url: "${base}/system/user/delete${ext}",
 										   data: "ids="+ids.join(','),
 										   success: function(msg){
 											   $.messager.show({
@@ -98,7 +98,7 @@
 					            if(d){
 					            	$.ajax({
 										   type: "get",
-										   url: "${base}/system/user/disabled.jhtml",
+										   url: "${base}/system/user/disabled${ext}",
 										   data: "ids="+ids.join(','),
 										   success: function(msg){
 											   $.messager.show({
@@ -131,7 +131,7 @@
 					            if(d){
 					            	$.ajax({
 										   type: "get",
-										   url: "${base}/system/user/enabled.jhtml",
+										   url: "${base}/system/user/enabled${ext}",
 										   data: "ids="+ids.join(','),
 										   success: function(msg){
 											   $.messager.show({

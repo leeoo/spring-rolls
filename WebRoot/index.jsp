@@ -25,7 +25,7 @@
 <body style="background-image: url('${base}/commons/images/loginbg.gif')">
 	<div id="login" class="easyui-dialog" title="请在此登录" style="width:270px;height:155px;padding-top: 10px;"
 			buttons="#dlg-buttons" resizable="false" iconCls="icon-key">
-		<form action="${base}/login.jhtml" method="post">
+		<form action="${base}/login${ext}" method="post">
 		<center>
 			<table>
 				<tr>

@@ -13,7 +13,7 @@ import com.demo.entity.system.User;
 import com.demo.service.system.UserService;
 
 @Controller(namespace="/")
-public class LoginController {
+public class LoginController extends BaseController{
 
 	@AutoInject
 	private UserService userService;
@@ -44,7 +44,7 @@ public class LoginController {
 			userDetails.setResources(userService.getUserAuth(username));
 		}
 		SecurityThread.put(userDetails,mv.getRequest());
-		mv.redirect("/system/index.jhtml");
+		mv.redirect(getServletExt("/system/index"));
 	}
 	
 	@MappingMethod

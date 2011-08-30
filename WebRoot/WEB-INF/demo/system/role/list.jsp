@@ -32,7 +32,7 @@
 			            text: '新增',
 			            iconCls: 'icon-add',
 			            handler:function(){
-							location.href ='${base}/system/role/input.jhtml';
+							location.href ='${base}/system/role/input${ext}';
 						}
 			        }, '-', {
 			            text: '修改',
@@ -45,7 +45,7 @@
 								$('#list').datagrid('clearSelections');
 								return false;
 							}
-							location.href ='${base}/system/role/input.jhtml?id='+rows[0].id;
+							location.href ='${base}/system/role/input${ext}?id='+rows[0].id;
 						}
 			        }, '-', {
 			            text: '删除',
@@ -64,7 +64,7 @@
 					            if(d){
 					            	$.ajax({
 										   type: "get",
-										   url: "${base}/system/role/delete.jhtml",
+										   url: "${base}/system/role/delete${ext}",
 										   data: "ids="+ids.join(','),
 										   success: function(msg){
 											   $.messager.show({

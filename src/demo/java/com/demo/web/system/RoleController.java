@@ -14,9 +14,10 @@ import org.paramecium.security.Resource;
 
 import com.demo.entity.system.Role;
 import com.demo.service.system.RoleService;
+import com.demo.web.BaseController;
 
 @Controller(namespace="/system/role")
-public class RoleController {
+public class RoleController extends BaseController{
 
 	@AutoInject
 	private RoleService roleService;
@@ -71,7 +72,7 @@ public class RoleController {
 			mv.forward("/WEB-INF/demo/system/role/input.jsp");
 			return;
 		}
-		mv.redirect("/system/role/list.jhtml");
+		mv.redirect(getServletExt("/system/role/list"));
 	}
 	
 	@MappingMethod

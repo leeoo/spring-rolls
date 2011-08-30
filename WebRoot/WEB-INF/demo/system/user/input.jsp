@@ -8,7 +8,7 @@
 </head>
 <body>
 <div region="center" title="用户信息维护">
-	<form id="userForm" action="${base}system/user/save.jhtml" method="post">
+	<form id="userForm" action="${base}system/user/save${ext}" method="post">
 		<c:if test="${user.id!=null}">
 			<input type="hidden" name="user.id" value="${user.id}"/>
 			<input type="hidden" name="user.enabled" value="${user.enabled}"/>
