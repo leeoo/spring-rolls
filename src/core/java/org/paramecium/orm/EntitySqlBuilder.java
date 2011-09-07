@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.paramecium.commons.BeanUitls;
+import org.paramecium.commons.BeanUtils;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
 import org.paramecium.orm.annotation.NotUpdate;
@@ -46,7 +46,7 @@ public class EntitySqlBuilder {
 								columns.add(column.fieldName());
 								propertys.add(mark.concat(field.getName()));
 							}else{
-								columns.add(BeanUitls.getDbFieldName(field.getName()));
+								columns.add(BeanUtils.getDbFieldName(field.getName()));
 								propertys.add(mark.concat(field.getName()));
 							}
 							isAuto = false;
@@ -55,7 +55,7 @@ public class EntitySqlBuilder {
 								columns.add(column.fieldName());
 								propertys.add(primaryKey.sequenceName());
 							}else{
-								columns.add(BeanUitls.getDbFieldName(field.getName()));
+								columns.add(BeanUtils.getDbFieldName(field.getName()));
 								propertys.add(primaryKey.sequenceName());
 							}
 							isAuto = false;
@@ -64,7 +64,7 @@ public class EntitySqlBuilder {
 								columns.add(column.fieldName());
 								propertys.add(mark.concat(field.getName()));
 							}else if(column!=null&&column.fieldName().isEmpty()){
-								columns.add(BeanUitls.getDbFieldName(field.getName()));
+								columns.add(BeanUtils.getDbFieldName(field.getName()));
 								propertys.add(mark.concat(field.getName()));
 							}
 						}
@@ -120,13 +120,13 @@ public class EntitySqlBuilder {
 							if(column!=null&&!column.fieldName().isEmpty()){
 								wheres.add(column.fieldName()+"=:"+field.getName()+" AND ");
 							}else{
-								wheres.add(BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
+								wheres.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
 							}
 						}else if(primaryKey==null){
 							if(column!=null&&!column.fieldName().isEmpty()){
 								sets.add(column.fieldName()+"=:"+field.getName()+",");
 							}else if(column!=null&&column.fieldName().isEmpty()){
-								sets.add(BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName()+",");
+								sets.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+",");
 							}
 						}
 					}
@@ -178,13 +178,13 @@ public class EntitySqlBuilder {
 							if(column!=null&&!column.fieldName().isEmpty()){
 								wheres.add(column.fieldName()+"=:"+field.getName()+" AND ");
 							}else{
-								wheres.add(BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
+								wheres.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
 							}
 						}else if(primaryKey==null){
 							if(column!=null&&!column.fieldName().isEmpty()){
 								sets.add(column.fieldName()+"=:"+field.getName()+",");
 							}else if(column!=null&&column.fieldName().isEmpty()){
-								sets.add(BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName()+",");
+								sets.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+",");
 							}
 						}
 					}
@@ -231,7 +231,7 @@ public class EntitySqlBuilder {
 							if(column!=null&&!column.fieldName().isEmpty()){
 								wheres.add(column.fieldName()+"=?");
 							}else{
-								wheres.add(BeanUitls.getDbFieldName(field.getName())+"=?");
+								wheres.add(BeanUtils.getDbFieldName(field.getName())+"=?");
 							}
 							break root;
 						}
@@ -277,13 +277,13 @@ public class EntitySqlBuilder {
 							if(column!=null&&!column.fieldName().isEmpty()){
 								wheres.add("base."+column.fieldName()+"=?");
 							}else{
-								wheres.add("base."+BeanUitls.getDbFieldName(field.getName())+"=?");
+								wheres.add("base."+BeanUtils.getDbFieldName(field.getName())+"=?");
 							}
 						}
 						if(column!=null&&!column.fieldName().isEmpty()){
 							columns.add("base."+column.fieldName()+" "+field.getName());
 						}else if(column!=null&&column.fieldName().isEmpty()){
-							columns.add("base."+BeanUitls.getDbFieldName(field.getName()));
+							columns.add("base."+BeanUtils.getDbFieldName(field.getName()));
 						}else if(referenceColumn!=null&&referenceColumn.subSelectSql()!=null&&!referenceColumn.subSelectSql().isEmpty()){
 							columns.add(referenceColumn.subSelectSql());
 						}
@@ -333,7 +333,7 @@ public class EntitySqlBuilder {
 							if(column!=null&&!column.fieldName().isEmpty()){
 								wheres.add(column.logical()+column.fieldName()+column.comparison()+":"+field.getName());
 							}else{
-								wheres.add(VirtualColumn.DYNAMIC_WHERE_LOGIC.AND+BeanUitls.getDbFieldName(field.getName())+"=:"+field.getName());
+								wheres.add(VirtualColumn.DYNAMIC_WHERE_LOGIC.AND+BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName());
 							}
 						}else if(virtualColumn!=null){
 							wheres.add(virtualColumn.logical()+":"+field.getName()+virtualColumn.comparison()+virtualColumn.comparisonColumn());
@@ -341,7 +341,7 @@ public class EntitySqlBuilder {
 							if(!column.fieldName().isEmpty()){
 								wheres.add(column.logical()+column.fieldName()+column.comparison()+":"+field.getName());
 							}else{
-								wheres.add(column.logical()+BeanUitls.getDbFieldName(field.getName())+column.comparison()+":"+field.getName());
+								wheres.add(column.logical()+BeanUtils.getDbFieldName(field.getName())+column.comparison()+":"+field.getName());
 							}
 						}
 					}

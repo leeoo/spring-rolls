@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.paramecium.commons.BeanUitls;
+import org.paramecium.commons.BeanUtils;
 import org.paramecium.commons.JdbcUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -172,7 +172,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(beanParams==null){
 			return query(connection,sql,clazz);
 		}
-		Map<String, Object> mapParams = BeanUitls.bean2Map(beanParams);
+		Map<String, Object> mapParams = BeanUtils.bean2Map(beanParams);
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
@@ -291,7 +291,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public Object queryUniqueColumnValueByBean(final Connection connection,final String sql,Object beanParams) throws SQLException {
-		Map<String,Object> values = queryUniqueByMap(connection,sql, BeanUitls.bean2Map(beanParams));
+		Map<String,Object> values = queryUniqueByMap(connection,sql, BeanUtils.bean2Map(beanParams));
 		return values.entrySet().iterator().next().getValue();
 	}
 	
@@ -443,7 +443,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(bean==null){
 			return executeDML(connection,sql);
 		}
-		Map<String, Object> mapParams = BeanUitls.bean2Map(bean);
+		Map<String, Object> mapParams = BeanUtils.bean2Map(bean);
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
@@ -467,7 +467,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(bean==null){
 			return insertGetGeneratedKey(connection,sql);
 		}
-		Map<String, Object> mapParams = BeanUitls.bean2Map(bean);
+		Map<String, Object> mapParams = BeanUtils.bean2Map(bean);
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
@@ -552,7 +552,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public int[] executeBatchDMLByBeans(final Connection connection,final String sql,Collection<?> beanParamsList) throws SQLException {
 		Collection<Map<String, Object>> mapParamsList = new ArrayList<Map<String,Object>>();
 		for(Object bean : beanParamsList){
-			mapParamsList.add(BeanUitls.bean2Map(bean));
+			mapParamsList.add(BeanUtils.bean2Map(bean));
 		}
 		Collection<Map<Integer, Object>> values = JdbcUtils.getPreparedStatementSql(sql, mapParamsList);
 		String preparedSql = (String) (values.iterator().next().get(-19820206));

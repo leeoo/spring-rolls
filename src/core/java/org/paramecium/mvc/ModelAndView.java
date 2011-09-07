@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.paramecium.commons.BeanUitls;
+import org.paramecium.commons.BeanUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 /**
@@ -55,7 +55,7 @@ public class ModelAndView {
 					try {
 						String name = bn.concat(field.getName());
 						String value = request.getParameter(name);
-						BeanUitls.setFieldValue(field, value, bean);
+						BeanUtils.setFieldValue(field, value, bean);
 					} catch (Exception e) {
 					}
 				}
@@ -82,7 +82,7 @@ public class ModelAndView {
 					try {
 						String name = field.getName();
 						String value = request.getParameter(name);
-						BeanUitls.setFieldValue(field, value, bean);
+						BeanUtils.setFieldValue(field, value, bean);
 					} catch (Exception e) {
 					}
 				}
@@ -103,7 +103,7 @@ public class ModelAndView {
 		if(value==null){
 			return null;
 		}
-		return (T)BeanUitls.getValueByClass(value, clazz);
+		return (T)BeanUtils.getValueByClass(value, clazz);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class ModelAndView {
 		}
 		Collection<Object> list = new HashSet<Object>();
 		for(String value : values){
-			list.add(BeanUitls.getValueByClass(value, clazz));
+			list.add(BeanUtils.getValueByClass(value, clazz));
 		}
 		return list;
 	}

@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.paramecium.commons.BeanUitls;
+import org.paramecium.commons.BeanUtils;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.nosql.mongodb.GenericMonogDBNativeDao;
 import org.paramecium.orm.annotation.Column;
@@ -295,7 +295,7 @@ public class NosqlOrmDao <T , PK extends Serializable>{
 			}
 		}
 		DBObject object = mongoDao.findOne(tableName, where);
-		return (T) BeanUitls.map2Bean(clazz, object.toMap(), true);
+		return (T) BeanUtils.map2Bean(clazz, object.toMap(), true);
 	}
 	
 	/**
@@ -399,7 +399,7 @@ public class NosqlOrmDao <T , PK extends Serializable>{
 		if(column!=null&&!column.fieldName().isEmpty()){
 			return column.fieldName();
 		}else{
-			return BeanUitls.getDbFieldName(field.getName());
+			return BeanUtils.getDbFieldName(field.getName());
 		}
 	}
 	
@@ -411,7 +411,7 @@ public class NosqlOrmDao <T , PK extends Serializable>{
 		Collection<T> beans = new ArrayList<T>();
 		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
 			DBObject object = it.next();
-			beans.add((T) BeanUitls.map2Bean(clazz, object.toMap(), true));
+			beans.add((T) BeanUtils.map2Bean(clazz, object.toMap(), true));
 		}
 		return beans;
 	}

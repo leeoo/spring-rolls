@@ -13,9 +13,9 @@ import org.paramecium.log.LoggerFactory;
  * jdbc所涉及到的bean工具
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2011-3-30下午02:12:56
- * <br>项 目 信 息:paramecium:org.paramecium.commons.BeanUitls.java
+ * <br>项 目 信 息:paramecium:org.paramecium.commons.BeanUtils.java
  */
-public abstract class BeanUitls {
+public abstract class BeanUtils {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	
@@ -190,6 +190,33 @@ public abstract class BeanUitls {
 			}
 		}
 		return strb.toString();
+	}
+	
+	/**
+	 * 根据属性获得值
+	 * @param name
+	 * @param bean
+	 * @return
+	 */
+	public static Object getFieldValue(Object bean,String name){
+		try {
+			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
+				Field[] fields = superClass.getDeclaredFields();
+				for(Field field : fields){
+					field.setAccessible(true);
+					try {
+						if(field.getName().equals(name)){
+							return field.get(bean);
+						}
+					} catch (Exception e) {
+						logger.warn(e.fillInStackTrace());
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }
