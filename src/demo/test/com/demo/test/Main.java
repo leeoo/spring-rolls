@@ -1,5 +1,6 @@
 package com.demo.test;
 
+import org.paramecium.search.SearchIndexCreator;
 import org.paramecium.validation.Validator;
 
 public class Main {
@@ -11,6 +12,7 @@ public class Main {
 		test.setIdCard("211233198202060616");
 		test.setSize(20);
 		Validator.validation(test);
+		SearchIndexCreator.createIndex(test);
 	}
 	
 }
