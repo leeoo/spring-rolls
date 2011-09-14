@@ -74,16 +74,12 @@ public class SearchIndexCreator {
 	public synchronized static void createIndex(Object bean) {
 		IndexWriter writer = null;
 		Directory directory = null;
-		//boolean isRecreate = false;
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
 			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_33,null);
 			conf.setMergeScheduler(new ReportingMergeScheduler());
-			try {
-				writer = new IndexWriter(directory, conf);
-			} catch (Exception e) {
-				//writer = new IndexWriter(directory, conf);
-			}
+			conf.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
+			writer = new IndexWriter(directory, conf);
 			Document doc = new Document();
 			String kekwordName = getKeywordName(bean.getClass());
 			String kekwordValue = (String)BeanUtils.getFieldValue(bean, kekwordName);
