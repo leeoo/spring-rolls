@@ -14,7 +14,7 @@ public class Test {
 	private String name;
 
 	@NotNull
-	@Length(min=4,max=10)
+	@Length(min=4,max=20)
 	@ShowLabel(name = "地址")
 	@TextWord
 	private String address;
