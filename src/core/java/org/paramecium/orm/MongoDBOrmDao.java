@@ -20,13 +20,13 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 /**
  * 功能描述(Description):<br><b>
- * Nosql的ROM映射操作类，默认是MongoDB
+ * MongoDB数据库的ROM映射操作类
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-8-19下午10:02:22</b>
  * <br>项目名称(Project Name): <b>paramecium</b>
- * <br>包及类名(Package Class): <b>org.paramecium.orm.NosqlOrmDao.java</b>
+ * <br>包及类名(Package Class): <b>org.paramecium.orm.MongoDBOrmDao.java</b>
  */
-public class NosqlOrmDao <T , PK extends Serializable>{
+public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T , PK>{
 	
 	private GenericMonogDBNativeDao mongoDao; 
 	
@@ -36,7 +36,7 @@ public class NosqlOrmDao <T , PK extends Serializable>{
 	 * 默认构造方法会自动加载事务线程
 	 * 如果启用NoSql，将会自动使用MongoDB。
 	 */
-	public NosqlOrmDao(final String dataSourceName,Class<T> clazz){
+	public MongoDBOrmDao(final String dataSourceName,Class<T> clazz){
 		mongoDao = new GenericMonogDBNativeDao(dataSourceName);
 		this.clazz = clazz;
 	}

@@ -2,14 +2,14 @@ package com.demo.service.system;
 
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.jdbc.dialect.Page;
-import org.paramecium.orm.NosqlOrmDao;
+import org.paramecium.orm.MongoDBOrmDao;
 
 import com.demo.entity.system.Message;
 
 @Service
 public class MessageService {
 
-	private NosqlOrmDao<Message, Long> ormDao = new NosqlOrmDao<Message, Long>("mg1", Message.class);
+	private MongoDBOrmDao<Message, Long> ormDao = new MongoDBOrmDao<Message, Long>("mg1", Message.class);
 	
 	public void clear(){
 		ormDao.getMongoDao().getDB().getCollection("t_message").drop();

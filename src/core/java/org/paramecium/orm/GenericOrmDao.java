@@ -13,7 +13,7 @@ import org.paramecium.orm.annotation.Entity;
  * <br>开 发 日 期:2011-4-1下午02:37:54
  * <br>项 目 信 息:paramecium:org.paramecium.orm.GenericOrmDao.java
  */
-public final class GenericOrmDao<T , PK extends Serializable>{
+public final class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T , PK>{
 	
 	private GenericJdbcDao genericJdbcDao;
 	
