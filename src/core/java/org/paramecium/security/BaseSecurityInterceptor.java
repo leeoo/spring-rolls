@@ -46,6 +46,7 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 			}
 			UserDetails user = SecurityThread.get();
 			if(user==null){
+				SecurityThread.putSecurity(SecurityThread.Security.AnonymousException);
 				throw new AnonymousException("匿名用户没有登录！");
 			}
 			Resource resource = buildResource(service.getClass(), method);
@@ -56,6 +57,7 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 					}
 				}
 			}
+			SecurityThread.putSecurity(SecurityThread.Security.AuthorizationException);
 			throw new AuthorizationException("该资源没有对此用户授权！");
 		}
 		return nextIntercept(service, method, parameters, proxy);

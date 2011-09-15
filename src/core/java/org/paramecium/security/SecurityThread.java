@@ -19,6 +19,40 @@ public class SecurityThread {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	private final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();
+	private final static ThreadLocal<Security> securityThreadLocal = new ThreadLocal<Security>();
+	
+	/**
+	 * 功能描述(Description):<br><b>
+	 * 安全问题
+	 * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
+	 * <br>建立日期(Create Date): <b>2011-9-15下午09:51:10</b>
+	 * <br>项目名称(Project Name): <b>paramecium</b>
+	 * <br>包及类名(Package Class): <b>org.paramecium.security.SecurityThread.java</b>
+	 */
+	public static enum Security{
+		Null,
+		SessionExpiredException,
+		UserKickException,
+		UserDisabledException,
+		AnonymousException,
+		AuthorizationException
+	}
+	
+	/**
+	 * 放入安全问题
+	 * @param security
+	 */
+	public static void putSecurity(Security security){
+		securityThreadLocal.set(security);
+	}
+
+	/**
+	 * 获取安全问题
+	 * @return
+	 */
+	public static Security getSecurity(){
+		return securityThreadLocal.get();
+	}
 	
 	/**
 	 * 开启本次线程
@@ -27,8 +61,10 @@ public class SecurityThread {
 	public static void startThread(HttpServletRequest request){
 		if(request.getSession(false)!=null){
 			sessionThreadLocal.set(request.getSession(false).getId());
+			securityThreadLocal.set(Security.Null);
 			return;
 		}
+		putSecurity(SecurityThread.Security.SessionExpiredException);
 		throw new SessionExpiredException("当前 Session已经过期!");
 	}
 	
@@ -37,6 +73,7 @@ public class SecurityThread {
 	 */
 	public static void endThread(){
 		sessionThreadLocal.remove();
+		securityThreadLocal.remove();
 	}
 	
 	/**
@@ -51,6 +88,7 @@ public class SecurityThread {
 			put(userDetails);
 			return;
 		}
+		putSecurity(SecurityThread.Security.SessionExpiredException);
 		throw new SessionExpiredException("当前 Session已经过期!");
 	}
 	
@@ -83,12 +121,15 @@ public class SecurityThread {
 		if(sessionId!=null){
 			UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
 			if(userDetails==null){//如果在线用户列表不存在该用户，而该用户线程仍有信息，被视为强制被踢出(一般管理员可用使用该权限)
+				putSecurity(SecurityThread.Security.UserKickException);
 				throw new UserKickException("用户已经被强制退出!");
 			}else if(!userDetails.isEnable()){//如果账户是被冻结的，抛出异常
+				putSecurity(SecurityThread.Security.UserDisabledException);
 				throw new UserDisabledException("用户已经被冻结!");
 			}
 			return userDetails;
 		}
+		putSecurity(SecurityThread.Security.SessionExpiredException);
 		throw new SessionExpiredException("当前 Session已经过期!");
 	}
 	

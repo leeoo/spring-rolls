@@ -84,13 +84,11 @@ public class ControllerExtractor {
 						if(!mappingMethod.url().isEmpty()){
 							if(mappingMethod.url().equals(URIStrs[1])){
 								method.invoke(controller, mv);
-								end();
-								return !mv.isRedirect();
+								return security(mv);
 							}
 						}else if((ControllerExtractor.lineStr+method.getName()).equals(URIStrs[1])){
 							method.invoke(controller, mv);
-							end();
-							return !mv.isRedirect();
+							return security(mv);
 						}
 					}
 				}
@@ -118,6 +116,30 @@ public class ControllerExtractor {
 			response.setStatus(404);
 			return true;
 		}
+	}
+	
+	private static boolean security(ModelAndView modelAndView){
+		try{
+			if(SecurityThread.getSecurity() != SecurityThread.Security.Null){
+				if(SecurityThread.getSecurity() == SecurityThread.Security.AnonymousException){
+					modelAndView.getResponse().sendRedirect(SecurityConfig.anonymousExceptionPage);
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.AuthorizationException){
+					modelAndView.getResponse().setStatus(403);
+					modelAndView.getResponse().sendRedirect(SecurityConfig.authorizationExceptionPage);
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserKickException){
+					modelAndView.getResponse().sendRedirect(SecurityConfig.userKickExceptionPage);
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserDisabledException){
+					modelAndView.getResponse().sendRedirect(SecurityConfig.userDisabledExceptionPage);
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.SessionExpiredException){
+					modelAndView.getResponse().sendRedirect(SecurityConfig.sessionExpiredExceptionPage);
+				}/*继续扩展，可在配置文件中加入更多异常*/
+				end();
+				return false;
+			}
+		}catch (Exception e) {
+		}
+		end();
+		return !modelAndView.isRedirect();
 	}
 	
 	private static void end(){
