@@ -25,6 +25,7 @@
 				<tr>
 					<td>授权信息:</td>
 					<td>
+						<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
 						<c:forEach items="${resources}" var="resourceKey">
 							<b>${resourceKey.key.showLabel}</b><br>&nbsp;&nbsp;&nbsp;&nbsp;
 								<c:forEach items="${resourceKey.value}" var="resource">
@@ -46,6 +47,7 @@
 								</c:forEach>
 							<br>
 						</c:forEach>
+						</div>
 					</td>
 				</tr>
 				<tr>
