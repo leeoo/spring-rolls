@@ -35,5 +35,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sitemesh-2.4.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-2.6.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-core-3.3.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/IKAnalyzer3.2.8.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

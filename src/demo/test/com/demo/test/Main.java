@@ -8,13 +8,13 @@ public class Main {
 	
 	public static void main(String[] args) {
 		/*Test test = new Test();
-		test.setName("1");
-		test.setAddress("hello world,this is a monkey!");
+		test.setName("2");
+		test.setAddress("北京市青年大街!");
 		test.setIdCard("211233198202060616");
 		test.setSize(20);
 		Validator.validation(test);
 		SearchIndexCreator.createIndex(test);*/
-		Collection<Object> list = SearchIndexCreator.searchKeyword(Test.class, "hello");
+		Collection<Object> list = SearchIndexCreator.searchKeyword(Test.class, "沈阳市");
 		for(Object o : list){
 			System.out.println(o);
 		}

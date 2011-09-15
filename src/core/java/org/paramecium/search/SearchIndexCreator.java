@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.LimitTokenCountAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
@@ -17,8 +14,6 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.MergeScheduler;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.MergePolicy.OneMerge;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -32,6 +27,8 @@ import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.search.annotation.Index;
 import org.paramecium.search.annotation.TextWord;
+import org.wltea.analyzer.lucene.IKAnalyzer;
+import org.wltea.analyzer.lucene.IKQueryParser;
 
 /**
  * 功能描述(Description):<br>
@@ -77,7 +74,7 @@ public class SearchIndexCreator {
 		Directory directory = null;
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_33, new StandardAnalyzer(Version.LUCENE_33));
+			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_33, new IKAnalyzer());
 			conf.setMergeScheduler(new ReportingMergeScheduler());
 			conf.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 			writer = new IndexWriter(directory, conf);
@@ -135,7 +132,7 @@ public class SearchIndexCreator {
 		Directory directory = null;
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_33, new StandardAnalyzer(Version.LUCENE_33));
+			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_33, new IKAnalyzer());
 			conf.setMergeScheduler(new ReportingMergeScheduler());
 			writer = new IndexWriter(directory, conf);
 			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -201,9 +198,7 @@ public class SearchIndexCreator {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(clazz) + "//"));
 			reader = IndexReader.open(directory, true);
 			searcher = new IndexSearcher(reader);
-			Analyzer analyzer = new LimitTokenCountAnalyzer(new StandardAnalyzer(Version.LUCENE_33), 100);
-			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_33, textPropertyNames, analyzer);
-		    Query query = parser.parse(queryText);
+		    Query query = IKQueryParser.parseMultiField(textPropertyNames, queryText);
 			TopDocs topDocs = searcher.search(query, 100);
 			ScoreDoc[] hits = topDocs.scoreDocs;
 			for (int i = 0; i < hits.length; i++) {
