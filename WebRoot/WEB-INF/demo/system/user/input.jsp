@@ -29,7 +29,7 @@
 					<td><input name="user.password" type="password" class="easyui-validatebox" required="true" validType="length[2,50]" style="width: 300px;" value="${user.password}"/></td>
 				</tr>
 				<tr>
-					<td>赋予角色:</td>
+					<td>角色分配:</td>
 					<td>
 						<c:forEach items="${roles}" var="role">
 							<c:if test="${user==null || user.roles==null}">
