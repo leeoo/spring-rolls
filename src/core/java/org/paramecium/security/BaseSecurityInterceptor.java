@@ -8,6 +8,7 @@ import org.paramecium.aop.cglib.MethodInterceptor;
 import org.paramecium.aop.cglib.MethodProxy;
 import org.paramecium.ioc.ApplicationContext;
 import org.paramecium.ioc.ClassScanner;
+import org.paramecium.log.system.CollectorFactory;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.annotation.Security;
 import org.paramecium.security.exception.AnonymousException;
@@ -31,6 +32,7 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 	 * 首先要拦截的安全验证,其他需要继承此抽象类后，实现nextIntercept方法
 	 */
 	public Object intercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
+		CollectorFactory.getBeanCollector().put("Class:"+service.getClass().getSuperclass().getName()+" Method:"+method.getName());//放入日志缓存
 		if(!SecurityConfig.iocSecurity){
 			return nextIntercept(service, method, parameters, proxy);
 		}else if(ApplicationContext.isSecurityThreadLocal.get()!=null&&!ApplicationContext.isSecurityThreadLocal.get()){

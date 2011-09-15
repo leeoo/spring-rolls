@@ -16,6 +16,7 @@ import org.paramecium.commons.BeanUtils;
 import org.paramecium.commons.JdbcUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
+import org.paramecium.log.system.CollectorFactory;
 
 /**
  * 功能描述(Description):<br><b>
@@ -42,6 +43,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = statement.executeQuery(sql);
 		Collection<Map<String, Object>> collection = JdbcUtils.getCollection(resultSet,this.isManyTable);
 		logger.debug(JdbcUtils.getNativeDMLSql(sql));
+		CollectorFactory.getJdbcCollector().put(sql);//放入日志缓存
 		JdbcUtils.close(statement, resultSet);
 		return collection;
 	}
@@ -58,6 +60,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = statement.executeQuery(sql);
 		Collection<?> collection = JdbcUtils.getCollection(resultSet,clazz);
 		logger.debug(JdbcUtils.getNativeDMLSql(sql));
+		CollectorFactory.getJdbcCollector().put(sql);//放入日志缓存
 		JdbcUtils.close(statement, resultSet);
 		return collection;
 	}
@@ -81,6 +84,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<Map<String, Object>> collection = JdbcUtils.getCollection(resultSet,this.isManyTable);
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -105,6 +109,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<?> collection = JdbcUtils.getCollection(resultSet,clazz);
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -130,6 +135,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<Map<String, Object>> collection = JdbcUtils.getCollection(resultSet,this.isManyTable);
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -156,6 +162,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<?> collection = JdbcUtils.getCollection(resultSet,clazz);
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -183,6 +190,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Collection<?> collection = JdbcUtils.getCollection(resultSet,clazz);
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement, resultSet);
 		return collection;
 	}
@@ -305,6 +313,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		statement.execute(sql);
 		logger.debug(JdbcUtils.getNativeDDLSql(sql));
+		CollectorFactory.getJdbcCollector().put(sql);//放入日志缓存
 		JdbcUtils.close(statement);
 	}
 	
@@ -318,6 +327,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Statement statement = connection.createStatement();
 		int result = statement.executeUpdate(sql);
 		logger.debug(JdbcUtils.getNativeDMLSql(sql));
+		CollectorFactory.getJdbcCollector().put(sql);//放入日志缓存
 		JdbcUtils.close(statement);
 		return result;
 	}
@@ -335,6 +345,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		resultSet.next();
 		Number value = (Number) resultSet.getObject(1);
 		logger.debug(JdbcUtils.getNativeDMLSql(sql));
+		CollectorFactory.getJdbcCollector().put(sql);//放入日志缓存
 		JdbcUtils.close(statement,resultSet);
 		return value;
 	}
@@ -356,6 +367,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		int result = preparedStatement.executeUpdate();
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement);
 		return result;
 	}
@@ -380,6 +392,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		resultSet.next();
 		Number value = (Number) resultSet.getObject(1);
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement,resultSet);
 		return value;
 	}
@@ -403,6 +416,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		int result = preparedStatement.executeUpdate();
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement);
 		return result;
 	}
@@ -429,6 +443,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		resultSet.next();
 		Number value2 = (Number) resultSet.getObject(1);
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement,resultSet);
 		return value2;
 	}
@@ -453,6 +468,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		int result = preparedStatement.executeUpdate();
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement);
 		return result;
 	}
@@ -480,6 +496,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		resultSet.next();
 		Number value2 = (Number) resultSet.getObject(1);
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement,resultSet);
 		return value2;
 	}
@@ -497,6 +514,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			logger.debug(JdbcUtils.getNativeDMLSql(sql));
 		}
 		int[] result = statement.executeBatch();
+		CollectorFactory.getJdbcCollector().put(sqls.toString());//放入日志缓存
 		JdbcUtils.close(statement);
 		return result;
 	}
@@ -514,6 +532,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			logger.debug(JdbcUtils.getNativeDMLSql(sql));
 		}
 		int[] result = statement.executeBatch();
+		CollectorFactory.getJdbcCollector().put(sqls.toString());//放入日志缓存
 		JdbcUtils.close(statement);
 		return result;
 	}
@@ -538,6 +557,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		int[] result = preparedStatement.executeBatch();
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement);
 		return result;
 	}
@@ -566,6 +586,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		int[] result = preparedStatement.executeBatch();
 		logger.debug(JdbcUtils.getNativeDMLSql(preparedStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(preparedStatement.toString());//放入日志缓存
 		JdbcUtils.close(preparedStatement);
 		return result;
 	}
@@ -579,6 +600,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		CallableStatement callableStatement = connection.prepareCall(sql);
 		callableStatement.execute();
 		logger.debug(JdbcUtils.getNativeDMLSql(callableStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(callableStatement.toString());//放入日志缓存
 		JdbcUtils.close(callableStatement);
 	}
 
@@ -597,6 +619,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		callableStatement.execute();
 		logger.debug(JdbcUtils.getNativeDMLSql(callableStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(callableStatement.toString());//放入日志缓存
 		JdbcUtils.close(callableStatement);
 	}
 	
@@ -618,6 +641,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			collection.add(callableStatement.getObject((j++)));
 		}
 		logger.debug(JdbcUtils.getNativeDMLSql(callableStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(callableStatement.toString());//放入日志缓存
 		JdbcUtils.close(callableStatement);
 		return collection;
 	}
@@ -646,6 +670,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			returnValues.put(outParam, callableStatement.getObject(outParam));
 		}
 		logger.debug(JdbcUtils.getNativeDMLSql(callableStatement.toString()));
+		CollectorFactory.getJdbcCollector().put(callableStatement.toString());//放入日志缓存
 		JdbcUtils.close(callableStatement);
 		return returnValues;
 	}

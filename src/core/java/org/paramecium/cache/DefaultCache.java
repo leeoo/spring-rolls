@@ -9,17 +9,17 @@ import java.util.LinkedHashMap;
  * <br>开 发 日 期:2011-7-1下午04:30:23
  * <br>项 目 信 息:paramecium:org.paramecium.cache.DefaultCache.java
  */
-public class DefaultCache extends BaseCache{
+public class DefaultCache<KEY extends Object,VALUE extends Object> extends BaseCache<KEY, VALUE>{
 
 	private static final long serialVersionUID = -8179064197236303233L;
 	
 	public DefaultCache(String name,int initSize){
 		this.maxSize = initSize;
 		this.name = name;
-		map = new LinkedHashMap<Object, Element>();
+		map = new LinkedHashMap<KEY,Element<KEY,VALUE>>();
 	}
 	
-	public synchronized void put(Object key, Object value) {
+	public synchronized void put(KEY key, VALUE value) {
 		if(this.maxSize < size()){
 			map.remove(map.keySet().iterator().next());
 			/*Collection<Element> elements = map.values();

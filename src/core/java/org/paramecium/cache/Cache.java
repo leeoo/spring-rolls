@@ -9,21 +9,21 @@ import java.util.Collection;
  * <br>开 发 日 期:2011-7-1下午04:30:02
  * <br>项 目 信 息:paramecium:org.paramecium.cache.Cache.java
  */
-public interface Cache {
+public interface Cache<KEY extends Object,VALUE extends Object> {
 
 	public void clear();
 	
 	public int size();
 	
-	public void put(Object key,Object value);
+	public void put(KEY key,VALUE value);
 	
-	public Object get(Object key);
+	public Object get(KEY key);
 	
-	public void remove(Object key);
+	public void remove(KEY key);
 	
-	public Collection<?> getKeys();
+	public Collection<KEY> getKeys();
 	
-	public Collection<?> getValues();
+	public Collection<VALUE> getValues();
 	
 	public boolean isEmpty();
 	

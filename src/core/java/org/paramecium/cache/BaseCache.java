@@ -13,11 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * <br>开 发 日 期:2011-7-1下午04:29:51
  * <br>项 目 信 息:paramecium:org.paramecium.cache.BaseCache.java
  */
-public abstract class BaseCache implements Cache,Cloneable, Serializable {
+public abstract class BaseCache<KEY extends Object,VALUE extends Object> implements Cache<KEY, VALUE>,Cloneable, Serializable {
 
 	private static final long serialVersionUID = 8139192731446878665L;
 
-	protected Map<Object,Element> map = new ConcurrentHashMap<Object, Element>();
+	protected Map<KEY,Element<KEY,VALUE>> map = new ConcurrentHashMap<KEY,Element<KEY,VALUE>>();
 	
 	public int maxSize = 500;
 	
@@ -27,22 +27,22 @@ public abstract class BaseCache implements Cache,Cloneable, Serializable {
 		map.clear();
 	}
 
-	public synchronized Object get(Object key) {
-		Element element = map.get(key);
+	public synchronized Object get(KEY key) {
+		Element<KEY,VALUE> element = map.get(key);
 		return element == null?null:element.getValue();
 	}
 
-	public synchronized Collection<?> getKeys() {
+	public synchronized Collection<KEY> getKeys() {
 		return map.keySet();
 	}
 
-	public synchronized Collection<?> getValues() {
-		Collection<Element> elements = map.values();
+	public synchronized Collection<VALUE> getValues() {
+		Collection<Element<KEY,VALUE>> elements = map.values();
 		if(map == null || map.isEmpty()){
 			return null;
 		}
-		Collection<Object> values = new ArrayList<Object>();
-		for(Element element : elements){
+		Collection<VALUE> values = new ArrayList<VALUE>();
+		for(Element<KEY,VALUE> element : elements){
 			values.add(element.getValue());
 		}
 		return values;
@@ -52,8 +52,8 @@ public abstract class BaseCache implements Cache,Cloneable, Serializable {
 		return map.isEmpty();
 	}
 
-	public synchronized void put(Object key, Object value) {
-		Element element = new Element(key, value);
+	public synchronized void put(KEY key, VALUE value) {
+		Element<KEY,VALUE> element = new Element<KEY,VALUE>(key, value);
 		map.put(key, element);
 	}
 

@@ -12,15 +12,17 @@ import java.util.Map;
  */
 public class CacheManager {
 	
-	private static Map<String,Cache> map = new HashMap<String,Cache>();
+	private static Map<String,Cache<?,?>> map = new HashMap<String,Cache<?,?>>();
 	
+	@SuppressWarnings("unchecked")
 	public static synchronized Cache getDefaultCache(String name){
 		return getDefaultCache(name, 500);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static synchronized Cache getDefaultCache(String name,int maxSize){
 		if(map.get(name)==null){
-			Cache cache = new DefaultCache(name, maxSize);
+			Cache<?,?> cache = new DefaultCache<Object, Object>(name, maxSize);
 			map.put(name, cache);
 		}
 		return map.get(name);

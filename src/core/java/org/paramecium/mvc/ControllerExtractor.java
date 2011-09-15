@@ -11,6 +11,7 @@ import org.paramecium.ioc.ControllerClassInfo;
 import org.paramecium.ioc.IocContextIndex;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
+import org.paramecium.log.system.CollectorFactory;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.SecurityConfig;
 import org.paramecium.security.SecurityThread;
@@ -43,6 +44,7 @@ public class ControllerExtractor {
 				request.getSession();
 			}
 			start(request);
+			CollectorFactory.getWebCollector().put(request);//放入日志缓存
 			String servletPath = request.getServletPath();
 			String[] URIStrs = getURIStrs(servletPath);
 			if(URIStrs==null){

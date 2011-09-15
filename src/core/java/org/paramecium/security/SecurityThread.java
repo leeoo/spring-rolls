@@ -92,6 +92,23 @@ public class SecurityThread {
 		throw new SessionExpiredException("当前 Session已经过期!");
 	}
 	
+	/**
+	 * 安全的获得当前用户，不会产生异常.
+	 * @return
+	 */
+	public static UserDetails getUserNotException(){
+		String sessionId = sessionThreadLocal.get();
+		if(sessionId!=null){
+			UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
+			if(userDetails!=null){
+				return null;
+			}
+			return userDetails;
+		}
+		return null;
+		
+	}
+	
 
 	/**
 	 * 移除用户登录信息
