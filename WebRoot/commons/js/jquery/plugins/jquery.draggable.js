@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.3
+ * jQuery EasyUI 1.2.2
  * 
- * Licensed under the GPL terms
- * To use it on other terms please contact us
+ * Licensed under the GPL:
+ *   http://www.gnu.org/licenses/gpl.txt
  *
- * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
+ * Copyright 2010 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -187,9 +187,6 @@ return;
 }
 var _20=$(e.data.target).position();
 var _21={startPosition:$(e.data.target).css("position"),startLeft:_20.left,startTop:_20.top,left:_20.left,top:_20.top,startX:e.pageX,startY:e.pageY,target:e.data.target,parent:$(e.data.target).parent()[0]};
-if(_1a.onBeforeDrag.call(e.data.target,e)==false){
-return;
-}
 $(document).bind("mousedown.draggable",_21,_9);
 $(document).bind("mousemove.draggable",_21,_e);
 $(document).bind("mouseup.draggable",_21,_11);
@@ -226,8 +223,7 @@ return jq.each(function(){
 $(this).draggable({disabled:true});
 });
 }};
-$.fn.draggable.defaults={proxy:null,revert:false,cursor:"move",deltaX:null,deltaY:null,handle:null,disabled:false,edge:0,axis:null,onBeforeDrag:function(e){
-},onStartDrag:function(e){
+$.fn.draggable.defaults={proxy:null,revert:false,cursor:"move",deltaX:null,deltaY:null,handle:null,disabled:false,edge:0,axis:null,onStartDrag:function(e){
 },onDrag:function(e){
 },onStopDrag:function(e){
 }};

@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.3
+ * jQuery EasyUI 1.2.2
  * 
- * Licensed under the GPL terms
- * To use it on other terms please contact us
+ * Licensed under the GPL:
+ *   http://www.gnu.org/licenses/gpl.txt
  *
- * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
+ * Copyright 2010 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -16,7 +16,6 @@ var _5=$(_2).datetimebox("getValue");
 _f(_2,_5,true);
 _4.onShowPanel.call(_2);
 }}));
-$(_2).removeClass("datebox-f").addClass("datetimebox-f");
 $(_2).datebox("calendar").calendar({onSelect:function(_6){
 _4.onSelect.call(_2,_6);
 }});

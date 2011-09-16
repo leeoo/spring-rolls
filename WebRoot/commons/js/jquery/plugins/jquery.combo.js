@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.3
+ * jQuery EasyUI 1.2.2
  * 
- * Licensed under the GPL terms
- * To use it on other terms please contact us
+ * Licensed under the GPL:
+ *   http://www.gnu.org/licenses/gpl.txt
  *
- * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
+ * Copyright 2010 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -71,14 +71,15 @@ var _18=$.data(_16,"combo").combo;
 var _19=$.data(_16,"combo").panel;
 var _1a=_18.find(".combo-text");
 var _1b=_18.find(".combo-arrow");
-$(document).unbind(".combo").bind("mousedown.combo",function(e){
-$("div.combo-panel").panel("close");
-});
+$(document).unbind(".combo");
 _18.unbind(".combo");
 _19.unbind(".combo");
 _1a.unbind(".combo");
 _1b.unbind(".combo");
 if(!_17.disabled){
+$(document).bind("mousedown.combo",function(e){
+$("div.combo-panel").panel("close");
+});
 _19.bind("mousedown.combo",function(e){
 return false;
 });
@@ -253,9 +254,6 @@ _3f(_4b,[_4c]);
 };
 function _4d(_4e){
 var _4f=$.data(_4e,"combo").options;
-var fn=_4f.onChange;
-_4f.onChange=function(){
-};
 if(_4f.multiple){
 if(_4f.value){
 if(typeof _4f.value=="object"){
@@ -269,7 +267,6 @@ _3f(_4e,[]);
 }else{
 _4a(_4e,_4f.value);
 }
-_4f.onChange=fn;
 };
 $.fn.combo=function(_50,_51){
 if(typeof _50=="string"){

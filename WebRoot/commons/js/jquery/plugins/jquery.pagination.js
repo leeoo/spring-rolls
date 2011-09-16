@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.3
+ * jQuery EasyUI 1.2.2
  * 
- * Licensed under the GPL terms
- * To use it on other terms please contact us
+ * Licensed under the GPL:
+ *   http://www.gnu.org/licenses/gpl.txt
  *
- * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
+ * Copyright 2010 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -102,8 +102,8 @@ _f=1;
 if(_c>_e){
 _f=_e;
 }
-_d.pageNumber=_f;
 _d.onSelectPage.call(_b,_f,_d.pageSize);
+_d.pageNumber=_f;
 _10(_b);
 };
 function _10(_11){

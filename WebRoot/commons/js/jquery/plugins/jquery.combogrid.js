@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.3
+ * jQuery EasyUI 1.2.2
  * 
- * Licensed under the GPL terms
- * To use it on other terms please contact us
+ * Licensed under the GPL:
+ *   http://www.gnu.org/licenses/gpl.txt
  *
- * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
+ * Copyright 2010 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -22,7 +22,8 @@ _4.datagrid($.extend({},_3,{border:false,fit:true,singleSelect:(!_3.multiple),on
 var _7=$.data(_2,"combogrid").remainText;
 var _8=$(_2).combo("getValues");
 _1c(_2,_8,_7);
-_3.onLoadSuccess.apply(_2,arguments);
+$.data(_2,"combogrid").remainText=false;
+_3.onLoadSuccess.apply(this,arguments);
 },onClickRow:_9,onSelect:function(_a,_b){
 _c();
 _3.onSelect.call(this,_a,_b);
@@ -33,9 +34,7 @@ _3.onUnselect.call(this,_d,_e);
 _c();
 _3.onSelectAll.call(this,_f);
 },onUnselectAll:function(_10){
-if(_3.multiple){
 _c();
-}
 _3.onUnselectAll.call(this,_10);
 }}));
 function _9(_11,row){
@@ -54,10 +53,9 @@ for(var i=0;i<_13.length;i++){
 vv.push(_13[i][_3.idField]);
 ss.push(_13[i][_3.textField]);
 }
-if(!_3.multiple){
-$(_2).combo("setValues",(vv.length?vv:[""]));
-}else{
 $(_2).combo("setValues",vv);
+if(!vv.length&&!_3.multiple){
+$(_2).combo("setValues",[""]);
 }
 if(!_12){
 $(_2).combo("setText",ss.join(_3.separator));
@@ -101,6 +99,7 @@ var _20=$.data(_1d,"combogrid").options;
 var _21=$.data(_1d,"combogrid").grid;
 var _22=_21.datagrid("getRows");
 var ss=[];
+_21.datagrid("clearSelections");
 for(var i=0;i<_1e.length;i++){
 var _23=_21.datagrid("getRowIndex",_1e[i]);
 if(_23>=0){
@@ -109,9 +108,6 @@ ss.push(_22[_23][_20.textField]);
 }else{
 ss.push(_1e[i]);
 }
-}
-if($(_1d).combo("getValues").join(",")==_1e.join(",")){
-return;
 }
 $(_1d).combo("setValues",_1e);
 if(!_1f){
@@ -128,8 +124,7 @@ _1c(_25,[],true);
 _1c(_25,[q],true);
 }
 if(_26.mode=="remote"){
-_27.datagrid("clearSelections");
-_27.datagrid("load",{q:q});
+_27.datagrid("reload",{q:q});
 }else{
 if(!q){
 return;
