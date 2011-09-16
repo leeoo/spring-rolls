@@ -49,31 +49,24 @@ public class ControllerExtractor {
 			String[] URIStrs = getURIStrs(servletPath);
 			if(URIStrs==null){
 				logger.warn("非法请求地址:"+servletPath);
-				end();
-				return true;
+				return returnTrue();
 			}
 			try{
 				ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
 				if(classInfo==null){
 					logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
-					end();
-					response.setStatus(404);
-					return true;
+					return return404(response);
 				}
 				Object controller = ApplicationContext.getBean(classInfo.getNamespace());
 				if(controller==null){
 					logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
-					end();
-					response.setStatus(404);
-					return true;
+					return return404(response);
 				}
 				for (Class<?> clazz = classInfo.getClazz(); clazz != Object.class; clazz = clazz.getSuperclass()) {
 					Method[] methods = clazz.getMethods();//只返回public，如果需要private可用getDeclaredMethods
 					if(methods==null||methods.length<1){
 						logger.warn(classInfo.getClazz().getName()+"没有定义相关的处理方法!");
-						end();
-						response.setStatus(404);
-						return true;
+						return return404(response);
 					}
 					ModelAndView mv = new ModelAndView(request, response);
 					for(Method method : methods){
@@ -93,29 +86,22 @@ public class ControllerExtractor {
 					}
 				}
 			}catch (Exception e) {
-				try {
-					if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
-						response.sendRedirect(SecurityConfig.anonymousExceptionPage);
-					}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
-						response.setStatus(403);
-						response.sendRedirect(SecurityConfig.authorizationExceptionPage);
-					}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
-						response.sendRedirect(SecurityConfig.userKickExceptionPage);
-					}else if(e.getCause() instanceof UserDisabledException||e instanceof UserDisabledException){
-						response.sendRedirect(SecurityConfig.userDisabledExceptionPage);
-					}else if(e.getCause() instanceof SessionExpiredException||e instanceof SessionExpiredException){
-						response.sendRedirect(SecurityConfig.sessionExpiredExceptionPage);
-					}/*继续扩展，可在配置文件中加入更多异常*/
-				} catch (IOException e1) {
-				}
-				end();
-				return false;
+				return security(e,response);
 			}
 			logger.warn("该资源没有与之对应的处理方法!");
-			end();
-			response.setStatus(404);
-			return true;
+			return return404(response);
 		}
+	}
+	
+	private static boolean return404(final HttpServletResponse response){
+		end();
+		response.setStatus(404);
+		return true;
+	}
+
+	private static boolean returnTrue(){
+		end();
+		return true;
 	}
 	
 	private static boolean security(ModelAndView modelAndView){
@@ -140,6 +126,26 @@ public class ControllerExtractor {
 		}
 		end();
 		return !modelAndView.isRedirect();
+	}
+	
+	private static boolean security(Exception e,final HttpServletResponse response){
+		try {
+			if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
+				response.sendRedirect(SecurityConfig.anonymousExceptionPage);
+			}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
+				response.setStatus(403);
+				response.sendRedirect(SecurityConfig.authorizationExceptionPage);
+			}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
+				response.sendRedirect(SecurityConfig.userKickExceptionPage);
+			}else if(e.getCause() instanceof UserDisabledException||e instanceof UserDisabledException){
+				response.sendRedirect(SecurityConfig.userDisabledExceptionPage);
+			}else if(e.getCause() instanceof SessionExpiredException||e instanceof SessionExpiredException){
+				response.sendRedirect(SecurityConfig.sessionExpiredExceptionPage);
+			}/*继续扩展，可在配置文件中加入更多异常*/
+		} catch (IOException e1) {
+		}
+		end();
+		return false;
 	}
 	
 	private static void end(){
