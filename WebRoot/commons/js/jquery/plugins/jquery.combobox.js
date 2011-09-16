@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.3
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -124,7 +124,7 @@ var _29=$.data(_28,"combobox").options;
 var _2a=[];
 $(">option",_28).each(function(){
 var _2b={};
-_2b[_29.valueField]=$(this).attr("value")||$(this).html();
+_2b[_29.valueField]=$(this).attr("value")!=undefined?$(this).attr("value"):$(this).html();
 _2b[_29.textField]=$(this).html();
 _2b["selected"]=$(this).attr("selected");
 _2a.push(_2b);
@@ -195,7 +195,7 @@ if(!_39.url){
 return;
 }
 _37=_37||{};
-$.ajax({url:_39.url,dataType:"json",data:_37,success:function(_3a){
+$.ajax({type:_39.method,url:_39.url,dataType:"json",data:_37,success:function(_3a){
 _2c(_36,_3a,_38);
 },error:function(){
 _39.onLoadError.apply(this,arguments);
@@ -300,9 +300,9 @@ _1b(this,_4d);
 }};
 $.fn.combobox.parseOptions=function(_4e){
 var t=$(_4e);
-return $.extend({},$.fn.combo.parseOptions(_4e),{valueField:t.attr("valueField"),textField:t.attr("textField"),mode:t.attr("mode"),url:t.attr("url")});
+return $.extend({},$.fn.combo.parseOptions(_4e),{valueField:t.attr("valueField"),textField:t.attr("textField"),mode:t.attr("mode"),method:(t.attr("method")?t.attr("method"):undefined),url:t.attr("url")});
 };
-$.fn.combobox.defaults=$.extend({},$.fn.combo.defaults,{valueField:"value",textField:"text",mode:"local",url:null,data:null,keyHandler:{up:function(){
+$.fn.combobox.defaults=$.extend({},$.fn.combo.defaults,{valueField:"value",textField:"text",mode:"local",method:"post",url:null,data:null,keyHandler:{up:function(){
 _6(this);
 },down:function(){
 _e(this);

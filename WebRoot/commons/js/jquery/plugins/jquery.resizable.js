@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.3
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -73,11 +73,11 @@ $(this).unbind(".resizable");
 _e=$.extend(_f.options,_1||{});
 }else{
 _e=$.extend({},$.fn.resizable.defaults,_1||{});
+$.data(this,"resizable",{options:_e});
 }
 if(_e.disabled==true){
 return;
 }
-$.data(this,"resizable",{options:_e});
 var _10=this;
 $(this).bind("mousemove.resizable",_11).bind("mousedown.resizable",_12);
 function _11(e){
