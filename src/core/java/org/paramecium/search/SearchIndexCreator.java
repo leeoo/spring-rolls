@@ -43,6 +43,8 @@ public class SearchIndexCreator {
 	private static Log logger = LoggerFactory.getLogger();
 
 	public static String INDEX_PATH = null;
+	
+	private static Version version = Version.LUCENE_34;
 
 	public static String getPath() {
 		if (INDEX_PATH == null) {
@@ -74,7 +76,7 @@ public class SearchIndexCreator {
 		Directory directory = null;
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_33, new IKAnalyzer());
+			IndexWriterConfig conf = new IndexWriterConfig(version, new IKAnalyzer());
 			conf.setMergeScheduler(new ReportingMergeScheduler());
 			conf.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 			writer = new IndexWriter(directory, conf);
@@ -132,7 +134,7 @@ public class SearchIndexCreator {
 		Directory directory = null;
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_33, new IKAnalyzer());
+			IndexWriterConfig conf = new IndexWriterConfig(version, new IKAnalyzer());
 			conf.setMergeScheduler(new ReportingMergeScheduler());
 			writer = new IndexWriter(directory, conf);
 			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
