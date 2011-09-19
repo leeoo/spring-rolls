@@ -9,7 +9,7 @@ import com.demo.entity.system.Message;
 @Service
 public class MessageService {
 
-	private MongoDBOrmDao<Message, Long> ormDao = new MongoDBOrmDao<Message, Long>("mg1", Message.class);
+	private MongoDBOrmDao<Message, Long> ormDao = new MongoDBOrmDao<Message, Long>(Message.class);
 	
 	public void clear(){
 		ormDao.getMongoDao().getDB().getCollection("t_message").drop();

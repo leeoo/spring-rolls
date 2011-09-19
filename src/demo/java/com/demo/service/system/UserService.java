@@ -21,7 +21,7 @@ import com.demo.entity.system.User;
 @ShowLabel(name="用户管理")
 public class UserService {
 	
-	private GenericOrmDao<User, Integer> ormDao = new GenericOrmDao<User, Integer>("ds1", User.class);
+	private GenericOrmDao<User, Integer> ormDao = new GenericOrmDao<User, Integer>(User.class);
 	
 	@ShowLabel(name="保存用户")
 	public int save(User user) throws Exception{

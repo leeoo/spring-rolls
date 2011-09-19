@@ -19,7 +19,7 @@ import com.demo.entity.system.Role;
 @ShowLabel(name="角色管理")
 public class RoleService {
 
-	private GenericOrmDao<Role, Integer> ormDao = new GenericOrmDao<Role, Integer>("ds1", Role.class);
+	private GenericOrmDao<Role, Integer> ormDao = new GenericOrmDao<Role, Integer>(Role.class);
 	
 	@ShowLabel(name="保存角色")
 	public int save(Role role) throws Exception{
