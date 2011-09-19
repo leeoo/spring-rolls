@@ -19,6 +19,11 @@ public final class GenericOrmDao<T , PK extends Serializable> implements BaseOrm
 	
 	private Class<T> clazz;
 	
+	public GenericOrmDao(Class<T> clazz){
+		genericJdbcDao = new GenericJdbcDao();
+		this.clazz = clazz;
+	}
+	
 	/**
 	 * 默认构造方法会自动加载事务线程
 	 */

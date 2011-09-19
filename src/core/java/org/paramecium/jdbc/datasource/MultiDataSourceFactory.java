@@ -23,6 +23,7 @@ import org.paramecium.log.LoggerFactory;
 public class MultiDataSourceFactory {
 	
 	private final static Log logger = LoggerFactory.getLogger();
+	public static String defaultDataSourceName = null;
 	private final static ConcurrentMap<String,DataSource> multiDataSource = new ConcurrentHashMap<String, DataSource>();
 	
 	static{
@@ -34,6 +35,9 @@ public class MultiDataSourceFactory {
 			propery.remove("dataSourceClass");//移除，对实例化数据源无用
 			propery.remove("dbType");//移除，对实例化数据源无用
 			propery.put("ds", key);
+			if(defaultDataSourceName == null){
+				defaultDataSourceName= key;
+			}
 			Object dataSource = null;
 			try {
 				Class<?> clazz = Class.forName(dataSourceClass);

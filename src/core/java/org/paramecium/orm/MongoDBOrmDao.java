@@ -32,6 +32,11 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	
 	private Class<T> clazz;
 	
+	public MongoDBOrmDao(Class<T> clazz){
+		mongoDao = new GenericMonogDBNativeDao();
+		this.clazz = clazz;
+	}
+	
 	/**
 	 * 默认构造方法会自动加载事务线程
 	 * 如果启用NoSql，将会自动使用MongoDB。

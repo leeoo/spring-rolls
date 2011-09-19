@@ -20,6 +20,13 @@ public class GenericMonogDBNativeDao {
 
 	private DB mongoDB;
 	
+	/**
+	 * 默认数据库名称
+	 */
+	public GenericMonogDBNativeDao(){
+		this(MongoDBManager.defaultDBName);
+	}
+	
 	public GenericMonogDBNativeDao(String mongoDBName){
 		this.mongoDB = MongoDBManager.getMongoDB(mongoDBName);
 	}

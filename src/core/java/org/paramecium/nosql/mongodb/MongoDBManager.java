@@ -19,6 +19,7 @@ import com.mongodb.DB;
 public class MongoDBManager {
 
 	private final static Log logger = LoggerFactory.getLogger();
+	public static String defaultDBName = null;
 	private static ConcurrentMap<String,DB> pool = new ConcurrentHashMap<String,DB>();
 	
 	static{
@@ -29,6 +30,9 @@ public class MongoDBManager {
 				String url = propery.get("url");
 				String portStr = propery.get("port");
 				String dbName = propery.get("dbName");
+				if(defaultDBName == null){
+					defaultDBName = dbName;
+				}
 				int port = portStr==null ? 27017 : Integer.parseInt(portStr);
 				MongoConfig config = new MongoConfig(url, port, dbName);
 				pool.put(key, config.getDB());

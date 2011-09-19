@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
 
+import org.paramecium.jdbc.datasource.MultiDataSourceFactory;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -24,6 +25,14 @@ public class GenericJdbcDao {
 	private JdbcTemplate jdbcTemplate;
 	
 	private String dataSourceName;
+	
+	/**
+	 * 默认数据源，构造方法会自动加载事务线程
+	 * @param connection
+	 */
+	public GenericJdbcDao(){
+		this(MultiDataSourceFactory.defaultDataSourceName);
+	}
 	
 	/**
 	 * 默认构造方法会自动加载事务线程
