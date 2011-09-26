@@ -54,11 +54,10 @@ public class UserController extends BaseController{
 		mv.forward("/WEB-INF/demo/system/user/input.jsp");
 	}
 	
-	@SuppressWarnings("unchecked")
 	@MappingMethod
 	public void save(ModelAndView mv){
 		User user = mv.getBean("user",User.class);
-		Collection<String> rolenames = (Collection<String>) mv.getValues("roles", String.class);
+		Collection<String> rolenames = mv.getValues("roles", String.class);
 		if(rolenames!=null){
 			Collection<Role> roles = new HashSet<Role>();
 			for(String rolename : rolenames){

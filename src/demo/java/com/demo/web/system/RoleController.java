@@ -51,11 +51,10 @@ public class RoleController extends BaseController{
 		mv.forward("/WEB-INF/demo/system/role/input.jsp");
 	}
 	
-	@SuppressWarnings("unchecked")
 	@MappingMethod
 	public void save(ModelAndView mv){
 		Role role = mv.getBean("role",Role.class);
-		Collection<String> auth = (Collection<String>) mv.getValues("auth", String.class);
+		Collection<String> auth = mv.getValues("auth", String.class);
 		if(role!=null){
 			role.setAuth(auth);
 		}
