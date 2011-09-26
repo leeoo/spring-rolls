@@ -111,14 +111,15 @@ public class ModelAndView {
 	 * @param name
 	 * @return
 	 */
-	public Collection<?> getValues(String name,Class<?> clazz){
+	@SuppressWarnings("unchecked")
+	public <T> Collection <T> getValues(String name,Class<T> clazz){
 		String[] values = request.getParameterValues(name);
 		if(values==null||values.length==0){
 			return null;
 		}
-		Collection<Object> list = new HashSet<Object>();
+		Collection<T> list = new HashSet<T>();
 		for(String value : values){
-			list.add(BeanUtils.getValueByClass(value, clazz));
+			list.add((T)BeanUtils.getValueByClass(value, clazz));
 		}
 		return list;
 	}
