@@ -6,6 +6,7 @@ import java.util.Map;
 import org.paramecium.commons.JsonUitls;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.jdbc.dialect.Page;
+import org.paramecium.mvc.End;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
@@ -24,7 +25,7 @@ public class RoleController extends BaseController{
 	
 	@MappingMethod
 	public void list(ModelAndView mv){
-		mv.forward("/WEB-INF/demo/system/role/list.jsp");
+		mv.forward(getPage("role/list.jsp"));
 	}
 	
 	@MappingMethod
@@ -40,7 +41,7 @@ public class RoleController extends BaseController{
 	}
 	
 	@MappingMethod
-	public void input(ModelAndView mv){
+	public End input(ModelAndView mv){
 		Integer id = mv.getValue("id",Integer.class);
 		if(id!=null){
 			Role role = roleService.get(id);
@@ -48,11 +49,11 @@ public class RoleController extends BaseController{
 		}
 		Map<Resource, Collection<Resource>> resources = AuthorizationMenu.getAuthorMenu();
 		mv.addValue("resources", resources);
-		mv.forward("/WEB-INF/demo/system/role/input.jsp");
+		return mv.forward(getPage("/role/input.jsp"));
 	}
 	
 	@MappingMethod
-	public void save(ModelAndView mv){
+	public End save(ModelAndView mv){
 		Role role = mv.getBean("role",Role.class);
 		Collection<String> auth = mv.getValues("auth", String.class);
 		if(role!=null){
@@ -68,10 +69,9 @@ public class RoleController extends BaseController{
 			mv.addValue("role", role);
 			Map<Resource, Collection<Resource>> resources = AuthorizationMenu.getAuthorMenu();
 			mv.addValue("resources", resources);
-			mv.forward("/WEB-INF/demo/system/role/input.jsp");
-			return;
+			return mv.forward(getPage("/role/input.jsp"));
 		}
-		mv.redirect(getServletExt("/system/role/list"));
+		return mv.redirect(getServletExt("/system/role/list"));
 	}
 	
 	@MappingMethod

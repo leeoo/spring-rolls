@@ -1,6 +1,7 @@
 package com.demo.web;
 
 import org.paramecium.ioc.annotation.AutoInject;
+import org.paramecium.mvc.End;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
@@ -19,12 +20,11 @@ public class LoginController extends BaseController{
 	private UserService userService;
 	
 	@MappingMethod
-	public void login(ModelAndView mv){
+	public End login(ModelAndView mv){
 		String username = mv.getValue("username", String.class);
 		String password = mv.getValue("password", String.class);
 		if(password==null||username==null||username.isEmpty()||password.isEmpty()){
-			mv.redirect(SecurityConfig.loginExceptionPage);
-			return;
+			return mv.redirect(SecurityConfig.loginExceptionPage);
 		}
 		UserDetails userDetails = new UserDetails();
 		userDetails.setUsername(username);
@@ -36,21 +36,20 @@ public class LoginController extends BaseController{
 		}else{
 			User user = userService.getUser(username);
 			if(user==null||!user.getPassword().equals(password)){
-				mv.redirect(SecurityConfig.loginExceptionPage);
-				return;
+				return mv.redirect(SecurityConfig.loginExceptionPage);
 			}
 			userDetails.setEnable(user.isEnabled());
 			userDetails.setName(user.getName());
 			userDetails.setResources(userService.getUserAuth(username));
 		}
 		SecurityThread.put(userDetails,mv.getRequest());
-		mv.redirect(getServletExt("/system/index"));
+		return mv.redirect(getServletExt("/system/index"));
 	}
 	
 	@MappingMethod
-	public void logout(ModelAndView mv){
+	public End logout(ModelAndView mv){
 		mv.getSession().invalidate();
-		mv.redirect("/index.jsp");
+		return mv.redirect("/index.jsp");
 	}
 	
 }

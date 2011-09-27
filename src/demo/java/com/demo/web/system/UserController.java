@@ -6,6 +6,7 @@ import java.util.HashSet;
 import org.paramecium.commons.JsonUitls;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.jdbc.dialect.Page;
+import org.paramecium.mvc.End;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
@@ -27,7 +28,7 @@ public class UserController extends BaseController{
 	
 	@MappingMethod
 	public void list(ModelAndView mv){
-		mv.forward("/WEB-INF/demo/system/user/list.jsp");
+		mv.forward(getPage("/user/list.jsp"));
 	}
 	
 	@MappingMethod
@@ -43,7 +44,7 @@ public class UserController extends BaseController{
 	}
 	
 	@MappingMethod
-	public void input(ModelAndView mv){
+	public End input(ModelAndView mv){
 		Integer id = mv.getValue("id",Integer.class);
 		if(id!=null){
 			User user = userService.get(id);
@@ -51,11 +52,11 @@ public class UserController extends BaseController{
 		}
 		Collection<Role> allRole = roleService.getAll();
 		mv.addValue("roles", allRole);
-		mv.forward("/WEB-INF/demo/system/user/input.jsp");
+		return mv.forward(getPage("user/input.jsp"));
 	}
 	
 	@MappingMethod
-	public void save(ModelAndView mv){
+	public End save(ModelAndView mv){
 		User user = mv.getBean("user",User.class);
 		Collection<String> rolenames = mv.getValues("roles", String.class);
 		if(rolenames!=null){
@@ -77,10 +78,9 @@ public class UserController extends BaseController{
 			mv.addValue("user", user);
 			Collection<Role> allRole = roleService.getAll();
 			mv.addValue("roles", allRole);
-			mv.forward("/WEB-INF/demo/system/user/input.jsp");
-			return;
+			return mv.forward(getPage("user/input.jsp"));
 		}
-		mv.redirect(getServletExt("/system/user/list"));
+		return mv.redirect(getServletExt("/system/user/list"));
 	}
 	
 	@MappingMethod
