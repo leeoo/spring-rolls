@@ -98,7 +98,7 @@ public class ClassScanner {
 			resource.setFirstResource(iocUniqueName);
 			ShowLabel showLabel = clazz.getAnnotation(ShowLabel.class);
 			if(showLabel!=null){
-				resource.setShowLabel(showLabel.name());
+				resource.setShowLabel(showLabel.value());
 			}
 			Collection<Resource> resources = new HashSet<Resource>();
 			for(Method method : clazz.getMethods()){
@@ -112,18 +112,18 @@ public class ClassScanner {
 					continue;
 				}
 				Security methodMecurity = method.getAnnotation(Security.class);
-				if(methodMecurity!=null&&!methodMecurity.protecting()){
+				if(methodMecurity!=null&&!methodMecurity.value()){
 					continue;
 				}
 				Resource subResource = new Resource();
 				subResource.setFirstResource(iocUniqueName);
 				showLabel = method.getAnnotation(ShowLabel.class);
 				if(showLabel!=null){
-					subResource.setShowLabel(showLabel.name());
+					subResource.setShowLabel(showLabel.value());
 				}
 				MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
 				if(mappingMethod!=null){
-					subResource.setLastResource(mappingMethod.url());
+					subResource.setLastResource(mappingMethod.value());
 				}else{
 					subResource.setLastResource(method.getName());
 				}
@@ -142,8 +142,8 @@ public class ClassScanner {
 		Service service = clazz.getAnnotation(Service.class);
 		Controller controller = clazz.getAnnotation(Controller.class);
 		if(service!=null){
-			if(!service.uniqueName().isEmpty()){
-				return service.uniqueName();
+			if(!service.value().isEmpty()){
+				return service.value();
 			}else{
 				return getInstanceName(clazz);
 			}

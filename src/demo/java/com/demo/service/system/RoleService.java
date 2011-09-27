@@ -16,12 +16,12 @@ import com.demo.entity.system.Role;
 @Service
 @Transactional
 @Security
-@ShowLabel(name="角色管理")
+@ShowLabel("角色管理")
 public class RoleService {
 
 	private GenericOrmDao<Role, Integer> ormDao = new GenericOrmDao<Role, Integer>(Role.class);
 	
-	@ShowLabel(name="保存角色")
+	@ShowLabel("保存角色")
 	public int save(Role role) throws Exception{
 		if(role.getAuth()==null||role.getAuth().isEmpty()){
 			new Exception("创建角色必须选择授权信息!");
@@ -33,19 +33,19 @@ public class RoleService {
 		return id;
 	}
 	
-	@ShowLabel(name="修改角色")
+	@ShowLabel("修改角色")
 	public void update(Role role) throws Exception{
 		if(role.getAuth()==null||role.getAuth().isEmpty()){
 			new Exception("修改角色必须选择授权信息!");
 		}
 		ormDao.update(role);
-		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_role_auth WHERE rolename=?",role.getRolename());
+		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_role_auth WHERE role?",role.getRolename());
 		for(String auth:role.getAuth()){
 			ormDao.getGenericJdbcDao().executeDMLByArray("INSERT INTO t_role_auth(rolename,auth) VALUES(?,?)",role.getRolename(),auth);
 		}
 	}
 
-	@ShowLabel(name="删除角色")
+	@ShowLabel("删除角色")
 	public void delete(String[] ids) throws Exception{
 		for(String id : ids){
 			ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_role_auth WHERE rolename IN(SELECT sr.rolename FROM t_security_role sr WHERE sr.id=?)",Integer.parseInt(id));
@@ -53,7 +53,7 @@ public class RoleService {
 		}
 	}
 	
-	@ShowLabel(name="获取角色详情")
+	@ShowLabel("获取角色详情")
 	@Transactional(readOnly=true)
 	public Role get(int id){
 		Role role = ormDao.select(id);
@@ -66,13 +66,13 @@ public class RoleService {
 		return role;
 	}
 	
-	@ShowLabel(name="获取角色分页信息")
+	@ShowLabel("获取角色分页信息")
 	@Transactional(readOnly=true)
 	public Page getAll(Page page){
 		return ormDao.select(page);
 	}
 	
-	@ShowLabel(name="获取角色列表信息")
+	@ShowLabel("获取角色列表信息")
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly=true)
 	public Collection<Role> getAll(){

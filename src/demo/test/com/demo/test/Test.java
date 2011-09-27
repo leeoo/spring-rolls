@@ -10,17 +10,17 @@ import org.paramecium.validation.annotation.base.Size;
 @Index(indexName="index_test",keywordPropertyName="name")
 public class Test {
 	@NotNull(empty = true)
-	@ShowLabel(name = "姓名")
+	@ShowLabel("姓名")
 	private String name;
 
 	@NotNull
 	@Length(min=4,max=20)
-	@ShowLabel(name = "地址")
+	@ShowLabel("地址")
 	@TextWord
 	private String address;
 	
 	@Size(max=50,min=20)
-	@ShowLabel(name = "长度")
+	@ShowLabel("长度")
 	private int size;
 
 	@IDCard

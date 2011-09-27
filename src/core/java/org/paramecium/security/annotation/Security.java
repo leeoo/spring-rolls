@@ -25,6 +25,6 @@ public @interface Security {
 	 * 是否受保护该资源
 	 * @return
 	 */
-	boolean protecting() default true;
+	boolean value() default true;
 	
 }

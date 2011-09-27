@@ -63,7 +63,7 @@ public class Validator {
 					ShowLabel showLabel = field.getAnnotation(ShowLabel.class);
 					String show = field.getName();//获取错误消息中字段名称
 					if(showLabel!=null){
-						show = showLabel.name();
+						show = showLabel.value();
 					}
 					//获取相关验证标注
 					NotNull notNull = field.getAnnotation(NotNull.class);

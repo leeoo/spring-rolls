@@ -24,6 +24,6 @@ public @interface Service {
 	 * 防止同名Service注入冲突,为注入到容器中的service起一个唯一的名字，默认为service实例化名称
 	 * @return
 	 */
-	String uniqueName() default "";
+	String value() default "";
 	
 }

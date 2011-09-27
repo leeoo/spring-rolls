@@ -20,9 +20,9 @@ import java.lang.annotation.Target;
 public @interface ShowLabel {
 	
 	/**
-	 * 名称
+	 * 显示此值
 	 * @return
 	 */
-	String name();
+	String value();
 	
 }

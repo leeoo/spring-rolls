@@ -42,8 +42,8 @@ public class EntitySqlBuilder {
 						Column column = field.getAnnotation(Column.class);
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 						if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.MANUAL){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								columns.add(column.fieldName());
+							if(column!=null&&!column.value().isEmpty()){
+								columns.add(column.value());
 								propertys.add(mark.concat(field.getName()));
 							}else{
 								columns.add(BeanUtils.getDbFieldName(field.getName()));
@@ -51,8 +51,8 @@ public class EntitySqlBuilder {
 							}
 							isAuto = false;
 						}else if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.NATIVE_SEQUENCE){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								columns.add(column.fieldName());
+							if(column!=null&&!column.value().isEmpty()){
+								columns.add(column.value());
 								propertys.add(primaryKey.sequenceName());
 							}else{
 								columns.add(BeanUtils.getDbFieldName(field.getName()));
@@ -60,10 +60,10 @@ public class EntitySqlBuilder {
 							}
 							isAuto = false;
 						}else if(primaryKey==null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								columns.add(column.fieldName());
+							if(column!=null&&!column.value().isEmpty()){
+								columns.add(column.value());
 								propertys.add(mark.concat(field.getName()));
-							}else if(column!=null&&column.fieldName().isEmpty()){
+							}else if(column!=null&&column.value().isEmpty()){
 								columns.add(BeanUtils.getDbFieldName(field.getName()));
 								propertys.add(mark.concat(field.getName()));
 							}
@@ -117,15 +117,15 @@ public class EntitySqlBuilder {
 						Column column = field.getAnnotation(Column.class);
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 						if(primaryKey!=null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								wheres.add(column.fieldName()+"=:"+field.getName()+" AND ");
+							if(column!=null&&!column.value().isEmpty()){
+								wheres.add(column.value()+"=:"+field.getName()+" AND ");
 							}else{
 								wheres.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
 							}
 						}else if(primaryKey==null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								sets.add(column.fieldName()+"=:"+field.getName()+",");
-							}else if(column!=null&&column.fieldName().isEmpty()){
+							if(column!=null&&!column.value().isEmpty()){
+								sets.add(column.value()+"=:"+field.getName()+",");
+							}else if(column!=null&&column.value().isEmpty()){
 								sets.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+",");
 							}
 						}
@@ -175,15 +175,15 @@ public class EntitySqlBuilder {
 						Column column = field.getAnnotation(Column.class);
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 						if(primaryKey!=null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								wheres.add(column.fieldName()+"=:"+field.getName()+" AND ");
+							if(column!=null&&!column.value().isEmpty()){
+								wheres.add(column.value()+"=:"+field.getName()+" AND ");
 							}else{
 								wheres.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
 							}
 						}else if(primaryKey==null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								sets.add(column.fieldName()+"=:"+field.getName()+",");
-							}else if(column!=null&&column.fieldName().isEmpty()){
+							if(column!=null&&!column.value().isEmpty()){
+								sets.add(column.value()+"=:"+field.getName()+",");
+							}else if(column!=null&&column.value().isEmpty()){
 								sets.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+",");
 							}
 						}
@@ -228,8 +228,8 @@ public class EntitySqlBuilder {
 						Column column = field.getAnnotation(Column.class);
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 						if(primaryKey!=null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								wheres.add(column.fieldName()+"=?");
+							if(column!=null&&!column.value().isEmpty()){
+								wheres.add(column.value()+"=?");
 							}else{
 								wheres.add(BeanUtils.getDbFieldName(field.getName())+"=?");
 							}
@@ -274,15 +274,15 @@ public class EntitySqlBuilder {
 						ReferenceColumn referenceColumn = field.getAnnotation(ReferenceColumn.class);
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 						if(primaryKey!=null&&wheres.isEmpty()){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								wheres.add("base."+column.fieldName()+"=?");
+							if(column!=null&&!column.value().isEmpty()){
+								wheres.add("base."+column.value()+"=?");
 							}else{
 								wheres.add("base."+BeanUtils.getDbFieldName(field.getName())+"=?");
 							}
 						}
-						if(column!=null&&!column.fieldName().isEmpty()){
-							columns.add("base."+column.fieldName()+" "+field.getName());
-						}else if(column!=null&&column.fieldName().isEmpty()){
+						if(column!=null&&!column.value().isEmpty()){
+							columns.add("base."+column.value()+" "+field.getName());
+						}else if(column!=null&&column.value().isEmpty()){
 							columns.add("base."+BeanUtils.getDbFieldName(field.getName()));
 						}else if(referenceColumn!=null&&referenceColumn.subSelectSql()!=null&&!referenceColumn.subSelectSql().isEmpty()){
 							columns.add(referenceColumn.subSelectSql());
@@ -330,16 +330,16 @@ public class EntitySqlBuilder {
 						Column column = field.getAnnotation(Column.class);
 						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 						if(primaryKey!=null){
-							if(column!=null&&!column.fieldName().isEmpty()){
-								wheres.add(column.logical()+column.fieldName()+column.comparison()+":"+field.getName());
+							if(column!=null&&!column.value().isEmpty()){
+								wheres.add(column.logical()+column.value()+column.comparison()+":"+field.getName());
 							}else{
 								wheres.add(VirtualColumn.DYNAMIC_WHERE_LOGIC.AND+BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName());
 							}
 						}else if(virtualColumn!=null){
 							wheres.add(virtualColumn.logical()+":"+field.getName()+virtualColumn.comparison()+virtualColumn.comparisonColumn());
 						}else if(column!=null&&column.isDynamicWhere()){
-							if(!column.fieldName().isEmpty()){
-								wheres.add(column.logical()+column.fieldName()+column.comparison()+":"+field.getName());
+							if(!column.value().isEmpty()){
+								wheres.add(column.logical()+column.value()+column.comparison()+":"+field.getName());
 							}else{
 								wheres.add(column.logical()+BeanUtils.getDbFieldName(field.getName())+column.comparison()+":"+field.getName());
 							}

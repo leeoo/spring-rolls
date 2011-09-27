@@ -40,8 +40,8 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 		}
 		Security classSecurity = service.getClass().getAnnotation(Security.class);
 		Security methodSecurity = method.getAnnotation(Security.class);
-		if(classSecurity!=null&&classSecurity.protecting()){
-			if(methodSecurity!=null&&!methodSecurity.protecting()){
+		if(classSecurity!=null&&classSecurity.value()){
+			if(methodSecurity!=null&&!methodSecurity.value()){
 				return nextIntercept(service, method, parameters, proxy);
 			}
 			UserDetails user = SecurityThread.get();
@@ -89,7 +89,7 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 		resource.setFirstResource(ClassScanner.getIocUniqueName(clazz.getSuperclass()));
 		MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
 		if(mappingMethod!=null){
-			resource.setLastResource(mappingMethod.url());
+			resource.setLastResource(mappingMethod.value());
 		}else{
 			resource.setLastResource(method.getName());
 		}

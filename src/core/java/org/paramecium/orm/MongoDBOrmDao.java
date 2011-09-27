@@ -401,8 +401,8 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	private static String getFieldName(Field field){
 		field.setAccessible(true);
 		Column column = field.getAnnotation(Column.class);
-		if(column!=null&&!column.fieldName().isEmpty()){
-			return column.fieldName();
+		if(column!=null&&!column.value().isEmpty()){
+			return column.value();
 		}else{
 			return BeanUtils.getDbFieldName(field.getName());
 		}

@@ -74,8 +74,8 @@ public class ControllerExtractor {
 						if(mappingMethod==null){
 							continue;
 						}
-						if(!mappingMethod.url().isEmpty()){
-							if(mappingMethod.url().equals(URIStrs[1])){
+						if(!mappingMethod.value().isEmpty()){
+							if(mappingMethod.value().equals(URIStrs[1])){
 								method.invoke(controller, mv);
 								return security(mv);
 							}

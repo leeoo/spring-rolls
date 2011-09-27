@@ -26,7 +26,7 @@ public @interface Column {
 	 * 对应字段名称，默认将属性名变大写变小写并在前加下划线，如“userName <=> user_name”；如果字段名为u_name,则需要手动填写fieldName
 	 * @return
 	 */
-	String fieldName() default "" ;
+	String value() default "" ;
 	
 	/**
 	 * 是否参与动态查询
