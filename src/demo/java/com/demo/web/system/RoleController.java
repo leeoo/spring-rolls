@@ -25,7 +25,7 @@ public class RoleController extends BaseController{
 	
 	@MappingMethod
 	public void list(ModelAndView mv){
-		mv.forward(getPage("role/list.jsp"));
+		mv.forward(getPage("/role/list.jsp"));
 	}
 	
 	@MappingMethod

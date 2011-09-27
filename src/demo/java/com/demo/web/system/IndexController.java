@@ -14,7 +14,7 @@ public class IndexController extends BaseController{
 	@MappingMethod
 	public End index(ModelAndView mv){
 		mv.addValue("loginName", SecurityThread.get().getName());
-		return mv.forward(getPage("/system/index.jsp"));
+		return mv.forward(getPage("/index.jsp"));
 	}
 	
 }
