@@ -3,6 +3,7 @@ package org.paramecium.mvc;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,8 +25,9 @@ import org.paramecium.log.LoggerFactory;
  * <br>项目名称(Project Name): <b>paramecium</b>
  * <br>包及类名(Package Class): <b>org.paramecium.mvc.ModelAndView.java</b>
  */
-public class ModelAndView {
+public class ModelAndView implements Serializable{
 	
+	private static final long serialVersionUID = 7105417137624158939L;
 	private final static Log logger = LoggerFactory.getLogger();
 	private boolean redirect = false;
 	private HttpServletRequest request;
@@ -137,9 +139,9 @@ public class ModelAndView {
 	 * forward跳转
 	 * @param forwardUrl
 	 */
-	public void forward(String forwardUrl){
+	public End forward(String forwardUrl){
 		if(response.isCommitted()){
-			return;
+			return null;
 		}
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher(forwardUrl);
 		try {
@@ -149,27 +151,29 @@ public class ModelAndView {
 		} catch (IOException e) {
 			logger.error(e);
 		}
+		return null;
 	}
 
 	/**
 	 * redirect重定向
 	 * @param redirectUrl
 	 */
-	public void redirect(String redirectUrl){
+	public End redirect(String redirectUrl){
 		try {
 			response.sendRedirect(redirectUrl);
 			redirect = true;
 		} catch (IOException e) {
 			logger.error(e);
 		}
+		return null;
 	}
 	
 	/**
 	 * 提供下载功能
 	 * @param file
 	 */
-	public void download(byte[] file){
-		download(file, null);
+	public End download(byte[] file){
+		return download(file, null);
 	}
 	
 	/**
@@ -177,8 +181,8 @@ public class ModelAndView {
 	 * @param file
 	 * @param fileName
 	 */
-	public void download(byte[] file,String fileName){
-		download(file, fileName, null);
+	public End download(byte[] file,String fileName){
+		return download(file, fileName, null);
 	}
 	
 	/**
@@ -187,7 +191,7 @@ public class ModelAndView {
 	 * @param fileName
 	 * @param encoding
 	 */
-	public void download(byte[] file,String fileName,String encoding){
+	public End download(byte[] file,String fileName,String encoding){
 		encoding = encoding!=null?encoding:"utf-8";
 		fileName = fileName!=null?fileName:"file";
 		response.setContentType("application/octet-stream;charset="+encoding);
@@ -200,14 +204,15 @@ public class ModelAndView {
 		}catch (Exception e) {
 			logger.error(e);
 		}
+		return null;
 	}
 	
 	/**
 	 * 输出xml
 	 * @param xml
 	 */
-	public void printXML(String xml){
-		printXML(xml,null);
+	public End printXML(String xml){
+		return printXML(xml,null);
 	}
 	
 	/**
@@ -215,7 +220,7 @@ public class ModelAndView {
 	 * @param xml
 	 * @param encoding
 	 */
-	public void printXML(String xml,String encoding){
+	public End printXML(String xml,String encoding){
 		encoding = encoding!=null?encoding:"utf-8";
 		response.setContentType("text/xml;charset="+encoding);
 		try{
@@ -226,14 +231,15 @@ public class ModelAndView {
 		}catch (Exception e) {
 			logger.error(e);
 		}
+		return null;
 	}
 	
 	/**
 	 * 输出json
 	 * @param json
 	 */
-	public void printJSON(String json){
-		printJSON(json,null);
+	public End printJSON(String json){
+		return printJSON(json,null);
 	}
 	
 	/**
@@ -241,7 +247,7 @@ public class ModelAndView {
 	 * @param json
 	 * @param encoding
 	 */
-	public void printJSON(String json,String encoding){
+	public End printJSON(String json,String encoding){
 		encoding = encoding!=null?encoding:"utf-8";
 		response.setContentType("text/html;charset="+encoding);
 		try{
@@ -252,6 +258,7 @@ public class ModelAndView {
 		}catch (Exception e) {
 			logger.error(e);
 		}
+		return null;
 	}
 
 	public HttpServletRequest getRequest() {
