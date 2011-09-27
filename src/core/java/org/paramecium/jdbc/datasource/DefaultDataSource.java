@@ -4,9 +4,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -151,7 +149,6 @@ public class DefaultDataSource implements DataSource{
 					}
 					logger.debug("默认数据源连接池当前数量为："+connectionPool.get(ds).size());
 					long currentTime = DateUtils.getCurrentDateTime().getTime();
-					Collection<Connection> tempConnections = new HashSet<Connection>();
 					for (Connection connection : connectionPool.get(ds).keySet()) {
 						try {
 							if(!connection.getAutoCommit()){
@@ -163,17 +160,17 @@ public class DefaultDataSource implements DataSource{
 							}
 							if (connection.getAutoCommit()) {
 								connection.close();
-								tempConnections.add(connection);
 								logger.debug("EN:A long time not use connection is colse! CN:一个长时间未被使用的Connection被关闭!");
 							}
 						} catch (SQLException e) {
 						}
 					}
-					for(Connection connection : tempConnections){
-						connectionPool.get(ds).remove(connection);
-						logger.debug("EN:A closed connection is clean from pool! CN:一个被关闭的Connection从连接池中清除!");
+					for(Connection connection : connectionPool.get(ds).keySet()){
+						if(connection.isClosed()){
+							connectionPool.get(ds).remove(connection);
+							logger.debug("EN:A closed connection is clean from pool! CN:一个被关闭的Connection从连接池中清除!");
+						}
 					}
-					tempConnections.clear();
 				} catch (Exception ex) {
 					logger.error(ex);
 				}
