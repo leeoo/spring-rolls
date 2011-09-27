@@ -52,7 +52,7 @@ public class UserController extends BaseController{
 		}
 		Collection<Role> allRole = roleService.getAll();
 		mv.addValue("roles", allRole);
-		return mv.forward(getPage("user/input.jsp"));
+		return mv.forward(getPage("/user/input.jsp"));
 	}
 	
 	@MappingMethod
@@ -78,7 +78,7 @@ public class UserController extends BaseController{
 			mv.addValue("user", user);
 			Collection<Role> allRole = roleService.getAll();
 			mv.addValue("roles", allRole);
-			return mv.forward(getPage("user/input.jsp"));
+			return mv.forward(getPage("/user/input.jsp"));
 		}
 		return mv.redirect(getServletExt("/system/user/list"));
 	}
