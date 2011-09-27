@@ -41,7 +41,7 @@ public class UserService {
 			new Exception("修改用户必须选择角色!");
 		}
 		ormDao.update(user);
-		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_user_role WHERE user?",user.getUsername());
+		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_user_role WHERE username=?",user.getUsername());
 		for(Role role:user.getRoles()){
 			ormDao.getGenericJdbcDao().executeDMLByArray("INSERT INTO t_user_role(username,rolename) VALUES(?,?)",user.getUsername(),role.getRolename());
 		}
@@ -82,13 +82,13 @@ public class UserService {
 	@Transactional(readOnly=true)
 	@Security(false)
 	public User getUser(String username){
-		return (User)ormDao.getGenericJdbcDao().queryUniqueByArray("SELECT * FROM t_security_user WHERE user?", User.class,username);
+		return (User)ormDao.getGenericJdbcDao().queryUniqueByArray("SELECT * FROM t_security_user WHERE username=?", User.class,username);
 	}
 
 	@Transactional(readOnly=true)
 	@Security(false)
 	public Collection<Resource> getUserAuth(String username){
-		Collection<Map<String, Object>> maps = ormDao.getGenericJdbcDao().queryByArray("SELECT ra.auth auth FROM t_role_auth ra WHERE ra.rolename IN(SELECT ur.rolename FROM t_user_role ur WHERE ur.user?)", username);
+		Collection<Map<String, Object>> maps = ormDao.getGenericJdbcDao().queryByArray("SELECT ra.auth auth FROM t_role_auth ra WHERE ra.rolename IN(SELECT ur.rolename FROM t_user_role ur WHERE ur.username=?)", username);
 		Collection<Resource> resources = new HashSet<Resource>();
 		for(Map<String,Object> map : maps){
 			Resource resource = new Resource((String)map.get("auth"));
