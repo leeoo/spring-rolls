@@ -7,9 +7,9 @@ import java.sql.SQLException;
  * sqlserver2005、2008级以上版本数据库方言实现
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2011-3-30下午03:25:28
- * <br>项 目 信 息:paramecium:org.paramecium.jdbc.dialect.SqlServer2005Dialect.java
+ * <br>项 目 信 息:paramecium:org.paramecium.jdbc.dialect.SqlServer200kxDialect.java
  */
-public final class SqlServer2005Dialect extends BaseDialect implements Dialect {
+public final class SqlServer2kxDialect extends BaseDialect implements Dialect {
 
 	public String getSql(final String sql,Page page){
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {

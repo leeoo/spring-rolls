@@ -7,9 +7,9 @@ import java.sql.SQLException;
  * SQLSERVER2000版本数据库方言实现
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2011-3-30下午03:26:35
- * <br>项 目 信 息:paramecium:org.paramecium.jdbc.dialect.SqlServerDialect.java
+ * <br>项 目 信 息:paramecium:org.paramecium.jdbc.dialect.SqlServer2kDialect.java
  */
-public final class SqlServerDialect extends BaseDialect implements Dialect {
+public final class SqlServer2kDialect extends BaseDialect implements Dialect {
 
 	public String getSql(final String sql,Page page){
 		String finalSql=sql;

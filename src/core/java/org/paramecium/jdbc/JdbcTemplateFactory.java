@@ -11,8 +11,8 @@ import org.paramecium.jdbc.dialect.InformixDialect;
 import org.paramecium.jdbc.dialect.MySqlDialect;
 import org.paramecium.jdbc.dialect.OracleDialect;
 import org.paramecium.jdbc.dialect.PostgresDialect;
-import org.paramecium.jdbc.dialect.SqlServer2005Dialect;
-import org.paramecium.jdbc.dialect.SqlServerDialect;
+import org.paramecium.jdbc.dialect.SqlServer2kDialect;
+import org.paramecium.jdbc.dialect.SqlServer2kxDialect;
 import org.paramecium.jdbc.dialect.SqliteDialect;
 /**
  * 功能描述(Description):<br><b>
@@ -51,9 +51,9 @@ public class JdbcTemplateFactory {
 		}else if(dbType.equalsIgnoreCase("oracle")){
 			return new OracleDialect();
 		}else if(dbType.equalsIgnoreCase("sqlserver")||dbType.equalsIgnoreCase("sqlserver2000")){
-			return new SqlServerDialect();
+			return new SqlServer2kDialect();
 		}else if(dbType.equalsIgnoreCase("sqlserver2005")||dbType.equalsIgnoreCase("sqlserver2008")){
-			return new SqlServer2005Dialect();
+			return new SqlServer2kxDialect();
 		}else if(dbType.equalsIgnoreCase("db2")){
 			return new Db2Dialect();
 		}else if(dbType.equalsIgnoreCase("informix")){
