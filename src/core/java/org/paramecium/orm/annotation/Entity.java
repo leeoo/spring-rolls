@@ -29,4 +29,10 @@ public @interface Entity {
 	 */
 	String orderBy() default "";
 	
+	/**
+	 * 全局的Where条件
+	 * @return
+	 */
+	String where() default "";
+	
 }

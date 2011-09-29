@@ -352,6 +352,9 @@ public class EntitySqlBuilder {
 		for(String where : wheres){
 			sb.append(where);
 		}
+		if(entity != null && entity.where().isEmpty()){
+			sb.append(" AND ".concat(entity.where()));
+		}
 		sb.delete(0, 4);
 		return sb.toString();
 	}
