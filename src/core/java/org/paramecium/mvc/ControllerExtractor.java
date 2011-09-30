@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.paramecium.commons.PathUtils;
 import org.paramecium.ioc.ApplicationContext;
 import org.paramecium.ioc.ControllerClassInfo;
 import org.paramecium.ioc.IocContextIndex;
@@ -108,16 +109,16 @@ public class ControllerExtractor {
 		try{
 			if(SecurityThread.getSecurity() != SecurityThread.Security.Null){
 				if(SecurityThread.getSecurity() == SecurityThread.Security.AnonymousException){
-					modelAndView.getResponse().sendRedirect(SecurityConfig.anonymousExceptionPage);
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.AuthorizationException){
 					modelAndView.getResponse().setStatus(403);
-					modelAndView.getResponse().sendRedirect(SecurityConfig.authorizationExceptionPage);
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.authorizationExceptionPage));
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserKickException){
-					modelAndView.getResponse().sendRedirect(SecurityConfig.userKickExceptionPage);
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userKickExceptionPage));
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserDisabledException){
-					modelAndView.getResponse().sendRedirect(SecurityConfig.userDisabledExceptionPage);
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userDisabledExceptionPage));
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.SessionExpiredException){
-					modelAndView.getResponse().sendRedirect(SecurityConfig.sessionExpiredExceptionPage);
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.sessionExpiredExceptionPage));
 				}/*继续扩展，可在配置文件中加入更多异常*/
 				end();
 				return false;
@@ -131,16 +132,16 @@ public class ControllerExtractor {
 	private static boolean security(Exception e,final HttpServletResponse response){
 		try {
 			if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
-				response.sendRedirect(SecurityConfig.anonymousExceptionPage);
+				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
 			}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
 				response.setStatus(403);
-				response.sendRedirect(SecurityConfig.authorizationExceptionPage);
+				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.authorizationExceptionPage));
 			}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
-				response.sendRedirect(SecurityConfig.userKickExceptionPage);
+				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.userKickExceptionPage));
 			}else if(e.getCause() instanceof UserDisabledException||e instanceof UserDisabledException){
-				response.sendRedirect(SecurityConfig.userDisabledExceptionPage);
+				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.userDisabledExceptionPage));
 			}else if(e.getCause() instanceof SessionExpiredException||e instanceof SessionExpiredException){
-				response.sendRedirect(SecurityConfig.sessionExpiredExceptionPage);
+				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.sessionExpiredExceptionPage));
 			}/*继续扩展，可在配置文件中加入更多异常*/
 		} catch (IOException e1) {
 		}

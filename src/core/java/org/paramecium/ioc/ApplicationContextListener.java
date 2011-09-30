@@ -1,5 +1,6 @@
 package org.paramecium.ioc;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -15,13 +16,23 @@ import org.paramecium.commons.PathUtils;
 public class ApplicationContextListener implements ServletContextListener {
 	
 	private static boolean isInit = true;
+	private static String path;
 
 	public void contextInitialized(ServletContextEvent event) {
 		if(isInit){
-			PathUtils.webClassRootPath = event.getServletContext().getRealPath("/WEB-INF")+"/classes";
+			ServletContext servletContext = event.getServletContext();
+			path = servletContext.getContextPath();
+			if(path!=null && path.equals("/")){
+				path = "";
+			}
+			PathUtils.webClassRootPath = servletContext.getRealPath("/WEB-INF")+"/classes";
 			ApplicationContext.init();
 			isInit = false;
 		}
+	}
+	
+	public static String getPath(){
+		return path;
 	}
 	
 	public void contextDestroyed(ServletContextEvent event) {

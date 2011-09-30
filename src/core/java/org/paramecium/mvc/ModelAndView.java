@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.paramecium.commons.BeanUtils;
+import org.paramecium.commons.PathUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 /**
@@ -160,7 +161,7 @@ public class ModelAndView implements Serializable{
 	 */
 	public End redirect(String redirectUrl){
 		try {
-			response.sendRedirect(redirectUrl);
+			response.sendRedirect(PathUtils.getNewPath(redirectUrl));
 			redirect = true;
 		} catch (IOException e) {
 			logger.error(e);
