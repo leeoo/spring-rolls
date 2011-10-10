@@ -24,6 +24,9 @@ public class LoggerFactory {
 	public static int loggerFileMax = 5;
 	public static String loggerDbInterface;
 	public static boolean sqlIsFormat = false;
+	public static boolean beanLogCollector = false;
+	public static boolean jdbcLogCollector = false;
+	public static boolean webLogCollector = false;
 	
 	static{
 		levelMap.put("trace", Log.LEVEL_TRACE);
@@ -54,7 +57,13 @@ public class LoggerFactory {
 			}
 		}
 		String sqlIsFormatStr = properties.get("sqlIsFormat");
+		String beanLogCollectorStr = properties.get("beanLogCollector");
+		String jdbcLogCollectorStr = properties.get("jdbcLogCollector");
+		String webLogCollectorStr = properties.get("webLogCollector");
 		sqlIsFormat = sqlIsFormatStr != null ? Boolean.valueOf(sqlIsFormatStr) : false;
+		beanLogCollector = beanLogCollectorStr != null ? Boolean.valueOf(beanLogCollector) : false;
+		jdbcLogCollector = jdbcLogCollectorStr != null ? Boolean.valueOf(jdbcLogCollector) : false;
+		webLogCollector = webLogCollectorStr != null ? Boolean.valueOf(webLogCollector) : false;
 	}
 	
 	/**

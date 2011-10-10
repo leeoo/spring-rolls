@@ -12,12 +12,6 @@ import java.util.Collection;
 public interface Collector<LOG extends Object> {
 	
 	/**
-	 * 是否启用
-	 * @param enabled
-	 */
-	public void enabled(boolean enabled);
-	
-	/**
 	 * 放入日志收集器队列
 	 * @param log
 	 */

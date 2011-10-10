@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.DateUtils;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
 
@@ -18,13 +19,12 @@ import org.paramecium.security.UserDetails;
 @SuppressWarnings("unchecked")
 public class JdbcCollector<STR extends Object> implements Collector<STR>{
 
-	private static boolean enabled = false;
+	private static boolean enabled = LoggerFactory.jdbcLogCollector;
 	
 	private static Cache<String,String> jdbcLogCache = CacheManager.getDefaultCache("CACHE_JDBC_LOG");
 
 	public synchronized Collection<String> getAll() {
 		if(!enabled){
-			jdbcLogCache.clear();
 			return null;
 		}
 		Collection<String> logs = jdbcLogCache.getKeys();
@@ -45,10 +45,6 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 			logger.append(log);
 			jdbcLogCache.put(logger.toString(), null);
 		}
-	}
-
-	public synchronized void enabled(boolean ebd) {
-		enabled = ebd;
 	}
 
 }

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.DateUtils;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
 
@@ -20,13 +21,12 @@ import org.paramecium.security.UserDetails;
 @SuppressWarnings("unchecked")
 public class WebCollector<Request extends Object> implements Collector<Request>{
 	
-	private static boolean enabled = false;
+	private static boolean enabled = LoggerFactory.webLogCollector;
 	
 	private static Cache<String,String> mvcLogCache = CacheManager.getDefaultCache("CACHE_WEB_LOG");
 
 	public synchronized Collection<String> getAll() {
 		if(!enabled){
-			mvcLogCache.clear();
 			return null;
 		}
 		Collection<String> logs = mvcLogCache.getKeys();
@@ -51,8 +51,4 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 		}
 	}
 
-	public synchronized void enabled(boolean ebd) {
-		enabled = ebd;
-	}
-	
 }
