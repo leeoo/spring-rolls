@@ -61,9 +61,9 @@ public class LoggerFactory {
 		String jdbcLogCollectorStr = properties.get("jdbcLogCollector");
 		String webLogCollectorStr = properties.get("webLogCollector");
 		sqlIsFormat = sqlIsFormatStr != null ? Boolean.valueOf(sqlIsFormatStr) : false;
-		beanLogCollector = beanLogCollectorStr != null ? Boolean.valueOf(beanLogCollector) : false;
-		jdbcLogCollector = jdbcLogCollectorStr != null ? Boolean.valueOf(jdbcLogCollector) : false;
-		webLogCollector = webLogCollectorStr != null ? Boolean.valueOf(webLogCollector) : false;
+		beanLogCollector = beanLogCollectorStr != null ? Boolean.valueOf(beanLogCollectorStr) : false;
+		jdbcLogCollector = jdbcLogCollectorStr != null ? Boolean.valueOf(jdbcLogCollectorStr) : false;
+		webLogCollector = webLogCollectorStr != null ? Boolean.valueOf(webLogCollectorStr) : false;
 	}
 	
 	/**

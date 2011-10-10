@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.DateUtils;
+import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
@@ -18,6 +19,8 @@ import org.paramecium.security.UserDetails;
  */
 @SuppressWarnings("unchecked")
 public class BeanCollector<STR extends Object> implements Collector<STR>{
+	
+	private final static Log logger$ = LoggerFactory.getLogger();
 
 	private static boolean enabled = LoggerFactory.beanLogCollector;
 	
@@ -29,6 +32,7 @@ public class BeanCollector<STR extends Object> implements Collector<STR>{
 		}
 		Collection<String> logs = beanLogCache.getKeys();
 		beanLogCache.clear();
+		logger$.debug("BEAN log cache is claer!");
 		return logs;
 	}
 
@@ -44,6 +48,7 @@ public class BeanCollector<STR extends Object> implements Collector<STR>{
 			logger.append(username).append("|");
 			logger.append(log);
 			beanLogCache.put(logger.toString(), null);
+			logger$.debug(logger.toString());
 		}
 	}
 

@@ -141,7 +141,7 @@ public class SecurityThread {
 		String sessionId = sessionThreadLocal.get();
 		if(sessionId!=null){
 			UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
-			if(userDetails!=null){
+			if(userDetails==null){
 				return null;
 			}
 			return userDetails;

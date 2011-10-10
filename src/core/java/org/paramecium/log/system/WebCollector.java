@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.DateUtils;
+import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
@@ -21,6 +22,8 @@ import org.paramecium.security.UserDetails;
 @SuppressWarnings("unchecked")
 public class WebCollector<Request extends Object> implements Collector<Request>{
 	
+	private final static Log logger$ = LoggerFactory.getLogger();
+	
 	private static boolean enabled = LoggerFactory.webLogCollector;
 	
 	private static Cache<String,String> mvcLogCache = CacheManager.getDefaultCache("CACHE_WEB_LOG");
@@ -31,6 +34,7 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 		}
 		Collection<String> logs = mvcLogCache.getKeys();
 		mvcLogCache.clear();
+		logger$.debug("MVC log cache is claer!");
 		return logs;
 	}
 
@@ -48,6 +52,7 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 			logger.append(username).append("|");
 			logger.append(rq.getRequestURI());
 			mvcLogCache.put(logger.toString(), null);
+			logger$.debug(logger.toString());
 		}
 	}
 
