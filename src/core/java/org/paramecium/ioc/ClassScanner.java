@@ -84,14 +84,22 @@ public class ClassScanner {
 			if(transactional!=null){
 				classInfo.setTransactional(true);
 			}
+			if(IocContextIndex.getService(iocUniqueName)!=null){
+				logger.fatal(clazz.getName()+" # "+iocUniqueName+"容器内已经存在，重复注入将会产生隐患，系统为您停止启动服务，请查明原因再试。");
+				System.exit(0);
+			}
 			IocContextIndex.setService(classInfo);
-			logger.debug(clazz.getName()+" 被载入");
+			logger.debug(clazz.getName()+" # "+iocUniqueName+" 被载入");
 		}else if(controller!=null){
 			ControllerClassInfo classInfo = new ControllerClassInfo();
 			classInfo.setClazz(clazz);
 			classInfo.setNamespace(iocUniqueName);
+			if(IocContextIndex.getController(iocUniqueName)!=null){
+				logger.fatal(clazz.getName()+" # "+iocUniqueName+"容器内已经存在，重复注入将会产生隐患，系统为您停止启动服务，请查明原因再试。");
+				System.exit(0);
+			}
 			IocContextIndex.setController(classInfo);
-			logger.debug(clazz.getName()+" 被载入");
+			logger.debug(clazz.getName()+" # "+iocUniqueName+" 被载入");
 		}
 		if(security!=null){
 			Resource resource = new Resource();
