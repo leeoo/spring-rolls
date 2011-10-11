@@ -7,7 +7,7 @@
  * <br>项 目 信 息:paramecium:.TomcatServer.java
  */
 public class TomcatServer extends BaseWebServerEmbed {
-	public String DEFAULT_PATH = "/web";
+	public String DEFAULT_PATH = "/WebRoot";
 
 	public String[] getContextsAbsolutePath() {
 		return new String[] { getSingleContextAbsolutePath() };
