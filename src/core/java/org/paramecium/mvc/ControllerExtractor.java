@@ -66,8 +66,7 @@ public class ControllerExtractor {
 				for (Class<?> clazz = classInfo.getClazz(); clazz != Object.class; clazz = clazz.getSuperclass()) {
 					Method[] methods = clazz.getMethods();//只返回public，如果需要private可用getDeclaredMethods
 					if(methods==null||methods.length<1){
-						logger.warn(classInfo.getClazz().getName()+"没有定义相关的处理方法!");
-						return return404(response);
+						continue;
 					}
 					ModelAndView mv = new ModelAndView(request, response);
 					for(Method method : methods){
