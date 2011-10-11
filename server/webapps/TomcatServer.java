@@ -40,11 +40,11 @@ public class TomcatServer extends BaseWebServerEmbed {
 	}
 	
 	public TomcatServer(String svrName,int port,String coding){
-		super(svrName,port,coding);
+		this(svrName,null,80,coding);
 	}
 	
 	public TomcatServer() {
-		super();
+		this(null,null,80,null);
 	}
 	
 	public String getTomcatPath() {

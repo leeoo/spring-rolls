@@ -10,7 +10,7 @@
 public class WebStart {
 
 	public static void main(String[] args) throws Exception {
-		 new TomcatServer(null,"/WebRoot",80,"UTF-8").start();
+		 new TomcatServer().start();
 	}
 
 }
