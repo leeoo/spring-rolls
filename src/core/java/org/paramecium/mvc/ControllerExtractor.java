@@ -44,8 +44,6 @@ public class ControllerExtractor {
 			if(request.getSession(false)==null){
 				request.getSession();
 			}
-			start(request);
-			CollectorFactory.getWebCollector().put(request);//放入日志缓存
 			String servletPath = request.getServletPath();
 			String[] URIStrs = getURIStrs(servletPath);
 			if(URIStrs==null){
@@ -53,6 +51,8 @@ public class ControllerExtractor {
 				return returnTrue();
 			}
 			try{
+				start(request);
+				CollectorFactory.getWebCollector().put(request);//放入日志缓存
 				ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
 				if(classInfo==null){
 					logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
@@ -100,7 +100,6 @@ public class ControllerExtractor {
 	}
 
 	private static boolean returnTrue(){
-		end();
 		return true;
 	}
 	
