@@ -1,19 +1,16 @@
 package org.paramecium.search;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.ConcurrentMergeScheduler;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.MergeScheduler;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.MergePolicy.OneMerge;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -53,20 +50,6 @@ public class SearchIndexCreator {
 		return INDEX_PATH;
 	}
 
-	private static class ReportingMergeScheduler extends MergeScheduler {
-		
-		public void merge(IndexWriter writer) throws CorruptIndexException,IOException {
-			OneMerge merge = null;
-			while ((merge = writer.getNextMerge()) != null) {
-				writer.merge(merge);
-			}
-		}
-
-		public void close() throws CorruptIndexException, IOException {
-		}
-
-	}
-
 	/**
 	 * 功能描述：创建索引文件 <br>
 	 * @param bean对象实体，用于装载数据
@@ -77,7 +60,7 @@ public class SearchIndexCreator {
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
 			IndexWriterConfig conf = new IndexWriterConfig(version, new IKAnalyzer());
-			conf.setMergeScheduler(new ReportingMergeScheduler());
+			conf.setMergeScheduler(new ConcurrentMergeScheduler());
 			conf.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 			writer = new IndexWriter(directory, conf);
 			Document doc = new Document();
@@ -135,7 +118,7 @@ public class SearchIndexCreator {
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
 			IndexWriterConfig conf = new IndexWriterConfig(version, new IKAnalyzer());
-			conf.setMergeScheduler(new ReportingMergeScheduler());
+			conf.setMergeScheduler(new ConcurrentMergeScheduler());
 			writer = new IndexWriter(directory, conf);
 			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 				java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
@@ -177,7 +160,7 @@ public class SearchIndexCreator {
 	}
 
 	/**
-	 * 功能描述：检索文本内容，获得数据库主键值集合，如果查询范围较广，检索结果较多，只返回100个.
+	 * 功能描述：检索文本内容，获得数据库主键值集合.
 	 * BooleanClause.Occur.MUST，BooleanClause
 	 * .Occur.MUST_NOT，BooleanClause.Occur.SHOULD。有以下6种组合：
 	 * A．MUST和MUST：取得连个查询子句的交集。
@@ -188,10 +171,11 @@ public class SearchIndexCreator {
 	 * E．SHOULD与SHOULD：表示“或”关系，最终检索结果为所有检索子句的并集。 <br>
 	 * @param clazz 实体类型 <br>
 	 * @param queryText 文本内容 <br>
+	 * @param queryCount 查询结果数量 <br>
 	 * @param textPropertyNames 文本检索bean属性名组 <br>
 	 * @return 唯一索引即主键值集合
 	 */
-	public synchronized static Collection<Object> searchKeyword(Class<?> clazz,String queryText, String... textPropertyNames) {
+	public synchronized static Collection<Object> searchKeyword(Class<?> clazz,String queryText,int queryCount, String... textPropertyNames) {
 		Collection<Object> ids = new LinkedList<Object>();
 		IndexReader reader = null;
 		IndexSearcher searcher = null;
@@ -201,7 +185,7 @@ public class SearchIndexCreator {
 			reader = IndexReader.open(directory, true);
 			searcher = new IndexSearcher(reader);
 		    Query query = IKQueryParser.parseMultiField(textPropertyNames, queryText);
-			TopDocs topDocs = searcher.search(query, 100);
+			TopDocs topDocs = searcher.search(query, queryCount);
 			ScoreDoc[] hits = topDocs.scoreDocs;
 			for (int i = 0; i < hits.length; i++) {
 				int DocId = hits[i].doc;
@@ -235,12 +219,13 @@ public class SearchIndexCreator {
 	}
 	
 	/**
-	 * 功能描述：检索文本内容，获得数据库主键值集合，如果查询范围较广，检索结果较多，只返回100个. <br>
+	 * 功能描述：检索文本内容，获得数据库主键值集合 <br>
 	 * @param clazz 实体类型 <br>
 	 * @param queryText 文本内容 <br>
+	 * @param queryCount 查询结果数量 <br>
 	 * @return 唯一索引即主键值集合
 	 */
-	public synchronized static Collection<Object> searchKeyword(Class<?> clazz,String queryText) {
+	public synchronized static Collection<Object> searchKeyword(Class<?> clazz,String queryText,int queryCount) {
 		Collection<Object> textPropertyNameList = new LinkedList<Object>();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
@@ -253,7 +238,17 @@ public class SearchIndexCreator {
 			}
 		}
 		String[] textPropertyNames = (String[]) textPropertyNameList.toArray(new String[textPropertyNameList.size()]);
-		return searchKeyword(clazz, queryText, textPropertyNames);
+		return searchKeyword(clazz, queryText,queryCount, textPropertyNames);
+	}
+	
+	/**
+	 * 功能描述：检索文本内容，获得数据库主键值集合，如果查询范围较广，检索结果较多，只返回100个. <br>
+	 * @param clazz 实体类型 <br>
+	 * @param queryText 文本内容 <br>
+	 * @return 唯一索引即主键值集合
+	 */
+	public synchronized static Collection<Object> searchKeyword(Class<?> clazz,String queryText) {
+		return searchKeyword(clazz, queryText,100);
 	}
 
 	private static String getIndexName(Class<?> clazz) {

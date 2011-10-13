@@ -14,7 +14,7 @@ public class Main {
 		test.setSize(20);
 		Validator.validation(test);
 		SearchIndexCreator.createIndex(test);*/
-		Collection<Object> list = SearchIndexCreator.searchKeyword(Test.class, "沈阳市");
+		Collection<Object> list = SearchIndexCreator.searchKeyword(Test.class, "北京青年");
 		for(Object o : list){
 			System.out.println(o);
 		}
