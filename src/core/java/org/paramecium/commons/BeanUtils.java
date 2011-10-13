@@ -219,4 +219,31 @@ public abstract class BeanUtils {
 		return null;
 	}
 	
+	/**
+	 * 设置属性值在bean中
+	 * @param bean
+	 * @param name
+	 * @param value
+	 */
+	public static void setFieldValue(Object bean,String name,Object value){
+		try {
+			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
+				Field[] fields = superClass.getDeclaredFields();
+				for(Field field : fields){
+					field.setAccessible(true);
+					try {
+						if(field.getName().equals(name)){
+							field.set(bean, value);
+							return;
+						}
+					} catch (Exception e) {
+						logger.warn(e.fillInStackTrace());
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
