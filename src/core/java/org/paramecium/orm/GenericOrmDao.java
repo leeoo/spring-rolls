@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.paramecium.jdbc.GenericJdbcDao;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.orm.annotation.Entity;
+import org.paramecium.validation.Validator;
 /**
  * 功 能 描 述:<br>
  * 通用ORM数据操作，功能类似hiberante
@@ -18,6 +19,16 @@ public final class GenericOrmDao<T , PK extends Serializable> implements BaseOrm
 	private GenericJdbcDao genericJdbcDao;
 	
 	private Class<T> clazz;
+	
+	private boolean isValidation = false;//是否操作数据库时启用自动验证
+	
+	/**
+	 * 设置操作数据库时是否启用自动验证,默认为false，即不启动。
+	 * @param isValidation
+	 */
+	public void setValidation(boolean isValidation) {
+		this.isValidation = isValidation;
+	}
 	
 	public GenericOrmDao(Class<T> clazz){
 		genericJdbcDao = new GenericJdbcDao();
@@ -43,6 +54,9 @@ public final class GenericOrmDao<T , PK extends Serializable> implements BaseOrm
 	 * @throws Exception
 	 */
 	public Number insert(T bean) throws Exception {
+		if(isValidation){
+			Validator.validation(bean);
+		}
 		String sql = EntitySqlBuilder.getInsertSql(bean);
 		String isAuto = sql.substring(0, 1);
 		if(isAuto.equals("A")){
@@ -59,6 +73,11 @@ public final class GenericOrmDao<T , PK extends Serializable> implements BaseOrm
 	 * @throws Exception
 	 */
 	public void insert(Collection<T> beans) throws Exception {
+		if(isValidation){
+			for(T bean : beans){
+				Validator.validation(bean);
+			}
+		}
 		String sql = EntitySqlBuilder.getInsertSql(beans.iterator().next());
 		genericJdbcDao.executeBatchDMLByBeans(sql.substring(1, sql.length()), beans);
 	}
@@ -69,6 +88,9 @@ public final class GenericOrmDao<T , PK extends Serializable> implements BaseOrm
 	 * @throws Exception
 	 */
 	public void update(T bean) throws Exception {
+		if(isValidation){
+			Validator.validationByUpdate(bean);
+		}
 		String sql = EntitySqlBuilder.getUpdateSql(bean);
 		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
@@ -185,5 +207,5 @@ public final class GenericOrmDao<T , PK extends Serializable> implements BaseOrm
 		}
 		return (Collection<T>) genericJdbcDao.queryByBean(sql, clazz, whereBean);
 	}
-	
+
 }

@@ -166,7 +166,7 @@ public class Validator {
 	}
 	
 	/**
-	 * 直接验证，并抛出自定义验证异常,咋更新时候，有些字段无需再次修改或展示给客户，所有验证忽略那些带有@NotUpdate的字段。
+	 * 直接验证，并抛出自定义验证异常,在更新时候，有些字段无需再次修改或展示给客户，所有验证忽略那些带有@NotUpdate的字段。
 	 * @param bean
 	 * @throws ValidationException
 	 */
