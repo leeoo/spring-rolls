@@ -24,7 +24,7 @@ public class BeanCollector<STR extends Object> implements Collector<STR>{
 
 	private static boolean enabled = LoggerFactory.beanLogCollector;
 	
-	private static Cache<String,String> beanLogCache = CacheManager.getDefaultCache("CACHE_BEAN_LOG");
+	private final static Cache<String,String> beanLogCache = CacheManager.getDefaultCache("CACHE_BEAN_LOG");
 
 	public synchronized Collection<String> getAll() {
 		if(!enabled){

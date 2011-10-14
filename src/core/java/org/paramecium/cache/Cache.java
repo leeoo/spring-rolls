@@ -17,7 +17,7 @@ public interface Cache<KEY extends Object,VALUE extends Object> {
 	
 	public void put(KEY key,VALUE value);
 	
-	public Object get(KEY key);
+	public VALUE get(KEY key);
 	
 	public void remove(KEY key);
 	

@@ -26,7 +26,7 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 	
 	private static boolean enabled = LoggerFactory.webLogCollector;
 	
-	private static Cache<String,String> mvcLogCache = CacheManager.getDefaultCache("CACHE_WEB_LOG");
+	private final static Cache<String,String> mvcLogCache = CacheManager.getDefaultCache("CACHE_WEB_LOG");
 
 	public synchronized Collection<String> getAll() {
 		if(!enabled){

@@ -24,7 +24,7 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 	
 	private static boolean enabled = LoggerFactory.jdbcLogCollector;
 	
-	private static Cache<String,String> jdbcLogCache = CacheManager.getDefaultCache("CACHE_JDBC_LOG");
+	private final static Cache<String,String> jdbcLogCache = CacheManager.getDefaultCache("CACHE_JDBC_LOG");
 
 	public synchronized Collection<String> getAll() {
 		if(!enabled){

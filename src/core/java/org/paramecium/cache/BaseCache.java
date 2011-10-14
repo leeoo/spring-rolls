@@ -27,7 +27,7 @@ public abstract class BaseCache<KEY extends Object,VALUE extends Object> impleme
 		map.clear();
 	}
 
-	public synchronized Object get(KEY key) {
+	public synchronized VALUE get(KEY key) {
 		Element<KEY,VALUE> element = map.get(key);
 		return element == null?null:element.getValue();
 	}

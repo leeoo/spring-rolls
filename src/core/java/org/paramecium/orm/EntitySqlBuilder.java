@@ -3,9 +3,9 @@ package org.paramecium.orm;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
+import org.paramecium.cache.Cache;
+import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.BeanUtils;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
@@ -24,7 +24,8 @@ import org.paramecium.orm.annotation.PrimaryKey.AUTO_GENERATE_MODE;
  */
 public class EntitySqlBuilder {
 	
-	private final static ConcurrentMap<String, String> sqlCache = new ConcurrentHashMap<String, String>();
+	@SuppressWarnings("unchecked")
+	private final static Cache<String,String> sqlCache = CacheManager.getDefaultCache("CACHE_SQL_BUILDER");
 	
 	public static String getInsertSql(Object bean){
 		String key = bean.getClass().getName()+":insert";
