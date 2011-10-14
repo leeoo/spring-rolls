@@ -6,6 +6,8 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.apache.lucene.search.SortField;
 /**
  * 功能描述(Description):<br><b>
  * Lucene排序用，只作存储，不做索引和分词
@@ -25,5 +27,11 @@ public @interface SortWord {
 	 * @return
 	 */
 	public boolean reverse() default true;
+	
+	/**
+	 * 排序类型
+	 * @return
+	 */
+	public int type() default SortField.INT;
 	
 }

@@ -1,7 +1,6 @@
 package org.paramecium.search;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -297,31 +296,7 @@ public class SearchIndexCreator {
 				String propertyName = field.getName();
 				if(isSortWord(clazz, propertyName)){
 					SortWord sortWord = field.getAnnotation(SortWord.class);
-					int type = SortField.DOC;
-					if (String.class.equals(field.getType())){
-						type = SortField.STRING;
-					}else if (int.class.equals(field.getType()) || Integer.class.equals(field.getType())) {
-						type = SortField.INT;
-					}else if (java.util.Date.class.equals(field.getType())) {
-						type = SortField.INT;
-					}else if (long.class.equals(field.getType()) || Long.class.equals(field.getType())) {
-						type = SortField.LONG;
-					}else if (boolean.class.equals(field.getType()) || Boolean.class.equals(field.getType())) {
-						type = SortField.CUSTOM;
-					}else if (byte.class.equals(field.getType()) || Byte.class.equals(field.getType())) {
-						type = SortField.BYTE;
-					}else if (short.class.equals(field.getType()) || Short.class.equals(field.getType())) {
-						type = SortField.SHORT;
-					}else if (float.class.equals(field.getType()) || Float.class.equals(field.getType())) {
-						type = SortField.FLOAT;
-					}else if (double.class.equals(field.getType()) || Double.class.equals(field.getType()) || Number.class.equals(field.getType())) {
-						type = SortField.DOUBLE;
-					}else if (byte[].class.equals(field.getType())) {
-						type = SortField.BYTE;
-					}else if (BigDecimal.class.equals(field.getType())) {
-						type = SortField.DOUBLE;
-					}
-					sfs.add(new SortField(propertyName, type, sortWord.reverse()));
+					sfs.add(new SortField(propertyName, sortWord.type(), sortWord.reverse()));
 				}
 			}
 		}
