@@ -2,15 +2,18 @@ package com.demo.test;
 
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.search.annotation.Index;
+import org.paramecium.search.annotation.KeyWord;
+import org.paramecium.search.annotation.SortWord;
 import org.paramecium.search.annotation.TextWord;
-import org.paramecium.validation.annotation.IDCard;
 import org.paramecium.validation.annotation.base.Length;
 import org.paramecium.validation.annotation.base.NotNull;
 import org.paramecium.validation.annotation.base.Size;
-@Index(indexName="index_test",keywordPropertyName="name")
+@Index("index_test")
 public class Test {
+	
 	@NotNull(empty = true)
 	@ShowLabel("姓名")
+	@KeyWord
 	private String name;
 
 	@NotNull
@@ -21,11 +24,9 @@ public class Test {
 	
 	@Size(max=50,min=20)
 	@ShowLabel("长度")
+	@SortWord
 	private int size;
 
-	@IDCard
-	private String idCard;
-	
 	public String getName() {
 		return name;
 	}
@@ -48,14 +49,6 @@ public class Test {
 
 	public void setSize(int size) {
 		this.size = size;
-	}
-
-	public String getIdCard() {
-		return idCard;
-	}
-
-	public void setIdCard(String idCard) {
-		this.idCard = idCard;
 	}
 
 }

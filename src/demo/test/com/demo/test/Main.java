@@ -8,11 +8,21 @@ public class Main {
 	
 	public static void main(String[] args) {
 		/*Test test = new Test();
-		test.setName("2");
+		test.setName("窦志");
 		test.setAddress("北京市青年大街!");
-		test.setIdCard("211233198202060616");
-		test.setSize(20);
-		Validator.validation(test);
+		test.setSize(6);
+		SearchIndexCreator.createIndex(test);
+		test.setName("曹阳");
+		test.setAddress("北京市青年大街!");
+		test.setSize(5);
+		SearchIndexCreator.createIndex(test);
+		test.setName("张迪");
+		test.setAddress("北京市青年大街!");
+		test.setSize(3);
+		SearchIndexCreator.createIndex(test);
+		test.setName("谢雷");
+		test.setAddress("北京市青年大街!");
+		test.setSize(4);
 		SearchIndexCreator.createIndex(test);*/
 		Collection<Object> list = SearchIndexCreator.searchKeyword(Test.class, "北京青年");
 		for(Object o : list){
