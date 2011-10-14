@@ -220,8 +220,14 @@ public class SearchIndexCreator {
 			reader = IndexReader.open(directory, true);
 			searcher = new IndexSearcher(reader);
 		    Query query = IKQueryParser.parseMultiField(textPropertyNames, queryText);
-			Sort sort = new Sort(getSortFields(clazz));
-			TopDocs topDocs = searcher.search(query, queryCount,sort);
+		    TopDocs topDocs = null;
+		    SortField[] sortFields = getSortFields(clazz);
+		    if(sortFields!=null && sortFields.length>0){
+		    	Sort sort = new Sort(sortFields);
+		    	topDocs = searcher.search(query, queryCount,sort);
+		    }else{
+		    	topDocs = searcher.search(query, queryCount);
+		    }
 			ScoreDoc[] hits = topDocs.scoreDocs;
 			for (int i = 0; i < hits.length; i++) {
 				int DocId = hits[i].doc;
