@@ -1,8 +1,11 @@
 package org.paramecium.search;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -14,15 +17,18 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-import org.paramecium.commons.BeanUtils;
 import org.paramecium.commons.PathUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.search.annotation.Index;
+import org.paramecium.search.annotation.KeyWord;
+import org.paramecium.search.annotation.SortWord;
 import org.paramecium.search.annotation.TextWord;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 import org.wltea.analyzer.lucene.IKQueryParser;
@@ -52,6 +58,19 @@ public class SearchIndexCreator {
 
 	/**
 	 * 功能描述：创建索引文件 <br>
+	 * Field.Store.YES:存储字段值（未分词前的字段值）
+     * Field.Store.NO:不存储,存储与索引没有关系
+     * Field.Store.COMPRESS:压缩存储,用于长文本或二进制，但性能受损
+	 * Field.Index.ANALYZED:分词建索引
+	 * Field.Index.ANALYZED_NO_NORMS:分词建索引，但是Field的值不像通常那样被保存，而是只取一个byte，这样节约存储空间
+	 * Field.Index.NOT_ANALYZED:不分词且索引
+	 * Field.Index.NOT_ANALYZED_NO_NORMS:不分词建索引，Field的值去一个byte保存
+	 * TermVector表示文档的条目（由一个Document和Field定位）和它们在当前文档中所出现的次数
+	 * Field.TermVector.YES:为每个文档（Document）存储该字段的TermVector
+	 * Field.TermVector.NO:不存储TermVector
+	 * Field.TermVector.WITH_POSITIONS:存储位置
+	 * Field.TermVector.WITH_OFFSETS:存储偏移量
+	 * Field.TermVector.WITH_POSITIONS_OFFSETS:存储位置和偏移量
 	 * @param bean对象实体，用于装载数据
 	 */
 	public synchronized static void createIndex(Object bean) {
@@ -64,16 +83,19 @@ public class SearchIndexCreator {
 			conf.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 			writer = new IndexWriter(directory, conf);
 			Document doc = new Document();
-			String kekwordName = getKeywordName(bean.getClass());
-			String kekwordValue = (String)BeanUtils.getFieldValue(bean, kekwordName);
-			Field keyField = new Field(kekwordName, kekwordValue,Field.Store.YES, Field.Index.NOT_ANALYZED);
-			doc.add(keyField);
 			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 				java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
 				for(java.lang.reflect.Field field : fields){
 					field.setAccessible(true);
 					String propertyName = field.getName();
-					if(isTextWord(bean.getClass(), propertyName)){
+					if(isKeyWord(bean.getClass(), propertyName)){
+						Object value = field.get(bean);
+						if (value == null || value.toString().trim().isEmpty()) {
+							continue;
+						}
+						Field textField = new Field(propertyName, value.toString(),Field.Store.YES, Field.Index.NOT_ANALYZED);
+						doc.add(textField);
+					}else if(isTextWord(bean.getClass(), propertyName)){
 						String propertyValue = (String)field.get(bean);
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
@@ -81,7 +103,14 @@ public class SearchIndexCreator {
 						if (isFilterHtmlTags(bean.getClass(), propertyName)) {
 							propertyValue = html2Text(propertyValue);
 						}
-						Field textField = new Field(propertyName, propertyValue,Field.Store.YES, Field.Index.ANALYZED);
+						Field textField = new Field(propertyName, propertyValue,Field.Store.NO, Field.Index.ANALYZED);
+						doc.add(textField);
+					}else if(isSortWord(bean.getClass(), propertyName)){
+						Object value = field.get(bean);
+						if (value == null || value.toString().trim().isEmpty()) {
+							continue;
+						}
+						Field textField = new Field(propertyName, value.toString(),Field.Store.NO, Field.Index.NOT_ANALYZED);
 						doc.add(textField);
 					}
 				}
@@ -125,7 +154,14 @@ public class SearchIndexCreator {
 				for(java.lang.reflect.Field field : fields){
 					field.setAccessible(true);
 					String propertyName = field.getName();
-					if(isTextWord(bean.getClass(), propertyName)){
+					if(isKeyWord(bean.getClass(), propertyName)||isSortWord(bean.getClass(), propertyName)){
+						Object value = field.get(bean);
+						if (value == null || value.toString().trim().isEmpty()) {
+							continue;
+						}
+						Term term = new Term(propertyName, value.toString());
+						writer.deleteDocuments(term);
+					}else if(isTextWord(bean.getClass(), propertyName)){
 						String propertyValue = (String)field.get(bean);
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
@@ -185,7 +221,8 @@ public class SearchIndexCreator {
 			reader = IndexReader.open(directory, true);
 			searcher = new IndexSearcher(reader);
 		    Query query = IKQueryParser.parseMultiField(textPropertyNames, queryText);
-			TopDocs topDocs = searcher.search(query, queryCount);
+			Sort sort = new Sort(getSortFields(clazz));
+			TopDocs topDocs = searcher.search(query, queryCount,sort);
 			ScoreDoc[] hits = topDocs.scoreDocs;
 			for (int i = 0; i < hits.length; i++) {
 				int DocId = hits[i].doc;
@@ -250,13 +287,57 @@ public class SearchIndexCreator {
 	public synchronized static Collection<Object> searchKeyword(Class<?> clazz,String queryText) {
 		return searchKeyword(clazz, queryText,100);
 	}
+	
+	private static SortField[] getSortFields(Class<?> clazz) {
+		List<SortField> sfs = new ArrayList<SortField>();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
+			for(java.lang.reflect.Field field : fields){
+				field.setAccessible(true);
+				String propertyName = field.getName();
+				if(isSortWord(clazz, propertyName)){
+					SortWord sortWord = field.getAnnotation(SortWord.class);
+					int type = SortField.DOC;
+					if (String.class.equals(field.getType())){
+						type = SortField.STRING;
+					}else if (int.class.equals(field.getType()) || Integer.class.equals(field.getType())) {
+						type = SortField.INT;
+					}else if (java.util.Date.class.equals(field.getType())) {
+						type = SortField.INT;
+					}else if (long.class.equals(field.getType()) || Long.class.equals(field.getType())) {
+						type = SortField.LONG;
+					}else if (boolean.class.equals(field.getType()) || Boolean.class.equals(field.getType())) {
+						type = SortField.CUSTOM;
+					}else if (byte.class.equals(field.getType()) || Byte.class.equals(field.getType())) {
+						type = SortField.BYTE;
+					}else if (short.class.equals(field.getType()) || Short.class.equals(field.getType())) {
+						type = SortField.SHORT;
+					}else if (float.class.equals(field.getType()) || Float.class.equals(field.getType())) {
+						type = SortField.FLOAT;
+					}else if (double.class.equals(field.getType()) || Double.class.equals(field.getType()) || Number.class.equals(field.getType())) {
+						type = SortField.DOUBLE;
+					}else if (byte[].class.equals(field.getType())) {
+						type = SortField.BYTE;
+					}else if (BigDecimal.class.equals(field.getType())) {
+						type = SortField.DOUBLE;
+					}
+					sfs.add(new SortField(propertyName, type, sortWord.reverse()));
+				}
+			}
+		}
+		SortField[] sfArray = new SortField[sfs.size()];
+		for(int i = 0 ; i < sfs.size();i++){
+			sfArray[i] = sfs.get(i);
+		}
+		return sfArray;
+	}
 
 	private static String getIndexName(Class<?> clazz) {
 		Index index = clazz.getAnnotation(Index.class);
 		if (index == null) {
 			return clazz.getSimpleName();
 		}
-		String indexName = index.indexName();
+		String indexName = index.value();
 		if (indexName == null) {
 			return clazz.getSimpleName();
 		}
@@ -268,11 +349,17 @@ public class SearchIndexCreator {
 		if (index == null) {
 			return "id";
 		}
-		String keyword = index.keywordPropertyName();
-		if (keyword == null) {
-			return "id";
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
+			for(java.lang.reflect.Field field : fields){
+				field.setAccessible(true);
+				String propertyName = field.getName();
+				if(isKeyWord(clazz, propertyName)){
+					return propertyName;
+				}
+			}
 		}
-		return keyword;
+		return "id";
 	}
 
 	private static boolean isTextWord(Class<?> clazz, String propertyName) {
@@ -282,6 +369,30 @@ public class SearchIndexCreator {
 		} catch (Exception e) {
 		}
 		if (textWord != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean isSortWord(Class<?> clazz, String propertyName) {
+		SortWord sortWord = null;
+		try {
+			sortWord = clazz.getDeclaredField(propertyName).getAnnotation(SortWord.class);
+		} catch (Exception e) {
+		}
+		if (sortWord != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean isKeyWord(Class<?> clazz, String propertyName) {
+		KeyWord keyWord = null;
+		try {
+			keyWord = clazz.getDeclaredField(propertyName).getAnnotation(KeyWord.class);
+		} catch (Exception e) {
+		}
+		if (keyWord != null) {
 			return true;
 		}
 		return false;

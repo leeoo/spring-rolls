@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 /**
  * 功能描述(Description):<br><b>
- * 对@Index所搜引擎索引建立查询字段标注,加入该标注的实体属性搜索引擎会建立文本索引
+ * 文本字段，建立分词和索引，但不做存储
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-8-30下午07:23:30</b>
  * <br>项目名称(Project Name): <b>paramecium</b>

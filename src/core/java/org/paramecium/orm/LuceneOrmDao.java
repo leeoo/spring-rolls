@@ -2,11 +2,16 @@ package org.paramecium.orm;
 
 import java.io.Serializable;
 
+import org.paramecium.cache.Cache;
+import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.BeanUtils;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.search.SearchIndexCreator;
 
-public class LuceneOrmDao <T , PK extends Serializable>{
+@SuppressWarnings("unchecked")
+public class LuceneOrmDao <T , PK extends Serializable> {
+	
+	private final static Cache<String,Serializable[]> cache = CacheManager.getDefaultCache("CACHE_INDEX_PK");
 	
 	private GenericOrmDao<T, PK> genericOrmDao;
 	
@@ -38,7 +43,6 @@ public class LuceneOrmDao <T , PK extends Serializable>{
 		return value;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void update(T bean) throws Exception {
 		T oBean = genericOrmDao.select((PK)BeanUtils.getFieldValue(bean, EntitySqlBuilder.getPkName(clazz)));
 		genericOrmDao.update(bean);
@@ -52,6 +56,13 @@ public class LuceneOrmDao <T , PK extends Serializable>{
 	}
 	
 	public Page select(Page page,String text){
+		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
+		int last = sql.toLowerCase().lastIndexOf("where");
+		sql = sql.substring(0, last);
+		PK[] pks = (PK[]) cache.get(clazz.getName()+"#"+text);
+		if(pks == null){
+			
+		}
 		return page;
 	}
 	
