@@ -19,13 +19,13 @@ import org.paramecium.security.UserDetails;
  * <br>开 发 日 期:2011-9-15上午10:29:48
  * <br>项 目 信 息:paramecium:org.paramecium.log.system.WebCollector.java
  */
-@SuppressWarnings("unchecked")
 public class WebCollector<Request extends Object> implements Collector<Request>{
 	
 	private final static Log logger$ = LoggerFactory.getLogger();
 	
 	private static boolean enabled = LoggerFactory.webLogCollector;
 	
+	@SuppressWarnings("unchecked")
 	private final static Cache<String,String> mvcLogCache = CacheManager.getDefaultCache("CACHE_WEB_LOG");
 
 	public synchronized Collection<String> getAll() {

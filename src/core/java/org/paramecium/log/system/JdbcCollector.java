@@ -17,13 +17,13 @@ import org.paramecium.security.UserDetails;
  * <br>开 发 日 期:2011-9-15上午11:02:26
  * <br>项 目 信 息:paramecium:org.paramecium.log.system.JdbcCollector.java
  */
-@SuppressWarnings("unchecked")
 public class JdbcCollector<STR extends Object> implements Collector<STR>{
 
 	private final static Log logger$ = LoggerFactory.getLogger();
 	
 	private static boolean enabled = LoggerFactory.jdbcLogCollector;
 	
+	@SuppressWarnings("unchecked")
 	private final static Cache<String,String> jdbcLogCache = CacheManager.getDefaultCache("CACHE_JDBC_LOG");
 
 	public synchronized Collection<String> getAll() {

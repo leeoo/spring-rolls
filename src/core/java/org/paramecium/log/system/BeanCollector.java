@@ -17,13 +17,13 @@ import org.paramecium.security.UserDetails;
  * <br>开 发 日 期:2011-9-15上午11:02:26
  * <br>项 目 信 息:paramecium:org.paramecium.log.system.BeanCollector.java
  */
-@SuppressWarnings("unchecked")
 public class BeanCollector<STR extends Object> implements Collector<STR>{
 	
 	private final static Log logger$ = LoggerFactory.getLogger();
 
 	private static boolean enabled = LoggerFactory.beanLogCollector;
 	
+	@SuppressWarnings("unchecked")
 	private final static Cache<String,String> beanLogCache = CacheManager.getDefaultCache("CACHE_BEAN_LOG");
 
 	public synchronized Collection<String> getAll() {
