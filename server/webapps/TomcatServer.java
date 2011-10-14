@@ -47,6 +47,10 @@ public class TomcatServer extends BaseWebServerEmbed {
 		this(null,null,80,null);
 	}
 	
+	public TomcatServer(int port) {
+		this(null,null,port,null);
+	}
+	
 	public String getTomcatPath() {
 		try {
 			return System.getProperty("user.dir") + "/server";
