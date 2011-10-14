@@ -368,7 +368,7 @@ public class EntitySqlBuilder {
 	}
 
 	public static String getPkName(Class<?> clazz){
-		String pkName = sqlCache.get(clazz.getName().concat("#PK#"));
+		String pkName = sqlCache.get(clazz.getName().concat("#PK_NAME#"));
 		if(pkName != null){
 			return pkName;
 		}
@@ -379,8 +379,25 @@ public class EntitySqlBuilder {
 				try {
 					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 					if(primaryKey!=null){
-						sqlCache.put(clazz.getName().concat("#PK#"), field.getName());
+						sqlCache.put(clazz.getName().concat("#PK_NAME#"), field.getName());
 						return getPkName(clazz);
+					}
+				} catch (Exception e) {
+				}
+			}
+		}
+		throw new RuntimeException(clazz.getName()+"没有设置主键注解@PrimaryKey");
+	}
+	
+	public static Class<?> getPkType(Class<?> clazz){
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+					if(primaryKey!=null){
+						return field.getType();
 					}
 				} catch (Exception e) {
 				}

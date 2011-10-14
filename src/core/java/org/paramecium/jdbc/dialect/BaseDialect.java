@@ -79,11 +79,11 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 		return page;
 	}
 	
-	private static String getCountSql(final String nativeSQL){
+	public static String getCountSql(final String nativeSQL){
 		return getCountSql(nativeSQL,"COUNT(0)");
 	}
 
-	private static String getCountSql(final String nativeSQL,String countSQL){
+	public static String getCountSql(final String nativeSQL,String countSQL){
 		String sql=nativeSQL.toUpperCase();
 		if(sql.indexOf("DISTINCT(")>=0||sql.indexOf(" GROUP BY ")>=0){
 			return "SELECT "+countSQL+" FROM ("+nativeSQL+") TEMP_COUNT_TABLE";

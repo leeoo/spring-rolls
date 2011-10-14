@@ -210,8 +210,8 @@ public class SearchIndexCreator {
 	 * @param textPropertyNames 文本检索bean属性名组 <br>
 	 * @return 唯一索引即主键值集合
 	 */
-	public synchronized static Collection<Object> searchKeyword(Class<?> clazz,String queryText,int queryCount, String... textPropertyNames) {
-		Collection<Object> ids = new LinkedList<Object>();
+	public synchronized static Collection<String> searchKeyword(Class<?> clazz,String queryText,int queryCount, String... textPropertyNames) {
+		Collection<String> ids = new LinkedList<String>();
 		IndexReader reader = null;
 		IndexSearcher searcher = null;
 		Directory directory = null;
@@ -267,7 +267,7 @@ public class SearchIndexCreator {
 	 * @param queryCount 查询结果数量 <br>
 	 * @return 唯一索引即主键值集合
 	 */
-	public synchronized static Collection<Object> searchKeyword(Class<?> clazz,String queryText,int queryCount) {
+	public synchronized static Collection<String> searchKeyword(Class<?> clazz,String queryText,int queryCount) {
 		Collection<Object> textPropertyNameList = new LinkedList<Object>();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
@@ -289,7 +289,7 @@ public class SearchIndexCreator {
 	 * @param queryText 文本内容 <br>
 	 * @return 唯一索引即主键值集合
 	 */
-	public synchronized static Collection<Object> searchKeyword(Class<?> clazz,String queryText) {
+	public synchronized static Collection<String> searchKeyword(Class<?> clazz,String queryText) {
 		return searchKeyword(clazz, queryText,100);
 	}
 	
