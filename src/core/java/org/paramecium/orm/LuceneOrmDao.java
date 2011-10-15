@@ -21,7 +21,7 @@ import org.paramecium.search.SearchIndexCreator;
 @SuppressWarnings("unchecked")
 public class LuceneOrmDao <T , PK extends Serializable> {
 	
-	private final static Cache cache = CacheManager.getDefaultCache("CACHE_INDEX_PK");
+	private final static Cache cache = CacheManager.getDefaultCache("CACHE_INDEX_PK",100);
 	
 	private GenericOrmDao<T, PK> genericOrmDao;
 	
@@ -66,6 +66,10 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		T oBean = genericOrmDao.select(pk);
 		SearchIndexCreator.removeIndex(oBean);
 		cache.clear();
+	}
+	
+	public T select(PK pk){
+		return genericOrmDao.select(pk);
 	}
 	
 	public Page select(Page page,String text){
