@@ -118,7 +118,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		int last = sql.lastIndexOf("=");
 		int where = sql.toLowerCase().lastIndexOf("where");
 		String countSql = BaseDialect.getCountSql(sql.substring(0, where));
-		sql = sql.substring(0, last).concat(" IN(");
+		sql = sql.substring(0, last).concat(" IN( ");
 		long count = 0;
 		if (page.isAutoCount()) {
 			count = (Long)genericOrmDao.getGenericJdbcDao().queryUniqueColumnValueByArray(countSql);
@@ -126,7 +126,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		}
 		List<PK> pks = getPKList(text,(int)count);
 		Object[] arrayParams = new Serializable[page.getPageSize()];
-		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
+		if (pks!=null && !pks.isEmpty() && page.isFirstSetted() && page.isPageSizeSetted()) {
 			try{
 				for(int i = 0;i<page.getPageSize();i++){
 					sql = sql.concat("?,");
@@ -135,8 +135,11 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 			}catch (Exception e) {
 				throw new RuntimeException("分页码与实际数量不符合!");
 			}
+		}else{
+			page.setResult(null);
+			return page;
 		}
-		sql = sql.substring(0, sql.length()-1).concat(")");
+		sql = sql.substring(0, sql.length()-1).concat(" )");
 		Collection<?> list = genericOrmDao.getGenericJdbcDao().queryByArray(sql, clazz, arrayParams);
 		page.setResult(list);
 		return page;
