@@ -133,7 +133,8 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 					arrayParams[i] = pks.get(page.getFirst()+i);
 				}
 			}catch (Exception e) {
-				throw new RuntimeException("分页码与实际数量不符合!");
+				page.setResult(null);
+				return page;
 			}
 		}else{
 			page.setResult(null);
