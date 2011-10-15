@@ -44,6 +44,12 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		genericOrmDao.setValidation(isValidation);
 	}
 	
+	/**
+	 * 新增操作，并创建索引
+	 * @param bean
+	 * @return
+	 * @throws Exception
+	 */
 	public Number insert(T bean) throws Exception {
 		Number value = genericOrmDao.insert(bean);
 		if(value != null){
@@ -54,6 +60,11 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		return value;
 	}
 	
+	/**
+	 * 更新某项，且更新对应索引
+	 * @param bean
+	 * @throws Exception
+	 */
 	public void update(T bean) throws Exception {
 		T oBean = genericOrmDao.select((PK)BeanUtils.getFieldValue(bean, EntitySqlBuilder.getPkName(clazz)));
 		genericOrmDao.update(bean);
@@ -62,33 +73,67 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		cache.clear();
 	}
 	
+	/**
+	 * 删除某项，且删除对应索引
+	 * @param pk
+	 * @throws Exception
+	 */
 	public void delete(PK pk) throws Exception {
 		T oBean = genericOrmDao.select(pk);
 		SearchIndexCreator.removeIndex(oBean);
 		cache.clear();
 	}
 	
+	/**
+	 * 获得某信息详情
+	 * @param pk
+	 * @return
+	 */
 	public T select(PK pk){
 		return genericOrmDao.select(pk);
 	}
 	
+	/**
+	 * 分页
+	 * @param page
+	 * @return
+	 */
+	public Page select(Page page){
+		return genericOrmDao.select(page);
+	}
+	
+	/**
+	 * 通过关键字搜索，如果关键字为空，返回第一页，且为空。
+	 * @param page
+	 * @param text
+	 * @return
+	 */
 	public Page select(Page page,String text){
+		if(text == null || text.isEmpty()){
+			page.setResult(null);
+			page.setPageNo(1);
+			return page;
+		}
 		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
 		int last = sql.lastIndexOf("=");
 		int where = sql.toLowerCase().lastIndexOf("where");
 		String countSql = BaseDialect.getCountSql(sql.substring(0, where));
 		sql = sql.substring(0, last).concat(" IN(");
-		int count = 0;
+		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Integer)genericOrmDao.getGenericJdbcDao().queryUniqueColumnValueByArray(countSql);
-			page.setTotalCount(count);
+			count = (Long)genericOrmDao.getGenericJdbcDao().queryUniqueColumnValueByArray(countSql);
+			page.setTotalCount((int)count);
 		}
-		List<PK> pks = getPKList(text,count);
+		List<PK> pks = getPKList(text,(int)count);
 		Object[] arrayParams = new Serializable[page.getPageSize()];
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			for(int i = 0;i<page.getPageSize();i++){
-				sql = sql.concat("?,");
-				arrayParams[i] = pks.get(page.getFirst()+i);
+			try{
+				for(int i = 0;i<page.getPageSize();i++){
+					sql = sql.concat("?,");
+					arrayParams[i] = pks.get(page.getFirst()+i);
+				}
+			}catch (Exception e) {
+				throw new RuntimeException("分页码与实际数量不符合!");
 			}
 		}
 		sql = sql.substring(0, sql.length()-1).concat(")");
@@ -97,6 +142,12 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		return page;
 	}
 	
+	/**
+	 * 从缓存中获得关键字搜索的主键或唯一键，如果分页较多，缓存作用较大，如果只是本页
+	 * @param text
+	 * @param count
+	 * @return
+	 */
 	private List<PK> getPKList(String text,int count){
 		List<PK> pks = (List<PK>)cache.get(clazz.getName()+"#"+text);
 		if(pks == null){
