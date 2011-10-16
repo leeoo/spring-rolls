@@ -50,8 +50,8 @@ public abstract class  BaseWebServerEmbed{
 		try {
 			long startTime = System.currentTimeMillis();
 			tomcat.start();
-			System.err.println("Embedded Tomcat started in "
-					+ (System.currentTimeMillis() - startTime) + " ms.");
+			System.err.println("启动成功！——————嵌入式Tomcat服务器:本次启动共耗时 "
+					+ (System.currentTimeMillis() - startTime) + " 毫秒;");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
