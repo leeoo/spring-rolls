@@ -21,9 +21,13 @@ public class ApplicationContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
 		if(isInit){
 			ServletContext servletContext = event.getServletContext();
-			path = servletContext.getContextPath();
-			if(path!=null && path.equals("/")){
-				path = "";
+			try{
+				path = servletContext.getContextPath();
+				if(path!=null && path.equals("/")){
+					path = "";
+				}
+			}catch (Exception e) {
+				System.err.println("请使用Servlet-api.jar2.5版本;2.4及之前版本缺少相关方法!");
 			}
 			PathUtils.webClassRootPath = servletContext.getRealPath("/WEB-INF")+"/classes";
 			ApplicationContext.init();
