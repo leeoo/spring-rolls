@@ -85,7 +85,7 @@ public class ClassScanner {
 				classInfo.setTransactional(true);
 			}
 			if(IocContextIndex.getService(iocUniqueName)!=null){
-				logger.fatal(clazz.getName()+" # "+iocUniqueName+"容器内已经存在，重复注入将会产生隐患，系统为您停止启动服务，请查明原因再试。");
+				logger.fatal(clazz.getName()+" # "+iocUniqueName+"容器内已经存在，重复注入将会产生隐患!系统为您停止启动服务，请查明原因再试。");
 				System.exit(0);
 			}
 			IocContextIndex.setService(classInfo);
@@ -95,7 +95,7 @@ public class ClassScanner {
 			classInfo.setClazz(clazz);
 			classInfo.setNamespace(iocUniqueName);
 			if(IocContextIndex.getController(iocUniqueName)!=null){
-				logger.fatal(clazz.getName()+" # "+iocUniqueName+"容器内已经存在，重复注入将会产生隐患，系统为您停止启动服务，请查明原因再试。");
+				logger.fatal(clazz.getName()+" # "+iocUniqueName+"容器内已经存在，重复注入将会产生隐患!系统为您停止启动服务，请查明原因再试。");
 				System.exit(0);
 			}
 			IocContextIndex.setController(classInfo);
