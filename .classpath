@@ -15,12 +15,10 @@
 	<classpathentry kind="lib" path="server/lib/jasper-compiler.jar"/>
 	<classpathentry kind="lib" path="server/lib/jasper-runtime.jar"/>
 	<classpathentry kind="lib" path="server/lib/jsp-api.jar"/>
-	<classpathentry kind="lib" path="server/lib/jstl-1.1.2.jar"/>
 	<classpathentry kind="lib" path="server/lib/naming-factory.jar"/>
 	<classpathentry kind="lib" path="server/lib/naming-resources.jar"/>
 	<classpathentry kind="lib" path="server/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="server/lib/servlets-default.jar"/>
-	<classpathentry kind="lib" path="server/lib/standard-1.1.2.jar"/>
 	<classpathentry kind="lib" path="server/lib/tomcat-coyote.jar"/>
 	<classpathentry kind="lib" path="server/lib/tomcat-http.jar"/>
 	<classpathentry kind="lib" path="server/lib/tomcat-util.jar"/>
