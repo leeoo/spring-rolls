@@ -23,7 +23,7 @@ public class SecurityThread {
 	
 	/**
 	 * 功能描述(Description):<br><b>
-	 * 安全问题
+	 * 安全隐患
 	 * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
 	 * <br>建立日期(Create Date): <b>2011-9-15下午09:51:10</b>
 	 * <br>项目名称(Project Name): <b>paramecium</b>
@@ -39,7 +39,7 @@ public class SecurityThread {
 	}
 	
 	/**
-	 * 放入安全问题
+	 * 放入安全隐患
 	 * @param security
 	 */
 	public static void putSecurity(Security security){
@@ -47,7 +47,7 @@ public class SecurityThread {
 	}
 
 	/**
-	 * 获取安全问题
+	 * 获取安全隐患
 	 * @return
 	 */
 	public static Security getSecurity(){
