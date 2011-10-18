@@ -7,6 +7,7 @@ import java.util.Map;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
+import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.orm.GenericOrmDao;
 import org.paramecium.security.annotation.Security;
 import org.paramecium.transaction.annotation.Transactional;
@@ -68,6 +69,7 @@ public class RoleService {
 	
 	@ShowLabel("获取角色分页信息")
 	@Transactional(readOnly=true)
+	@MappingMethod("getAllPage")
 	public Page getAll(Page page){
 		return ormDao.select(page);
 	}
@@ -75,6 +77,7 @@ public class RoleService {
 	@ShowLabel("获取角色列表信息")
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly=true)
+	@MappingMethod("getAllList")
 	public Collection<Role> getAll(){
 		return (Collection<Role>) ormDao.getGenericJdbcDao().query("SELECT * FROM t_security_role", Role.class);
 	}
