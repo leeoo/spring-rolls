@@ -10,6 +10,7 @@ public interface LoggerDB {
 	
 	/**
 	 * 保存普通输出信息
+	 * <b>注意:此方法会产生大量的数据，不建议实现该方法，否则会出现意外错误!(如递归死循环，启动时因没有初始化而导致的空指针等等。。。)</b>
 	 * @param log
 	 */
 	public void saveLogger(String log);
