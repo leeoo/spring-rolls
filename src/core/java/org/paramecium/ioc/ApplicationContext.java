@@ -57,16 +57,14 @@ public class ApplicationContext {
 			if(serviceClassInfo.isTransactional()){
 				ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
 				instance = proxy.getClassInstance();
-				loopInject(instance);
-			}else{
+				loopInjectNoSecurity(instance,false);
+			}else{//没有事务可能为综合多个带事务的service，如任务调度
 				try {
 					instance = serviceClassInfo.getClazz().newInstance();
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				loopInjectNoSecurity(instance);
+				loopInjectNoSecurity(instance,true);
 			}
 		}else if(classInfo instanceof ControllerClassInfo){
 			ControllerClassInfo controllerClassInfo = (ControllerClassInfo)classInfo;
@@ -86,9 +84,16 @@ public class ApplicationContext {
 						throw new InjectException(fieldName+"注入时,请用@Service声明!");
 					}
 					try {
-						ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
-						Object fieldInstance = proxy.getClassInstance();
-						loopInject(fieldInstance);
+						Object fieldInstance = null;
+						if(serviceClassInfo.isTransactional()){
+							ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
+							fieldInstance = proxy.getClassInstance();
+							loopInject(fieldInstance,false);
+						}else{//没有事务可能为综合多个带事务的service，如任务调度
+							ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),serviceClassInfo.getClazz());
+							fieldInstance = proxy.getClassInstance();
+							loopInject(fieldInstance,true);
+						}
 						field.set(instance, fieldInstance);
 					} catch (Exception e) {
 					}
@@ -103,7 +108,7 @@ public class ApplicationContext {
 	 * 递归注入
 	 * @param instance
 	 */
-	private static void loopInject(Object instance){
+	private static void loopInject(Object instance,boolean isTran){
 		Field[] fields = instance.getClass().getSuperclass().getDeclaredFields();
 		for(Field field : fields){
 			field.setAccessible(true);
@@ -115,9 +120,16 @@ public class ApplicationContext {
 					throw new InjectException(fieldName+"注入时,请用@Service声明!");
 				}
 				try {
-					ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),serviceClassInfo.getClazz());
-					Object fieldInstance = proxy.getClassInstance();
-					loopInject(fieldInstance);
+					Object fieldInstance = null;
+					if(serviceClassInfo.isTransactional()&&isTran){
+						ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
+						fieldInstance = proxy.getClassInstance();
+						loopInject(fieldInstance,false);
+					}else{//没有事务可能为综合多个带事务的service，如任务调度
+						ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),serviceClassInfo.getClazz());
+						fieldInstance = proxy.getClassInstance();
+						loopInject(fieldInstance,true);
+					}
 					field.set(instance, fieldInstance);
 				} catch (Exception e) {
 				}
@@ -127,9 +139,10 @@ public class ApplicationContext {
 	
 	/**
 	 * 递归注入
+	 * 该方法为至引入service时使用，如果基类没有使用事务，loopInjectNoSecurity时子属性实例化需要查找第一次（第一层事务），找到后，下一层无需在启动事务
 	 * @param instance
 	 */
-	private static void loopInjectNoSecurity(Object instance){
+	private static void loopInjectNoSecurity(Object instance,boolean isTran){
 		Field[] fields = instance.getClass().getSuperclass().getDeclaredFields();
 		for(Field field : fields){
 			field.setAccessible(true);
@@ -141,8 +154,15 @@ public class ApplicationContext {
 					throw new InjectException(fieldName+"注入时,请用@Service声明!");
 				}
 				try {
-					Object fieldInstance = serviceClassInfo.getClazz().newInstance();
-					loopInjectNoSecurity(fieldInstance);
+					Object fieldInstance = null;
+					if(serviceClassInfo.isTransactional()&&isTran){
+						ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
+						fieldInstance = proxy.getClassInstance();
+						loopInjectNoSecurity(fieldInstance,false);
+					}else{
+						fieldInstance = serviceClassInfo.getClazz().newInstance();
+						loopInjectNoSecurity(fieldInstance,true);
+					}
 					field.set(instance, fieldInstance);
 				} catch (Exception e) {
 				}
@@ -201,6 +221,7 @@ public class ApplicationContext {
 		}
 		if(index!=null){
 			instance = buildInstance(index);
+			isSecurityThreadLocal.remove();
 		}
 		return instance;
 	}
