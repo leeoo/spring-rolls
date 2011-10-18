@@ -39,7 +39,7 @@ public class RoleService {
 			new Exception("修改角色必须选择授权信息!");
 		}
 		ormDao.update(role);
-		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_role_auth WHERE role?",role.getRolename());
+		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_role_auth WHERE rolename=?",role.getRolename());
 		for(String auth:role.getAuth()){
 			ormDao.getGenericJdbcDao().executeDMLByArray("INSERT INTO t_role_auth(rolename,auth) VALUES(?,?)",role.getRolename(),auth);
 		}
