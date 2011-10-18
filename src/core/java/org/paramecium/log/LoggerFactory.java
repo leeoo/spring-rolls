@@ -22,7 +22,6 @@ public class LoggerFactory {
 	private static int currentLevel = Log.LEVEL_INFO;
 	public static String loggerFileName;
 	public static int loggerFileMax = 5;
-	public static String loggerDbInterface;
 	public static boolean sqlIsFormat = false;
 	public static boolean beanLogCollector = false;
 	public static boolean jdbcLogCollector = false;
@@ -51,7 +50,7 @@ public class LoggerFactory {
 				loggerFileMax = loggerFileMaxStr!=null?Integer.parseInt(loggerFileMaxStr):5;
 			}else if(loggerMode.indexOf("db")>-1||loggerMode.indexOf("database")>-1){
 				logHandler = new DataBaseLogHandler();
-				loggerDbInterface = properties.get("loggerDbInterface");
+				DataBaseLogHandler.setDbInterface(properties.get("loggerDbInterface"));
 			}else{
 				logHandler = new ConsoleLogHandler();
 			}

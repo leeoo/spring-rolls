@@ -9,12 +9,29 @@ import org.paramecium.log.LogHandler;
  * <br>项 目 信 息:paramecium:org.paramecium.log.handler.DataBaseLogHandler.java
  */
 public class DataBaseLogHandler implements LogHandler{
+	
+	private static LoggerDB loggerDB = null;
+	
+	public static void setDbInterface(String loggerDbInterface){
+		try{
+			Class<?> clazz = Class.forName(loggerDbInterface);
+			loggerDB = (LoggerDB) clazz.newInstance();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void log(String message, boolean isError) {
 		if(isError){
 			System.err.println(message);
+			if(loggerDB!=null){
+				loggerDB.saveErrorLogger(message);
+			}
 		}else{
 			System.out.println(message);
+			if(loggerDB!=null){
+				loggerDB.saveLogger(message);
+			}
 		}
 	}
 
