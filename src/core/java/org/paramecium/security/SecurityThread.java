@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
+import org.paramecium.security.exception.IpAddressException;
 import org.paramecium.security.exception.SessionExpiredException;
 import org.paramecium.security.exception.UserDisabledException;
 import org.paramecium.security.exception.UserKickException;
@@ -35,7 +36,8 @@ public class SecurityThread {
 		UserKickException,
 		UserDisabledException,
 		AnonymousException,
-		AuthorizationException
+		AuthorizationException,
+		IpAddressException
 	}
 	
 	/**
@@ -85,6 +87,10 @@ public class SecurityThread {
 		if(request.getSession(false)!=null){
 			userDetails.setSessionId(request.getSession(false).getId());
 			userDetails.setAddress(request.getRemoteAddr());
+			if(!IpAddressVoter.voteIPV4(userDetails.getAddress())){
+				putSecurity(SecurityThread.Security.IpAddressException);
+				throw new IpAddressException("登录用户"+userDetails.getUsername()+",登录IP为"+userDetails.getAddress()+"没有被授权IP!");
+			}
 			put(userDetails);
 			return;
 		}

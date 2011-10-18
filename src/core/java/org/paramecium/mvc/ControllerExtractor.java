@@ -18,6 +18,7 @@ import org.paramecium.security.SecurityConfig;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.exception.AnonymousException;
 import org.paramecium.security.exception.AuthorizationException;
+import org.paramecium.security.exception.IpAddressException;
 import org.paramecium.security.exception.SessionExpiredException;
 import org.paramecium.security.exception.UserDisabledException;
 import org.paramecium.security.exception.UserKickException;
@@ -117,6 +118,8 @@ public class ControllerExtractor {
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userDisabledExceptionPage));
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.SessionExpiredException){
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.sessionExpiredExceptionPage));
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.IpAddressException){
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
 				}/*继续扩展，可在配置文件中加入更多异常*/
 				end();
 				return false;
@@ -140,6 +143,8 @@ public class ControllerExtractor {
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.userDisabledExceptionPage));
 			}else if(e.getCause() instanceof SessionExpiredException||e instanceof SessionExpiredException){
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.sessionExpiredExceptionPage));
+			}else if(e.getCause() instanceof IpAddressException||e instanceof IpAddressException){
+				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
 			}/*继续扩展，可在配置文件中加入更多异常*/
 		} catch (IOException e1) {
 		}

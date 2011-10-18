@@ -60,6 +60,8 @@
 		msg = '您的账户被冻结,请联系管理员!';
 	}else if(error==9){
 		msg = '您在登录后长时间没有操作,请重新登录!';
+	}else if(error==11){
+		msg = '您的IP地址没有被系统授权,请联系管理员!';
 	}
 	if(msg!=''){
 		$.messager.show({title:'提示',msg:msg,timeout:3000,showType:'slide'});

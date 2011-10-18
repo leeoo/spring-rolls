@@ -48,4 +48,9 @@ public class SecurityConfig {
 	 */
 	public static String sessionExpiredExceptionPage;
 	
+	/**
+	 * IP未授权错误页面
+	 */
+	public static String ipAddressExceptionPage;
+	
 }
