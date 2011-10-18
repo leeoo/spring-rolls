@@ -1,6 +1,7 @@
 package org.paramecium.ioc;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -22,6 +23,7 @@ public class ApplicationContext {
 	
 	private final static ConcurrentMap<String, Object> controllerContext = new ConcurrentHashMap<String, Object>();
 	public final static ThreadLocal<Boolean> isSecurityThreadLocal = new ThreadLocal<Boolean>();
+	public static String priorityStartClass;
 	
 	static{
 		try {
@@ -37,9 +39,28 @@ public class ApplicationContext {
 	public static void init(){
 		try{
 			System.class.getName().isEmpty();
+			priority();
 		}catch (Exception e) {
 			System.err.println("请使用JDK1.6及以上版本;JDK1.5及之前版本缺少相关方法!系统为您停止启动服务，请查明原因再试。");
 			System.exit(0);
+		}
+	}
+	
+	/**
+	 * 优先 启动的业务类,随着服务一起启动。
+	 */
+	private static void priority(){
+		if(ApplicationContext.priorityStartClass!=null&&!ApplicationContext.priorityStartClass.isEmpty()){
+			try {
+				String className = priorityStartClass.substring(0,priorityStartClass.indexOf('#'));
+				String methodName = priorityStartClass.substring(priorityStartClass.indexOf('#')+1,priorityStartClass.length());
+				Class<?> clazz = Class.forName(className);
+				Object object = clazz.newInstance();
+				Method method = clazz.getMethod(methodName);
+				method.invoke(object);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

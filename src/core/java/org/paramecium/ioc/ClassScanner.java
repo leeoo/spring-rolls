@@ -34,8 +34,10 @@ public class ClassScanner {
 	private static Collection<String> classes = new ArrayList<String>();
 	
 	static{
+		logger.debug("正在初始化Application容器...");
 		Map<String,String> properties = PropertiesUitls.get("/context.properties");
 		iocScanBasePackage = properties.get("iocScanBasePackage");
+		ApplicationContext.priorityStartClass = properties.get("priorityStartClass");
 		properties = PropertiesUitls.get("/security.properties");
 		String iocSecurityStr = properties.get("iocSecurity");
 		String sessionControlStr = properties.get("sessionControl");
