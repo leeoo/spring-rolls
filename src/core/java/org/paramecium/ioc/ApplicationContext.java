@@ -221,7 +221,6 @@ public class ApplicationContext {
 		}
 		if(index!=null){
 			instance = buildInstance(index);
-			isSecurityThreadLocal.remove();
 		}
 		return instance;
 	}
