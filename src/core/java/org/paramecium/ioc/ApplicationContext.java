@@ -128,7 +128,7 @@ public class ApplicationContext {
 					}else{//没有事务可能为综合多个带事务的service，如任务调度
 						ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),serviceClassInfo.getClazz());
 						fieldInstance = proxy.getClassInstance();
-						loopInject(fieldInstance,true);
+						loopInject(fieldInstance,isTran);
 					}
 					field.set(instance, fieldInstance);
 				} catch (Exception e) {
@@ -161,7 +161,7 @@ public class ApplicationContext {
 						loopInjectNoSecurity(fieldInstance,false);
 					}else{
 						fieldInstance = serviceClassInfo.getClazz().newInstance();
-						loopInjectNoSecurity(fieldInstance,true);
+						loopInjectNoSecurity(fieldInstance,isTran);
 					}
 					field.set(instance, fieldInstance);
 				} catch (Exception e) {
