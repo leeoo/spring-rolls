@@ -87,24 +87,24 @@ public class SearchIndexCreator {
 				for(java.lang.reflect.Field field : fields){
 					field.setAccessible(true);
 					String propertyName = field.getName();
-					if(isKeyWord(bean.getClass(), propertyName)){
+					if(isKeyWord(superClass, propertyName)){
 						Object value = field.get(bean);
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
 						Field textField = new Field(propertyName, value.toString(),Field.Store.YES, Field.Index.NOT_ANALYZED);
 						doc.add(textField);
-					}else if(isTextWord(bean.getClass(), propertyName)){
+					}else if(isTextWord(superClass, propertyName)){
 						String propertyValue = (String)field.get(bean);
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
 						}
-						if (isFilterHtmlTags(bean.getClass(), propertyName)) {
+						if (isFilterHtmlTags(superClass, propertyName)) {
 							propertyValue = html2Text(propertyValue);
 						}
 						Field textField = new Field(propertyName, propertyValue,Field.Store.NO, Field.Index.ANALYZED);
 						doc.add(textField);
-					}else if(isSortWord(bean.getClass(), propertyName)){
+					}else if(isSortWord(superClass, propertyName)){
 						Object value = field.get(bean);
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
@@ -120,17 +120,23 @@ public class SearchIndexCreator {
 			logger.error("索引文件建立错误!");
 		}
 		try {
-			writer.optimize();
+			if(writer!=null){
+				writer.optimize();
+			}
 		} catch (Exception e) {
 			logger.error("索引写入器优化错误!");
 		}
 		try {
-			writer.close();
+			if(writer!=null){
+				writer.close();
+			}
 		} catch (Exception e) {
 			logger.error("索引写入器关闭错误!");
 		}
 		try {
-			directory.close();
+			if(directory!=null){
+				directory.close();
+			}
 		} catch (Exception e) {
 			logger.error("索引目录关闭错误!");
 		}
@@ -153,19 +159,19 @@ public class SearchIndexCreator {
 				for(java.lang.reflect.Field field : fields){
 					field.setAccessible(true);
 					String propertyName = field.getName();
-					if(isKeyWord(bean.getClass(), propertyName)||isSortWord(bean.getClass(), propertyName)){
+					if(isKeyWord(superClass, propertyName)||isSortWord(superClass, propertyName)){
 						Object value = field.get(bean);
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
 						Term term = new Term(propertyName, value.toString());
 						writer.deleteDocuments(term);
-					}else if(isTextWord(bean.getClass(), propertyName)){
+					}else if(isTextWord(superClass, propertyName)){
 						String propertyValue = (String)field.get(bean);
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
 						}
-						if (isFilterHtmlTags(bean.getClass(), propertyName)) {
+						if (isFilterHtmlTags(superClass, propertyName)) {
 							propertyValue = html2Text(propertyValue);
 						}
 						Term term = new Term(propertyName, propertyValue);
@@ -178,17 +184,23 @@ public class SearchIndexCreator {
 			logger.error("索引文件建立错误!");
 		}
 		try {
-			writer.optimize();
+			if(writer!=null){
+				writer.optimize();
+			}
 		} catch (Exception e) {
 			logger.error("索引写入器优化错误!");
 		}
 		try {
-			writer.close();
+			if(writer!=null){
+				writer.close();
+			}
 		} catch (Exception e) {
 			logger.error("索引写入器关闭错误!");
 		}
 		try {
-			directory.close();
+			if(directory!=null){
+				directory.close();
+			}
 		} catch (Exception e) {
 			logger.error("索引目录关闭错误!");
 		}
@@ -238,22 +250,30 @@ public class SearchIndexCreator {
 			logger.error("索引错误!");
 		}
 		try {
-			searcher.close();
+			if(searcher!=null){
+				searcher.close();
+			}
 		} catch (Exception e) {
 			logger.error("查询器关闭错误!");
 		}
 		try {
-			reader.flush();
+			if(reader!=null){
+				reader.flush();
+			}
 		} catch (Exception e) {
 			logger.error("索引读取器栈清空错误!");
 		}
 		try {
-			reader.close();
+			if(reader!=null){
+				reader.close();
+			}
 		} catch (Exception e) {
 			logger.error("索引读取器关闭错误!");
 		}
 		try {
-			directory.close();
+			if(directory!=null){
+				directory.close();
+			}
 		} catch (Exception e) {
 			logger.error("索引目录关闭错误!");
 		}
@@ -274,7 +294,7 @@ public class SearchIndexCreator {
 			for(java.lang.reflect.Field field : fields){
 				field.setAccessible(true);
 				String propertyName = field.getName();
-				if (isTextWord(clazz, propertyName)) {
+				if (isTextWord(superClass, propertyName)) {
 					textPropertyNameList.add(propertyName);
 				}
 			}
@@ -300,7 +320,7 @@ public class SearchIndexCreator {
 			for(java.lang.reflect.Field field : fields){
 				field.setAccessible(true);
 				String propertyName = field.getName();
-				if(isSortWord(clazz, propertyName)){
+				if(isSortWord(superClass, propertyName)){
 					SortWord sortWord = field.getAnnotation(SortWord.class);
 					sfs.add(new SortField(propertyName, sortWord.type(), sortWord.reverse()));
 				}
@@ -335,7 +355,7 @@ public class SearchIndexCreator {
 			for(java.lang.reflect.Field field : fields){
 				field.setAccessible(true);
 				String propertyName = field.getName();
-				if(isKeyWord(clazz, propertyName)){
+				if(isKeyWord(superClass, propertyName)){
 					return propertyName;
 				}
 			}
