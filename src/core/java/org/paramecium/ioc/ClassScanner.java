@@ -133,7 +133,7 @@ public class ClassScanner {
 					subResource.setShowLabel(showLabel.value());
 				}
 				MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
-				if(mappingMethod!=null){
+				if(mappingMethod!=null && !mappingMethod.value().isEmpty()){
 					subResource.setLastResource(mappingMethod.value());
 				}else{
 					subResource.setLastResource(method.getName());
