@@ -5,11 +5,13 @@ import java.util.HashSet;
 
 import org.paramecium.commons.JsonUitls;
 import org.paramecium.ioc.annotation.AutoInject;
+import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.mvc.End;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
+import org.paramecium.security.annotation.Security;
 
 import com.demo.entity.system.Role;
 import com.demo.entity.system.User;
@@ -17,6 +19,8 @@ import com.demo.service.system.RoleService;
 import com.demo.service.system.UserService;
 import com.demo.web.BaseController;
 
+@Security
+@ShowLabel("用户管理")
 @Controller(namespace="/system/user")
 public class UserController extends BaseController{
 	
@@ -26,11 +30,13 @@ public class UserController extends BaseController{
 	@AutoInject
 	private RoleService roleService;
 	
+	@ShowLabel("首页界面")
 	@MappingMethod
 	public void list(ModelAndView mv){
 		mv.forward(getPage("/user/list.jsp"));
 	}
 	
+	@ShowLabel("获取列表数据")
 	@MappingMethod
 	public void data(ModelAndView mv){
 		int pageNo = mv.getValue("page", Integer.class);
@@ -43,6 +49,7 @@ public class UserController extends BaseController{
 		mv.printJSON(json);
 	}
 	
+	@ShowLabel("新增及维护界面")
 	@MappingMethod
 	public End input(ModelAndView mv){
 		Integer id = mv.getValue("id",Integer.class);
@@ -55,6 +62,7 @@ public class UserController extends BaseController{
 		return mv.forward(getPage("/user/input.jsp"));
 	}
 	
+	@ShowLabel("保存")
 	@MappingMethod
 	public End save(ModelAndView mv){
 		User user = mv.getBean("user",User.class);
@@ -83,6 +91,7 @@ public class UserController extends BaseController{
 		return mv.redirect(getServletExt("/system/user/list"));
 	}
 	
+	@ShowLabel("修改")
 	@MappingMethod
 	public void delete(ModelAndView mv){
 		String idstr = mv.getValue("ids",String.class);
@@ -95,6 +104,7 @@ public class UserController extends BaseController{
 		}
 	}
 	
+	@ShowLabel("冻结账号")
 	@MappingMethod
 	public void disabled(ModelAndView mv){
 		String idstr = mv.getValue("ids",String.class);
@@ -107,6 +117,7 @@ public class UserController extends BaseController{
 		}
 	}
 
+	@ShowLabel("解冻账号")
 	@MappingMethod
 	public void enabled(ModelAndView mv){
 		String idstr = mv.getValue("ids",String.class);

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.paramecium.commons.JsonUitls;
 import org.paramecium.ioc.annotation.AutoInject;
+import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.mvc.End;
 import org.paramecium.mvc.ModelAndView;
@@ -12,22 +13,26 @@ import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.AuthorizationMenu;
 import org.paramecium.security.Resource;
+import org.paramecium.security.annotation.Security;
 
 import com.demo.entity.system.Role;
 import com.demo.service.system.RoleService;
 import com.demo.web.BaseController;
-
+@Security
+@ShowLabel("角色管理")
 @Controller(namespace="/system/role")
 public class RoleController extends BaseController{
 
 	@AutoInject
 	private RoleService roleService;
 	
+	@ShowLabel("首页界面")
 	@MappingMethod
 	public void list(ModelAndView mv){
 		mv.forward(getPage("/role/list.jsp"));
 	}
 	
+	@ShowLabel("获取列表数据")
 	@MappingMethod
 	public void data(ModelAndView mv){
 		int pageNo = mv.getValue("page", Integer.class);
@@ -40,6 +45,7 @@ public class RoleController extends BaseController{
 		mv.printJSON(json);
 	}
 	
+	@ShowLabel("新增及维护界面")
 	@MappingMethod
 	public End input(ModelAndView mv){
 		Integer id = mv.getValue("id",Integer.class);
@@ -52,6 +58,7 @@ public class RoleController extends BaseController{
 		return mv.forward(getPage("/role/input.jsp"));
 	}
 	
+	@ShowLabel("保存")
 	@MappingMethod
 	public End save(ModelAndView mv){
 		Role role = mv.getBean("role",Role.class);
@@ -74,6 +81,7 @@ public class RoleController extends BaseController{
 		return mv.redirect(getServletExt("/system/role/list"));
 	}
 	
+	@ShowLabel("删除")
 	@MappingMethod
 	public void delete(ModelAndView mv){
 		String idstr = mv.getValue("ids",String.class);
