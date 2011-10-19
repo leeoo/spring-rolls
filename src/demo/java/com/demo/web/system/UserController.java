@@ -91,7 +91,7 @@ public class UserController extends BaseController{
 		return mv.redirect(getServletExt("/system/user/list"));
 	}
 	
-	@ShowLabel("修改")
+	@ShowLabel("删除")
 	@MappingMethod
 	public void delete(ModelAndView mv){
 		String idstr = mv.getValue("ids",String.class);

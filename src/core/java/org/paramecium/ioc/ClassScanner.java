@@ -4,7 +4,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.paramecium.commons.PathUtils;
@@ -111,7 +111,7 @@ public class ClassScanner {
 			if(showLabel!=null){
 				resource.setShowLabel(showLabel.value());
 			}
-			Collection<Resource> resources = new HashSet<Resource>();
+			Collection<Resource> resources = new LinkedList<Resource>();
 			for(Method method : clazz.getMethods()){
 				/*if(Modifier.isStatic(method.getModifiers())){
 					continue;//如果该方法为静态则过滤不计

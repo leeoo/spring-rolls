@@ -1,10 +1,9 @@
 package org.paramecium.security;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * 功能描述(Description):<br><b>
@@ -16,7 +15,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class AuthorizationMenu{
 
-	private final static ConcurrentMap<Resource, Collection<Resource>> authorizationMenu = new ConcurrentHashMap<Resource, Collection<Resource>>();
+	private final static Map<Resource, Collection<Resource>> authorizationMenu = new LinkedHashMap<Resource, Collection<Resource>>();
 	
 	public static void put(Resource resource, Collection<Resource> resources){
 		authorizationMenu.put(resource,resources);
@@ -27,7 +26,7 @@ public class AuthorizationMenu{
 	 * @return
 	 */
 	public static Collection<Resource> getAllAuthorizationMenu(){
-		Collection<Resource> allMenu = new HashSet<Resource>();
+		Collection<Resource> allMenu = new LinkedList<Resource>();
 		for(Collection<Resource> resources : authorizationMenu.values()){
 			allMenu.addAll(resources);
 		}
