@@ -30,15 +30,15 @@ public class IpAddressVoter{
 		ipAddressList.clear();
 	}
 	
-	public Collection<String> getIpAddressList() {
+	public static Collection<String> getIpAddressList() {
 		return ipAddressList;
 	}
 
-	public void setIpAddressList(Collection<String> ipAddressList) {
+	public static void setIpAddressList(Collection<String> ipAddressList) {
 		IpAddressVoter.ipAddressList = ipAddressList;
 	}
 	
-	public void setInclude(boolean include) {
+	public static void setInclude(boolean include) {
 		IpAddressVoter.include = include;
 	}
 
