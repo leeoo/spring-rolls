@@ -1,5 +1,7 @@
 package com.demo.service;
 
+import org.paramecium.security.IpAddressVoter;
+
 /**
  * 功 能 描 述:<br>
  * 优先启动
@@ -10,10 +12,8 @@ package com.demo.service;
 public class PriorityService {
 	
 	public void init(){
-		/*RoleService roleService = (RoleService) ApplicationContext.getNotSecurityBean("roleService");
-		UserService userService = (UserService) ApplicationContext.getNotSecurityBean("userService");
-		roleService.getAll();
-		userService.getUser("caoyang");*/
+		IpAddressVoter.setInclude(true);
+		IpAddressVoter.put("127.0.0.1");
 		System.out.println("应用层初始化类已经执行...");
 	}
 	
