@@ -32,14 +32,14 @@ public class Transaction {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Connection getCurrentConnection() throws SQLException {
+	public synchronized Connection getCurrentConnection() throws SQLException {
 		if(this.connection!=null&&!this.connection.isClosed()&&!this.connection.getAutoCommit()){
 			return this.connection;
 		}
 		throw new SQLException("EN:connection fail!CN:数据库连接错误!");
 	}
 	
-	private void connectionLife() throws SQLException{
+	private synchronized void connectionLife() throws SQLException{
 		if(this.connection==null){
 			throw new SQLException("EN:connection fail!CN:数据库连接错误!");
 		}else if(this.connection.isClosed()){
@@ -58,12 +58,12 @@ public class Transaction {
 	 * @param level
 	 * @throws SQLException
 	 */
-	public void setTransactionIsolation(int level) throws SQLException{
+	public synchronized void setTransactionIsolation(int level) throws SQLException{
 		connectionLife();
 		connection.setTransactionIsolation(level);
 	}
 	
-	public void setReadOnly(boolean readOnly) throws SQLException{
+	public synchronized void setReadOnly(boolean readOnly) throws SQLException{
 		connectionLife();
 		connection.setReadOnly(readOnly);
 	}
@@ -72,7 +72,7 @@ public class Transaction {
 	 * 提交事务
 	 * @throws SQLException
 	 */
-	public void commit() throws SQLException{
+	public synchronized void commit() throws SQLException{
 		connectionLife();
 		connection.commit();
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS COMMIT!");
@@ -82,7 +82,7 @@ public class Transaction {
 	 * 回滚事务
 	 * @throws SQLException
 	 */
-	public void rollback() throws SQLException{
+	public synchronized void rollback() throws SQLException{
 		connectionLife();
 		connection.rollback();
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS ROOLBACK!");
@@ -92,7 +92,7 @@ public class Transaction {
 	 * 连接结束
 	 * @throws SQLException
 	 */
-	public void over() throws SQLException{
+	public synchronized void over() throws SQLException{
 		connectionLife();
 		connection.setAutoCommit(true);
 		connection.setReadOnly(false);
@@ -103,7 +103,7 @@ public class Transaction {
 	 * 连接关闭
 	 * @throws SQLException
 	 */
-	public void close() throws SQLException{
+	public synchronized void close() throws SQLException{
 		if(!connection.isClosed()){
 			connection.close();
 		}
@@ -112,17 +112,17 @@ public class Transaction {
 	
 	
 
-	public boolean isException() {
+	public synchronized boolean isException() {
 		return isException;
 	}
 
-	public void setException() {
+	public synchronized void setException() {
 		if(this.isException == false){
 			this.isException = true;
 		}
 	}
 
-	public void setConnection(Connection connection) {
+	public synchronized void setConnection(Connection connection) {
 		this.connection = connection;
 	}
 	

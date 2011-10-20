@@ -72,7 +72,7 @@ public class SearchIndexCreator {
 	 * Field.TermVector.WITH_POSITIONS_OFFSETS:存储位置和偏移量
 	 * @param bean对象实体，用于装载数据
 	 */
-	public synchronized static void createIndex(Object bean) {
+	public static void createIndex(Object bean) {
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
@@ -146,7 +146,7 @@ public class SearchIndexCreator {
 	 * 功能描述：删除索引文件 <br>
 	 * @param bean实体，用于装载数据
 	 */
-	public synchronized static void removeIndex(Object bean) {
+	public static void removeIndex(Object bean) {
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
@@ -222,7 +222,7 @@ public class SearchIndexCreator {
 	 * @param textPropertyNames 文本检索bean属性名组 <br>
 	 * @return 唯一索引即主键值集合
 	 */
-	public synchronized static Collection<String> searchKeyword(Class<?> clazz,String queryText,int queryCount, String... textPropertyNames) {
+	public static Collection<String> searchKeyword(Class<?> clazz,String queryText,int queryCount, String... textPropertyNames) {
 		Collection<String> ids = new LinkedList<String>();
 		IndexReader reader = null;
 		IndexSearcher searcher = null;
@@ -287,7 +287,7 @@ public class SearchIndexCreator {
 	 * @param queryCount 查询结果数量 <br>
 	 * @return 唯一索引即主键值集合
 	 */
-	public synchronized static Collection<String> searchKeyword(Class<?> clazz,String queryText,int queryCount) {
+	public static Collection<String> searchKeyword(Class<?> clazz,String queryText,int queryCount) {
 		Collection<Object> textPropertyNameList = new LinkedList<Object>();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
@@ -309,7 +309,7 @@ public class SearchIndexCreator {
 	 * @param queryText 文本内容 <br>
 	 * @return 唯一索引即主键值集合
 	 */
-	public synchronized static Collection<String> searchKeyword(Class<?> clazz,String queryText) {
+	public static Collection<String> searchKeyword(Class<?> clazz,String queryText) {
 		return searchKeyword(clazz, queryText,100);
 	}
 	
