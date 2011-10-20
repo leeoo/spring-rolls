@@ -20,7 +20,7 @@ import com.demo.service.system.RoleService;
 import com.demo.web.BaseController;
 @Security
 @ShowLabel("角色管理")
-@Controller(namespace="/system/role")
+@Controller("/system/role")
 public class RoleController extends BaseController{
 
 	@AutoInject

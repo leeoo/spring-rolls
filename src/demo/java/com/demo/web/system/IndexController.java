@@ -12,7 +12,7 @@ import com.demo.web.BaseController;
 
 @Security
 @ShowLabel("系统首页")
-@Controller(namespace="/system")
+@Controller("/system")
 public class IndexController extends BaseController{
 
 	@ShowLabel("登录成功后友好界面")

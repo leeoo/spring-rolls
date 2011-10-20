@@ -13,7 +13,7 @@ import org.paramecium.security.UserDetails;
 import com.demo.entity.system.User;
 import com.demo.service.system.UserService;
 
-@Controller(namespace="/")
+@Controller("/")
 public class LoginController extends BaseController{
 
 	@AutoInject

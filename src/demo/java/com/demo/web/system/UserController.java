@@ -21,7 +21,7 @@ import com.demo.web.BaseController;
 
 @Security
 @ShowLabel("用户管理")
-@Controller(namespace="/system/user")
+@Controller("/system/user")
 public class UserController extends BaseController{
 	
 	@AutoInject
