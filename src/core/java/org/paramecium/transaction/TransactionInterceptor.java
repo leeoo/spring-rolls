@@ -20,7 +20,7 @@ public class TransactionInterceptor extends BaseSecurityInterceptor {
 	
 	public Object nextIntercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
 		Transactional serviceTransaction = service.getClass().getAnnotation(Transactional.class);
-		if(serviceTransaction==null){
+		if(serviceTransaction==null||TransactionManager.isThisThread()){
 			return proxy.invokeSuper(service, parameters);
 		}
 		TransactionManager.begin();

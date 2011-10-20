@@ -23,6 +23,10 @@ public class TransactionManager {
 	
 	private final static ThreadLocal<Map<String,Transaction>> transactionThreadLocal = new ThreadLocal<Map<String,Transaction>>();
 	
+	public static boolean isThisThread(){
+		return transactionThreadLocal.get() != null ? true : false;
+	}
+	
 	/**
 	 * 获得当前事务
 	 * @return

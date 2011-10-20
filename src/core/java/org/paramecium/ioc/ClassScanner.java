@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
+import org.paramecium.aop.ClassProxy;
 import org.paramecium.commons.PathUtils;
 import org.paramecium.commons.PropertiesUitls;
 import org.paramecium.ioc.annotation.Service;
@@ -18,7 +21,9 @@ import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.AuthorizationMenu;
 import org.paramecium.security.Resource;
 import org.paramecium.security.SecurityConfig;
+import org.paramecium.security.SecurityInterceptor;
 import org.paramecium.security.annotation.Security;
+import org.paramecium.transaction.TransactionInterceptor;
 import org.paramecium.transaction.annotation.Transactional;
 /**
  * 功 能 描 述:<br>
@@ -29,6 +34,7 @@ import org.paramecium.transaction.annotation.Transactional;
  */
 public class ClassScanner {
 	
+	private final static ConcurrentMap<String, Object> instanceContext = new ConcurrentHashMap<String, Object>();
 	private final static Log logger = LoggerFactory.getLogger();
 	public static String iocScanBasePackage;
 	private static Collection<String> classes = new ArrayList<String>();
@@ -66,7 +72,9 @@ public class ClassScanner {
 			} catch (ClassNotFoundException e) {
 			}
 		}
+		ApplicationContext.buildApplicationContext();
 		classes.clear();//物理类文件信息可以清空了
+		instanceContext.clear();
 	}
 	
 	/**
@@ -92,6 +100,13 @@ public class ClassScanner {
 				System.exit(0);
 			}
 			IocContextIndex.setService(classInfo);
+			try {
+				ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),clazz);
+				instanceContext.put(iocUniqueName, proxy.getClassInstance());
+			} catch (Exception e) {
+				logger.fatal(clazz.getName()+" # "+iocUniqueName+"无法实例化，请给出该类无参数构造方法！");
+				System.exit(0);
+			}
 			logger.debug(clazz.getName()+" # "+iocUniqueName+" 被载入");
 		}else if(controller!=null){
 			ControllerClassInfo classInfo = new ControllerClassInfo();
@@ -102,6 +117,13 @@ public class ClassScanner {
 				System.exit(0);
 			}
 			IocContextIndex.setController(classInfo);
+			try {
+				ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),clazz);
+				instanceContext.put(iocUniqueName, proxy.getClassInstance());
+			} catch (Exception e) {
+				logger.fatal(clazz.getName()+" # "+iocUniqueName+"无法实例化，请给出该类无参数构造方法！");
+				System.exit(0);
+			}
 			logger.debug(clazz.getName()+" # "+iocUniqueName+" 被载入");
 		}
 		if(security!=null){
@@ -144,6 +166,11 @@ public class ClassScanner {
 		}
 	}
 	
+	public static Object getIocInstance(String name){
+		return instanceContext.get(name);
+	}
+	
+	
 	/**
 	 * 获得IOC容器中的类唯一标示
 	 * @param clazz
@@ -159,7 +186,7 @@ public class ClassScanner {
 				return getInstanceName(clazz);
 			}
 		}else if(controller!=null){
-			return controller.namespace();
+			return controller.value();
 		}
 		return null;
 	}

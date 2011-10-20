@@ -5,11 +5,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.paramecium.aop.ClassProxy;
 import org.paramecium.ioc.annotation.AutoInject;
-import org.paramecium.mvc.annotation.Controller;
-import org.paramecium.security.SecurityInterceptor;
-import org.paramecium.transaction.TransactionInterceptor;
 
 /**
  * 功能描述(Description):<br><b>
@@ -21,7 +17,7 @@ import org.paramecium.transaction.TransactionInterceptor;
  */
 public class ApplicationContext {
 	
-	private final static ConcurrentMap<String, Object> controllerContext = new ConcurrentHashMap<String, Object>();
+	private final static ConcurrentMap<String, Object> applicationContext = new ConcurrentHashMap<String, Object>();
 	public final static ThreadLocal<Boolean> isSecurityThreadLocal = new ThreadLocal<Boolean>();
 	public static String priorityStartClass;
 	
@@ -71,66 +67,23 @@ public class ApplicationContext {
 	 * @param classInfo索引
 	 * @return
 	 */
-	private static Object buildInstance(final BaseClassInfo classInfo){
-		Object instance = null;
-		if(classInfo instanceof ServiceClassInfo){
-			ServiceClassInfo serviceClassInfo = (ServiceClassInfo)classInfo;
-			if(serviceClassInfo.isTransactional()){
-				ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
-				instance = proxy.getClassInstance();
-				loopInjectNoSecurity(instance,false);
-			}else{//没有事务可能为综合多个带事务的service，如任务调度
-				try {
-					instance = serviceClassInfo.getClazz().newInstance();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				loopInjectNoSecurity(instance,true);
-			}
-		}else if(classInfo instanceof ControllerClassInfo){
-			ControllerClassInfo controllerClassInfo = (ControllerClassInfo)classInfo;
-			try {
-				ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),controllerClassInfo.getClazz());
-				instance = proxy.getClassInstance();
-			} catch (Exception e) {
-			}
-			Field[] fields = controllerClassInfo.getClazz().getDeclaredFields();
-			for(Field field : fields){
-				field.setAccessible(true);
-				AutoInject autoInject = field.getAnnotation(AutoInject.class);
-				if(autoInject!=null){
-					String fieldName = field.getName();
-					ServiceClassInfo serviceClassInfo = IocContextIndex.getService(fieldName);
-					if(serviceClassInfo==null){
-						throw new InjectException(fieldName+"注入时,请用@Service声明!");
-					}
-					try {
-						Object fieldInstance = null;
-						if(serviceClassInfo.isTransactional()){
-							ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
-							fieldInstance = proxy.getClassInstance();
-							loopInject(fieldInstance,false);
-						}else{//没有事务可能为综合多个带事务的service，如任务调度
-							ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),serviceClassInfo.getClazz());
-							fieldInstance = proxy.getClassInstance();
-							loopInject(fieldInstance,true);
-						}
-						field.set(instance, fieldInstance);
-					} catch (Exception e) {
-					}
-				}
-			}
-			controllerContext.put(controllerClassInfo.getNamespace(), instance);
+	public static void buildApplicationContext(){
+		for(ServiceClassInfo info : IocContextIndex.getServices()){
+			String name = info.getUniqueName();
+			Object instance = ClassScanner.getIocInstance(name);
+			setFieldInstance(instance,info.getClazz());
+			applicationContext.put(name, instance);
 		}
-		return instance;
+		for(ControllerClassInfo info : IocContextIndex.getControllers()){
+			String name = info.getNamespace();
+			Object instance = ClassScanner.getIocInstance(name);
+			setFieldInstance(instance,info.getClazz());
+			applicationContext.put(name, instance);
+		}
 	}
 	
-	/**
-	 * 递归注入
-	 * @param instance
-	 */
-	private static void loopInject(Object instance,boolean isTran){
-		Field[] fields = instance.getClass().getSuperclass().getDeclaredFields();
+	private static void setFieldInstance(Object instance,Class<?> clazz){
+		Field[] fields = clazz.getDeclaredFields();
 		for(Field field : fields){
 			field.setAccessible(true);
 			AutoInject autoInject = field.getAnnotation(AutoInject.class);
@@ -141,16 +94,7 @@ public class ApplicationContext {
 					throw new InjectException(fieldName+"注入时,请用@Service声明!");
 				}
 				try {
-					Object fieldInstance = null;
-					if(serviceClassInfo.isTransactional()&&isTran){
-						ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
-						fieldInstance = proxy.getClassInstance();
-						loopInject(fieldInstance,false);
-					}else{//没有事务可能为综合多个带事务的service，如任务调度
-						ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),serviceClassInfo.getClazz());
-						fieldInstance = proxy.getClassInstance();
-						loopInject(fieldInstance,isTran);
-					}
+					Object fieldInstance = ClassScanner.getIocInstance(fieldName);
 					field.set(instance, fieldInstance);
 				} catch (Exception e) {
 				}
@@ -158,38 +102,6 @@ public class ApplicationContext {
 		}
 	}
 	
-	/**
-	 * 递归注入
-	 * 该方法为至引入service时使用，如果基类没有使用事务，loopInjectNoSecurity时子属性实例化需要查找第一次（第一层事务），找到后，下一层无需在启动事务
-	 * @param instance
-	 */
-	private static void loopInjectNoSecurity(Object instance,boolean isTran){
-		Field[] fields = instance.getClass().getSuperclass().getDeclaredFields();
-		for(Field field : fields){
-			field.setAccessible(true);
-			AutoInject autoInject = field.getAnnotation(AutoInject.class);
-			if(autoInject!=null){
-				String fieldName = field.getName();
-				ServiceClassInfo serviceClassInfo = IocContextIndex.getService(fieldName);
-				if(serviceClassInfo==null){
-					throw new InjectException(fieldName+"注入时,请用@Service声明!");
-				}
-				try {
-					Object fieldInstance = null;
-					if(serviceClassInfo.isTransactional()&&isTran){
-						ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),serviceClassInfo.getClazz());
-						fieldInstance = proxy.getClassInstance();
-						loopInjectNoSecurity(fieldInstance,false);
-					}else{
-						fieldInstance = serviceClassInfo.getClazz().newInstance();
-						loopInjectNoSecurity(fieldInstance,isTran);
-					}
-					field.set(instance, fieldInstance);
-				} catch (Exception e) {
-				}
-			}
-		}
-	}
 	
 	static class InjectException extends IllegalArgumentException {
 
@@ -224,26 +136,7 @@ public class ApplicationContext {
 	 * @return
 	 */
 	public static Object getBean(String name){
-		Object instance = null;
-		BaseClassInfo index = IocContextIndex.getController(name);
-		if(index!=null){
-			Controller controller = index.getClazz().getAnnotation(Controller.class);
-			if(controller!=null&&controller.singleton()){
-				instance = controllerContext.get(((ControllerClassInfo)index).getNamespace());
-				if(instance!=null){
-					synchronized (instance) {
-						return instance;
-					}
-				}
-			}
-		}
-		if(index == null){
-			index = IocContextIndex.getService(name);
-		}
-		if(index!=null){
-			instance = buildInstance(index);
-		}
-		return instance;
+		return applicationContext.get(name);
 	}
 	
 }

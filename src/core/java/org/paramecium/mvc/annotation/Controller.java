@@ -22,12 +22,6 @@ public @interface Controller {
 	 * 进入该Controller的url命名空间
 	 * @return
 	 */
-	String namespace();
-	
-	/**
-	 * 是否是单例模式
-	 * @return
-	 */
-	boolean singleton() default true;
+	String value();
 	
 }
