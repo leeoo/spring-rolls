@@ -50,33 +50,69 @@ public abstract class  BaseWebServerEmbed{
 		try {
 			long startTime = System.currentTimeMillis();
 			tomcat.start();
-			System.err.println("########OK######## 嵌入式Tomcat服务器启动成功！本次启动共耗时 " + (System.currentTimeMillis() - startTime) + " 毫秒;");
+			long l = (System.currentTimeMillis() - startTime);
+			System.err.print("		");
+			System.err.print(" • ");
+			Thread.sleep(200);
+			System.out.print(" • ");
+			Thread.sleep(200);
+			System.err.print(" • ");
+			Thread.sleep(200);
+			System.out.print(" • ");
+			Thread.sleep(200);
+			System.err.print(" • ");
+			Thread.sleep(200);
+			System.out.print(" • ");
+			Thread.sleep(200);
+			System.err.print(" • ");
+			Thread.sleep(200);
+			System.out.print(" • ");
+			Thread.sleep(200);
+			System.err.print(" • ");
+			Thread.sleep(200);
+			System.out.print(" • ");
+			Thread.sleep(200);
+			System.err.print("本 ");
+			Thread.sleep(200);
+			System.out.print("次 ");
+			Thread.sleep(200);
+			System.err.print("启 ");
+			Thread.sleep(200);
+			System.out.print("动 ");
+			Thread.sleep(200);
+			System.err.print("耗 ");
+			Thread.sleep(200);
+			System.out.print("时 ");
+			Thread.sleep(200);
+			System.err.print(""+l);
+			Thread.sleep(200);
+			System.out.print(" 毫 ");
+			Thread.sleep(200);
+			System.err.print("秒 ");
+			Thread.sleep(200);
+			System.out.print("！");
+			Thread.sleep(200);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	
 	public void initEmbedded() {
 		tomcat = new Embedded();
 		tomcat.setCatalinaBase(getTomcatPath());
-
-		Host host = tomcat.createHost("127.0.0.1", tomcat.getCatalinaHome()
-				+ "/webapps");
-
+		Host host = tomcat.createHost("127.0.0.1", tomcat.getCatalinaHome()+ "/webapps");
 		String[] contexts = getContextsMappingPath();
 		String[] contextsPath = getContextsAbsolutePath();
 		Context context = null;
-
 		for (int i = 0; i < contexts.length; ++i) {
 			context = tomcat.createContext(contexts[i], contextsPath[i]);
 			host.addChild(context);
 		}
-
 		Engine engine = tomcat.createEngine();
 		engine.setName(DEFAULT_SERVER_NAME);
 		engine.addChild(host);
 		engine.setDefaultHost(host.getName());
-
 		tomcat.addEngine(engine);
 		// 只能本机访问
 		//Connector connector = tomcat.createConnector("127.0.0.1", getPort(),false);
