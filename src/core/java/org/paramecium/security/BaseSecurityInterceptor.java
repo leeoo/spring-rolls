@@ -33,9 +33,7 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 	 */
 	public Object intercept(Object service, Method method, Object[] parameters, MethodProxy proxy) throws Throwable{
 		CollectorFactory.getBeanCollector().put("Class:"+service.getClass().getSuperclass().getName()+" Method:"+method.getName());//放入日志缓存
-		if(!SecurityConfig.iocSecurity){
-			return nextIntercept(service, method, parameters, proxy);
-		}else if(ApplicationContext.isSecurityThreadLocal.get()!=null&&!ApplicationContext.isSecurityThreadLocal.get()){
+		if(!SecurityConfig.iocSecurity||ApplicationContext.isSecurityThreadLocal()){
 			return nextIntercept(service, method, parameters, proxy);
 		}
 		Security classSecurity = service.getClass().getAnnotation(Security.class);

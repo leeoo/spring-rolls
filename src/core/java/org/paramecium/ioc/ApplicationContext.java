@@ -18,8 +18,8 @@ import org.paramecium.ioc.annotation.AutoInject;
 public class ApplicationContext {
 	
 	private final static ConcurrentMap<String, Object> applicationContext = new ConcurrentHashMap<String, Object>();
-	public final static ThreadLocal<Boolean> isSecurityThreadLocal = new ThreadLocal<Boolean>();
-	public static String priorityStartClass;
+	private final static ThreadLocal<Boolean> isSecurityThreadLocal = new ThreadLocal<Boolean>();
+	static String priorityStartClass;
 	
 	static{
 		try {
@@ -40,6 +40,17 @@ public class ApplicationContext {
 			System.err.println("请使用JDK1.6及以上版本;JDK1.5及之前版本缺少相关方法!系统为您停止启动服务，请查明原因再试。");
 			System.exit(0);
 		}
+	}
+	
+	/**
+	 * 判断此线程是否传递不要需要安全保护的通知
+	 * @return
+	 */
+	public static boolean isSecurityThreadLocal(){
+		if(isSecurityThreadLocal.get()!=null&&!isSecurityThreadLocal.get()){
+			return true;
+		}
+		return false;
 	}
 	
 	/**
