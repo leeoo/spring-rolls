@@ -32,7 +32,7 @@ public class ApplicationContext {
 	/**
 	 * 第一次加载
 	 */
-	public static void init(){
+	static void init(){
 		try{
 			System.class.getName().isEmpty();
 			priority();
@@ -61,13 +61,11 @@ public class ApplicationContext {
 	}
 	
 	/**
-	 * 根据索引构建所需应用实例<br>
-	 * 如果是首层事务的service，其中包含的service属性声明无需自动注入，可以通过new方式得到。<br>
-	 * 如果已经加入@AutoInject自动注入声明，其其下所有service属性实例将不会被声明为Transaction,统统交由最高层service事务代理<br>
-	 * @param classInfo索引
+	 * 填充实例到ApplicationContext容器中，避免嵌套注入的隐患，同时提高了注入性能，占用少量的内存。
+	 * 容器中的实例是单例存储，使用者应避免使用属性变量赋值方式，应多采用注入或方法内声明变量。
 	 * @return
 	 */
-	public static void buildApplicationContext(){
+	static void fillApplicationContext(){
 		for(ServiceClassInfo info : IocContextIndex.getServices()){
 			String name = info.getUniqueName();
 			Object instance = ClassScanner.getIocInstance(name);

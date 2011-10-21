@@ -72,7 +72,7 @@ public class ClassScanner {
 			} catch (ClassNotFoundException e) {
 			}
 		}
-		ApplicationContext.buildApplicationContext();
+		ApplicationContext.fillApplicationContext();
 		classes.clear();//物理类文件信息可以清空了
 		instanceContext.clear();
 	}
