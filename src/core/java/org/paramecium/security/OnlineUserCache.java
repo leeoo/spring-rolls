@@ -38,6 +38,7 @@ public class OnlineUserCache {
 		UserDetails userDetails = getOnlineUserBySessionId(sessionId);
 		if(userDetails==null){
 			logger.error("sessionId:"+sessionId+"无法正常退出系统!");
+			onlineUsers.remove(sessionId);
 			return;
 		}
 		sessionIdIndex.remove(userDetails.getUsername());
