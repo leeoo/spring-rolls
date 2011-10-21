@@ -1,5 +1,6 @@
 package com.demo.web;
 
+import org.paramecium.commons.SecurityUitls;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.mvc.End;
 import org.paramecium.mvc.ModelAndView;
@@ -7,7 +8,6 @@ import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.AuthorizationMenu;
 import org.paramecium.security.SecurityConfig;
-import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
 
 import com.demo.entity.system.User;
@@ -42,7 +42,7 @@ public class LoginController extends BaseController{
 			userDetails.setName(user.getName());
 			userDetails.setResources(userService.getUserAuth(username));
 		}
-		SecurityThread.put(userDetails,mv.getRequest());
+		SecurityUitls.login(userDetails,mv.getRequest());
 		return mv.redirect(getServletExt("/system/index"));
 	}
 	
