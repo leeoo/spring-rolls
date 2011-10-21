@@ -2,8 +2,9 @@ package org.paramecium.security;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.paramecium.log.Log;
-import org.paramecium.log.LoggerFactory;
+import org.paramecium.cache.Cache;
+import org.paramecium.cache.CacheManager;
+import org.paramecium.security.exception.AnonymousException;
 import org.paramecium.security.exception.IpAddressException;
 import org.paramecium.security.exception.SessionExpiredException;
 import org.paramecium.security.exception.UserDisabledException;
@@ -18,9 +19,10 @@ import org.paramecium.security.exception.UserKickException;
  */
 public class SecurityThread {
 	
-	private final static Log logger = LoggerFactory.getLogger();
 	private final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();
 	private final static ThreadLocal<Security> securityThreadLocal = new ThreadLocal<Security>();
+	@SuppressWarnings("unchecked")
+	private final static Cache<String, Boolean> kickUserCache = CacheManager.getDefaultCache("CACHE_KICK_USER", 20);
 	
 	/**
 	 * 功能描述(Description):<br><b>
@@ -84,6 +86,10 @@ public class SecurityThread {
 	 * @param request
 	 */
 	public static void put(UserDetails userDetails,HttpServletRequest request){
+		if(userDetails==null){
+			putSecurity(SecurityThread.Security.AnonymousException);
+			throw new AnonymousException("用户信息为空,登录失败!");
+		}
 		if(request.getSession(false)!=null){
 			userDetails.setSessionId(request.getSession(false).getId());
 			userDetails.setAddress(request.getRemoteAddr());
@@ -102,20 +108,20 @@ public class SecurityThread {
 	 * 将登录正确的用户放入系统安全验证
 	 * @param userDetails
 	 */
-	public static void put(UserDetails userDetails){
+	private static void put(UserDetails userDetails){
 		if(SecurityConfig.sessionControl){//判断是否是同一session登录
-			for(UserDetails onlineUser : OnlineUserCache.getAllOnlineUsers()){
-				if(onlineUser.getUsername().equals(userDetails.getUsername())&&!onlineUser.getSessionId().equals(userDetails.getSessionId())){//用户信息相同,Session不同,说明用户出现重复登录或盗用,前者的在线用户信息删除
+			UserDetails onlineUser = OnlineUserCache.getOnlineUserByUsername(userDetails.getUsername());
+			if(onlineUser!=null){//用户信息相同,Session不同,说明用户出现重复登录或盗用,前者的在线用户信息删除
+				OnlineUserCache.logout(onlineUser.getSessionId());
+				kickUserCache.put(onlineUser.getSessionId(), true);//先记录下该用户被踢掉的状态
+			}else{//Session相同,用户信息不同，说明用户用相同浏览器重新登录,Session保存，之前在线用户信息删除
+				onlineUser = OnlineUserCache.getOnlineUserBySessionId(userDetails.getSessionId());
+				if(onlineUser!=null){
 					OnlineUserCache.logout(onlineUser.getSessionId());
-					break;
-				}else if(onlineUser.getSessionId().equals(userDetails.getSessionId())&&!onlineUser.getUsername().equals(userDetails.getUsername())){//Session相同,用户信息不同，说明用户用相同浏览器重新登录,Session保存，之前在线用户信息删除
-					OnlineUserCache.logout(onlineUser.getSessionId());
-					break;
 				}
 			}
 		}
 		OnlineUserCache.login(userDetails);
-		logger.debug(userDetails.getUsername()+"登录成功!");
 	}
 	
 	/**
@@ -125,10 +131,16 @@ public class SecurityThread {
 	public static UserDetails get() {
 		String sessionId = sessionThreadLocal.get();
 		if(sessionId!=null){
-			UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
+			UserDetails userDetails = OnlineUserCache.getOnlineUserBySessionId(sessionId);
 			if(userDetails==null){//如果在线用户列表不存在该用户，而该用户线程仍有信息，被视为强制被踢出(一般管理员可用使用该权限)
-				putSecurity(SecurityThread.Security.UserKickException);
-				throw new UserKickException("用户已经被强制退出!");
+				if(kickUserCache.get(sessionId)!=null&&kickUserCache.get(sessionId)){
+					putSecurity(SecurityThread.Security.UserKickException);
+					kickUserCache.remove(sessionId);
+					throw new UserKickException("该账号重复登录被踢掉!");
+				}else{
+					putSecurity(SecurityThread.Security.AnonymousException);
+					throw new AnonymousException("匿名用户没有登录!");
+				}
 			}else if(!userDetails.isEnable()){//如果账户是被冻结的，抛出异常
 				putSecurity(SecurityThread.Security.UserDisabledException);
 				throw new UserDisabledException("用户已经被冻结!");
@@ -146,7 +158,7 @@ public class SecurityThread {
 	public static UserDetails getUserNotException(){
 		String sessionId = sessionThreadLocal.get();
 		if(sessionId!=null){
-			UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
+			UserDetails userDetails = OnlineUserCache.getOnlineUserBySessionId(sessionId);
 			if(userDetails==null){
 				return null;
 			}
@@ -162,12 +174,8 @@ public class SecurityThread {
 	 * @param sessionId
 	 */
 	public static void remove(String sessionId){
-		UserDetails userDetails = OnlineUserCache.getOnlineUser(sessionId);
-		if(userDetails==null){
-			return;
-		}
 		OnlineUserCache.logout(sessionId);
-		logger.debug(userDetails.getUsername()+"退出成功!");
+		kickUserCache.remove(sessionId);
 	}
 
 }

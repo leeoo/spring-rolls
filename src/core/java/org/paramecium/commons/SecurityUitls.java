@@ -1,5 +1,7 @@
 package org.paramecium.commons;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
 
@@ -19,6 +21,15 @@ public abstract class SecurityUitls {
 	 */
 	public static UserDetails getLoginUser(){
 		return SecurityThread.getUserNotException();
+	}
+	
+	/**
+	 * 用户登录
+	 * @param userDetails
+	 * @param request
+	 */
+	public static void login(UserDetails userDetails,HttpServletRequest request){
+		SecurityThread.put(userDetails, request);
 	}
 	
 }
