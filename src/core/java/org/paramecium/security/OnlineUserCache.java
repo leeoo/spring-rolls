@@ -27,7 +27,7 @@ public class OnlineUserCache {
 	public static void login(UserDetails details){
 		onlineUsers.put(details.getSessionId(), details);
 		sessionIdIndex.put(details.getUsername(), details.getSessionId());
-		logger.debug(details.getUsername()+"登录成功!");
+		logger.debug(details.getUsername()+"登录成功!sessionId:"+details.getSessionId());
 	}
 	
 	/**
@@ -37,13 +37,13 @@ public class OnlineUserCache {
 	public static void logout(String sessionId){
 		UserDetails userDetails = getOnlineUserBySessionId(sessionId);
 		if(userDetails==null){
-			logger.error("sessionId:"+sessionId+"无法正常退出系统!");
+			logger.debug("sessionId:"+sessionId+"对应的用户之前被同账号挤掉，系统自动销毁Session！");
 			onlineUsers.remove(sessionId);
 			return;
 		}
 		sessionIdIndex.remove(userDetails.getUsername());
 		onlineUsers.remove(sessionId);
-		logger.debug(userDetails.getUsername()+"退出成功!");
+		logger.debug(userDetails.getUsername()+"退出成功!sessionId:"+sessionId);
 	}
 	
 	/**
