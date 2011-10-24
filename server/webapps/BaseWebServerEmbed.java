@@ -51,8 +51,24 @@ public abstract class  BaseWebServerEmbed{
 			long startTime = System.currentTimeMillis();
 			tomcat.start();
 			long l = (System.currentTimeMillis() - startTime);
-			System.err.print("░░▒▒░░▒▒░░▒▒░░▒▒░░");
-			System.err.print("P");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░  ░░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒                          ▒▒░░▒          ░▒             ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░  ░░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒  ▒▒░░▒▒  ▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░                   	 ░▒▒░░▒▒  ▒▒░░▒  ░▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░  ▒░░  ░░▒▒░░▒▒░░  ░░▒  ░▒▒░░▒▒  ▒▒░░  ░░▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░                        ░▒▒░░▒▒  ▒▒░  ▒░░▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░  ▒░░  ░░▒▒░░▒▒░░  ░░▒  ░▒▒░░▒▒  ▒▒░░  ░░▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░                        ░▒▒░░▒▒  ▒▒░░▒  ░▒             ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒  ▒▒░░▒▒  ▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒                  ▒▒░░▒▒░░▒▒  ▒▒░░▒  ░▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒  ▒▒░░▒▒░░▒▒░░▒▒  ▒▒░░▒▒░░▒▒        ░░▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒                  ▒▒░░▒▒░░▒▒  ▒▒░░▒▒░░▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒  ▒▒░░▒▒░░▒▒░░▒▒  ▒▒░░▒▒░░▒▒  ▒▒░░▒▒░░▒             ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒                  ▒▒░░▒▒░░▒▒  ▒▒░░▒▒░░▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
+			  System.err.print("░░▒▒░░▒▒░░▒▒");
+			System.err.print(" P");
 			Thread.sleep(200);
 			System.err.print("a");
 			Thread.sleep(200);
@@ -116,9 +132,9 @@ public abstract class  BaseWebServerEmbed{
 			Thread.sleep(200);
 			System.out.print(" 毫 ");
 			Thread.sleep(200);
-			System.err.print("秒 ");
+			System.err.print("秒");
 			Thread.sleep(200);
-			System.out.print("！");
+			System.err.println(" ▒░░▒▒░░▒▒░░▒▒");
 			Thread.sleep(200);
 		} catch (Exception e) {
 			e.printStackTrace();
