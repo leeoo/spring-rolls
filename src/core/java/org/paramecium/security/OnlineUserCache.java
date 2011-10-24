@@ -38,7 +38,6 @@ public class OnlineUserCache {
 		UserDetails userDetails = getOnlineUserBySessionId(sessionId);
 		if(userDetails==null){
 			logger.debug("sessionId:"+sessionId+"对应的用户之前被同账号挤掉，系统自动销毁Session！");
-			onlineUsers.remove(sessionId);
 			return;
 		}
 		sessionIdIndex.remove(userDetails.getUsername());
