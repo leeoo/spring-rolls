@@ -8,20 +8,16 @@
 				<p><a href="${base}/system/user/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-user">登录账户</a></p>
 				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-ding">参数设定</a></p>
 				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-date">日志系统</a></p>
-				<p style="padding-left: 10px;"><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-date">错误日志</a></p>
-				<p style="padding-left: 10px;"><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-date">请求日志</a></p>
-				<p style="padding-left: 10px;"><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-time">调用日志</a></p>
-				<p style="padding-left: 10px;"><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-date">数据日志</a></p>
+				<p style="padding-left: 10px;"><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-warn">错误日志</a></p>
+				<p style="padding-left: 10px;"><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-reload">请求日志</a></p>
+				<p style="padding-left: 10px;"><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-undo">调用日志</a></p>
+				<p style="padding-left: 10px;"><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-db">数据日志</a></p>
 			</div>
-			<div title="功能演示" icon="icon-db" style="padding-left: 10px;padding-top: 20px;">
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-help">任务调度(Thread)</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-help">搜索引擎(Lucene)</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-help">NoSQL控(MongoDB)</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-help">酷炫报表(F)</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-help">待定功能入口</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-help">待定功能入口</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-help">待定功能入口</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-help">待定功能入口</a></p>
+			<div title="功能演示" icon="icon-good" style="padding-left: 10px;padding-top: 20px;">
+				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-time">任务调度(Thread)</a></p>
+				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search">搜索引擎(Lucene)</a></p>
+				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-doc">NoSQL控(MongoDB)</a></p>
+				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-report">酷炫报表(F)</a></p>
 			</div>
 		</div>
 	</div>
