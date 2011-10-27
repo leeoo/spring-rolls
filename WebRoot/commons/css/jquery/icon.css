@@ -102,6 +102,9 @@
 .icon-warn{
 	background:url('icons/warn.png') no-repeat;
 }
+.icon-good{
+	background:url('icons/good.png') no-repeat;
+}
 .icon-zip{
 	background:url('icons/zip.gif') no-repeat;
 }
