@@ -27,11 +27,6 @@ public class FileLogHandler implements LogHandler {
 		writFile(message);
 	}
 	
-	public static void main(String[] args) {
-		System.out.println("abcde.log".substring("abcde.log".lastIndexOf("."),"abcde.log".length()));
-		System.out.println("abcde.log".substring(0,"abcde.log".lastIndexOf(".")));
-	}
-	
 	public void writFile(String message){
 		try {
 			File file = new File(LoggerFactory.loggerFileName);
