@@ -7,7 +7,6 @@ import org.paramecium.commons.JsonUitls;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
-import org.paramecium.mvc.End;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
@@ -47,7 +46,7 @@ public class RoleController extends BaseController{
 	
 	@ShowLabel("新增及维护界面")
 	@MappingMethod
-	public End input(ModelAndView mv){
+	public ModelAndView input(ModelAndView mv){
 		Integer id = mv.getValue("id",Integer.class);
 		if(id!=null){
 			Role role = roleService.get(id);
@@ -60,7 +59,7 @@ public class RoleController extends BaseController{
 	
 	@ShowLabel("保存")
 	@MappingMethod
-	public End save(ModelAndView mv){
+	public ModelAndView save(ModelAndView mv){
 		Role role = mv.getBean("role",Role.class);
 		Collection<String> auth = mv.getValues("auth", String.class);
 		if(role!=null){

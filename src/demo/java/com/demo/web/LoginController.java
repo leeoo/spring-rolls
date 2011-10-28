@@ -2,7 +2,6 @@ package com.demo.web;
 
 import org.paramecium.commons.SecurityUitls;
 import org.paramecium.ioc.annotation.AutoInject;
-import org.paramecium.mvc.End;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
@@ -20,7 +19,7 @@ public class LoginController extends BaseController{
 	private UserService userService;
 	
 	@MappingMethod
-	public End login(ModelAndView mv){
+	public ModelAndView login(ModelAndView mv){
 		String username = mv.getValue("username", String.class);
 		String password = mv.getValue("password", String.class);
 		if(password==null||username==null||username.isEmpty()||password.isEmpty()){
@@ -47,7 +46,7 @@ public class LoginController extends BaseController{
 	}
 	
 	@MappingMethod
-	public End logout(ModelAndView mv){
+	public ModelAndView logout(ModelAndView mv){
 		mv.getSession().invalidate();
 		return mv.redirect("/index.jsp");
 	}

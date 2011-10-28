@@ -39,6 +39,12 @@ public class ModelAndView implements Serializable{
 		this.response = response;
 	}
 	
+	private ModelAndView(final HttpServletRequest request,final HttpServletResponse response,boolean redirect){
+		this.request = request;
+		this.response = response;
+		this.redirect = redirect;
+	}
+	
 	/**
 	 * 根据提交的name构建bean,表单中beanName.propertyName格式将被构建。
 	 * @param beanName
@@ -140,9 +146,9 @@ public class ModelAndView implements Serializable{
 	 * forward跳转
 	 * @param forwardUrl
 	 */
-	public End forward(String forwardUrl){
+	public ModelAndView forward(String forwardUrl){
 		if(response.isCommitted()){
-			return null;
+			return new ModelAndView(this.request, this.response, this.redirect);
 		}
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher(forwardUrl);
 		try {
@@ -152,28 +158,28 @@ public class ModelAndView implements Serializable{
 		} catch (IOException e) {
 			logger.error(e);
 		}
-		return null;
+		return new ModelAndView(this.request, this.response, this.redirect);
 	}
 
 	/**
 	 * redirect重定向
 	 * @param redirectUrl
 	 */
-	public End redirect(String redirectUrl){
+	public ModelAndView redirect(String redirectUrl){
 		try {
 			response.sendRedirect(PathUtils.getNewPath(redirectUrl));
 			redirect = true;
 		} catch (IOException e) {
 			logger.error(e);
 		}
-		return null;
+		return new ModelAndView(this.request, this.response, this.redirect);
 	}
 	
 	/**
 	 * 提供下载功能
 	 * @param file
 	 */
-	public End download(byte[] file){
+	public ModelAndView download(byte[] file){
 		return download(file, null);
 	}
 	
@@ -182,7 +188,7 @@ public class ModelAndView implements Serializable{
 	 * @param file
 	 * @param fileName
 	 */
-	public End download(byte[] file,String fileName){
+	public ModelAndView download(byte[] file,String fileName){
 		return download(file, fileName, null);
 	}
 	
@@ -192,7 +198,7 @@ public class ModelAndView implements Serializable{
 	 * @param fileName
 	 * @param encoding
 	 */
-	public End download(byte[] file,String fileName,String encoding){
+	public ModelAndView download(byte[] file,String fileName,String encoding){
 		encoding = encoding!=null?encoding:"utf-8";
 		fileName = fileName!=null?fileName:"file";
 		response.setContentType("application/octet-stream;charset="+encoding);
@@ -205,14 +211,14 @@ public class ModelAndView implements Serializable{
 		}catch (Exception e) {
 			logger.error(e);
 		}
-		return null;
+		return new ModelAndView(this.request, this.response, this.redirect);
 	}
 	
 	/**
 	 * 输出xml
 	 * @param xml
 	 */
-	public End printXML(String xml){
+	public ModelAndView printXML(String xml){
 		return printXML(xml,null);
 	}
 	
@@ -221,7 +227,7 @@ public class ModelAndView implements Serializable{
 	 * @param xml
 	 * @param encoding
 	 */
-	public End printXML(String xml,String encoding){
+	public ModelAndView printXML(String xml,String encoding){
 		encoding = encoding!=null?encoding:"utf-8";
 		response.setContentType("text/xml;charset="+encoding);
 		try{
@@ -232,14 +238,14 @@ public class ModelAndView implements Serializable{
 		}catch (Exception e) {
 			logger.error(e);
 		}
-		return null;
+		return new ModelAndView(this.request, this.response, this.redirect);
 	}
 	
 	/**
 	 * 输出json
 	 * @param json
 	 */
-	public End printJSON(String json){
+	public ModelAndView printJSON(String json){
 		return printJSON(json,null);
 	}
 	
@@ -248,7 +254,7 @@ public class ModelAndView implements Serializable{
 	 * @param json
 	 * @param encoding
 	 */
-	public End printJSON(String json,String encoding){
+	public ModelAndView printJSON(String json,String encoding){
 		encoding = encoding!=null?encoding:"utf-8";
 		response.setContentType("text/html;charset="+encoding);
 		try{
@@ -259,7 +265,7 @@ public class ModelAndView implements Serializable{
 		}catch (Exception e) {
 			logger.error(e);
 		}
-		return null;
+		return new ModelAndView(this.request, this.response, this.redirect);
 	}
 
 	public HttpServletRequest getRequest() {
