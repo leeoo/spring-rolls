@@ -19,5 +19,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface AutoInject {
-
+	
+	/**
+	 * 防止同名Service注入冲突,为注入到容器中的service起一个唯一的名字，默认为service实例化名称
+	 * @return
+	 */
+	String value() default "";
+	
 }
