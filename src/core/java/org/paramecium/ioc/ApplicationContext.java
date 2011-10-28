@@ -92,23 +92,25 @@ public class ApplicationContext {
 	}
 	
 	private static void setFieldInstance(Object instance,Class<?> clazz){
-		Field[] fields = clazz.getDeclaredFields();
-		for(Field field : fields){
-			field.setAccessible(true);
-			AutoInject autoInject = field.getAnnotation(AutoInject.class);
-			if(autoInject!=null){
-				String fieldName = field.getName();
-				if(!autoInject.value().isEmpty()){
-					fieldName = autoInject.value();
-				}
-				ServiceClassInfo serviceClassInfo = IocContextIndex.getService(fieldName);
-				if(serviceClassInfo==null){
-					throw new InjectException(fieldName+"注入时,请用@Service声明!");
-				}
-				try {
-					Object fieldInstance = ClassScanner.getIocInstance(fieldName);
-					field.set(instance, fieldInstance);
-				} catch (Exception e) {
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				AutoInject autoInject = field.getAnnotation(AutoInject.class);
+				if(autoInject!=null){
+					String fieldName = field.getName();
+					if(!autoInject.value().isEmpty()){
+						fieldName = autoInject.value();
+					}
+					ServiceClassInfo serviceClassInfo = IocContextIndex.getService(fieldName);
+					if(serviceClassInfo==null){
+						throw new InjectException(fieldName+"注入时,请用@Service声明!");
+					}
+					try {
+						Object fieldInstance = ClassScanner.getIocInstance(fieldName);
+						field.set(instance, fieldInstance);
+					} catch (Exception e) {
+					}
 				}
 			}
 		}
