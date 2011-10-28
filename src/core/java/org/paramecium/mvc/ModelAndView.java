@@ -26,7 +26,7 @@ import org.paramecium.log.LoggerFactory;
  * <br>项目名称(Project Name): <b>paramecium</b>
  * <br>包及类名(Package Class): <b>org.paramecium.mvc.ModelAndView.java</b>
  */
-public class ModelAndView implements Serializable{
+public class ModelAndView implements Serializable,Cloneable{
 	
 	private static final long serialVersionUID = 7105417137624158939L;
 	private final static Log logger = LoggerFactory.getLogger();
@@ -34,15 +34,17 @@ public class ModelAndView implements Serializable{
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	
+	protected ModelAndView clone() {
+		try {
+			return (ModelAndView) super.clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+	
 	public ModelAndView(final HttpServletRequest request,final HttpServletResponse response){
 		this.request = request;
 		this.response = response;
-	}
-	
-	private ModelAndView(final HttpServletRequest request,final HttpServletResponse response,boolean redirect){
-		this.request = request;
-		this.response = response;
-		this.redirect = redirect;
 	}
 	
 	/**
@@ -148,7 +150,7 @@ public class ModelAndView implements Serializable{
 	 */
 	public ModelAndView forward(String forwardUrl){
 		if(response.isCommitted()){
-			return new ModelAndView(this.request, this.response, this.redirect);
+			return this.clone();
 		}
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher(forwardUrl);
 		try {
@@ -158,7 +160,7 @@ public class ModelAndView implements Serializable{
 		} catch (IOException e) {
 			logger.error(e);
 		}
-		return new ModelAndView(this.request, this.response, this.redirect);
+		return this.clone();
 	}
 
 	/**
@@ -172,7 +174,7 @@ public class ModelAndView implements Serializable{
 		} catch (IOException e) {
 			logger.error(e);
 		}
-		return new ModelAndView(this.request, this.response, this.redirect);
+		return this.clone();
 	}
 	
 	/**
@@ -211,7 +213,7 @@ public class ModelAndView implements Serializable{
 		}catch (Exception e) {
 			logger.error(e);
 		}
-		return new ModelAndView(this.request, this.response, this.redirect);
+		return this.clone();
 	}
 	
 	/**
@@ -238,7 +240,7 @@ public class ModelAndView implements Serializable{
 		}catch (Exception e) {
 			logger.error(e);
 		}
-		return new ModelAndView(this.request, this.response, this.redirect);
+		return this.clone();
 	}
 	
 	/**
@@ -265,7 +267,7 @@ public class ModelAndView implements Serializable{
 		}catch (Exception e) {
 			logger.error(e);
 		}
-		return new ModelAndView(this.request, this.response, this.redirect);
+		return this.clone();
 	}
 
 	public HttpServletRequest getRequest() {
