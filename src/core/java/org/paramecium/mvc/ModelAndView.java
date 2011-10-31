@@ -31,8 +31,8 @@ public class ModelAndView implements Serializable,Cloneable{
 	private static final long serialVersionUID = 7105417137624158939L;
 	private final static Log logger = LoggerFactory.getLogger();
 	private boolean redirect = false;
-	private HttpServletRequest request;
-	private HttpServletResponse response;
+	private transient HttpServletRequest request;//无需序列化
+	private transient HttpServletResponse response;//无需序列化
 	
 	protected ModelAndView clone() {
 		try {
