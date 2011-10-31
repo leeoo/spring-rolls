@@ -37,10 +37,10 @@ public abstract class BaseCache<KEY extends Object,VALUE extends Object> impleme
 	}
 
 	public synchronized Collection<VALUE> getValues() {
-		Collection<Element<KEY,VALUE>> elements = map.values();
 		if(map == null || map.isEmpty()){
 			return null;
 		}
+		Collection<Element<KEY,VALUE>> elements = map.values();
 		Collection<VALUE> values = new ArrayList<VALUE>();
 		for(Element<KEY,VALUE> element : elements){
 			values.add(element.getValue());

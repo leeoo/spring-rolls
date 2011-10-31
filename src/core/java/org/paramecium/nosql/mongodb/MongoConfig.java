@@ -57,7 +57,7 @@ public class MongoConfig {
 		}
 		this.port = port;
 		if(dbName==null){
-			new MongoException("MongoDB配置数据库名称不能为空!");
+			throw new MongoException("MongoDB配置数据库名称不能为空!");
 		}
 		this.dbName = dbName;
 	}
