@@ -88,43 +88,39 @@ public class DefaultDataSource implements DataSource{
 	/**
 	 * 获得连接
 	 */
-	public Connection getConnection(){
+	public synchronized Connection getConnection(){
 		if(connectionPool.get(ds)==null){//由于是运行时构建数据源实例，很多属性需要之后填充,之所以不把此处放在构造方法中，是因为当时ds还没有被赋值.
 			connectionPool.put(ds, new ConcurrentHashMap<Connection, Date>());
 		}
-		synchronized (connectionPool.get(ds)) {
-			Connection connection = getConnectionFromPool();
-			connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
-			return connection;
-		}
+		Connection connection = getConnectionFromPool();
+		connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
+		return connection;
 	}
 	
 	/**
 	 * 从连接池中获得连接
 	 * @return
 	 */
-	private Connection getConnectionFromPool(){
-		synchronized(connectionPool.get(ds)){
-			for(Connection connection : connectionPool.get(ds).keySet()){
-				try {
-					if (!connection.getAutoCommit()) {//查看是否正在使用，如果多线程的话可能会出现失误，不过没关系，下面仍有处理
-						continue;
-					}
-					long currentTime = DateUtils.getCurrentDateTime().getTime();
-					long lastUseTime = connectionPool.get(ds).get(connection).getTime();
-					if((currentTime-lastUseTime)>poolBase*poolMax){//只要有间隔，可错开多线程
-						return connection;
-					}
-				} catch (Exception e) {
-				}
-			}
+	private synchronized Connection getConnectionFromPool(){
+		for(Connection connection : connectionPool.get(ds).keySet()){
 			try {
-				Thread.sleep(1);//如果上面没有找到可用连接，稍等片刻，重现递归调用
-				buildConnectionToPool();//休息片刻初始化一下连接池，看看还有没有可用的新连接可以创建
+				if (!connection.getAutoCommit()) {//查看是否正在使用，如果多线程的话可能会出现失误，不过没关系，下面仍有处理
+					continue;
+				}
+				long currentTime = DateUtils.getCurrentDateTime().getTime();
+				long lastUseTime = connectionPool.get(ds).get(connection).getTime();
+				if((currentTime-lastUseTime)>poolBase*poolMax){//只要有间隔，可错开多线程
+					return connection;
+				}
 			} catch (Exception e) {
 			}
-			return getConnectionFromPool();//
 		}
+		try {
+			Thread.sleep(1);//如果上面没有找到可用连接，稍等片刻，重现递归调用
+			buildConnectionToPool();//休息片刻初始化一下连接池，看看还有没有可用的新连接可以创建
+		} catch (Exception e) {
+		}
+		return getConnectionFromPool();//
 	}
 
 	/**
