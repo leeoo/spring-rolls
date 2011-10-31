@@ -49,7 +49,7 @@ public class MultiDataSourceFactory {
 							field.setAccessible(true);
 							if(field.getType().equals(Integer.TYPE)){
 								field.set(dataSource,Integer.valueOf(entry.getValue()));
-							}else if(field.getType().equals(Boolean.TRUE)){
+							}else if(field.getType().equals(Boolean.TYPE)){
 								field.set(dataSource,Boolean.valueOf(entry.getValue()));
 							}else{
 								field.set(dataSource,entry.getValue());
