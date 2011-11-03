@@ -139,7 +139,7 @@ public class Validator {
 					if(!messages.isEmpty()){
 						messagesMap.put(instanceName+"."+field.getName(), messages);
 					}
-				} catch (Exception e) {
+				} catch (Throwable e) {
 				}
 			}
 		}

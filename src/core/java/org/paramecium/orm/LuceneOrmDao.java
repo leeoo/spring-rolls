@@ -132,7 +132,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 					sql = sql.concat("?,");
 					arrayParams[i] = pks.get(page.getFirst()+i);
 				}
-			}catch (Exception e) {
+			}catch (Throwable e) {
 				page.setResult(null);
 				return page;
 			}

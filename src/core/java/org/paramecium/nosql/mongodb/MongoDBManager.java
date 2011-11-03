@@ -36,7 +36,7 @@ public class MongoDBManager {
 				int port = portStr==null ? 27017 : Integer.parseInt(portStr);
 				MongoConfig config = new MongoConfig(url, port, dbName);
 				pool.put(key, config.getDB());
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 				logger.error(e);
 			}

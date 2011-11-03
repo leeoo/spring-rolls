@@ -59,7 +59,7 @@ public class TransactionManager {
 			for(Transaction transaction : transactionMap.values()){
 				try {
 					transaction.setReadOnly(true);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					e.printStackTrace();
 					logger.error(e);
 				}
@@ -76,7 +76,7 @@ public class TransactionManager {
 			for(Transaction transaction : transactionMap.values()){
 				try {
 					transaction.setTransactionIsolation(level);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					e.printStackTrace();
 					logger.error(e);
 				}
@@ -97,7 +97,7 @@ public class TransactionManager {
 					transactionMap.put(dataSourceName, new Transaction(dataSourceName));
 					transactionThreadLocal.set(transactionMap);
 				}
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 				logger.error(e);
 			}
@@ -124,7 +124,7 @@ public class TransactionManager {
 					}else{
 						transaction.close();//其他数据源默认关闭
 					}
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					e.printStackTrace();
 					logger.error(e);
 				}

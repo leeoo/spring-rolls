@@ -115,7 +115,7 @@ public class SearchIndexCreator {
 				}
 			}
 			writer.addDocument(doc);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			logger.error("索引文件建立错误!");
 		}
@@ -123,21 +123,21 @@ public class SearchIndexCreator {
 			if(writer!=null){
 				writer.optimize();
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("索引写入器优化错误!");
 		}
 		try {
 			if(writer!=null){
 				writer.close();
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("索引写入器关闭错误!");
 		}
 		try {
 			if(directory!=null){
 				directory.close();
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("索引目录关闭错误!");
 		}
 	}
@@ -179,7 +179,7 @@ public class SearchIndexCreator {
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			logger.error("索引文件建立错误!");
 		}
@@ -187,21 +187,21 @@ public class SearchIndexCreator {
 			if(writer!=null){
 				writer.optimize();
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("索引写入器优化错误!");
 		}
 		try {
 			if(writer!=null){
 				writer.close();
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("索引写入器关闭错误!");
 		}
 		try {
 			if(directory!=null){
 				directory.close();
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("索引目录关闭错误!");
 		}
 	}
@@ -246,35 +246,35 @@ public class SearchIndexCreator {
 				Document doc = searcher.doc(DocId);
 				ids.add(doc.get(getKeywordName(clazz)));
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("索引错误!");
 		}
 		try {
 			if(searcher!=null){
 				searcher.close();
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("查询器关闭错误!");
 		}
 		try {
 			if(reader!=null){
 				reader.flush();
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("索引读取器栈清空错误!");
 		}
 		try {
 			if(reader!=null){
 				reader.close();
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("索引读取器关闭错误!");
 		}
 		try {
 			if(directory!=null){
 				directory.close();
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("索引目录关闭错误!");
 		}
 		return ids;
@@ -367,7 +367,7 @@ public class SearchIndexCreator {
 		TextWord textWord = null;
 		try {
 			textWord = clazz.getDeclaredField(propertyName).getAnnotation(TextWord.class);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 		}
 		if (textWord != null) {
 			return true;
@@ -379,7 +379,7 @@ public class SearchIndexCreator {
 		SortWord sortWord = null;
 		try {
 			sortWord = clazz.getDeclaredField(propertyName).getAnnotation(SortWord.class);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 		}
 		if (sortWord != null) {
 			return true;
@@ -391,7 +391,7 @@ public class SearchIndexCreator {
 		KeyWord keyWord = null;
 		try {
 			keyWord = clazz.getDeclaredField(propertyName).getAnnotation(KeyWord.class);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 		}
 		if (keyWord != null) {
 			return true;
@@ -403,7 +403,7 @@ public class SearchIndexCreator {
 		TextWord textWord = null;
 		try {
 			textWord = clazz.getDeclaredField(propertyName).getAnnotation(TextWord.class);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 		}
 		if (textWord != null) {
 			return textWord.isFilterHtmlTags();

@@ -34,69 +34,68 @@ public class EntitySqlBuilder {
 			return sql;
 		}
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		isEntity(entity);
 		StringBuffer sb = new StringBuffer();
-		if(entity!=null){
-			String tableName = entity.tableName();
-			Collection<String> columns = new ArrayList<String>();
-			Collection<String> propertys = new ArrayList<String>();
-			Class<?> clazz = bean.getClass();
-			String mark = ":";
-			boolean isAuto = true;
-			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
-				Field[] fields = superClass.getDeclaredFields();
-				for(Field field : fields){
-					field.setAccessible(true);
-					try {
-						Column column = field.getAnnotation(Column.class);
-						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-						if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.MANUAL){
-							if(column!=null&&!column.value().isEmpty()){
-								columns.add(column.value());
-								propertys.add(mark.concat(field.getName()));
-							}else{
-								columns.add(BeanUtils.getDbFieldName(field.getName()));
-								propertys.add(mark.concat(field.getName()));
-							}
-							isAuto = false;
-						}else if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.NATIVE_SEQUENCE){
-							if(column!=null&&!column.value().isEmpty()){
-								columns.add(column.value());
-								propertys.add(primaryKey.sequenceName());
-							}else{
-								columns.add(BeanUtils.getDbFieldName(field.getName()));
-								propertys.add(primaryKey.sequenceName());
-							}
-							isAuto = false;
-						}else if(primaryKey==null){
-							if(column!=null&&!column.value().isEmpty()){
-								columns.add(column.value());
-								propertys.add(mark.concat(field.getName()));
-							}else if(column!=null&&column.value().isEmpty()){
-								columns.add(BeanUtils.getDbFieldName(field.getName()));
-								propertys.add(mark.concat(field.getName()));
-							}
+		String tableName = entity.tableName();
+		Collection<String> columns = new ArrayList<String>();
+		Collection<String> propertys = new ArrayList<String>();
+		Class<?> clazz = bean.getClass();
+		String mark = ":";
+		boolean isAuto = true;
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					Column column = field.getAnnotation(Column.class);
+					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+					if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.MANUAL){
+						if(column!=null&&!column.value().isEmpty()){
+							columns.add(column.value());
+							propertys.add(mark.concat(field.getName()));
+						}else{
+							columns.add(BeanUtils.getDbFieldName(field.getName()));
+							propertys.add(mark.concat(field.getName()));
 						}
-					} catch (Exception e) {
+						isAuto = false;
+					}else if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.NATIVE_SEQUENCE){
+						if(column!=null&&!column.value().isEmpty()){
+							columns.add(column.value());
+							propertys.add(primaryKey.sequenceName());
+						}else{
+							columns.add(BeanUtils.getDbFieldName(field.getName()));
+							propertys.add(primaryKey.sequenceName());
+						}
+						isAuto = false;
+					}else if(primaryKey==null){
+						if(column!=null&&!column.value().isEmpty()){
+							columns.add(column.value());
+							propertys.add(mark.concat(field.getName()));
+						}else if(column!=null&&column.value().isEmpty()){
+							columns.add(BeanUtils.getDbFieldName(field.getName()));
+							propertys.add(mark.concat(field.getName()));
+						}
 					}
+				} catch (Throwable e) {
 				}
 			}
-			if(isAuto){//判断是否为自增
-				sb.append("A");
-			}else{
-				sb.append("M");
-			}
-			sb.append("INSERT INTO ").append(tableName).append("(");
-			for(String column : columns){
-				sb.append(column).append(",");
-			}
-			sb.delete(sb.length()-1, sb.length()).append(")");
-			sb.append(" VALUES(");
-			for(String propertyc : propertys){
-				sb.append(propertyc).append(",");
-			}
-			sb.delete(sb.length()-1, sb.length()).append(")");
-			sqlCache.put(key, sb.toString());
 		}
+		if(isAuto){//判断是否为自增
+			sb.append("A");
+		}else{
+			sb.append("M");
+		}
+		sb.append("INSERT INTO ").append(tableName).append("(");
+		for(String column : columns){
+			sb.append(column).append(",");
+		}
+		sb.delete(sb.length()-1, sb.length()).append(")");
+		sb.append(" VALUES(");
+		for(String propertyc : propertys){
+			sb.append(propertyc).append(",");
+		}
+		sb.delete(sb.length()-1, sb.length()).append(")");
+		sqlCache.put(key, sb.toString());
 		return sb.toString();
 	}
 	
@@ -107,112 +106,110 @@ public class EntitySqlBuilder {
 			return sql;
 		}
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		isEntity(entity);
 		StringBuffer sb = new StringBuffer();
-		if(entity!=null){
-			String tableName = entity.tableName();
-			Collection<String> sets = new ArrayList<String>();
-			Collection<String> wheres = new ArrayList<String>();
-			Class<?> clazz = bean.getClass();
-			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
-				Field[] fields = superClass.getDeclaredFields();
-				for(Field field : fields){
-					field.setAccessible(true);
-					try {
-						NotUpdate notUpdate = field.getAnnotation(NotUpdate.class);
-						if(notUpdate!=null){
-							continue;
-						}
-						Column column = field.getAnnotation(Column.class);
-						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-						if(primaryKey!=null){
-							if(column!=null&&!column.value().isEmpty()){
-								wheres.add(column.value()+"=:"+field.getName()+" AND ");
-							}else{
-								wheres.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
-							}
-						}else if(primaryKey==null){
-							if(column!=null&&!column.value().isEmpty()){
-								sets.add(column.value()+"=:"+field.getName()+",");
-							}else if(column!=null&&column.value().isEmpty()){
-								sets.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+",");
-							}
-						}
-					} catch (Exception e) {
+		String tableName = entity.tableName();
+		Collection<String> sets = new ArrayList<String>();
+		Collection<String> wheres = new ArrayList<String>();
+		Class<?> clazz = bean.getClass();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					NotUpdate notUpdate = field.getAnnotation(NotUpdate.class);
+					if(notUpdate!=null){
+						continue;
 					}
+					Column column = field.getAnnotation(Column.class);
+					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+					if(primaryKey!=null){
+						if(column!=null&&!column.value().isEmpty()){
+							wheres.add(column.value()+"=:"+field.getName()+" AND ");
+						}else{
+							wheres.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
+						}
+					}else if(primaryKey==null){
+						if(column!=null&&!column.value().isEmpty()){
+							sets.add(column.value()+"=:"+field.getName()+",");
+						}else if(column!=null&&column.value().isEmpty()){
+							sets.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+",");
+						}
+					}
+				} catch (Throwable e) {
 				}
 			}
-			sb.append("UPDATE ").append(tableName).append(" SET ");
-			for(String set : sets){
-				sb.append(set);
-			}
-			sb.delete(sb.length()-1, sb.length());
-			if(!wheres.isEmpty()){
-				sb.append(" WHERE ");
-				for(String where : wheres){
-					sb.append(where);
-				}
-				sb.delete(sb.length()-5, sb.length());
-			}else{
-				return null;
-			}
-			sqlCache.put(key, sb.toString());
 		}
+		sb.append("UPDATE ").append(tableName).append(" SET ");
+		for(String set : sets){
+			sb.append(set);
+		}
+		sb.delete(sb.length()-1, sb.length());
+		if(!wheres.isEmpty()){
+			sb.append(" WHERE ");
+			for(String where : wheres){
+				sb.append(where);
+			}
+			sb.delete(sb.length()-5, sb.length());
+		}else{
+			return null;
+		}
+		sqlCache.put(key, sb.toString());
 		return sb.toString();
 	}
 	
 	public static String getUpdateSqlNotNull(Object bean){
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
+		isEntity(entity);
 		StringBuffer sb = new StringBuffer();
-		if(entity!=null){
-			String tableName = entity.tableName();
-			Collection<String> sets = new ArrayList<String>();
-			Collection<String> wheres = new ArrayList<String>();
-			Class<?> clazz = bean.getClass();
-			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
-				Field[] fields = superClass.getDeclaredFields();
-				for(Field field : fields){
-					field.setAccessible(true);
-					try {
-						if(field.get(bean)==null){
-							continue;
-						}
-						NotUpdate notUpdate = field.getAnnotation(NotUpdate.class);
-						if(notUpdate!=null){
-							continue;
-						}
-						Column column = field.getAnnotation(Column.class);
-						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-						if(primaryKey!=null){
-							if(column!=null&&!column.value().isEmpty()){
-								wheres.add(column.value()+"=:"+field.getName()+" AND ");
-							}else{
-								wheres.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
-							}
-						}else if(primaryKey==null){
-							if(column!=null&&!column.value().isEmpty()){
-								sets.add(column.value()+"=:"+field.getName()+",");
-							}else if(column!=null&&column.value().isEmpty()){
-								sets.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+",");
-							}
-						}
-					} catch (Exception e) {
+		String tableName = entity.tableName();
+		Collection<String> sets = new ArrayList<String>();
+		Collection<String> wheres = new ArrayList<String>();
+		Class<?> clazz = bean.getClass();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(field.get(bean)==null){
+						continue;
 					}
+					NotUpdate notUpdate = field.getAnnotation(NotUpdate.class);
+					if(notUpdate!=null){
+						continue;
+					}
+					Column column = field.getAnnotation(Column.class);
+					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+					if(primaryKey!=null){
+						if(column!=null&&!column.value().isEmpty()){
+							wheres.add(column.value()+"=:"+field.getName()+" AND ");
+						}else{
+							wheres.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+" AND ");
+						}
+					}else if(primaryKey==null){
+						if(column!=null&&!column.value().isEmpty()){
+							sets.add(column.value()+"=:"+field.getName()+",");
+						}else if(column!=null&&column.value().isEmpty()){
+							sets.add(BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName()+",");
+						}
+					}
+				} catch (Throwable e) {
 				}
 			}
-			sb.append("UPDATE ").append(tableName).append(" SET ");
-			for(String set : sets){
-				sb.append(set);
+		}
+		sb.append("UPDATE ").append(tableName).append(" SET ");
+		for(String set : sets){
+			sb.append(set);
+		}
+		sb.delete(sb.length()-1, sb.length());
+		if(!wheres.isEmpty()){
+			sb.append(" WHERE ");
+			for(String where : wheres){
+				sb.append(where);
 			}
-			sb.delete(sb.length()-1, sb.length());
-			if(!wheres.isEmpty()){
-				sb.append(" WHERE ");
-				for(String where : wheres){
-					sb.append(where);
-				}
-				sb.delete(sb.length()-5, sb.length());
-			}else{
-				return null;
-			}
+			sb.delete(sb.length()-5, sb.length());
+		}else{
+			return null;
 		}
 		return sb.toString();
 	}
@@ -224,40 +221,39 @@ public class EntitySqlBuilder {
 			return sql;
 		}
 		Entity entity = clazz.getAnnotation(Entity.class);
+		isEntity(entity);
 		StringBuffer sb = new StringBuffer();
-		if(entity!=null){
-			String tableName = entity.tableName();
-			Collection<String> wheres = new ArrayList<String>();
-			root:for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
-				Field[] fields = superClass.getDeclaredFields();
-				for(Field field : fields){
-					field.setAccessible(true);
-					try {
-						Column column = field.getAnnotation(Column.class);
-						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-						if(primaryKey!=null){
-							if(column!=null&&!column.value().isEmpty()){
-								wheres.add(column.value()+"=?");
-							}else{
-								wheres.add(BeanUtils.getDbFieldName(field.getName())+"=?");
-							}
-							break root;
+		String tableName = entity.tableName();
+		Collection<String> wheres = new ArrayList<String>();
+		root:for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					Column column = field.getAnnotation(Column.class);
+					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+					if(primaryKey!=null){
+						if(column!=null&&!column.value().isEmpty()){
+							wheres.add(column.value()+"=?");
+						}else{
+							wheres.add(BeanUtils.getDbFieldName(field.getName())+"=?");
 						}
-					} catch (Exception e) {
+						break root;
 					}
+				} catch (Throwable e) {
 				}
 			}
-			sb.append("DELETE FROM ").append(tableName);
-			if(!wheres.isEmpty()){
-				sb.append(" WHERE ");
-				for(String where : wheres){
-					sb.append(where);
-				}
-			}else{
-				return null;
-			}
-			sqlCache.put(key, sb.toString());
 		}
+		sb.append("DELETE FROM ").append(tableName);
+		if(!wheres.isEmpty()){
+			sb.append(" WHERE ");
+			for(String where : wheres){
+				sb.append(where);
+			}
+		}else{
+			return null;
+		}
+		sqlCache.put(key, sb.toString());
 		return sb.toString();
 	}
 	
@@ -268,102 +264,100 @@ public class EntitySqlBuilder {
 			return sql;
 		}
 		Entity entity = clazz.getAnnotation(Entity.class);
+		isEntity(entity);
 		StringBuffer sb = new StringBuffer();
-		if(entity!=null){
-			String tableName = entity.tableName();
-			Collection<String> columns = new ArrayList<String>();
-			Collection<String> wheres = new ArrayList<String>();
-			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
-				Field[] fields = superClass.getDeclaredFields();
-				for(Field field : fields){
-					field.setAccessible(true);
-					try {
-						Column column = field.getAnnotation(Column.class);
-						ReferenceColumn referenceColumn = field.getAnnotation(ReferenceColumn.class);
-						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-						if(primaryKey!=null&&wheres.isEmpty()){
-							if(column!=null&&!column.value().isEmpty()){
-								wheres.add("base."+column.value()+"=?");
-							}else{
-								wheres.add("base."+BeanUtils.getDbFieldName(field.getName())+"=?");
-							}
-						}
+		String tableName = entity.tableName();
+		Collection<String> columns = new ArrayList<String>();
+		Collection<String> wheres = new ArrayList<String>();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					Column column = field.getAnnotation(Column.class);
+					ReferenceColumn referenceColumn = field.getAnnotation(ReferenceColumn.class);
+					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+					if(primaryKey!=null&&wheres.isEmpty()){
 						if(column!=null&&!column.value().isEmpty()){
-							columns.add("base."+column.value()+" "+field.getName());
-						}else if(column!=null&&column.value().isEmpty()){
-							columns.add("base."+BeanUtils.getDbFieldName(field.getName()));
-						}else if(referenceColumn!=null&&referenceColumn.subSelectSql()!=null&&!referenceColumn.subSelectSql().isEmpty()){
-							columns.add(referenceColumn.subSelectSql());
+							wheres.add("base."+column.value()+"=?");
+						}else{
+							wheres.add("base."+BeanUtils.getDbFieldName(field.getName())+"=?");
 						}
-					} catch (Exception e) {
 					}
+					if(column!=null&&!column.value().isEmpty()){
+						columns.add("base."+column.value()+" "+field.getName());
+					}else if(column!=null&&column.value().isEmpty()){
+						columns.add("base."+BeanUtils.getDbFieldName(field.getName()));
+					}else if(referenceColumn!=null&&referenceColumn.subSelectSql()!=null&&!referenceColumn.subSelectSql().isEmpty()){
+						columns.add(referenceColumn.subSelectSql());
+					}
+				} catch (Throwable e) {
 				}
 			}
-			sb.append("SELECT ");
-			if(!columns.isEmpty()){
-				for(String column : columns){
-					sb.append(column).append(",");
-				}
-			}
-			sb.delete(sb.length()-1, sb.length());
-			sb.append(" FROM ").append(tableName+" base");
-			if(!wheres.isEmpty()){
-				sb.append(" WHERE ");
-				for(String where : wheres){
-					sb.append(where);
-				}
-			}else{
-				return null;
-			}
-			sqlCache.put(key, sb.toString());
 		}
+		sb.append("SELECT ");
+		if(!columns.isEmpty()){
+			for(String column : columns){
+				sb.append(column).append(",");
+			}
+		}
+		sb.delete(sb.length()-1, sb.length());
+		sb.append(" FROM ").append(tableName+" base");
+		if(!wheres.isEmpty()){
+			sb.append(" WHERE ");
+			for(String where : wheres){
+				sb.append(where);
+			}
+		}else{
+			return null;
+		}
+		sqlCache.put(key, sb.toString());
 		return sb.toString();
 	}
 	
 	public static String getDynamicWhereSql(Object dynamicWhereBean){
 		StringBuffer sb = new StringBuffer();
 		Entity entity = dynamicWhereBean.getClass().getAnnotation(Entity.class);
-		if(entity!=null){
-			Collection<String> wheres = new ArrayList<String>();
-			Class<?> clazz = dynamicWhereBean.getClass();
-			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
-				Field[] fields = superClass.getDeclaredFields();
-				for(Field field : fields){
-					field.setAccessible(true);
-					try {
-						if(field.get(dynamicWhereBean)==null||field.get(dynamicWhereBean).toString().isEmpty()){
-							continue;
-						}
-						VirtualColumn virtualColumn = field.getAnnotation(VirtualColumn.class);
-						Column column = field.getAnnotation(Column.class);
-						PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-						if(primaryKey!=null){
-							if(column!=null&&!column.value().isEmpty()){
-								wheres.add(column.logical()+column.value()+column.comparison()+":"+field.getName());
-							}else{
-								wheres.add(VirtualColumn.DYNAMIC_WHERE_LOGIC.AND+BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName());
-							}
-						}else if(virtualColumn!=null){
-							wheres.add(virtualColumn.logical()+":"+field.getName()+virtualColumn.comparison()+virtualColumn.comparisonColumn());
-						}else if(column!=null&&column.isDynamicWhere()){
-							if(!column.value().isEmpty()){
-								wheres.add(column.logical()+column.value()+column.comparison()+":"+field.getName());
-							}else{
-								wheres.add(column.logical()+BeanUtils.getDbFieldName(field.getName())+column.comparison()+":"+field.getName());
-							}
-						}
-					} catch (Exception e) {
+		isEntity(entity);
+		Collection<String> wheres = new ArrayList<String>();
+		Class<?> clazz = dynamicWhereBean.getClass();
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			Field[] fields = superClass.getDeclaredFields();
+			for(Field field : fields){
+				field.setAccessible(true);
+				try {
+					if(field.get(dynamicWhereBean)==null||field.get(dynamicWhereBean).toString().isEmpty()){
+						continue;
 					}
+					VirtualColumn virtualColumn = field.getAnnotation(VirtualColumn.class);
+					Column column = field.getAnnotation(Column.class);
+					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+					if(primaryKey!=null){
+						if(column!=null&&!column.value().isEmpty()){
+							wheres.add(column.logical()+column.value()+column.comparison()+":"+field.getName());
+						}else{
+							wheres.add(VirtualColumn.DYNAMIC_WHERE_LOGIC.AND+BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName());
+						}
+					}else if(virtualColumn!=null){
+						wheres.add(virtualColumn.logical()+":"+field.getName()+virtualColumn.comparison()+virtualColumn.comparisonColumn());
+					}else if(column!=null&&column.isDynamicWhere()){
+						if(!column.value().isEmpty()){
+							wheres.add(column.logical()+column.value()+column.comparison()+":"+field.getName());
+						}else{
+							wheres.add(column.logical()+BeanUtils.getDbFieldName(field.getName())+column.comparison()+":"+field.getName());
+						}
+					}
+				} catch (Throwable e) {
 				}
 			}
-			for(String where : wheres){
-				sb.append(where);
-			}
-			if(entity != null && entity.where().isEmpty()){
-				sb.append(" AND ".concat(entity.where()));
-			}
-			sb.delete(0, 4);
 		}
+		for(String where : wheres){
+			sb.append(where);
+		}
+		if(entity != null && entity.where().isEmpty()){
+			sb.append(" AND ".concat(entity.where()));
+		}
+		sb.delete(0, 4);
 		return sb.toString();
 	}
 
@@ -382,7 +376,7 @@ public class EntitySqlBuilder {
 						sqlCache.put(clazz.getName().concat("#PK_NAME#"), field.getName());
 						return getPkName(clazz);
 					}
-				} catch (Exception e) {
+				} catch (Throwable e) {
 				}
 			}
 		}
@@ -399,11 +393,17 @@ public class EntitySqlBuilder {
 					if(primaryKey!=null){
 						return field.getType();
 					}
-				} catch (Exception e) {
+				} catch (Throwable e) {
 				}
 			}
 		}
 		throw new RuntimeException(clazz.getName()+"没有设置主键注解@PrimaryKey");
+	}
+	
+	public static void isEntity(Entity entity){
+		if(entity==null){
+			throw new RuntimeException("实体没有声明标注@Entity并配置");
+		}
 	}
 	
 }

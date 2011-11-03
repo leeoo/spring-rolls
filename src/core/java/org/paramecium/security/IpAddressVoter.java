@@ -80,7 +80,7 @@ public class IpAddressVoter{
 					if(isMeet==0){
 						return include;
 					}
-				}catch (Exception e) {
+				}catch (Throwable e) {
 					return !include;//登录ip验证发生意外错误则否定
 				}
 			}

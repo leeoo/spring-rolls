@@ -59,9 +59,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public Number insert(T bean) throws Exception {
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
-		if(entity==null){
-			throw new RuntimeException("实体没有声明标注@Entity并配置");
-		}
+		EntitySqlBuilder.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject object = new BasicDBObject();
 		long id = 0;
@@ -81,8 +79,8 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 						object.put(fieldName, id);
 						continue;
 					}
-						object.put(fieldName, field.get(bean));
-				} catch (Exception e) {
+					object.put(fieldName, field.get(bean));
+				} catch (Throwable e) {
 				}
 			}
 		}
@@ -98,9 +96,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public void insert(Collection<T> beans) throws Exception {
 		Entity entity = beans.iterator().next().getClass().getAnnotation(Entity.class);
-		if(entity==null){
-			throw new RuntimeException("实体没有声明标注@Entity并配置");
-		}
+		EntitySqlBuilder.isEntity(entity);
 		String tableName = entity.tableName();
 		List<DBObject> objects = new ArrayList<DBObject>();
 		for(T bean : beans){
@@ -112,7 +108,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 					try {
 						String fieldName = getFieldName(field);
 						object.put(fieldName, field.get(bean));
-					} catch (Exception e) {
+					} catch (Throwable e) {
 					}
 				}
 			}
@@ -146,9 +142,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	private void updateMongo(T bean,boolean isNoNull){
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
-		if(entity==null){
-			throw new RuntimeException("实体没有声明标注@Entity并配置");
-		}
+		EntitySqlBuilder.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject object = new BasicDBObject();
 		DBObject where = new BasicDBObject();
@@ -167,7 +161,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 						where.put(fieldName, value);
 					}
 					object.put(fieldName, value);//无需判断，更新需要全部更新，不能局部更新
-				} catch (Exception e) {
+				} catch (Throwable e) {
 				}
 			}
 		}
@@ -181,9 +175,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public void delete(PK primaryKey)throws Exception {
 		Entity entity = clazz.getAnnotation(Entity.class);
-		if(entity==null){
-			throw new RuntimeException("实体没有声明标注@Entity并配置");
-		}
+		EntitySqlBuilder.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject where = new BasicDBObject();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -196,7 +188,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 					if(primaryKey$!=null){
 						where.put(fieldName, primaryKey);
 					}
-				} catch (Exception e) {
+				} catch (Throwable e) {
 				}
 			}
 		}
@@ -223,9 +215,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	private static DBObject buildWhere(Object whereBean){
 		Entity entity = whereBean.getClass().getAnnotation(Entity.class);
 		DBObject where = new BasicDBObject();
-		if(entity==null){
-			throw new RuntimeException("实体没有声明标注@Entity并配置");
-		}
+		EntitySqlBuilder.isEntity(entity);
 		for (Class<?> superClass = whereBean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
@@ -265,7 +255,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 							}
 						}
 					}
-				} catch (Exception e) {
+				} catch (Throwable e) {
 				}
 			}
 		}
@@ -280,9 +270,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	@SuppressWarnings("unchecked")
 	public T select(PK primaryKey){
 		Entity entity = clazz.getAnnotation(Entity.class);
-		if(entity==null){
-			throw new RuntimeException("实体没有声明标注@Entity并配置");
-		}
+		EntitySqlBuilder.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject where = new BasicDBObject();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -295,7 +283,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 					if(primaryKey$!=null){
 						where.put(fieldName, primaryKey);
 					}
-				} catch (Exception e) {
+				} catch (Throwable e) {
 				}
 			}
 		}
@@ -310,9 +298,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public Page select(Page page){
 		Entity entity = clazz.getAnnotation(Entity.class);
-		if(entity==null){
-			throw new RuntimeException("实体没有声明标注@Entity并配置");
-		}
+		EntitySqlBuilder.isEntity(entity);
 		String tableName = entity.tableName();
 		long count = mongoDao.count(tableName);
 		page.setTotalCount((int)count);
@@ -342,9 +328,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public Page select(Page page,T whereBean){
 		Entity entity = clazz.getAnnotation(Entity.class);
-		if(entity==null){
-			throw new RuntimeException("实体没有声明标注@Entity并配置");
-		}
+		EntitySqlBuilder.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject where = buildWhere(whereBean);
 		long count = mongoDao.count(tableName,where);
@@ -376,9 +360,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public Collection<T> select(T whereBean){
 		Entity entity = clazz.getAnnotation(Entity.class);
-		if(entity==null){
-			throw new RuntimeException("实体没有声明标注@Entity并配置");
-		}
+		EntitySqlBuilder.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject where = buildWhere(whereBean);
 		DBCursor dbCursor = null;
