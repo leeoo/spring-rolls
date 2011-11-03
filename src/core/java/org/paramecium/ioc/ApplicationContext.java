@@ -36,7 +36,7 @@ public class ApplicationContext {
 		try{
 			System.class.getName().isEmpty();
 			priority();
-		}catch (Exception e) {
+		}catch (Throwable e) {
 			System.err.println("请使用JDK1.6及以上版本;JDK1.5及之前版本缺少相关方法!系统为您停止启动服务，请查明原因再试。");
 			System.exit(0);
 		}
@@ -65,7 +65,7 @@ public class ApplicationContext {
 				Object object = clazz.newInstance();
 				Method method = clazz.getMethod(methodName);
 				method.invoke(object);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 		}
@@ -109,7 +109,7 @@ public class ApplicationContext {
 					try {
 						Object fieldInstance = ClassScanner.getIocInstance(fieldName);
 						field.set(instance, fieldInstance);
-					} catch (Exception e) {
+					} catch (Throwable e) {
 					}
 				}
 			}

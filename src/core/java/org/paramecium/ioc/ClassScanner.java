@@ -103,7 +103,7 @@ public class ClassScanner {
 			try {
 				ClassProxy proxy = new ClassProxy(new TransactionInterceptor(),clazz);
 				instanceContext.put(iocUniqueName, proxy.getClassInstance());
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				logger.fatal(clazz.getName()+" # "+iocUniqueName+"无法实例化，请给出该类无参数构造方法！");
 				System.exit(0);
 			}
@@ -120,7 +120,7 @@ public class ClassScanner {
 			try {
 				ClassProxy proxy = new ClassProxy(new SecurityInterceptor(),clazz);
 				instanceContext.put(iocUniqueName, proxy.getClassInstance());
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				logger.fatal(clazz.getName()+" # "+iocUniqueName+"无法实例化，请给出该类无参数构造方法！");
 				System.exit(0);
 			}

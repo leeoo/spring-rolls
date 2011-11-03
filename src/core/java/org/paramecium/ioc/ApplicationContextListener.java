@@ -26,7 +26,7 @@ public class ApplicationContextListener implements ServletContextListener {
 				if(path!=null && path.equals("/")){
 					path = "";
 				}
-			}catch (Exception e) {
+			}catch (Throwable e) {
 				System.err.println("请使用Servlet-api.jar2.5版本;2.4及之前版本缺少相关方法!系统为您停止启动服务，请查明原因再试。");
 				System.exit(0);
 			}
