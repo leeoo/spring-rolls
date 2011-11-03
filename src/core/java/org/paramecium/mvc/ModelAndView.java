@@ -71,7 +71,7 @@ public class ModelAndView implements Serializable,Cloneable{
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 		}
 		return (T)bean;
 	}
@@ -98,7 +98,7 @@ public class ModelAndView implements Serializable,Cloneable{
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 		}
 		return (T)bean;
 	}
@@ -210,7 +210,7 @@ public class ModelAndView implements Serializable,Cloneable{
 			outStream.write(file);
 			outStream.flush();
 			outStream.close();
-		}catch (Exception e) {
+		}catch (Throwable e) {
 			logger.error(e);
 		}
 		return this.clone();
@@ -237,7 +237,7 @@ public class ModelAndView implements Serializable,Cloneable{
 			writer.write(xml);
 			writer.flush();
 			writer.close();
-		}catch (Exception e) {
+		}catch (Throwable e) {
 			logger.error(e);
 		}
 		return this.clone();
@@ -264,7 +264,7 @@ public class ModelAndView implements Serializable,Cloneable{
 			writer.write(json);
 			writer.flush();
 			writer.close();
-		}catch (Exception e) {
+		}catch (Throwable e) {
 			logger.error(e);
 		}
 		return this.clone();
