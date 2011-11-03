@@ -1,6 +1,5 @@
 package org.paramecium.mvc;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,7 +85,7 @@ public class ControllerExtractor {
 						}
 					}
 				}
-			}catch (Exception e) {
+			}catch (Throwable e) {
 				return security(e,response);
 			}
 			logger.warn("该资源没有与之对应的处理方法!");
@@ -124,13 +123,13 @@ public class ControllerExtractor {
 				end();
 				return false;
 			}
-		}catch (Exception e) {
+		}catch (Throwable e) {
 		}
 		end();
 		return !modelAndView.isRedirect();
 	}
 	
-	private static boolean security(Exception e,final HttpServletResponse response){
+	private static boolean security(Throwable e,final HttpServletResponse response){
 		try {
 			if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
@@ -146,7 +145,7 @@ public class ControllerExtractor {
 			}else if(e.getCause() instanceof IpAddressException||e instanceof IpAddressException){
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
 			}/*继续扩展，可在配置文件中加入更多异常*/
-		} catch (IOException e1) {
+		} catch (Throwable e2) {
 		}
 		end();
 		return false;
