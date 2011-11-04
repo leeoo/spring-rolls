@@ -17,7 +17,7 @@ public class CollectorFactory {
 	private static JdbcCollector<String> jdbcCollector = new JdbcCollector<String>();
 	
 	public static void setLogCollector(String logCollectorInterface){
-		if(logCollectorInterface==null||logCollectorInterface.isEmpty()){
+		if(logCollectorInterface==null||logCollectorInterface.isEmpty()||logCollector!=null){
 			return;
 		}
 		try{

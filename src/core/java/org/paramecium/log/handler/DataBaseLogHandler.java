@@ -13,6 +13,9 @@ public class DataBaseLogHandler implements LogHandler{
 	private static LoggerDB loggerDB = null;
 	
 	public static void setDbInterface(String loggerDbInterface){
+		if(loggerDbInterface==null||loggerDbInterface.isEmpty()||loggerDB!=null){
+			return;
+		}
 		try{
 			Class<?> clazz = Class.forName(loggerDbInterface);
 			loggerDB = (LoggerDB) clazz.newInstance();
