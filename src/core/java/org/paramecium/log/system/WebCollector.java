@@ -51,7 +51,11 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 			}
 			logger.append(username).append("|");
 			logger.append(rq.getRequestURI());
-			mvcLogCache.put(logger.toString(), null);
+			if(CollectorFactory.logCollector!=null){
+				CollectorFactory.logCollector.putWebLog(logger.toString());
+			}else{
+				mvcLogCache.put(logger.toString(), null);
+			}
 			logger$.debug(logger.toString());
 		}
 	}
