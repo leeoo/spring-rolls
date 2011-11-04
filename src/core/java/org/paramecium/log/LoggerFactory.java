@@ -8,6 +8,7 @@ import org.paramecium.commons.PropertiesUitls;
 import org.paramecium.log.handler.ConsoleLogHandler;
 import org.paramecium.log.handler.DataBaseLogHandler;
 import org.paramecium.log.handler.FileLogHandler;
+import org.paramecium.log.system.CollectorFactory;
 
 /**
  * 功 能 描 述:<br>
@@ -63,6 +64,7 @@ public class LoggerFactory {
 		beanLogCollector = beanLogCollectorStr != null ? Boolean.valueOf(beanLogCollectorStr) : false;
 		jdbcLogCollector = jdbcLogCollectorStr != null ? Boolean.valueOf(jdbcLogCollectorStr) : false;
 		webLogCollector = webLogCollectorStr != null ? Boolean.valueOf(webLogCollectorStr) : false;
+		CollectorFactory.setLogCollector(properties.get("logCollectorInterface"));
 	}
 	
 	/**
