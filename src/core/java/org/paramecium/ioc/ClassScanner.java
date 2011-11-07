@@ -2,6 +2,7 @@ package org.paramecium.ioc;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -135,9 +136,9 @@ public class ClassScanner {
 			}
 			Collection<Resource> resources = new LinkedList<Resource>();
 			for(Method method : clazz.getMethods()){
-				/*if(Modifier.isStatic(method.getModifiers())){
+				if(Modifier.isStatic(method.getModifiers())){
 					continue;//如果该方法为静态则过滤不计
-				}*/
+				}
 				if(method.getName().equals("wait")||method.getName().equals("equals")
 						||method.getName().equals("getClass")||method.getName().equals("toString")
 						||method.getName().equals("hashCode")||method.getName().equals("notify")
