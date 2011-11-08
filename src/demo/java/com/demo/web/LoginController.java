@@ -25,7 +25,7 @@ public class LoginController extends BaseController{
 		if(password==null||username==null||username.isEmpty()||password.isEmpty()){
 			return mv.redirect(SecurityConfig.loginExceptionPage);
 		}
-		UserDetails userDetails = new UserDetails();
+		UserDetails<?> userDetails = new UserDetails<Object>();
 		userDetails.setUsername(username);
 		userDetails.setAddress(mv.getRequest().getRemoteAddr());
 		if(username.equals("admin")&&password.equals("admin")){
