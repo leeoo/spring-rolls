@@ -16,7 +16,7 @@ import org.paramecium.log.LoggerFactory;
  */
 public class OnlineUserCache {
 	
-	private final static ConcurrentMap<String, UserDetails> onlineUsers = new ConcurrentHashMap<String, UserDetails>();
+	private final static ConcurrentMap<String, UserDetails<?>> onlineUsers = new ConcurrentHashMap<String, UserDetails<?>>();
 	private final static ConcurrentMap<String, String> sessionIdIndex = new ConcurrentHashMap<String, String>();
 	private final static Log logger = LoggerFactory.getLogger();
 	
@@ -24,7 +24,7 @@ public class OnlineUserCache {
 	 * 用户登录
 	 * @param details
 	 */
-	public static void login(UserDetails details){
+	public static void login(UserDetails<?> details){
 		onlineUsers.put(details.getSessionId(), details);
 		sessionIdIndex.put(details.getUsername(), details.getSessionId());
 		logger.debug(details.getUsername()+"登录成功!sessionId:"+details.getSessionId());
@@ -35,7 +35,7 @@ public class OnlineUserCache {
 	 * @param username
 	 */
 	public static void logout(String sessionId){
-		UserDetails userDetails = getOnlineUserBySessionId(sessionId);
+		UserDetails<?> userDetails = getOnlineUserBySessionId(sessionId);
 		if(userDetails==null){
 			logger.debug("sessionId:"+sessionId+"对应的用户之前被同账号挤掉，系统自动销毁Session！");
 			return;
@@ -49,7 +49,7 @@ public class OnlineUserCache {
 	 * 获得所有在线用户列表
 	 * @return
 	 */
-	public static Collection<UserDetails> getAllOnlineUsers(){
+	public static Collection<UserDetails<?>> getAllOnlineUsers(){
 		return onlineUsers.values();
 	}
 	
@@ -58,7 +58,7 @@ public class OnlineUserCache {
 	 * @param username
 	 * @return
 	 */
-	public static UserDetails getOnlineUserBySessionId(String sessionId){
+	public static UserDetails<?> getOnlineUserBySessionId(String sessionId){
 		if(sessionId==null){
 			logger.error("SessionID为空,不能正常获取用户信息!");
 			return null;
@@ -71,7 +71,7 @@ public class OnlineUserCache {
 	 * @param username
 	 * @return
 	 */
-	public static UserDetails getOnlineUserByUsername(String username){
+	public static UserDetails<?> getOnlineUserByUsername(String username){
 		if(username==null){
 			logger.error("username为空,不能正常获取用户信息!");
 			return null;

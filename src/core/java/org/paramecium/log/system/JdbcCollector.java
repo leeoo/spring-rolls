@@ -40,7 +40,7 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 		if(enabled){
 			StringBuffer logger = new StringBuffer();
 			logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
-			UserDetails user = SecurityThread.getUserNotException();
+			UserDetails<?> user = SecurityThread.getUserNotException();
 			String username = "匿名用户";
 			if(user!=null){
 				username = user.getUsername();

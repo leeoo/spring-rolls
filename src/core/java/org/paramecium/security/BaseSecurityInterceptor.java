@@ -42,7 +42,7 @@ public abstract class BaseSecurityInterceptor implements MethodInterceptor {
 			if(methodSecurity!=null&&!methodSecurity.value()){
 				return nextIntercept(service, method, parameters, proxy);
 			}
-			UserDetails user = SecurityThread.get();
+			UserDetails<?> user = SecurityThread.get();
 			if(user==null){
 				SecurityThread.putSecurity(SecurityThread.Security.AnonymousException);
 				throw new AnonymousException("匿名用户没有登录！");

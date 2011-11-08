@@ -12,7 +12,7 @@ import org.paramecium.commons.DateUtils;
  * <br>开 发 日 期:2011-4-22下午01:46:36
  * <br>项 目 信 息:paramecium:org.paramecium.security.UserDetails.java
  */
-public class UserDetails implements Serializable{
+public class UserDetails<T extends Object> implements Serializable{
 
 	private static final long serialVersionUID = 943883230212509386L;
 	
@@ -27,6 +27,8 @@ public class UserDetails implements Serializable{
 	private String address;
 	
 	private boolean enable;
+	
+	private T otherInfo;
 	
 	private Collection<Resource> resources;
 	
@@ -98,6 +100,14 @@ public class UserDetails implements Serializable{
 
 	public void setLoginDate(Date loginDate) {
 		this.loginDate = loginDate;
+	}
+
+	public T getOtherInfo() {
+		return otherInfo;
+	}
+
+	public void setOtherInfo(T otherInfo) {
+		this.otherInfo = otherInfo;
 	}
 
 }

@@ -44,7 +44,7 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 			StringBuffer logger = new StringBuffer();
 			logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
 			logger.append(rq.getRemoteAddr()).append("|");
-			UserDetails user = SecurityThread.getUserNotException();
+			UserDetails<?> user = SecurityThread.getUserNotException();
 			String username = "匿名用户";
 			if(user!=null){
 				username = user.getUsername();

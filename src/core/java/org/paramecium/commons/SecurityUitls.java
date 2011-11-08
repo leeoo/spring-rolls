@@ -19,7 +19,7 @@ public abstract class SecurityUitls {
 	 * 获得当前登录用户
 	 * @return
 	 */
-	public static UserDetails getLoginUser(){
+	public static UserDetails<?> getLoginUser(){
 		return SecurityThread.getUserNotException();
 	}
 	
@@ -28,7 +28,7 @@ public abstract class SecurityUitls {
 	 * @param userDetails
 	 * @param request
 	 */
-	public static void login(UserDetails userDetails,HttpServletRequest request){
+	public static void login(UserDetails<?> userDetails,HttpServletRequest request){
 		SecurityThread.put(userDetails, request);
 	}
 	

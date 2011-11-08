@@ -85,7 +85,7 @@ public class SecurityThread {
 	 * @param userDetails
 	 * @param request
 	 */
-	public static void put(UserDetails userDetails,HttpServletRequest request){
+	public static void put(UserDetails<?> userDetails,HttpServletRequest request){
 		if(userDetails==null){
 			putSecurity(SecurityThread.Security.AnonymousException);
 			throw new AnonymousException("用户信息为空,登录失败!");
@@ -108,9 +108,9 @@ public class SecurityThread {
 	 * 将登录正确的用户放入系统安全验证
 	 * @param userDetails
 	 */
-	private static void put(UserDetails userDetails){
+	private static void put(UserDetails<?> userDetails){
 		if(SecurityConfig.sessionControl){//判断是否是同一session登录
-			UserDetails onlineUser = OnlineUserCache.getOnlineUserByUsername(userDetails.getUsername());
+			UserDetails<?> onlineUser = OnlineUserCache.getOnlineUserByUsername(userDetails.getUsername());
 			if(onlineUser!=null){//用户信息相同,Session不同,说明用户出现重复登录或盗用,前者的在线用户信息删除
 				OnlineUserCache.logout(onlineUser.getSessionId());
 				kickUserCache.put(onlineUser.getSessionId(), true);//先记录下该用户被踢掉的状态
@@ -128,10 +128,10 @@ public class SecurityThread {
 	 * 获得当前登录用户信息
 	 * @return
 	 */
-	public static UserDetails get() {
+	public static UserDetails<?> get() {
 		String sessionId = sessionThreadLocal.get();
 		if(sessionId!=null){
-			UserDetails userDetails = OnlineUserCache.getOnlineUserBySessionId(sessionId);
+			UserDetails<?> userDetails = OnlineUserCache.getOnlineUserBySessionId(sessionId);
 			if(userDetails==null){//如果在线用户列表不存在该用户，而该用户线程仍有信息，被视为强制被踢出(一般管理员可用使用该权限)
 				if(kickUserCache.get(sessionId)!=null&&kickUserCache.get(sessionId)){
 					putSecurity(SecurityThread.Security.UserKickException);
@@ -155,10 +155,10 @@ public class SecurityThread {
 	 * 安全的获得当前用户，不会产生异常.
 	 * @return
 	 */
-	public static UserDetails getUserNotException(){
+	public static UserDetails<?> getUserNotException(){
 		String sessionId = sessionThreadLocal.get();
 		if(sessionId!=null){
-			UserDetails userDetails = OnlineUserCache.getOnlineUserBySessionId(sessionId);
+			UserDetails<?> userDetails = OnlineUserCache.getOnlineUserBySessionId(sessionId);
 			if(userDetails==null){
 				return null;
 			}
