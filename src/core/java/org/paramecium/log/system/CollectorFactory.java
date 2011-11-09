@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class CollectorFactory {
 	
-	static LogCollector logCollector = null;
+	static LogCollector logCollector = null;//日志收集器一旦被实例化，各个收集器中的缓存将不会被使用，而是直接调用应用层持久化或在应用侧自行缓存。
 	private static WebCollector<HttpServletRequest> webCollector = new WebCollector<HttpServletRequest>();
 	private static BeanCollector<String> beanCollector = new BeanCollector<String>();
 	private static JdbcCollector<String> jdbcCollector = new JdbcCollector<String>();
