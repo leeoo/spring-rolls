@@ -9,7 +9,7 @@ import org.paramecium.ioc.ApplicationContextListener;
  * <br>开 发 日 期:2011-9-30上午09:59:05
  * <br>项 目 信 息:paramecium:org.paramecium.commons.PathUtils.java
  */
-public class PathUtils {
+public abstract class PathUtils {
 	
 	public static String webClassRootPath = null;
 
