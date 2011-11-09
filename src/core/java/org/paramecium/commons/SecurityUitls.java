@@ -2,6 +2,7 @@ package org.paramecium.commons;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.paramecium.security.OnlineUserCache;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
 
@@ -21,6 +22,14 @@ public abstract class SecurityUitls {
 	 */
 	public static UserDetails<?> getLoginUser(){
 		return SecurityThread.getUserNotException();
+	}
+	
+	/**
+	 * 根据session获得用户
+	 * @return
+	 */
+	public static UserDetails<?> getLoginUser(String sessionId){
+		return OnlineUserCache.getOnlineUserBySessionId(sessionId);
 	}
 	
 	/**
