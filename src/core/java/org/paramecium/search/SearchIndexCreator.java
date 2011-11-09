@@ -54,6 +54,61 @@ public class SearchIndexCreator {
 		}
 		return INDEX_PATH;
 	}
+	
+	private static void close(IndexWriter writer,Directory directory){
+		try {
+			if(writer!=null){
+				writer.optimize();
+			}
+		} catch (Throwable e) {
+			logger.error("索引写入器优化错误!");
+		}
+		try {
+			if(writer!=null){
+				writer.close();
+			}
+		} catch (Throwable e) {
+			logger.error("索引写入器关闭错误!");
+		}
+		try {
+			if(directory!=null){
+				directory.close();
+			}
+		} catch (Throwable e) {
+			logger.error("索引目录关闭错误!");
+		}
+	}
+
+	private static void close(IndexReader reader,IndexSearcher searcher,Directory directory){
+		try {
+			if(searcher!=null){
+				searcher.close();
+			}
+		} catch (Throwable e) {
+			logger.error("查询器关闭错误!");
+		}
+		try {
+			if(reader!=null){
+				reader.flush();
+			}
+		} catch (Throwable e) {
+			logger.error("索引读取器栈清空错误!");
+		}
+		try {
+			if(reader!=null){
+				reader.close();
+			}
+		} catch (Throwable e) {
+			logger.error("索引读取器关闭错误!");
+		}
+		try {
+			if(directory!=null){
+				directory.close();
+			}
+		} catch (Throwable e) {
+			logger.error("索引目录关闭错误!");
+		}
+	}
 
 	/**
 	 * 功能描述：创建索引文件 <br>
@@ -119,27 +174,7 @@ public class SearchIndexCreator {
 			e.printStackTrace();
 			logger.error("索引文件建立错误!");
 		}
-		try {
-			if(writer!=null){
-				writer.optimize();
-			}
-		} catch (Throwable e) {
-			logger.error("索引写入器优化错误!");
-		}
-		try {
-			if(writer!=null){
-				writer.close();
-			}
-		} catch (Throwable e) {
-			logger.error("索引写入器关闭错误!");
-		}
-		try {
-			if(directory!=null){
-				directory.close();
-			}
-		} catch (Throwable e) {
-			logger.error("索引目录关闭错误!");
-		}
+		close(writer, directory);
 	}
 
 	/**
@@ -183,27 +218,7 @@ public class SearchIndexCreator {
 			e.printStackTrace();
 			logger.error("索引文件建立错误!");
 		}
-		try {
-			if(writer!=null){
-				writer.optimize();
-			}
-		} catch (Throwable e) {
-			logger.error("索引写入器优化错误!");
-		}
-		try {
-			if(writer!=null){
-				writer.close();
-			}
-		} catch (Throwable e) {
-			logger.error("索引写入器关闭错误!");
-		}
-		try {
-			if(directory!=null){
-				directory.close();
-			}
-		} catch (Throwable e) {
-			logger.error("索引目录关闭错误!");
-		}
+		close(writer, directory);
 	}
 
 	/**
@@ -249,34 +264,7 @@ public class SearchIndexCreator {
 		} catch (Throwable e) {
 			logger.error("索引错误!");
 		}
-		try {
-			if(searcher!=null){
-				searcher.close();
-			}
-		} catch (Throwable e) {
-			logger.error("查询器关闭错误!");
-		}
-		try {
-			if(reader!=null){
-				reader.flush();
-			}
-		} catch (Throwable e) {
-			logger.error("索引读取器栈清空错误!");
-		}
-		try {
-			if(reader!=null){
-				reader.close();
-			}
-		} catch (Throwable e) {
-			logger.error("索引读取器关闭错误!");
-		}
-		try {
-			if(directory!=null){
-				directory.close();
-			}
-		} catch (Throwable e) {
-			logger.error("索引目录关闭错误!");
-		}
+		close(reader, searcher, directory);
 		return ids;
 	}
 	
