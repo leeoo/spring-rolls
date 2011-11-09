@@ -27,6 +27,8 @@
 			buttons="#dlg-buttons" resizable="false" iconCls="icon-key">
 		<form action="${base}/login${ext}" method="post">
 		<center>
+			<prmm:loginAuthorize>我登录了</prmm:loginAuthorize>
+			<prmm:loginAuthorize isNotLogin="true">我没有登录</prmm:loginAuthorize>
 			<table>
 				<tr>
 					<td>账号:</td>
