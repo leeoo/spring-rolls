@@ -11,23 +11,23 @@ import javax.servlet.jsp.JspException;
 public class LoginAuthorizeTag extends BaseSecurityTag{
 
 	private static final long serialVersionUID = 7826057529010322820L;
-	private boolean isNotLogin = false;
+	private boolean ifNotLogin = false;
 	
 	public int doStartTag() throws JspException {
-		if(!this.isNotLogin && getUserDetails()!=null){//判断是否登录
+		if(!this.ifNotLogin && getUserDetails()!=null){//判断是否登录
 			return EVAL_BODY_INCLUDE;
-		}else if(this.isNotLogin && getUserDetails()==null){//判断是否没有登录
+		}else if(this.ifNotLogin && getUserDetails()==null){//判断是否没有登录
 			return EVAL_BODY_INCLUDE;
 		}
 		return SKIP_BODY;
 	}
 
-	public boolean isNotLogin() {
-		return this.isNotLogin;
+	public boolean isIfNotLogin() {
+		return ifNotLogin;
 	}
 
-	public void setIsNotLogin(boolean isNotLogin) {
-		this.isNotLogin = isNotLogin;
+	public void setIfNotLogin(boolean ifNotLogin) {
+		this.ifNotLogin = ifNotLogin;
 	}
 
 }
