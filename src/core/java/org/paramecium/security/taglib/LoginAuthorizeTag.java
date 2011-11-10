@@ -14,16 +14,16 @@ public class LoginAuthorizeTag extends BaseSecurityTag{
 	private boolean isNotLogin = false;
 	
 	public int doStartTag() throws JspException {
-		if(!isNotLogin && getUserDetails()!=null){//判断是否登录
+		if(!this.isNotLogin && getUserDetails()!=null){//判断是否登录
 			return EVAL_BODY_INCLUDE;
-		}else if(isNotLogin && getUserDetails()==null){//判断是否没有登录
+		}else if(this.isNotLogin && getUserDetails()==null){//判断是否没有登录
 			return EVAL_BODY_INCLUDE;
 		}
 		return SKIP_BODY;
 	}
 
 	public boolean isNotLogin() {
-		return isNotLogin;
+		return this.isNotLogin;
 	}
 
 	public void setIsNotLogin(boolean isNotLogin) {
