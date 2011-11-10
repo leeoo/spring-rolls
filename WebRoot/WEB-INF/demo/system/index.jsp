@@ -12,14 +12,17 @@
 		<div style="padding-left: 20px;padding-top: 10px;">
 			<div><img src="${base}/commons/images/logo.gif" alt="产品LOGO" /></div>
 			<div>
-				<paramecium:loginAuthorize>我登录了</paramecium:loginAuthorize>
-				<paramecium:loginAuthorize isNotLogin="true">我没有登录</paramecium:loginAuthorize>
-				<h3>本DEMO用于演示Paramecium敏捷开发架构的常规开发演示；<br>
-				以<font color="red">保信通2011</font>为例，将原有<font color="red">保信通2008(bxt3.6)</font>功能以Paramecium开发架构重新实现，后期可以通过评测工具进行比较。<br>
-				希望用户提出宝贵意见！<br>
-				<font color="red">QQ:563509737</font><br>
-				<font color="red">EMAIL:caoyang@sinowel.com</font><br>
-				</h3>
+				<paramecium:loginAuthorize>我登录了<br></paramecium:loginAuthorize>
+				<paramecium:loginAuthorize ifNotLogin="true">我没有登录<br></paramecium:loginAuthorize>
+				<paramecium:resourceAuthorize ifAllGranted="/system/user#save,/system/user#list">
+					我有/system/user#save,/system/user#list权限<br>
+				</paramecium:resourceAuthorize>
+				<paramecium:resourceAuthorize ifAnyGranted="/system/user#save,/system/user#list">
+					我包含/system/user#save,/system/user#list其中的权限<br>
+				</paramecium:resourceAuthorize>
+				<paramecium:resourceAuthorize ifNotGranted="empty">
+					我不包含empty权限<br>
+				</paramecium:resourceAuthorize>
 			</div>
 		</div>
 	</div>
