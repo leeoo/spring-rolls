@@ -6,8 +6,8 @@
 	<display-name>paramecium</display-name>
 	
 	<filter>
-		<filter-name>encodingFilter</filter-name>
-		<filter-class>org.paramecium.mvc.EncodingFilter</filter-class>
+		<filter-name>specialFilter</filter-name>
+		<filter-class>org.paramecium.mvc.SpecialFilter</filter-class>
 		<init-param>
 			<param-name>encoding</param-name>
 			<param-value>UTF-8</param-value>
@@ -15,7 +15,7 @@
 	</filter>
 	
 	<filter-mapping>
-		<filter-name>encodingFilter</filter-name>
+		<filter-name>specialFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	

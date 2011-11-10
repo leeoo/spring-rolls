@@ -41,9 +41,6 @@ public class ControllerExtractor {
 	 */
 	public static boolean extract(final HttpServletRequest request,final HttpServletResponse response){
 		synchronized (request) {
-			if(request.getSession(false)==null){
-				request.getSession();
-			}
 			String servletPath = request.getServletPath();
 			String[] URIStrs = getURIStrs(servletPath);
 			if(URIStrs==null){
@@ -51,7 +48,6 @@ public class ControllerExtractor {
 				return returnTrue();
 			}
 			try{
-				start(request);
 				CollectorFactory.getWebCollector().put(request);//放入日志缓存
 				ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
 				if(classInfo==null){
@@ -94,7 +90,6 @@ public class ControllerExtractor {
 	}
 	
 	private static boolean return404(final HttpServletResponse response){
-		end();
 		response.setStatus(404);
 		return true;
 	}
@@ -120,12 +115,10 @@ public class ControllerExtractor {
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.IpAddressException){
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
 				}/*继续扩展，可在配置文件中加入更多异常*/
-				end();
 				return false;
 			}
 		}catch (Throwable e) {
 		}
-		end();
 		return !modelAndView.isRedirect();
 	}
 	
@@ -147,16 +140,7 @@ public class ControllerExtractor {
 			}/*继续扩展，可在配置文件中加入更多异常*/
 		} catch (Throwable e2) {
 		}
-		end();
 		return false;
-	}
-	
-	private static void end(){
-		SecurityThread.endThread();
-	}
-
-	private static void start(HttpServletRequest request){
-		SecurityThread.startThread(request);
 	}
 	
 	/**
