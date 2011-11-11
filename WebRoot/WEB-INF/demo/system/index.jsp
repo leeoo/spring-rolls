@@ -29,9 +29,9 @@
 	
 	<script>
 		var loginName = '<%=request.getAttribute("loginName")%>';
-		if(name!=null&&name!='null'){
+		if(loginName!=''&&loginName!='null'){
 			$.messager.show({title:'提示',msg:'尊敬的用户: '+loginName+' 你好! \n 欢迎登录本系统',timeout:3000,showType:'slide'});
 		}
-</script>
+	</script>
 </body>
 </html>

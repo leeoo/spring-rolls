@@ -71,10 +71,12 @@ public class RoleController extends BaseController{
 			}else{
 				roleService.update(role);
 			}
+			mv.setSuccessMessage("操作成功!");
 		} catch (Exception e) {
 			mv.addValue("role", role);
 			Map<Resource, Collection<Resource>> resources = AuthorizationMenu.getAuthorMenu();
 			mv.addValue("resources", resources);
+			mv.setErrorMessage(e.getMessage());
 			return mv.forward(getPage("/role/input.jsp"));
 		}
 		return mv.redirect(getServletExt("/system/role/list"));

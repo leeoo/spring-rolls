@@ -81,10 +81,12 @@ public class UserController extends BaseController{
 			}else{
 				userService.update(user);
 			}
+			mv.setSuccessMessage("操作成功!");
 		} catch (Exception e) {
 			mv.addValue("user", user);
 			Collection<Role> allRole = roleService.getAll();
 			mv.addValue("roles", allRole);
+			mv.setErrorMessage(e.getMessage());
 			return mv.forward(getPage("/user/input.jsp"));
 		}
 		return mv.redirect(getServletExt("/system/user/list"));
