@@ -31,6 +31,8 @@ public class ModelAndView implements Serializable,Cloneable{
 	private static final long serialVersionUID = 7105417137624158939L;
 	private final static Log logger = LoggerFactory.getLogger();
 	private boolean redirect = false;
+	private String successMessage;
+	private String errorMessage;
 	private transient HttpServletRequest request;//无需序列化
 	private transient HttpServletResponse response;//无需序列化
 	
@@ -154,6 +156,12 @@ public class ModelAndView implements Serializable,Cloneable{
 		}
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher(forwardUrl);
 		try {
+			if(this.errorMessage!=null){
+				request.setAttribute(MessageConstant.ERROR_MESSAGE, this.errorMessage);
+			}
+			if(this.successMessage!=null){
+				request.setAttribute(MessageConstant.SUCCESS_MESSAGE, this.successMessage);
+			}
 			requestDispatcher.forward(request, response);
 		} catch (ServletException e) {
 			logger.error(e);
@@ -169,7 +177,22 @@ public class ModelAndView implements Serializable,Cloneable{
 	 */
 	public ModelAndView redirect(String redirectUrl){
 		try {
-			response.sendRedirect(PathUtils.getNewPath(redirectUrl));
+			String url = PathUtils.getNewPath(redirectUrl);
+			if(this.errorMessage!=null){
+				if(url.indexOf('?')<0){
+					url = url.concat(MessageConstant.$ERROR_MESSAGE).concat(this.errorMessage);
+				}else{
+					url = url.concat(MessageConstant.ERROR_MESSAGE$).concat(this.errorMessage);
+				}
+			}
+			if(this.successMessage!=null){
+				if(url.indexOf('?')<0){
+					url = url.concat(MessageConstant.$SUCCESS_MESSAGE).concat(this.successMessage);
+				}else{
+					url = url.concat(MessageConstant.SUCCESS_MESSAGE$).concat(this.successMessage);
+				}
+			}
+			response.sendRedirect(url);
 			redirect = true;
 		} catch (IOException e) {
 			logger.error(e);
@@ -288,6 +311,22 @@ public class ModelAndView implements Serializable,Cloneable{
 
 	public void setRedirect(boolean redirect) {
 		this.redirect = redirect;
+	}
+
+	public String getSuccessMessage() {
+		return successMessage;
+	}
+
+	public void setSuccessMessage(String successMessage) {
+		this.successMessage = successMessage;
+	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 	
 }

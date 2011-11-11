@@ -15,7 +15,7 @@ import org.paramecium.security.UserDetails;
  */
 public class ResourceAuthorizeTag extends BaseSecurityTag{
 
-	private static final long serialVersionUID = 7826057529010322820L;
+	private static final long serialVersionUID = -2087116999369663254L;
 	private String ifNotGranted;//不包含
 	private String ifAllGranted;//全部包含
 	private String ifAnyGranted;//任意包含
