@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.paramecium.commons.BeanUtils;
+import org.paramecium.commons.EncodeUtils;
 import org.paramecium.commons.PathUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -180,16 +181,16 @@ public class ModelAndView implements Serializable,Cloneable{
 			String url = PathUtils.getNewPath(redirectUrl);
 			if(this.errorMessage!=null){
 				if(url.indexOf('?')<0){
-					url = url.concat(MessageConstant.$ERROR_MESSAGE).concat(this.errorMessage);
+					url = url.concat(MessageConstant.$ERROR_MESSAGE).concat(EncodeUtils.encode(this.errorMessage));
 				}else{
-					url = url.concat(MessageConstant.ERROR_MESSAGE$).concat(this.errorMessage);
+					url = url.concat(MessageConstant.ERROR_MESSAGE$).concat(EncodeUtils.encode(this.errorMessage));
 				}
 			}
 			if(this.successMessage!=null){
 				if(url.indexOf('?')<0){
-					url = url.concat(MessageConstant.$SUCCESS_MESSAGE).concat(this.successMessage);
+					url = url.concat(MessageConstant.$SUCCESS_MESSAGE).concat(EncodeUtils.encode(this.successMessage));
 				}else{
-					url = url.concat(MessageConstant.SUCCESS_MESSAGE$).concat(this.successMessage);
+					url = url.concat(MessageConstant.SUCCESS_MESSAGE$).concat(EncodeUtils.encode(this.successMessage));
 				}
 			}
 			response.sendRedirect(url);

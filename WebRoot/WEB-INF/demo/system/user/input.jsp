@@ -59,5 +59,11 @@
 		</div>
 	</form>
 </div>
+<script>
+	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';
+	if(message!=''&&message!='null'){
+		$.messager.show({title:'提示',msg:message,timeout:3000,showType:'slide'});
+	}
+</script>
 </body>
 </html>

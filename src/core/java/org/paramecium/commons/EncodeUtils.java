@@ -1,5 +1,6 @@
 package org.paramecium.commons;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ import sun.security.util.BigInt;
 
 /**
  * 功 能 描 述:<br>
- * 字符加密
+ * 字符编码工具
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2011-11-9上午10:28:44
  * <br>项 目 信 息:paramecium:org.paramecium.commons.EncodeUtils.java
@@ -151,4 +152,18 @@ public abstract class EncodeUtils {
 		mac.init(secretKey);
 		return mac.doFinal(data);
 	}
+	
+	/**
+	 * 将汉字转换成UTF-8的Unicode编码的十六进制编码,用于url传送中文值参数。
+	 * @param str
+	 * @return
+	 */
+	public static String encode(String str){
+		try {
+			return java.net.URLEncoder.encode(str,"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+		}
+		return str;
+	}
+	
 }
