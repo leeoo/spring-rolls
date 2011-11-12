@@ -21,7 +21,7 @@ public class UserService {
 	
 	public int save(User user) throws Exception{
 		if(user.getRoles()==null||user.getRoles().isEmpty()){
-			throw new Exception("创建用户必须选择角色!");
+			throw new RuntimeException("创建用户必须选择角色!");
 		}
 		int id = ormDao.insert(user).intValue();
 		for(Role role:user.getRoles()){
@@ -32,7 +32,7 @@ public class UserService {
 	
 	public void update(User user) throws Exception{
 		if(user.getRoles()==null||user.getRoles().isEmpty()){
-			throw new Exception("修改用户必须选择角色!");
+			throw new RuntimeException("修改用户必须选择角色!");
 		}
 		ormDao.update(user);
 		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_user_role WHERE username=?",user.getUsername());

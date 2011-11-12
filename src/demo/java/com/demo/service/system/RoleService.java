@@ -19,7 +19,7 @@ public class RoleService {
 	
 	public int save(Role role) throws Exception{
 		if(role.getAuth()==null||role.getAuth().isEmpty()){
-			throw new Exception("创建角色必须选择授权信息!");
+			throw new RuntimeException("创建角色必须选择授权信息!");
 		}
 		int id = ormDao.insert(role).intValue();
 		for(String auth:role.getAuth()){
@@ -30,7 +30,7 @@ public class RoleService {
 	
 	public void update(Role role) throws Exception{
 		if(role.getAuth()==null||role.getAuth().isEmpty()){
-			throw new Exception("修改角色必须选择授权信息!");
+			throw new RuntimeException("修改角色必须选择授权信息!");
 		}
 		ormDao.update(role);
 		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_role_auth WHERE rolename=?",role.getRolename());

@@ -41,6 +41,8 @@ public class TransactionInterceptor extends BaseSecurityInterceptor {
 		}catch (Throwable e) {
 			e.printStackTrace();
 			TransactionManager.globalException();
+			TransactionManager.end();
+			throw new TransactionException(e.getMessage());
 		}
 		TransactionManager.end();
 		return result;
