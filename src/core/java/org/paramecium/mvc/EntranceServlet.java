@@ -28,10 +28,17 @@ public class EntranceServlet extends HttpServlet{
 		end();
 	}
 	
+	/**
+	 * 结束本次线程
+	 */
 	private static void end(){
 		SecurityThread.endThread();
 	}
 
+	/**
+	 * 为安全开启本次线程
+	 * @param request
+	 */
 	private static void start(HttpServletRequest request){
 		if(request.getSession(false)==null){
 			request.getSession();

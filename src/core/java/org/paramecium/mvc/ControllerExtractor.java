@@ -1,6 +1,7 @@
 package org.paramecium.mvc;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,46 +49,62 @@ public class ControllerExtractor {
 				logger.warn("非法请求地址:"+servletPath);
 				return return404(response);
 			}
+			CollectorFactory.getWebCollector().put(request);//放入日志缓存
+			ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
+			if(classInfo==null){
+				logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
+				return return404(response);
+			}
+			Object controller = ApplicationContext.getBean(classInfo.getNamespace());
+			if(controller==null){
+				logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
+				return return404(response);
+			}
 			try{
-				CollectorFactory.getWebCollector().put(request);//放入日志缓存
-				ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
-				if(classInfo==null){
-					logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
-					return return404(response);
-				}
-				Object controller = ApplicationContext.getBean(classInfo.getNamespace());
-				if(controller==null){
-					logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
-					return return404(response);
-				}
-				for (Class<?> clazz = classInfo.getClazz(); clazz != Object.class; clazz = clazz.getSuperclass()) {
-					Method[] methods = clazz.getMethods();//只返回public，如果需要private可用getDeclaredMethods
-					if(methods==null||methods.length<1){
-						continue;
-					}
-					ModelAndView mv = new ModelAndView(request, response);
-					for(Method method : methods){
-						MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
-						if(mappingMethod==null){
-							continue;
-						}
-						if(!mappingMethod.value().isEmpty()){
-							if(mappingMethod.value().equals(URIStrs[1])){
-								method.invoke(controller, mv);
-								return security(mv);
-							}
-						}else if(ControllerExtractor.lineStr.concat(method.getName()).equals(URIStrs[1])){
-							method.invoke(controller, mv);
-							return security(mv);
-						}
-					}
-				}
+				return invoke(classInfo.getClazz(), request, response, controller, URIStrs);
 			} catch (Throwable e) {
 				return security(e, response);
 			}
-			logger.warn("该资源没有与之对应的处理方法!");
-			return return404(response);
 		}
+	}
+	
+	/**
+	 * 调用Controller对应的方法
+	 * @param clazz
+	 * @param request
+	 * @param response
+	 * @param controller
+	 * @param URIStrs
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	private static boolean invoke(Class<?> clazz,final HttpServletRequest request,final HttpServletResponse response,Object controller,String[] URIStrs) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+		for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+			Method[] methods = clazz.getMethods();//只返回public，如果需要private可用getDeclaredMethods
+			if(methods==null||methods.length<1){
+				continue;
+			}
+			ModelAndView mv = new ModelAndView(request, response);
+			for(Method method : methods){
+				MappingMethod mappingMethod = method.getAnnotation(MappingMethod.class);
+				if(mappingMethod==null){
+					continue;
+				}
+				if(!mappingMethod.value().isEmpty()){
+					if(mappingMethod.value().equals(URIStrs[1])){
+						method.invoke(controller, mv);
+						return security(mv);
+					}
+				}else if(ControllerExtractor.lineStr.concat(method.getName()).equals(URIStrs[1])){
+					method.invoke(controller, mv);
+					return security(mv);
+				}
+			}
+		}
+		logger.warn("该资源没有与之对应的处理方法!");
+		return return404(response);
 	}
 	
 	private static boolean return404(final HttpServletResponse response){
@@ -101,7 +118,7 @@ public class ControllerExtractor {
 	private static boolean return500(final HttpServletResponse response,Throwable e){
 		try {
 			logger.error(e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,e.getCause().getMessage());//500
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 		} catch (IOException ioe) {
 		}
 		return false;
@@ -143,6 +160,12 @@ public class ControllerExtractor {
 		return !modelAndView.isRedirect();
 	}
 	
+	/**
+	 * 通过权限安全产生的异常判断
+	 * @param e
+	 * @param response
+	 * @return
+	 */
 	private static boolean security(Throwable e,final HttpServletResponse response){
 		try {
 			if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){

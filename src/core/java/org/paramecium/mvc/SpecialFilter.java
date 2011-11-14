@@ -10,7 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 /**
  * 功 能 描 述:<br>
- * 特殊功能的过滤器,包含字符集过滤，安全用户线程放入与销毁
+ * 特殊功能的过滤器,包含字符集过滤(可以将安全用户线程放入与销毁，未经测试，无用请求是否开销太大)
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2011-4-18下午02:39:07
  * <br>项 目 信 息:paramecium:org.paramecium.mvc.SpecialFilter.java
