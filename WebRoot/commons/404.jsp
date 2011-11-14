@@ -5,8 +5,13 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 	<title>404——您访问的页面不存在</title>
+	<style type="text/css">
+	body{
+		background-image:url("/commons/images/notfind.jpg");
+	}
+	</style>
 </head>
 <body>
-	<h1>我真的找不到了!</h1>
+	<h1>您要的页面找不到了！</h1>
 </body>
 </html>

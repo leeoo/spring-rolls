@@ -7,9 +7,14 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 	<title>500——您访问的页面出现错误</title>
+	<style type="text/css">
+	body{
+		background-image:url("/commons/images/exception.gif");
+	}
+	</style>
 </head>
 <body>
-	<h1>您把我弄坏了!</h1>
+	<h1>您把我的网页弄坏了!</h1>
 		错误来源:<br>
 		${base}${pageContext.errorData.requestURI}<br>
 		<hr>
