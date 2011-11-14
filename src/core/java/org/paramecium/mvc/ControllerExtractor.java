@@ -120,7 +120,7 @@ public class ControllerExtractor {
 	private static boolean return500(final HttpServletRequest request,final HttpServletResponse response,Throwable e){
 		try {
 			e.printStackTrace();
-			logger.error(e);
+			logger.error(e.getCause());
 			request.setAttribute(MessageConstant.ERROR_MESSAGE, e.getCause());
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 		} catch (IOException ioe) {
