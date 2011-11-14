@@ -76,14 +76,13 @@ public class ControllerExtractor {
 								method.invoke(controller, mv);
 								return security(mv);
 							}
-						}else if((ControllerExtractor.lineStr+method.getName()).equals(URIStrs[1])){
+						}else if(ControllerExtractor.lineStr.concat(method.getName()).equals(URIStrs[1])){
 							method.invoke(controller, mv);
 							return security(mv);
 						}
 					}
 				}
 			}catch (Throwable e) {
-				e.printStackTrace();
 				return security(e,response);
 			}
 			logger.warn("该资源没有与之对应的处理方法!");
@@ -99,10 +98,11 @@ public class ControllerExtractor {
 		return true;
 	}
 
-	private static boolean return500(final HttpServletResponse response){
+	private static boolean return500(final HttpServletResponse response,Throwable e){
 		try {
+			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
-		} catch (IOException e) {
+		} catch (IOException ioe) {
 		}
 		return false;
 	}
@@ -115,29 +115,23 @@ public class ControllerExtractor {
 		return false;
 	}*/
 	
-	private static boolean security(ModelAndView modelAndView){
-		try{
-			if(SecurityThread.getSecurity() != SecurityThread.Security.Null){
-				if(SecurityThread.getSecurity() == SecurityThread.Security.AnonymousException){
-					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
-				}else if(SecurityThread.getSecurity() == SecurityThread.Security.AuthorizationException){
-					//return return403(modelAndView.getResponse());属于403跳转，如果需要可以替换
-					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.authorizationExceptionPage));
-				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserKickException){
-					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userKickExceptionPage));
-				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserDisabledException){
-					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userDisabledExceptionPage));
-				}else if(SecurityThread.getSecurity() == SecurityThread.Security.SessionExpiredException){
-					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.sessionExpiredExceptionPage));
-				}else if(SecurityThread.getSecurity() == SecurityThread.Security.IpAddressException){
-					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
-				}/*继续扩展，可在配置文件中加入更多异常*/
-				return false;
-			}
-		}catch (Throwable e) {
-			//一般来说不会有错误
-			e.printStackTrace();
-			return return500(modelAndView.getResponse());//500
+	private static boolean security(ModelAndView modelAndView) throws IOException{
+		if(SecurityThread.getSecurity() != SecurityThread.Security.Null){
+			if(SecurityThread.getSecurity() == SecurityThread.Security.AnonymousException){
+				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
+			}else if(SecurityThread.getSecurity() == SecurityThread.Security.AuthorizationException){
+				//return return403(modelAndView.getResponse());属于403跳转，如果需要可以替换
+				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.authorizationExceptionPage));
+			}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserKickException){
+				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userKickExceptionPage));
+			}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserDisabledException){
+				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userDisabledExceptionPage));
+			}else if(SecurityThread.getSecurity() == SecurityThread.Security.SessionExpiredException){
+				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.sessionExpiredExceptionPage));
+			}else if(SecurityThread.getSecurity() == SecurityThread.Security.IpAddressException){
+				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
+			}/*继续扩展，可在配置文件中加入更多异常*/
+			return false;
 		}
 		return !modelAndView.isRedirect();
 	}
@@ -159,12 +153,10 @@ public class ControllerExtractor {
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
 			}/*继续扩展，可在配置文件中加入更多异常*/
 			else if(!(e.getCause() instanceof SecurityException)||!(e instanceof SecurityException)){//如果发生一个不是安全的异常，抛出500错误
-				return return500(response);//500
+				return return500(response,e);//500
 			}
-		} catch (Throwable e2) {
-			//一般来说不会有错误
-			e2.printStackTrace();
-			return return500(response);//500
+		} catch (IOException ioe) {//一般来说不会有错误
+			return return500(response,ioe);//500
 		}
 		return false;
 	}
