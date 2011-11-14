@@ -1,5 +1,6 @@
 package org.paramecium.mvc;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
@@ -90,9 +91,28 @@ public class ControllerExtractor {
 	}
 	
 	private static boolean return404(final HttpServletResponse response){
-		response.setStatus(HttpServletResponse.SC_NOT_FOUND);//404
+		try {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);//404
+		} catch (IOException e) {
+		}
 		return true;
 	}
+
+	private static boolean return500(final HttpServletResponse response){
+		try {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
+		} catch (IOException e) {
+		}
+		return false;
+	}
+	
+	/*private static boolean return403(final HttpServletResponse response){
+		try {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);//500
+		} catch (IOException e) {
+		}
+		return false;
+	}*/
 	
 	private static boolean security(ModelAndView modelAndView){
 		try{
@@ -100,7 +120,7 @@ public class ControllerExtractor {
 				if(SecurityThread.getSecurity() == SecurityThread.Security.AnonymousException){
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.AuthorizationException){
-					modelAndView.getResponse().setStatus(HttpServletResponse.SC_FORBIDDEN);//403
+					//return return403(modelAndView.getResponse());属于403跳转，如果需要可以替换
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.authorizationExceptionPage));
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserKickException){
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userKickExceptionPage));
@@ -114,7 +134,7 @@ public class ControllerExtractor {
 				return false;
 			}
 		}catch (Throwable e) {
-			modelAndView.getResponse().setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
+			return return500(modelAndView.getResponse());//500
 		}
 		return !modelAndView.isRedirect();
 	}
@@ -124,7 +144,7 @@ public class ControllerExtractor {
 			if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
 			}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
-				response.setStatus(HttpServletResponse.SC_FORBIDDEN);//403
+				//return return403(response);属于403跳转，如果需要可以替换
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.authorizationExceptionPage));
 			}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.userKickExceptionPage));
@@ -136,10 +156,10 @@ public class ControllerExtractor {
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
 			}/*继续扩展，可在配置文件中加入更多异常*/
 			else if(!(e.getCause() instanceof SecurityException)||!(e instanceof SecurityException)){//如果发生一个不是安全的异常，抛出500错误
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
+				return return500(response);//500
 			}
 		} catch (Throwable e2) {
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
+			return return500(response);//500
 		}
 		return false;
 	}
