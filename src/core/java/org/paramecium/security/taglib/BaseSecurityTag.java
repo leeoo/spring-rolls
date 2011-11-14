@@ -1,5 +1,6 @@
 package org.paramecium.security.taglib;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.paramecium.commons.SecurityUitls;
@@ -23,9 +24,8 @@ public abstract class BaseSecurityTag extends TagSupport{
 	 * @return
 	 */
 	public UserDetails<?> getUserDetails(){
-		/*HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
-		return SecurityUitls.getLoginUser(request.getSession().getId());*/
-		return SecurityUitls.getLoginUser();
+		HttpServletRequest request = (HttpServletRequest) this.pageContext.getRequest();
+		return SecurityUitls.getLoginUser(request.getSession().getId());
 	}
 
 }

@@ -82,8 +82,8 @@ public class ControllerExtractor {
 						}
 					}
 				}
-			}catch (Throwable e) {
-				return security(e,response);
+			} catch (Throwable e) {
+				return security(e, response);
 			}
 			logger.warn("该资源没有与之对应的处理方法!");
 			return return404(response);
@@ -100,7 +100,7 @@ public class ControllerExtractor {
 
 	private static boolean return500(final HttpServletResponse response,Throwable e){
 		try {
-			e.printStackTrace();
+			logger.error(e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,e.getCause().getMessage());//500
 		} catch (IOException ioe) {
 		}
@@ -115,23 +115,30 @@ public class ControllerExtractor {
 		return false;
 	}*/
 	
-	private static boolean security(ModelAndView modelAndView) throws IOException{
-		if(SecurityThread.getSecurity() != SecurityThread.Security.Null){
-			if(SecurityThread.getSecurity() == SecurityThread.Security.AnonymousException){
-				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
-			}else if(SecurityThread.getSecurity() == SecurityThread.Security.AuthorizationException){
-				//return return403(modelAndView.getResponse());属于403跳转，如果需要可以替换
-				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.authorizationExceptionPage));
-			}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserKickException){
-				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userKickExceptionPage));
-			}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserDisabledException){
-				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userDisabledExceptionPage));
-			}else if(SecurityThread.getSecurity() == SecurityThread.Security.SessionExpiredException){
-				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.sessionExpiredExceptionPage));
-			}else if(SecurityThread.getSecurity() == SecurityThread.Security.IpAddressException){
-				modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
-			}/*继续扩展，可在配置文件中加入更多异常*/
-			return false;
+	/**
+	 * 正常情况下通过线程传递安全异常机制
+	 */
+	private static boolean security(ModelAndView modelAndView){
+		try {
+			if(SecurityThread.getSecurity() != SecurityThread.Security.Null){
+				if(SecurityThread.getSecurity() == SecurityThread.Security.AnonymousException){
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.AuthorizationException){
+					//return return403(modelAndView.getResponse());属于403跳转，如果需要可以替换
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.authorizationExceptionPage));
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserKickException){
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userKickExceptionPage));
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserDisabledException){
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userDisabledExceptionPage));
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.SessionExpiredException){
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.sessionExpiredExceptionPage));
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.IpAddressException){
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
+				}/*继续扩展，可在配置文件中加入更多安全问题*/
+				return false;
+			}
+		} catch (IOException ioe) {//一般来说不会有错误
+			return return500(modelAndView.getResponse(),ioe);//500
 		}
 		return !modelAndView.isRedirect();
 	}

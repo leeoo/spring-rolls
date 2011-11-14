@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.paramecium.security.SecurityThread;
 /**
  * 功 能 描 述:<br>
  * 所有请求的入口
@@ -21,7 +23,20 @@ public class EntranceServlet extends HttpServlet{
 	}
 	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		start((HttpServletRequest)request);
 		ControllerExtractor.extract(request, response);
+		end();
+	}
+	
+	private static void end(){
+		SecurityThread.endThread();
+	}
+
+	private static void start(HttpServletRequest request){
+		if(request.getSession(false)==null){
+			request.getSession();
+		}
+		SecurityThread.startThread(request);
 	}
 	
 }

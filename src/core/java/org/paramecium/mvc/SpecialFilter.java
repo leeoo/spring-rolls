@@ -8,9 +8,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
-import org.paramecium.security.SecurityThread;
 /**
  * 功 能 描 述:<br>
  * 特殊功能的过滤器,包含字符集过滤，安全用户线程放入与销毁
@@ -31,22 +28,9 @@ public class SpecialFilter implements Filter{
 	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
 		request.setCharacterEncoding(encoding);
 		response.setCharacterEncoding(encoding);
-		start((HttpServletRequest)request);
 		chain.doFilter(request, response);
-		end();
 	}
 
-	private static void end(){
-		SecurityThread.endThread();
-	}
-
-	private static void start(HttpServletRequest request){
-		if(request.getSession(false)==null){
-			request.getSession();
-		}
-		SecurityThread.startThread(request);
-	}
-	
 	public void destroy() {
 	}
 	
