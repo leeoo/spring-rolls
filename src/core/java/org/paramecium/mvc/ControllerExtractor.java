@@ -83,6 +83,7 @@ public class ControllerExtractor {
 					}
 				}
 			}catch (Throwable e) {
+				e.printStackTrace();
 				return security(e,response);
 			}
 			logger.warn("该资源没有与之对应的处理方法!");
@@ -134,6 +135,8 @@ public class ControllerExtractor {
 				return false;
 			}
 		}catch (Throwable e) {
+			//一般来说不会有错误
+			e.printStackTrace();
 			return return500(modelAndView.getResponse());//500
 		}
 		return !modelAndView.isRedirect();
@@ -159,6 +162,8 @@ public class ControllerExtractor {
 				return return500(response);//500
 			}
 		} catch (Throwable e2) {
+			//一般来说不会有错误
+			e2.printStackTrace();
 			return return500(response);//500
 		}
 		return false;
