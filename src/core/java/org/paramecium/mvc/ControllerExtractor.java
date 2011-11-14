@@ -45,7 +45,7 @@ public class ControllerExtractor {
 			String[] URIStrs = getURIStrs(servletPath);
 			if(URIStrs==null){
 				logger.warn("非法请求地址:"+servletPath);
-				return returnTrue();
+				return return404(response);
 			}
 			try{
 				CollectorFactory.getWebCollector().put(request);//放入日志缓存
@@ -90,11 +90,7 @@ public class ControllerExtractor {
 	}
 	
 	private static boolean return404(final HttpServletResponse response){
-		response.setStatus(404);
-		return true;
-	}
-
-	private static boolean returnTrue(){
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);//404
 		return true;
 	}
 	
@@ -104,7 +100,7 @@ public class ControllerExtractor {
 				if(SecurityThread.getSecurity() == SecurityThread.Security.AnonymousException){
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.AuthorizationException){
-					modelAndView.getResponse().setStatus(403);
+					modelAndView.getResponse().setStatus(HttpServletResponse.SC_FORBIDDEN);//403
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.authorizationExceptionPage));
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserKickException){
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userKickExceptionPage));
@@ -118,6 +114,7 @@ public class ControllerExtractor {
 				return false;
 			}
 		}catch (Throwable e) {
+			modelAndView.getResponse().setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 		}
 		return !modelAndView.isRedirect();
 	}
@@ -127,7 +124,7 @@ public class ControllerExtractor {
 			if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
 			}else if(e.getCause() instanceof AuthorizationException||e instanceof AuthorizationException){
-				response.setStatus(403);
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);//403
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.authorizationExceptionPage));
 			}else if(e.getCause() instanceof UserKickException||e instanceof UserKickException){
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.userKickExceptionPage));
@@ -138,7 +135,11 @@ public class ControllerExtractor {
 			}else if(e.getCause() instanceof IpAddressException||e instanceof IpAddressException){
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
 			}/*继续扩展，可在配置文件中加入更多异常*/
+			else if(!(e.getCause() instanceof SecurityException)||!(e instanceof SecurityException)){//如果发生一个不是安全的异常，抛出500错误
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
+			}
 		} catch (Throwable e2) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 		}
 		return false;
 	}

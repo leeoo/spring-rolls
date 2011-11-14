@@ -56,10 +56,9 @@ public class ModelAndView implements Serializable,Cloneable{
 	 * @param clazz
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T getBean(String beanName,Class<T> clazz){
 		String bn = beanName.concat(".");
-		Object bean = null;
+		T bean = null;
 		try {
 			bean = clazz.newInstance();
 			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -76,7 +75,7 @@ public class ModelAndView implements Serializable,Cloneable{
 			}
 		} catch (Throwable e) {
 		}
-		return (T)bean;
+		return bean;
 	}
 
 	/**
@@ -84,9 +83,8 @@ public class ModelAndView implements Serializable,Cloneable{
 	 * @param clazz
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T getBean(Class<T> clazz){
-		Object bean = null;
+		T bean = null;
 		try {
 			bean = clazz.newInstance();
 			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -103,7 +101,7 @@ public class ModelAndView implements Serializable,Cloneable{
 			}
 		} catch (Throwable e) {
 		}
-		return (T)bean;
+		return bean;
 	}
 	
 	/**
