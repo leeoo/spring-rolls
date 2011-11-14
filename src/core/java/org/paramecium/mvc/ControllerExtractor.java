@@ -63,7 +63,7 @@ public class ControllerExtractor {
 			try{
 				return invoke(classInfo.getClazz(), request, response, controller, URIStrs);
 			} catch (Throwable e) {
-				return security(e, response);
+				return security(e, request,response);
 			}
 		}
 	}
@@ -117,9 +117,10 @@ public class ControllerExtractor {
 		return true;
 	}
 
-	private static boolean return500(final HttpServletResponse response,Throwable e){
+	private static boolean return500(final HttpServletRequest request,final HttpServletResponse response,Throwable e){
 		try {
-			logger.error(e);
+			logger.error(e.getCause());
+			request.setAttribute(MessageConstant.ERROR_MESSAGE, e.getCause());
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 		} catch (IOException ioe) {
 		}
@@ -157,7 +158,7 @@ public class ControllerExtractor {
 				return false;
 			}
 		} catch (IOException ioe) {//一般来说不会有错误
-			return return500(modelAndView.getResponse(),ioe);//500
+			return return500(modelAndView.getRequest(),modelAndView.getResponse(),ioe);//500
 		}
 		return !modelAndView.isRedirect();
 	}
@@ -168,7 +169,7 @@ public class ControllerExtractor {
 	 * @param response
 	 * @return
 	 */
-	private static boolean security(Throwable e,final HttpServletResponse response){
+	private static boolean security(Throwable e,final HttpServletRequest request,final HttpServletResponse response){
 		try {
 			if(e.getCause() instanceof AnonymousException||e instanceof AnonymousException){
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.anonymousExceptionPage));
@@ -185,10 +186,10 @@ public class ControllerExtractor {
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
 			}/*继续扩展，可在配置文件中加入更多异常*/
 			else if(!(e.getCause() instanceof SecurityException)||!(e instanceof SecurityException)){//如果发生一个不是安全的异常，抛出500错误
-				return return500(response,e);//500
+				return return500(request,response,e);//500
 			}
 		} catch (IOException ioe) {//一般来说不会有错误
-			return return500(response,ioe);//500
+			return return500(request,response,ioe);//500
 		}
 		return false;
 	}
