@@ -80,7 +80,9 @@ public class ControllerExtractor {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	private static boolean invoke(Class<?> clazz,final HttpServletRequest request,final HttpServletResponse response,Object controller,String[] URIStrs) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+	private static boolean invoke(Class<?> clazz,final HttpServletRequest request,
+			final HttpServletResponse response,Object controller,String[] URIStrs) 
+	throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
 		for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
 			Method[] methods = clazz.getMethods();//只返回public，如果需要private可用getDeclaredMethods
 			if(methods==null||methods.length<1){
