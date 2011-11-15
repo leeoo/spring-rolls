@@ -9,7 +9,7 @@
 	<title>500——您访问的页面出现错误</title>
 	<style type="text/css">
 	body{
-		background-image:url("/commons/images/exception.gif");
+		background-image:url("/commons/images/loginbg.gif");
 	}
 	</style>
 </head>

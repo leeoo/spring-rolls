@@ -7,7 +7,7 @@
 	<title>404——您访问的页面不存在</title>
 	<style type="text/css">
 	body{
-		background-image:url("/commons/images/notfind.jpg");
+		background-image:url("/commons/images/loginbg.gif");
 	}
 	</style>
 </head>
