@@ -4,7 +4,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-	<title>404——您访问的页面不存在</title>
+	<title>404——您访问的页面无法找到</title>
 	<style type="text/css">
 	body{
 		background-image:url("/commons/images/loginbg.gif");
