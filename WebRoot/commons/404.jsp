@@ -12,6 +12,10 @@
 	</style>
 </head>
 <body>
-	<h1>您要的页面找不到了！</h1>
+	<div style="text-align: center;">
+		<img alt="IE的404必须要求大于512字节，否则会被IE换成自己的界面。因此我用了这个图片占用一下字节。" src="${base}/commons/images/logo.gif">
+		<div style="color: #FFF;font-size: 280px;font-weight: bolder;">404</div>
+		<div style="color: #FFF;font-size: 50px;font-weight: bolder;">您访问的页面无法找到</div>
+	</div>
 </body>
 </html>
