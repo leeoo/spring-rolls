@@ -37,7 +37,7 @@ public class OnlineUserCache {
 	public static void logout(String sessionId){
 		UserDetails<?> userDetails = getOnlineUserBySessionId(sessionId);
 		if(userDetails==null){
-			logger.debug("sessionId:"+sessionId+"对应的用户之前被同账号挤掉，系统自动销毁Session！");
+			logger.debug("sessionId:"+sessionId+"对应的用户之前被同账号挤掉或未登录过，系统自动销毁Session！");
 			return;
 		}
 		sessionIdIndex.remove(userDetails.getUsername());
