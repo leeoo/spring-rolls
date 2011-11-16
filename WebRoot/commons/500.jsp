@@ -64,7 +64,7 @@
 						if(throwable!=null){
 							PrintWriter pout = new PrintWriter(out);
 							out.println("<pre id='error500' style='display:none;'>");
-					    	out.println("<span id='error500title'>Exception: " + exception+"</span>");
+					    	out.println("<span id='error500title'>Exception: " + throwable+"</span>");
 							throwable.printStackTrace(pout);
 							out.println("</pre>");
 						}
