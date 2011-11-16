@@ -1,4 +1,7 @@
 package org.paramecium.mvc;
+
+import javax.servlet.jsp.PageContext;
+
 /**
  * 功 能 描 述:<br>
  * Servlet常量
@@ -14,6 +17,9 @@ public class ServletConstant {
 	public static final String SUCCESS_MESSAGE = "paramecium_success_message";
 	public static final String $SUCCESS_MESSAGE = "?paramecium_success_message=";
 	public static final String SUCCESS_MESSAGE$ = "&paramecium_success_message=";
-	public static final String SERVLET_MESSAGE = "javax.servlet.JspException";
+	/**
+	 * 获得JSP的Exception所对应的键值
+	 */
+	public static final String PAGE_CONTEXT_EXCEPTION = PageContext.EXCEPTION;
 	
 }

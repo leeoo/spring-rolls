@@ -121,7 +121,8 @@ public class ControllerExtractor {
 		try {
 			e.printStackTrace();
 			logger.error(e.getCause());
-			request.setAttribute(ServletConstant.SERVLET_MESSAGE, e.getCause());
+			//将异常放入request,Jsp中的exception对象实际为request中定义的一个特定值KEY对应的Exception对象.
+			request.setAttribute(ServletConstant.PAGE_CONTEXT_EXCEPTION, e.getCause());
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 		} catch (IOException ioe) {
 		}

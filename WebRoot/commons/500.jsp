@@ -59,15 +59,6 @@
 				    	out.println("<span id='error500title'>Exception: " + exception+"</span>");
 				    	exception.printStackTrace(pout);
 				    	out.println("</pre>");
-				    }else{
-				    	Throwable throwable = (Throwable)request.getAttribute("paramecium_error_message");
-						if(throwable!=null){
-							PrintWriter pout = new PrintWriter(out);
-							out.println("<pre id='error500' style='display:none;'>");
-					    	out.println("<span id='error500title'>Exception: " + throwable+"</span>");
-							throwable.printStackTrace(pout);
-							out.println("</pre>");
-						}
 				    }
 				%>
 			</pre>
