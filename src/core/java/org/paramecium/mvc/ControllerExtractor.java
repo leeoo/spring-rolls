@@ -121,7 +121,7 @@ public class ControllerExtractor {
 		try {
 			e.printStackTrace();
 			logger.error(e.getCause());
-			request.setAttribute(MessageConstant.ERROR_MESSAGE, e.getCause());
+			request.setAttribute(ServletConstant.SERVLET_MESSAGE, e.getCause());
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 		} catch (IOException ioe) {
 		}

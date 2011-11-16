@@ -1,13 +1,12 @@
 package org.paramecium.mvc;
 /**
- * 功能描述(Description):<br><b>
- * 消息常量
- * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
- * <br>建立日期(Create Date): <b>2011-11-11下午11:45:36</b>
- * <br>项目名称(Project Name): <b>paramecium</b>
- * <br>包及类名(Package Class): <b>org.paramecium.mvc.MessageConstant.java</b>
+ * 功 能 描 述:<br>
+ * Servlet常量
+ * <br>代 码 作 者:曹阳(CaoYang)
+ * <br>开 发 日 期:2011-11-16下午03:04:55
+ * <br>项 目 信 息:paramecium:org.paramecium.mvc.ServletConstant.java
  */
-public class MessageConstant {
+public class ServletConstant {
 
 	public static final String ERROR_MESSAGE = "paramecium_error_message";
 	public static final String $ERROR_MESSAGE = "?paramecium_error_message=";
@@ -15,5 +14,6 @@ public class MessageConstant {
 	public static final String SUCCESS_MESSAGE = "paramecium_success_message";
 	public static final String $SUCCESS_MESSAGE = "?paramecium_success_message=";
 	public static final String SUCCESS_MESSAGE$ = "&paramecium_success_message=";
+	public static final String SERVLET_MESSAGE = "javax.servlet.JspException";
 	
 }

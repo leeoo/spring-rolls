@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.paramecium.mvc.MessageConstant;
+import org.paramecium.mvc.ServletConstant;
 /**
  * 功能描述(Description):<br><b>
  * 错误信息
@@ -19,9 +19,9 @@ public class ErrorMessageTag extends TagSupport{
 	private static final long serialVersionUID = 5899444990055568100L;
 
 	public int doStartTag() throws JspException {
-		String message = (String) this.pageContext.getRequest().getAttribute(MessageConstant.ERROR_MESSAGE);
+		String message = (String) this.pageContext.getRequest().getAttribute(ServletConstant.ERROR_MESSAGE);
 		if(message==null||message.isEmpty()){
-			message =  this.pageContext.getRequest().getParameter(MessageConstant.ERROR_MESSAGE);
+			message =  this.pageContext.getRequest().getParameter(ServletConstant.ERROR_MESSAGE);
 		}
 		if(message!=null&&!message.isEmpty()){
 			try {

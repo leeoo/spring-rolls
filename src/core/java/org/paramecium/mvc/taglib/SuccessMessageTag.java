@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.paramecium.mvc.MessageConstant;
+import org.paramecium.mvc.ServletConstant;
 /**
  * 功能描述(Description):<br><b>
  * 成功信息
@@ -19,9 +19,9 @@ public class SuccessMessageTag extends TagSupport{
 	private static final long serialVersionUID = 6894581120457283943L;
 
 	public int doStartTag() throws JspException {
-		String message = (String) this.pageContext.getRequest().getAttribute(MessageConstant.SUCCESS_MESSAGE);
+		String message = (String) this.pageContext.getRequest().getAttribute(ServletConstant.SUCCESS_MESSAGE);
 		if(message==null||message.isEmpty()){
-			message =  this.pageContext.getRequest().getParameter(MessageConstant.SUCCESS_MESSAGE);
+			message =  this.pageContext.getRequest().getParameter(ServletConstant.SUCCESS_MESSAGE);
 		}
 		if(message!=null&&!message.isEmpty()){
 			try {

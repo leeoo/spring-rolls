@@ -156,10 +156,10 @@ public class ModelAndView implements Serializable,Cloneable{
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher(forwardUrl);
 		try {
 			if(this.errorMessage!=null){
-				request.setAttribute(MessageConstant.ERROR_MESSAGE, this.errorMessage);
+				request.setAttribute(ServletConstant.ERROR_MESSAGE, this.errorMessage);
 			}
 			if(this.successMessage!=null){
-				request.setAttribute(MessageConstant.SUCCESS_MESSAGE, this.successMessage);
+				request.setAttribute(ServletConstant.SUCCESS_MESSAGE, this.successMessage);
 			}
 			requestDispatcher.forward(request, response);
 		} catch (ServletException e) {
@@ -179,16 +179,16 @@ public class ModelAndView implements Serializable,Cloneable{
 			String url = PathUtils.getNewPath(redirectUrl);
 			if(this.errorMessage!=null){
 				if(url.indexOf('?')<0){
-					url = url.concat(MessageConstant.$ERROR_MESSAGE).concat(EncodeUtils.encode(this.errorMessage));
+					url = url.concat(ServletConstant.$ERROR_MESSAGE).concat(EncodeUtils.encode(this.errorMessage));
 				}else{
-					url = url.concat(MessageConstant.ERROR_MESSAGE$).concat(EncodeUtils.encode(this.errorMessage));
+					url = url.concat(ServletConstant.ERROR_MESSAGE$).concat(EncodeUtils.encode(this.errorMessage));
 				}
 			}
 			if(this.successMessage!=null){
 				if(url.indexOf('?')<0){
-					url = url.concat(MessageConstant.$SUCCESS_MESSAGE).concat(EncodeUtils.encode(this.successMessage));
+					url = url.concat(ServletConstant.$SUCCESS_MESSAGE).concat(EncodeUtils.encode(this.successMessage));
 				}else{
-					url = url.concat(MessageConstant.SUCCESS_MESSAGE$).concat(EncodeUtils.encode(this.successMessage));
+					url = url.concat(ServletConstant.SUCCESS_MESSAGE$).concat(EncodeUtils.encode(this.successMessage));
 				}
 			}
 			response.sendRedirect(url);
