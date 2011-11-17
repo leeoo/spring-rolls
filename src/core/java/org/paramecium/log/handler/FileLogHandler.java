@@ -75,9 +75,7 @@ public class FileLogHandler implements LogHandler {
 		if(file.canWrite()){
 			FileWriter writer = null;
 			try {
-				if(writer!=null){
-					writer = new FileWriter(file,true);
-				}
+				writer = new FileWriter(file,true);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
