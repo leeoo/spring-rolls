@@ -45,7 +45,7 @@
 	</script>
 </head>
 <body>
-	<div style="text-align: center;width: 100%;height: 100%;background-image: url('/commons/images/loginbg.gif');">
+	<div style="text-align: center;width: 100%;height: 100%;background-image: url('${base}/commons/images/loginbg.gif');">
 		<img alt="IE的404必须要求大于512字节，否则会被IE换成自己的界面。因此我用了这个图片占用一下字节。" src="${base}/commons/images/logo.gif">
 		<div style="color: #FFF;font-size: 280px;font-weight: bolder;">500</div>
 		<div style="color: #FFF;font-size: 50px;font-weight: bolder;">您访问的页面出现错误</div>
