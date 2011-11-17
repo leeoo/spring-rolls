@@ -47,9 +47,9 @@ public class MultiDataSourceFactory {
 					for(Field field:clazz.getDeclaredFields()){
 						if(fieldName.equalsIgnoreCase(field.getName())){
 							field.setAccessible(true);
-							if(field.getType().equals(Integer.TYPE)){
+							if(field.getType().equals(Integer.TYPE)||field.getType()==int.class){
 								field.set(dataSource,Integer.valueOf(entry.getValue()));
-							}else if(field.getType().equals(Boolean.TYPE)){
+							}else if(field.getType().equals(Boolean.TYPE)||field.getType()==boolean.class){
 								field.set(dataSource,Boolean.valueOf(entry.getValue()));
 							}else{
 								field.set(dataSource,entry.getValue());

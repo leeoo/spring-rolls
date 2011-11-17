@@ -30,6 +30,8 @@ public class DefaultDataSource implements DataSource{
 	private int poolMax = 5;//最大连接数
 	private int poolBase = 3;//控制并发基数
 	private int connectLife = 120;//连接生命长度(秒)
+	private int reconnectionTime = 10;//失效后多久重连(秒)
+	private int poolThreadTime = 60;//连接池线程轮训间隔(秒)
 	private String ds;
 	private String driverClassName;
 	private String url;
@@ -70,8 +72,8 @@ public class DefaultDataSource implements DataSource{
 				e.printStackTrace();
 				logger.error(e);
 				connection = null;
-				try {//如果连接失败，等待10秒钟再次连接
-					Thread.sleep(10000);
+				try {//如果连接失败，等待n秒钟再次连接
+					Thread.sleep(reconnectionTime*1000);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 					logger.error(e1);
@@ -139,7 +141,7 @@ public class DefaultDataSource implements DataSource{
 		private void clearPool(){
 			while (true) {
 				try {
-					Thread.sleep(60 * 1000);// 指定轮询间隔清理使用完毕的Connection
+					Thread.sleep(poolThreadTime * 1000);// 指定轮询间隔清理使用完毕的Connection
 					if(connectionPool.get(ds)==null||connectionPool.get(ds).isEmpty()){
 						continue;
 					}
