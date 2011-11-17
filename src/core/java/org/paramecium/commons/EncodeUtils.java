@@ -24,6 +24,7 @@ import sun.security.util.BigInt;
  * <br>项 目 信 息:paramecium:org.paramecium.commons.EncodeUtils.java
  */
 public abstract class EncodeUtils {
+	
 	private final static Log logger = LoggerFactory.getLogger();
 	public static final String KEY_SHA = "SHA";
 	public static final String KEY_MD5 = "MD5";
