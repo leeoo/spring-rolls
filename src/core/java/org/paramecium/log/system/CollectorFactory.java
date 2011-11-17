@@ -2,6 +2,9 @@ package org.paramecium.log.system;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
+
 /**
  * 功 能 描 述:<br>
  * 收集器工厂
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class CollectorFactory {
 	
+	private final static Log logger = LoggerFactory.getLogger();
 	static LogCollector logCollector = null;//日志收集器一旦被实例化，各个收集器中的缓存将不会被使用，而是直接调用应用层持久化或在应用侧自行缓存。
 	private static WebCollector<HttpServletRequest> webCollector = new WebCollector<HttpServletRequest>();
 	private static BeanCollector<String> beanCollector = new BeanCollector<String>();
@@ -24,7 +28,7 @@ public class CollectorFactory {
 			Class<?> clazz = Class.forName(logCollectorInterface);
 			logCollector = (LogCollector) clazz.newInstance();
 		}catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
