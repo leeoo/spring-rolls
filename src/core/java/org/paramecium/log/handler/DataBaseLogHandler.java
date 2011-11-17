@@ -26,12 +26,10 @@ public class DataBaseLogHandler implements LogHandler{
 
 	public void log(String message, boolean isError) {
 		if(isError){
-			System.err.println(message);
 			if(loggerDB!=null){
 				loggerDB.saveErrorLogger(message);
 			}
 		}else{
-			System.out.println(message);
 			if(loggerDB!=null){
 				loggerDB.saveLogger(message);
 			}

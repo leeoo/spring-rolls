@@ -19,11 +19,6 @@ import org.paramecium.log.LoggerFactory;
 public class FileLogHandler implements LogHandler {
 
 	public void log(String message, boolean isError) {
-		if(isError){
-			System.err.println(message);
-		}else{
-			System.out.println(message);
-		}
 		writFile(message);
 	}
 	
