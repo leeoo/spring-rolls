@@ -55,6 +55,7 @@ public abstract class BeanUtils {
 				field.set(bean,new BigDecimal(value));
 			}
 		}catch (Exception e) {
+			logger.error(e);
 		}
 	}
 	
@@ -109,7 +110,7 @@ public abstract class BeanUtils {
 				try {
 					map.put(field.getName(),field.get(bean));
 				} catch (Exception e) {
-					logger.warn(e.fillInStackTrace());
+					logger.warn(e);
 				}
 			}
 		}
@@ -141,7 +142,7 @@ public abstract class BeanUtils {
 						}
 						field.set(bean, map.get(name));
 					} catch (Exception e) {
-						logger.warn(e.fillInStackTrace());
+						logger.warn(e);
 					}
 				}
 			}
@@ -209,12 +210,12 @@ public abstract class BeanUtils {
 							return field.get(bean);
 						}
 					} catch (Exception e) {
-						logger.warn(e.fillInStackTrace());
+						logger.warn(e);
 					}
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -237,12 +238,12 @@ public abstract class BeanUtils {
 							return;
 						}
 					} catch (Exception e) {
-						logger.warn(e.fillInStackTrace());
+						logger.warn(e);
 					}
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	

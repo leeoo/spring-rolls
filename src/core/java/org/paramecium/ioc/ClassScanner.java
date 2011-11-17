@@ -35,8 +35,8 @@ import org.paramecium.transaction.annotation.Transactional;
  */
 public class ClassScanner {
 	
-	private final static ConcurrentMap<String, Object> instanceContext = new ConcurrentHashMap<String, Object>();
 	private final static Log logger = LoggerFactory.getLogger();
+	private final static ConcurrentMap<String, Object> instanceContext = new ConcurrentHashMap<String, Object>();
 	public static String iocScanBasePackage;
 	private static Collection<String> classes = new ArrayList<String>();
 	
@@ -71,6 +71,7 @@ public class ClassScanner {
 				clazz = Class.forName(cp);
 				putIocContext(clazz);
 			} catch (ClassNotFoundException e) {
+				logger.warn(e.getMessage());
 			}
 		}
 		ApplicationContext.fillApplicationContext();

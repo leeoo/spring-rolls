@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.mvc.ServletConstant;
 /**
  * 功能描述(Description):<br><b>
@@ -16,6 +18,7 @@ import org.paramecium.mvc.ServletConstant;
  */
 public class ErrorMessageTag extends TagSupport{
 
+	private final static Log logger = LoggerFactory.getLogger();
 	private static final long serialVersionUID = 5899444990055568100L;
 
 	public int doStartTag() throws JspException {
@@ -27,6 +30,7 @@ public class ErrorMessageTag extends TagSupport{
 			try {
 				this.pageContext.getOut().write(message);
 			} catch (IOException e) {
+				logger.error(e);
 			}
 		}
 		return SKIP_BODY;

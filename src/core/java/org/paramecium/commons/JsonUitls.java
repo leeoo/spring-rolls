@@ -47,7 +47,7 @@ public abstract class JsonUitls {
 							sb.append("\"").append(field.get(bean)).append("\",");
 						}
 					} catch (Exception e) {
-						logger.warn(e.fillInStackTrace());
+						logger.warn(e);
 					}
 				}
 			}

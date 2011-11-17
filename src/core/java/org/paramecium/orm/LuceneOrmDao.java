@@ -10,6 +10,8 @@ import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.BeanUtils;
 import org.paramecium.jdbc.dialect.BaseDialect;
 import org.paramecium.jdbc.dialect.Page;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.search.SearchIndexCreator;
 /**
  * 功 能 描 述:<br>
@@ -20,6 +22,8 @@ import org.paramecium.search.SearchIndexCreator;
  */
 @SuppressWarnings("unchecked")
 public class LuceneOrmDao <T , PK extends Serializable> {
+	
+	private final static Log logger = LoggerFactory.getLogger();
 	
 	private final static Cache cache = CacheManager.getDefaultCache("CACHE_INDEX_PK",100);
 	
@@ -133,6 +137,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 					arrayParams[i] = pks.get(page.getFirst()+i);
 				}
 			}catch (Throwable e) {
+				logger.warn(e);
 				page.setResult(null);
 				return page;
 			}

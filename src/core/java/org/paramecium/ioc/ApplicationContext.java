@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.paramecium.ioc.annotation.AutoInject;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 
 /**
  * 功能描述(Description):<br><b>
@@ -17,6 +19,7 @@ import org.paramecium.ioc.annotation.AutoInject;
  */
 public class ApplicationContext {
 	
+	private final static Log logger = LoggerFactory.getLogger();
 	private final static ConcurrentMap<String, Object> applicationContext = new ConcurrentHashMap<String, Object>();
 	private final static ThreadLocal<Boolean> isSecurityThreadLocal = new ThreadLocal<Boolean>();
 	static String priorityStartClass;
@@ -25,7 +28,7 @@ public class ApplicationContext {
 		try {
 			Class.forName("org.paramecium.ioc.ClassScanner");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	
@@ -37,7 +40,8 @@ public class ApplicationContext {
 			System.class.getName().isEmpty();
 			priority();
 		}catch (Throwable e) {
-			System.err.println("请使用JDK1.6及以上版本;JDK1.5及之前版本缺少相关方法!系统为您停止启动服务，请查明原因再试。");
+			logger.error(e);
+			logger.error("请使用JDK1.6及以上版本;JDK1.5及之前版本缺少相关方法!系统为您停止启动服务，请查明原因再试。");
 			System.exit(0);
 		}
 	}
@@ -66,7 +70,7 @@ public class ApplicationContext {
 				Method method = clazz.getMethod(methodName);
 				method.invoke(object);
 			} catch (Throwable e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 	}
@@ -110,6 +114,7 @@ public class ApplicationContext {
 						Object fieldInstance = ClassScanner.getIocInstance(fieldName);
 						field.set(instance, fieldInstance);
 					} catch (Throwable e) {
+						logger.error(e);
 					}
 				}
 			}

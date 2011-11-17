@@ -113,6 +113,7 @@ public class ControllerExtractor {
 		try {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);//404
 		} catch (IOException e) {
+			logger.error(e);
 		}
 		return true;
 	}
@@ -125,6 +126,7 @@ public class ControllerExtractor {
 			request.setAttribute(ServletConstant.PAGE_CONTEXT_EXCEPTION, e.getCause());
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 		} catch (IOException ioe) {
+			logger.error(ioe);
 		}
 		return false;
 	}

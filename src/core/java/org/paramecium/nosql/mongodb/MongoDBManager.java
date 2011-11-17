@@ -37,7 +37,6 @@ public class MongoDBManager {
 				MongoConfig config = new MongoConfig(url, port, dbName);
 				pool.put(key, config.getDB());
 			} catch (Throwable e) {
-				e.printStackTrace();
 				logger.error(e);
 			}
 		}

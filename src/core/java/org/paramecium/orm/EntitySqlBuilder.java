@@ -7,6 +7,8 @@ import java.util.Collection;
 import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.BeanUtils;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
 import org.paramecium.orm.annotation.NotUpdate;
@@ -24,6 +26,8 @@ import org.paramecium.orm.annotation.PrimaryKey.AUTO_GENERATE_MODE;
  */
 public class EntitySqlBuilder {
 	
+	private final static Log logger = LoggerFactory.getLogger();
+
 	@SuppressWarnings("unchecked")
 	private final static Cache<String,String> sqlCache = CacheManager.getDefaultCache("CACHE_SQL_BUILDER");
 	
@@ -77,6 +81,7 @@ public class EntitySqlBuilder {
 						}
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -137,6 +142,7 @@ public class EntitySqlBuilder {
 						}
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -194,6 +200,7 @@ public class EntitySqlBuilder {
 						}
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -241,6 +248,7 @@ public class EntitySqlBuilder {
 						break root;
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -292,6 +300,7 @@ public class EntitySqlBuilder {
 						columns.add(referenceColumn.subSelectSql());
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -348,6 +357,7 @@ public class EntitySqlBuilder {
 						}
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -377,6 +387,7 @@ public class EntitySqlBuilder {
 						return getPkName(clazz);
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -394,6 +405,7 @@ public class EntitySqlBuilder {
 						return field.getType();
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}

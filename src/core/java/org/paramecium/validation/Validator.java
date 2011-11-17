@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.paramecium.ioc.ClassScanner;
 import org.paramecium.ioc.annotation.ShowLabel;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.orm.annotation.NotUpdate;
 import org.paramecium.validation.annotation.Chinese;
 import org.paramecium.validation.annotation.Email;
@@ -37,6 +39,7 @@ import org.paramecium.validation.annotation.base.Size;
  */
 public class Validator {
 	
+	private final static Log logger = LoggerFactory.getLogger();
 	private final static String SHOWLABEL = "\\{ShowLabel\\}";
 	private final static String MAX = "\\{max\\}";
 	private final static String MIN = "\\{min\\}";
@@ -140,6 +143,7 @@ public class Validator {
 						messagesMap.put(instanceName+"."+field.getName(), messages);
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}

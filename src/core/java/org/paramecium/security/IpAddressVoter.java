@@ -3,6 +3,9 @@ package org.paramecium.security;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
+
 import sun.net.util.IPAddressUtil;
 
 /**
@@ -14,6 +17,8 @@ import sun.net.util.IPAddressUtil;
  */
 public class IpAddressVoter{
 
+	private final static Log logger = LoggerFactory.getLogger();
+	
 	private static Collection<String> ipAddressList = new HashSet<String>();
 	
 	private static boolean include = true;
@@ -81,6 +86,7 @@ public class IpAddressVoter{
 						return include;
 					}
 				}catch (Throwable e) {
+					logger.error(e);
 					return !include;//登录ip验证发生意外错误则否定
 				}
 			}

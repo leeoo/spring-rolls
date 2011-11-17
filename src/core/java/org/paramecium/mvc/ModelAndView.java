@@ -41,8 +41,9 @@ public class ModelAndView implements Serializable,Cloneable{
 		try {
 			return (ModelAndView) super.clone();
 		} catch (CloneNotSupportedException e) {
-			return null;
+			logger.error(e);
 		}
+		return null;
 	}
 	
 	public ModelAndView(final HttpServletRequest request,final HttpServletResponse response){
@@ -70,10 +71,12 @@ public class ModelAndView implements Serializable,Cloneable{
 						String value = request.getParameter(name);
 						BeanUtils.setFieldValue(field, value, bean);
 					} catch (Exception e) {
+						logger.error(e);
 					}
 				}
 			}
 		} catch (Throwable e) {
+			logger.error(e);
 		}
 		return bean;
 	}
@@ -96,10 +99,12 @@ public class ModelAndView implements Serializable,Cloneable{
 						String value = request.getParameter(name);
 						BeanUtils.setFieldValue(field, value, bean);
 					} catch (Exception e) {
+						logger.error(e);
 					}
 				}
 			}
 		} catch (Throwable e) {
+			logger.error(e);
 		}
 		return bean;
 	}

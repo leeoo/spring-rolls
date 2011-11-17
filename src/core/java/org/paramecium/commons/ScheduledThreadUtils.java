@@ -36,6 +36,7 @@ public abstract class ScheduledThreadUtils {
 				logger.info("正在执行中hashCode:"+runnable.hashCode());
 			}catch (Exception e) {
 				logger.error("线程执行失败hashCode:"+runnable.hashCode());
+				logger.error(e);
 			}
 		}
 		//scheduler.shutdown();

@@ -43,7 +43,6 @@ public class GenericJdbcDao {
 			this.dataSourceName = dataSourceName;
 			this.jdbcTemplate = JdbcTemplateFactory.getJdbcTemplate(dataSourceName);
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 	}
@@ -67,7 +66,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.query(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -85,7 +83,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.query(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -103,7 +100,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, arrayParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -122,7 +118,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, arrayParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -140,7 +135,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, mapParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -159,7 +153,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, mapParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -178,7 +171,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryByBean(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, beanParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -195,7 +187,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUnique(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -212,7 +203,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUnique(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -229,7 +219,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, arrayParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -248,7 +237,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, arrayParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -267,7 +255,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueByBean(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, beanParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -284,7 +271,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, mapParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -301,7 +287,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueColumnValue(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -318,7 +303,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueColumnValueByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, arrayParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -335,7 +319,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueColumnValueByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, mapParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -352,7 +335,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueColumnValueByBean(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, beanParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -369,7 +351,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			this.jdbcTemplate.executeDDL(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -386,7 +367,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.executeDML(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -403,7 +383,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.insertGetGeneratedKey(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -420,7 +399,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.executeDMLByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, arrayParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -437,7 +415,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.insertGetGeneratedKeyByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, arrayParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -454,7 +431,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.executeDMLByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, mapParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -471,7 +447,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.insertGetGeneratedKeyByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, mapParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -488,7 +463,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.executeDMLByBean(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, bean);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -505,7 +479,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.insertGetGeneratedKeyByBean(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, bean);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -522,7 +495,6 @@ public class GenericJdbcDao {
 			logger.debug(sqls[0]);
 			return this.jdbcTemplate.executeBatchDML(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sqls);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -539,7 +511,6 @@ public class GenericJdbcDao {
 			logger.debug(sqls.iterator().next());
 			return this.jdbcTemplate.executeBatchDML(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sqls);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -557,7 +528,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.executeBatchDMLByMaps(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, mapParamsList);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -575,7 +545,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.executeBatchDMLByBeans(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, beanParamsList);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -591,7 +560,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			this.jdbcTemplate.call(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -609,7 +577,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			this.jdbcTemplate.call(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, inParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -626,7 +593,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.call(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, outParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -644,7 +610,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.call(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, inParams, outParams);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
 			throw new SQLException(e);
 		}
@@ -659,7 +624,6 @@ public class GenericJdbcDao {
 		try{
 			return this.jdbcTemplate.getAutoGeneratedKey(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection());
 		}catch (SQLException e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -676,7 +640,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.getAutoGeneratedKey(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
 		}catch (SQLException e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -695,7 +658,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryPageBeansByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, page, arrayParameters);
 		}catch (SQLException e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -714,7 +676,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryPageBeansByBean(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, page, beanParameters);
 		}catch (SQLException e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -733,7 +694,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryPageBeansByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, page, mapParameters);
 		}catch (SQLException e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -751,7 +711,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryPageMapsByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, page, arrayParameters);
 		}catch (SQLException e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;
@@ -769,7 +728,6 @@ public class GenericJdbcDao {
 			logger.debug(sql);
 			return this.jdbcTemplate.queryPageMapsByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, page, mapParameters);
 		}catch (SQLException e) {
-			e.printStackTrace();
 			logger.error(e);
 		}
 		return null;

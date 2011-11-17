@@ -59,7 +59,6 @@ public class MultiDataSourceFactory {
 				}
 				multiDataSource.put(key,(DataSource)dataSource);
 			} catch (Exception e) {
-				e.printStackTrace();
 				logger.error(e);
 			}
 		}

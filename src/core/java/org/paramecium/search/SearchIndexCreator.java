@@ -171,8 +171,8 @@ public class SearchIndexCreator {
 			}
 			writer.addDocument(doc);
 		} catch (Throwable e) {
-			e.printStackTrace();
 			logger.error("索引文件建立错误!");
+			logger.error(e);
 		}
 		close(writer, directory);
 	}
@@ -215,7 +215,7 @@ public class SearchIndexCreator {
 				}
 			}
 		} catch (Throwable e) {
-			e.printStackTrace();
+			logger.error(e);
 			logger.error("索引文件建立错误!");
 		}
 		close(writer, directory);
@@ -262,6 +262,7 @@ public class SearchIndexCreator {
 				ids.add(doc.get(getKeywordName(clazz)));
 			}
 		} catch (Throwable e) {
+			logger.error(e);
 			logger.error("索引错误!");
 		}
 		close(reader, searcher, directory);
@@ -356,6 +357,7 @@ public class SearchIndexCreator {
 		try {
 			textWord = clazz.getDeclaredField(propertyName).getAnnotation(TextWord.class);
 		} catch (Throwable e) {
+			logger.error(e);
 		}
 		if (textWord != null) {
 			return true;
@@ -368,6 +370,7 @@ public class SearchIndexCreator {
 		try {
 			sortWord = clazz.getDeclaredField(propertyName).getAnnotation(SortWord.class);
 		} catch (Throwable e) {
+			logger.error(e);
 		}
 		if (sortWord != null) {
 			return true;
@@ -380,6 +383,7 @@ public class SearchIndexCreator {
 		try {
 			keyWord = clazz.getDeclaredField(propertyName).getAnnotation(KeyWord.class);
 		} catch (Throwable e) {
+			logger.error(e);
 		}
 		if (keyWord != null) {
 			return true;
@@ -392,6 +396,7 @@ public class SearchIndexCreator {
 		try {
 			textWord = clazz.getDeclaredField(propertyName).getAnnotation(TextWord.class);
 		} catch (Throwable e) {
+			logger.error(e);
 		}
 		if (textWord != null) {
 			return textWord.isFilterHtmlTags();

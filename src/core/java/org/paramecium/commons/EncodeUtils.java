@@ -9,6 +9,9 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 import sun.security.util.BigInt;
@@ -21,6 +24,7 @@ import sun.security.util.BigInt;
  * <br>项 目 信 息:paramecium:org.paramecium.commons.EncodeUtils.java
  */
 public abstract class EncodeUtils {
+	private final static Log logger = LoggerFactory.getLogger();
 	public static final String KEY_SHA = "SHA";
 	public static final String KEY_MD5 = "MD5";
 
@@ -162,6 +166,7 @@ public abstract class EncodeUtils {
 		try {
 			return java.net.URLEncoder.encode(str,"UTF-8");
 		} catch (UnsupportedEncodingException e) {
+			logger.error(e);
 		}
 		return str;
 	}

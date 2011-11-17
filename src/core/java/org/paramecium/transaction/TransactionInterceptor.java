@@ -3,6 +3,8 @@ package org.paramecium.transaction;
 import java.lang.reflect.Method;
 
 import org.paramecium.aop.cglib.MethodProxy;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.BaseSecurityInterceptor;
 import org.paramecium.transaction.annotation.Transactional;
 /**
@@ -13,6 +15,8 @@ import org.paramecium.transaction.annotation.Transactional;
  * <br>项 目 信 息:paramecium:org.paramecium.transaction.TransactionInterceptor.java
  */
 public class TransactionInterceptor extends BaseSecurityInterceptor {
+	
+	private final static Log logger = LoggerFactory.getLogger();
 	
 	public Object intercept(Object service, Method method, Object[] parameters,MethodProxy proxy) throws Throwable {
 		return super.intercept(service, method, parameters, proxy);
@@ -39,7 +43,7 @@ public class TransactionInterceptor extends BaseSecurityInterceptor {
 		try{
 			result = proxy.invokeSuper(service, parameters);
 		}catch (Throwable e) {
-			e.printStackTrace();
+			logger.error(e);
 			TransactionManager.globalException();
 			TransactionManager.end();
 			throw new TransactionException(e.getMessage());

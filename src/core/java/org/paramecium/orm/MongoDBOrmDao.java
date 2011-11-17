@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.paramecium.commons.BeanUtils;
 import org.paramecium.jdbc.dialect.Page;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.nosql.mongodb.GenericMonogDBNativeDao;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
@@ -27,6 +29,8 @@ import com.mongodb.DBObject;
  * <br>包及类名(Package Class): <b>org.paramecium.orm.MongoDBOrmDao.java</b>
  */
 public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T , PK>{
+	
+	private final static Log logger = LoggerFactory.getLogger();
 	
 	private GenericMonogDBNativeDao mongoDao; 
 	
@@ -81,6 +85,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 					}
 					object.put(fieldName, field.get(bean));
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -109,6 +114,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 						String fieldName = getFieldName(field);
 						object.put(fieldName, field.get(bean));
 					} catch (Throwable e) {
+						logger.error(e);
 					}
 				}
 			}
@@ -162,6 +168,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 					}
 					object.put(fieldName, value);//无需判断，更新需要全部更新，不能局部更新
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -189,6 +196,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 						where.put(fieldName, primaryKey);
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -256,6 +264,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 						}
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}
@@ -284,6 +293,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 						where.put(fieldName, primaryKey);
 					}
 				} catch (Throwable e) {
+					logger.error(e);
 				}
 			}
 		}

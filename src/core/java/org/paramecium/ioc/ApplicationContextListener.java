@@ -5,6 +5,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.paramecium.commons.PathUtils;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 
 /**
  * 功 能 描 述:<br>
@@ -15,6 +17,7 @@ import org.paramecium.commons.PathUtils;
  */
 public class ApplicationContextListener implements ServletContextListener {
 	
+	private final static Log logger = LoggerFactory.getLogger();
 	private static boolean isInit = true;
 	private static String path;
 
@@ -27,7 +30,8 @@ public class ApplicationContextListener implements ServletContextListener {
 					path = "";
 				}
 			}catch (Throwable e) {
-				System.err.println("请使用Servlet-api.jar2.5版本;2.4及之前版本缺少相关方法!系统为您停止启动服务，请查明原因再试。");
+				logger.error(e);
+				logger.error("请使用Servlet-api.jar2.5版本;2.4及之前版本缺少相关方法!系统为您停止启动服务，请查明原因再试。");
 				System.exit(0);
 			}
 			PathUtils.webClassRootPath = servletContext.getRealPath("/WEB-INF")+"/classes";

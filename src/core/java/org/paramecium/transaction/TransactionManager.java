@@ -60,7 +60,6 @@ public class TransactionManager {
 				try {
 					transaction.setReadOnly(true);
 				} catch (Throwable e) {
-					e.printStackTrace();
 					logger.error(e);
 				}
 			}
@@ -77,7 +76,6 @@ public class TransactionManager {
 				try {
 					transaction.setTransactionIsolation(level);
 				} catch (Throwable e) {
-					e.printStackTrace();
 					logger.error(e);
 				}
 			}
@@ -98,7 +96,6 @@ public class TransactionManager {
 					transactionThreadLocal.set(transactionMap);
 				}
 			} catch (Throwable e) {
-				e.printStackTrace();
 				logger.error(e);
 			}
 		}
@@ -125,7 +122,6 @@ public class TransactionManager {
 						transaction.close();//其他数据源默认关闭
 					}
 				} catch (Throwable e) {
-					e.printStackTrace();
 					logger.error(e);
 				}
 			}

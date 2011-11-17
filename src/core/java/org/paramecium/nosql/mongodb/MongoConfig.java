@@ -2,6 +2,9 @@ package org.paramecium.nosql.mongodb;
 
 import java.net.UnknownHostException;
 
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
+
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
@@ -34,6 +37,8 @@ import com.mongodb.MongoException;
  * <br>项 目 信 息:paramecium:org.paramecium.nosql.mongodb.MongoConfig.java
  */
 public class MongoConfig {
+	
+	private final static Log logger = LoggerFactory.getLogger();
 	
 	private String url = "127.0.0.1";
 	
@@ -68,9 +73,9 @@ public class MongoConfig {
 				mongo = new Mongo(url, port);
 			}
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			logger.error(e);
 		} catch (MongoException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
  		return mongo.getDB(dbName);
 	}

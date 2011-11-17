@@ -14,6 +14,8 @@ import org.paramecium.jdbc.dialect.PostgresDialect;
 import org.paramecium.jdbc.dialect.SqlServer2kDialect;
 import org.paramecium.jdbc.dialect.SqlServer2kxDialect;
 import org.paramecium.jdbc.dialect.SqliteDialect;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 /**
  * 功能描述(Description):<br><b>
  * 通过配置文件获取数据库类型
@@ -24,13 +26,14 @@ import org.paramecium.jdbc.dialect.SqliteDialect;
  */
 public class JdbcTemplateFactory {
 	
+	private final static Log logger = LoggerFactory.getLogger();
 	public final static ConcurrentMap<String,String> dbTypes = new ConcurrentHashMap<String,String>();
 
 	static{
 		try {
 			Class.forName("org.paramecium.jdbc.datasource.MultiDataSourceFactory");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	

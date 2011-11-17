@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.paramecium.commons.DateUtils;
+import org.paramecium.commons.ExceptionUtils;
 import org.paramecium.commons.PropertiesUitls;
 import org.paramecium.log.handler.ConsoleLogHandler;
 import org.paramecium.log.handler.DataBaseLogHandler;
@@ -118,7 +119,7 @@ public class LoggerFactory {
 		sb.append(className).append('.').append(methodName);
 		sb.append("\r\n");
 		sb.append(level).append(":");
-		sb.append(throwable);
+		sb.append(ExceptionUtils.getExceptionString(throwable));
 		sb.append("\r\n");
 		return sb.toString();
 	}
@@ -162,13 +163,13 @@ public class LoggerFactory {
 		public void error(String message) {
 			String methodName = getMethodNameSpecial();
 			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_ERROR){
-				consoleLogHandler.log(getMessage(message, "ERROR", className,methodName),false);
+				consoleLogHandler.log(getMessage(message, "ERROR", className,methodName),true);
 			}
 			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_ERROR){
-				fileLogHandler.log(getMessage(message, "ERROR", className,methodName),false);
+				fileLogHandler.log(getMessage(message, "ERROR", className,methodName),true);
 			}
 			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_ERROR){
-				dbLogHandler.log(getMessage(message, "ERROR", className,methodName),false);
+				dbLogHandler.log(getMessage(message, "ERROR", className,methodName),true);
 			}
 		}
 
@@ -176,13 +177,13 @@ public class LoggerFactory {
 		public void error(Throwable throwable) {
 			String methodName = getMethodNameSpecial(throwable);
 			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_ERROR){
-				consoleLogHandler.log(getMessage(throwable, "ERROR", className,methodName),false);
+				consoleLogHandler.log(getMessage(throwable, "ERROR", className,methodName),true);
 			}
 			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_ERROR){
-				fileLogHandler.log(getMessage(throwable, "ERROR", className,methodName),false);
+				fileLogHandler.log(getMessage(throwable, "ERROR", className,methodName),true);
 			}
 			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_ERROR){
-				dbLogHandler.log(getMessage(throwable, "ERROR", className,methodName),false);
+				dbLogHandler.log(getMessage(throwable, "ERROR", className,methodName),true);
 			}
 		}
 
@@ -190,26 +191,26 @@ public class LoggerFactory {
 		public void fatal(String message) {
 			String methodName = getMethodNameSpecial();
 			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_FATAL){
-				consoleLogHandler.log(getMessage(message, "FATAL", className,methodName),false);
+				consoleLogHandler.log(getMessage(message, "FATAL", className,methodName),true);
 			}
 			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_FATAL){
-				fileLogHandler.log(getMessage(message, "FATAL", className,methodName),false);
+				fileLogHandler.log(getMessage(message, "FATAL", className,methodName),true);
 			}
 			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_FATAL){
-				dbLogHandler.log(getMessage(message, "FATAL", className,methodName),false);
+				dbLogHandler.log(getMessage(message, "FATAL", className,methodName),true);
 			}
 		}
 
 		public void fatal(Throwable throwable) {
 			String methodName = getMethodNameSpecial(throwable);
 			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_FATAL){
-				consoleLogHandler.log(getMessage(throwable, "FATAL", className,methodName),false);
+				consoleLogHandler.log(getMessage(throwable, "FATAL", className,methodName),true);
 			}
 			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_FATAL){
-				fileLogHandler.log(getMessage(throwable, "FATAL", className,methodName),false);
+				fileLogHandler.log(getMessage(throwable, "FATAL", className,methodName),true);
 			}
 			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_FATAL){
-				dbLogHandler.log(getMessage(throwable, "FATAL", className,methodName),false);
+				dbLogHandler.log(getMessage(throwable, "FATAL", className,methodName),true);
 			}
 		}
 		
@@ -314,26 +315,26 @@ public class LoggerFactory {
 		public void warn(String message) {
 			String methodName = getMethodNameGeneral();
 			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_WARN){
-				consoleLogHandler.log(getMessage(message, "WARN", className,methodName),false);
+				consoleLogHandler.log(getMessage(message, "WARN", className,methodName),true);
 			}
 			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_WARN){
-				fileLogHandler.log(getMessage(message, "WARN", className,methodName),false);
+				fileLogHandler.log(getMessage(message, "WARN", className,methodName),true);
 			}
 			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_WARN){
-				dbLogHandler.log(getMessage(message, "WARN", className,methodName),false);
+				dbLogHandler.log(getMessage(message, "WARN", className,methodName),true);
 			}
 		}
 
 		public void warn(Throwable throwable) {
 			String methodName = getMethodNameGeneral(throwable);
 			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_WARN){
-				consoleLogHandler.log(getMessage(throwable, "WARN", className,methodName),false);
+				consoleLogHandler.log(getMessage(throwable, "WARN", className,methodName),true);
 			}
 			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_WARN){
-				fileLogHandler.log(getMessage(throwable, "WARN", className,methodName),false);
+				fileLogHandler.log(getMessage(throwable, "WARN", className,methodName),true);
 			}
 			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_WARN){
-				dbLogHandler.log(getMessage(throwable, "WARN", className,methodName),false);
+				dbLogHandler.log(getMessage(throwable, "WARN", className,methodName),true);
 			}
 		}
 		
