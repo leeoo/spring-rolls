@@ -2,6 +2,7 @@ package org.paramecium.log.handler;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -22,22 +23,33 @@ public class FileLogHandler implements LogHandler {
 		writFile(message);
 	}
 	
-	public void writFile(String message){
-		try {
-			File file = new File(LoggerFactory.loggerFileName);
-			if(!file.exists()){
-				int lastLine = 0;
-				if(LoggerFactory.loggerFileName.lastIndexOf("/")>lastLine){
-					lastLine = LoggerFactory.loggerFileName.lastIndexOf("/");
-				}
-				if(LoggerFactory.loggerFileName.lastIndexOf("\\")>lastLine){
-					lastLine = LoggerFactory.loggerFileName.lastIndexOf("\\");
-				}
-				File dfile = new File(LoggerFactory.loggerFileName.substring(0,lastLine));
-				dfile.mkdir();
+	private static void writFile(String message){
+		File file = new File(LoggerFactory.loggerFileName);
+		if(!file.exists()){
+			int lastLine = 0;
+			if(LoggerFactory.loggerFileName.lastIndexOf("/")>lastLine){
+				lastLine = LoggerFactory.loggerFileName.lastIndexOf("/");
+			}
+			if(LoggerFactory.loggerFileName.lastIndexOf("\\")>lastLine){
+				lastLine = LoggerFactory.loggerFileName.lastIndexOf("\\");
+			}
+			File dfile = new File(LoggerFactory.loggerFileName.substring(0,lastLine));
+			dfile.mkdir();
+			try {
 				file.createNewFile();
-			}else{
-				FileInputStream inputStream = new FileInputStream(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+		}else{
+			FileInputStream inputStream = null;
+			try {
+				inputStream = new FileInputStream(file);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				return;
+			}
+			try {
 				if(inputStream.available()>LoggerFactory.loggerFileMax*1024*1024){//查看文件容量是否超出额定
 					int dotIndex = LoggerFactory.loggerFileName.lastIndexOf(".");
 					if(dotIndex<0){
@@ -49,18 +61,48 @@ public class FileLogHandler implements LogHandler {
 					LoggerFactory.loggerFileName = f1+newFileName+f2;
 					writFile(message);
 				}
-				inputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			if(file.canWrite()){
-				FileWriter writer = new FileWriter(file,true);
-				writer.write(message);
-				writer.flush();
-				writer.close();
-				return;
+			try {
+				if(inputStream!=null){
+					inputStream.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
+		}
+		if(file.canWrite()){
+			FileWriter writer = null;
+			try {
+				if(writer!=null){
+					writer = new FileWriter(file,true);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(writer!=null){
+					writer.write(message);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(writer!=null){
+					writer.flush();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(writer!=null){
+					writer.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
