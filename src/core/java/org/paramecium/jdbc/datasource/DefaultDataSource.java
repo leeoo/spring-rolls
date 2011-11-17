@@ -27,7 +27,7 @@ public class DefaultDataSource implements DataSource{
 	private final static Log logger = LoggerFactory.getLogger();
 	private final static ConcurrentMap<String,ConcurrentMap<Connection,Date>> connectionPool = new ConcurrentHashMap<String,ConcurrentMap<Connection,Date>>();
 	private PrintWriter printWriter;
-	private int poolMax = 5;//最大连接数
+	private int poolMax = 2;//最大连接数
 	private int poolBase = 3;//控制并发基数
 	private int connectLife = 120;//连接生命长度(秒)
 	private int reconnectionTime = 10;//失效后多久重连(秒)
