@@ -27,7 +27,7 @@ public class LoggerFactory {
 	private static int dbLoggerLevel = Log.LEVEL_ERROR;
 	
 	private final static Map<String,Integer> levelMap = new HashMap<String,Integer>();
-	public static String loggerFileName;
+	private static String loggerFileName;
 	public static int loggerFileMax = 10;
 	public static boolean sqlIsFormat = false;
 	public static boolean beanLogCollector = false;
@@ -86,6 +86,14 @@ public class LoggerFactory {
 		jdbcLogCollector = jdbcLogCollectorStr != null ? Boolean.valueOf(jdbcLogCollectorStr) : false;
 		webLogCollector = webLogCollectorStr != null ? Boolean.valueOf(webLogCollectorStr) : false;
 		CollectorFactory.setLogCollector(properties.get("logCollectorInterface"));
+	}
+	
+	/**
+	 * 获得文件名
+	 * @return
+	 */
+	public static String getLoggerFileName(){
+		return loggerFileName;
 	}
 	
 	/**

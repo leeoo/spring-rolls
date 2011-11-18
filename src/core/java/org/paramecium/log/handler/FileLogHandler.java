@@ -18,22 +18,24 @@ import org.paramecium.log.LoggerFactory;
  * <br>项 目 信 息:paramecium:org.paramecium.log.handler.FileLogHandler.java
  */
 public class FileLogHandler implements LogHandler {
+	
+	private static String currentFileName = LoggerFactory.getLoggerFileName();
 
 	public void log(String message, boolean isError) {
 		writFile(message);
 	}
 	
 	private static void writFile(String message){
-		File file = new File(LoggerFactory.loggerFileName);
+		File file = new File(currentFileName);
 		if(!file.exists()){
 			int lastLine = 0;
-			if(LoggerFactory.loggerFileName.lastIndexOf("/")>lastLine){
-				lastLine = LoggerFactory.loggerFileName.lastIndexOf("/");
+			if(currentFileName.lastIndexOf("/")>lastLine){
+				lastLine = currentFileName.lastIndexOf("/");
 			}
-			if(LoggerFactory.loggerFileName.lastIndexOf("\\")>lastLine){
-				lastLine = LoggerFactory.loggerFileName.lastIndexOf("\\");
+			if(currentFileName.lastIndexOf("\\")>lastLine){
+				lastLine = currentFileName.lastIndexOf("\\");
 			}
-			File dfile = new File(LoggerFactory.loggerFileName.substring(0,lastLine));
+			File dfile = new File(currentFileName.substring(0,lastLine));
 			dfile.mkdir();
 			try {
 				file.createNewFile();
@@ -51,15 +53,15 @@ public class FileLogHandler implements LogHandler {
 			}
 			try {
 				if(inputStream.available()>LoggerFactory.loggerFileMax*1024*1024){//查看文件容量是否超出额定
-					int dotIndex = LoggerFactory.loggerFileName.lastIndexOf(".");
+					int dotIndex = LoggerFactory.getLoggerFileName().lastIndexOf(".");
 					if(dotIndex<0){
-						dotIndex = LoggerFactory.loggerFileName.length();
+						dotIndex = LoggerFactory.getLoggerFileName().length();
 					}
-					String newFileName = new SimpleDateFormat("yyMMdd-HHmmss",java.util.Locale.CHINA).format(new Date());
-					String f1 = LoggerFactory.loggerFileName.substring(0,dotIndex);
-					String f2 = LoggerFactory.loggerFileName.substring(dotIndex,LoggerFactory.loggerFileName.length());
-					LoggerFactory.loggerFileName = f1+newFileName+f2;
-					writFile(message);
+					String newFileName = new SimpleDateFormat("yyyyMMdd-HHmmss",java.util.Locale.CHINA).format(new Date());
+					String f1 = LoggerFactory.getLoggerFileName().substring(0,dotIndex);
+					String f2 = LoggerFactory.getLoggerFileName().substring(dotIndex,LoggerFactory.getLoggerFileName().length());
+					currentFileName = f1+newFileName+f2;
+					file = new File(currentFileName);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
