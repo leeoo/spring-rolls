@@ -35,24 +35,24 @@ public class LoggerFactory {
 	public static boolean webLogCollector = false;
 	
 	static{
-		levelMap.put("trace", Log.LEVEL_TRACE);
-		levelMap.put("debug", Log.LEVEL_DEBUG);
-		levelMap.put("info", Log.LEVEL_INFO);
-		levelMap.put("warn", Log.LEVEL_WARN);
-		levelMap.put("error", Log.LEVEL_ERROR);
-		levelMap.put("fatal", Log.LEVEL_FATAL);
+		levelMap.put(Log.TRACE, Log.LEVEL_TRACE);
+		levelMap.put(Log.DEBUG, Log.LEVEL_DEBUG);
+		levelMap.put(Log.INFO, Log.LEVEL_INFO);
+		levelMap.put(Log.WARN, Log.LEVEL_WARN);
+		levelMap.put(Log.ERROR, Log.LEVEL_ERROR);
+		levelMap.put(Log.FATAL, Log.LEVEL_FATAL);
 		Map<String,String> properties = PropertiesUitls.get("/logger.properties");
 		{//控制台输出模式
 			String loggerLevel = properties.get("consoleLoggerLevel");
 			if(loggerLevel!=null){
-				consoleLoggerLevel = levelMap.get(loggerLevel.trim().toLowerCase());
+				consoleLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
 				consoleLogHandler = new ConsoleLogHandler();
 			}
 		}
 		{//文件输出模式
 			String loggerLevel = properties.get("fileLoggerLevel");
 			if(loggerLevel!=null){
-				fileLoggerLevel = levelMap.get(loggerLevel.toLowerCase());
+				fileLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
 				loggerFileName = properties.get("loggerFileName");
 				if(loggerFileName==null){
 					System.err.println("文件输出日志没有制定loggerFileName属性值!");
@@ -67,7 +67,7 @@ public class LoggerFactory {
 		{//数据库输出模式
 			String loggerLevel = properties.get("dbLoggerLevel");
 			if(loggerLevel!=null){
-				dbLoggerLevel = levelMap.get(loggerLevel.trim().toLowerCase());
+				dbLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
 				String loggerDbInterface = properties.get("loggerDbInterface");
 				if(loggerDbInterface==null){
 					System.err.println("数据库输出日志没有制定loggerDbInterface属性值!");
@@ -147,203 +147,127 @@ public class LoggerFactory {
 		
 		private String className;
 		
-		//以下为异常级别===============
-		
-		private String getMethodNameSpecial(){
-			Exception exception = new Exception();
-			String methodName = exception.getStackTrace()[1].getMethodName();// 获得调用者的方法名
-			methodName = methodName+"("+exception.getStackTrace()[1].getFileName()+":"+exception.getStackTrace()[1].getLineNumber()+")";// 获得调用者的文件名和行号
-			if(this.className==null){
-				className = exception.getStackTrace()[1].getClassName();// 获得调用者的类名
-			}
-			return methodName;
-		}
-
-		private String getMethodNameSpecial(Throwable throwable){
-			String methodName = throwable.getStackTrace()[1].getMethodName();// 获得调用者的方法名
-			methodName = methodName+"("+throwable.getStackTrace()[1].getFileName()+":"+throwable.getStackTrace()[1].getLineNumber()+")";// 获得调用者的文件名和行号
-			if(this.className==null){
-				className = throwable.getStackTrace()[1].getClassName();// 获得调用者的类名
-			}
-			return methodName;
-		}
-		
 		public void error(String message) {
-			String methodName = getMethodNameSpecial();
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_ERROR){
-				consoleLogHandler.log(getMessage(message, "ERROR", className,methodName),true);
-			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_ERROR){
-				fileLogHandler.log(getMessage(message, "ERROR", className,methodName),true);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_ERROR){
-				dbLogHandler.log(getMessage(message, "ERROR", className,methodName),true);
-			}
+			putLog(Log.ERROR, message, true);
 		}
 
-		
 		public void error(Throwable throwable) {
-			String methodName = getMethodNameSpecial(throwable);
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_ERROR){
-				consoleLogHandler.log(getMessage(throwable, "ERROR", className,methodName),true);
-			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_ERROR){
-				fileLogHandler.log(getMessage(throwable, "ERROR", className,methodName),true);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_ERROR){
-				dbLogHandler.log(getMessage(throwable, "ERROR", className,methodName),true);
-			}
+			putLog(Log.ERROR, throwable, true);
 		}
-
 		
 		public void fatal(String message) {
-			String methodName = getMethodNameSpecial();
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_FATAL){
-				consoleLogHandler.log(getMessage(message, "FATAL", className,methodName),true);
-			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_FATAL){
-				fileLogHandler.log(getMessage(message, "FATAL", className,methodName),true);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_FATAL){
-				dbLogHandler.log(getMessage(message, "FATAL", className,methodName),true);
-			}
+			putLog(Log.FATAL, message, true);
 		}
 
 		public void fatal(Throwable throwable) {
-			String methodName = getMethodNameSpecial(throwable);
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_FATAL){
-				consoleLogHandler.log(getMessage(throwable, "FATAL", className,methodName),true);
+			putLog(Log.FATAL, throwable, true);
+		}
+		
+		public void warn(String message) {
+			putLog(Log.WARN, message, true);
+		}
+
+		public void warn(Throwable throwable) {
+			putLog(Log.WARN, throwable, true);
+		}
+		
+		public void info(String message) {
+			putLog(Log.INFO, message, false);
+		}
+		
+		public void info(Throwable throwable) {
+			putLog(Log.INFO, throwable, false);
+		}
+
+		public void trace(String message) {
+			putLog(Log.TRACE, message, false);
+		}
+
+		public void trace(Throwable throwable) {
+			putLog(Log.TRACE, throwable, false);
+		}
+		
+		public void debug(String message) {
+			putLog(Log.DEBUG, message, false);
+		}
+
+		
+		public void debug(Throwable throwable) {
+			putLog(Log.DEBUG, throwable, false);
+		}
+		
+		private void putLog(String level,Throwable throwable,boolean isError){
+			String methodName = null;
+			if(isError){
+				methodName = getMethodNameGeneral(throwable);
+			}else{
+				methodName = getMethodNameSpecial(throwable);
 			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_FATAL){
-				fileLogHandler.log(getMessage(throwable, "FATAL", className,methodName),true);
+			int levelN = levelMap.get(level);
+			if(consoleLogHandler!=null && consoleLoggerLevel <= levelN){
+				consoleLogHandler.log(getMessage(throwable, level, className,methodName),isError);
 			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_FATAL){
-				dbLogHandler.log(getMessage(throwable, "FATAL", className,methodName),true);
+			if(fileLogHandler!=null && fileLoggerLevel <= levelN){
+				fileLogHandler.log(getMessage(throwable, level, className,methodName),isError);
+			}
+			if(dbLogHandler!=null && dbLoggerLevel <= levelN){
+				dbLogHandler.log(getMessage(throwable, level, className,methodName),isError);
 			}
 		}
 		
-		//以下为常规级别===============
+		private void putLog(String level,String message,boolean isError){
+			String methodName = null;
+			if(isError){
+				methodName = getMethodNameGeneral();
+			}else{
+				methodName = getMethodNameSpecial();
+			}
+			int levelN = levelMap.get(level);
+			if(consoleLogHandler!=null && consoleLoggerLevel <= levelN){
+				consoleLogHandler.log(getMessage(message, level, className,methodName),isError);
+			}
+			if(fileLogHandler!=null && fileLoggerLevel <= levelN){
+				fileLogHandler.log(getMessage(message, level, className,methodName),isError);
+			}
+			if(dbLogHandler!=null && dbLoggerLevel <= levelN){
+				dbLogHandler.log(getMessage(message, level, className,methodName),isError);
+			}
+		}
 		
 		private String getMethodNameGeneral(){
 			Exception exception = new Exception();
-			String methodName = exception.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+			String methodName = exception.getStackTrace()[3].getMethodName();// 获得调用者的方法名
 			if(this.className==null){
-				className = exception.getStackTrace()[1].getClassName();// 获得调用者的类名
+				className = exception.getStackTrace()[3].getClassName();// 获得调用者的类名
 			}
 			return methodName;
 		}
 
 		private String getMethodNameGeneral(Throwable throwable){
-			String methodName = throwable.getStackTrace()[1].getMethodName();// 获得调用者的方法名
+			String methodName = throwable.getStackTrace()[3].getMethodName();// 获得调用者的方法名
 			if(this.className==null){
-				className = throwable.getStackTrace()[1].getClassName();// 获得调用者的类名
+				className = throwable.getStackTrace()[3].getClassName();// 获得调用者的类名
+			}
+			return methodName;
+		}
+		
+		private String getMethodNameSpecial(){
+			Exception exception = new Exception();
+			String methodName = exception.getStackTrace()[3].getMethodName();// 获得调用者的方法名
+			methodName = methodName+"("+exception.getStackTrace()[3].getFileName()+":"+exception.getStackTrace()[3].getLineNumber()+")";// 获得调用者的文件名和行号
+			if(this.className==null){
+				className = exception.getStackTrace()[3].getClassName();// 获得调用者的类名
 			}
 			return methodName;
 		}
 
-		public void info(String message) {
-			String methodName = getMethodNameGeneral();
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_INFO){
-				consoleLogHandler.log(getMessage(message, "INFO", className,methodName),false);
+		private String getMethodNameSpecial(Throwable throwable){
+			String methodName = throwable.getStackTrace()[3].getMethodName();// 获得调用者的方法名
+			methodName = methodName+"("+throwable.getStackTrace()[3].getFileName()+":"+throwable.getStackTrace()[3].getLineNumber()+")";// 获得调用者的文件名和行号
+			if(this.className==null){
+				className = throwable.getStackTrace()[3].getClassName();// 获得调用者的类名
 			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_INFO){
-				fileLogHandler.log(getMessage(message, "INFO", className,methodName),false);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_INFO){
-				dbLogHandler.log(getMessage(message, "INFO", className,methodName),false);
-			}
-		}
-		
-		public void info(Throwable throwable) {
-			String methodName = getMethodNameGeneral(throwable);
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_INFO){
-				consoleLogHandler.log(getMessage(throwable, "INFO", className,methodName),false);
-			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_INFO){
-				fileLogHandler.log(getMessage(throwable, "INFO", className,methodName),false);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_INFO){
-				dbLogHandler.log(getMessage(throwable, "INFO", className,methodName),false);
-			}
-		}
-
-		public void trace(String message) {
-			String methodName = getMethodNameGeneral();
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_TRACE){
-				consoleLogHandler.log(getMessage(message, "TRACE", className,methodName),false);
-			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_TRACE){
-				fileLogHandler.log(getMessage(message, "TRACE", className,methodName),false);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_TRACE){
-				dbLogHandler.log(getMessage(message, "TRACE", className,methodName),false);
-			}
-		}
-
-		public void trace(Throwable throwable) {
-			String methodName = getMethodNameGeneral(throwable);
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_TRACE){
-				consoleLogHandler.log(getMessage(throwable, "TRACE", className,methodName),false);
-			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_TRACE){
-				fileLogHandler.log(getMessage(throwable, "TRACE", className,methodName),false);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_TRACE){
-				dbLogHandler.log(getMessage(throwable, "TRACE", className,methodName),false);
-			}
-		}
-		
-		public void debug(String message) {
-			String methodName = getMethodNameGeneral();
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_DEBUG){
-				consoleLogHandler.log(getMessage(message, "DEBUG", className,methodName),false);
-			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_DEBUG){
-				fileLogHandler.log(getMessage(message, "DEBUG", className,methodName),false);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_DEBUG){
-				dbLogHandler.log(getMessage(message, "DEBUG", className,methodName),false);
-			}
-		}
-
-		
-		public void debug(Throwable throwable) {
-			String methodName = getMethodNameGeneral(throwable);
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_DEBUG){
-				consoleLogHandler.log(getMessage(throwable, "DEBUG", className,methodName),false);
-			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_DEBUG){
-				fileLogHandler.log(getMessage(throwable, "DEBUG", className,methodName),false);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_DEBUG){
-				dbLogHandler.log(getMessage(throwable, "DEBUG", className,methodName),false);
-			}
-		}
-		
-		public void warn(String message) {
-			String methodName = getMethodNameGeneral();
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_WARN){
-				consoleLogHandler.log(getMessage(message, "WARN", className,methodName),true);
-			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_WARN){
-				fileLogHandler.log(getMessage(message, "WARN", className,methodName),true);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_WARN){
-				dbLogHandler.log(getMessage(message, "WARN", className,methodName),true);
-			}
-		}
-
-		public void warn(Throwable throwable) {
-			String methodName = getMethodNameGeneral(throwable);
-			if(consoleLogHandler!=null && consoleLoggerLevel <= Log.LEVEL_WARN){
-				consoleLogHandler.log(getMessage(throwable, "WARN", className,methodName),true);
-			}
-			if(fileLogHandler!=null && fileLoggerLevel <= Log.LEVEL_WARN){
-				fileLogHandler.log(getMessage(throwable, "WARN", className,methodName),true);
-			}
-			if(dbLogHandler!=null && dbLoggerLevel <= Log.LEVEL_WARN){
-				dbLogHandler.log(getMessage(throwable, "WARN", className,methodName),true);
-			}
+			return methodName;
 		}
 		
 	}

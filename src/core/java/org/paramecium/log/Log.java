@@ -14,6 +14,13 @@ public interface Log{
 	public static final int LEVEL_WARN = 7;
 	public static final int LEVEL_ERROR = 9;
 	public static final int LEVEL_FATAL = 11;
+
+	public static final String TRACE = "TRACE";
+	public static final String DEBUG = "DEBUG";
+	public static final String INFO = "INFO";
+	public static final String WARN = "WARN";
+	public static final String ERROR = "ERROR";
+	public static final String FATAL = "FATAL";
 	
 	/**
 	 * 跟踪级别输出
