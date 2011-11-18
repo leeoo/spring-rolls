@@ -33,6 +33,9 @@ public class LoggerFactory {
 	public static boolean beanLogCollector = false;
 	public static boolean jdbcLogCollector = false;
 	public static boolean webLogCollector = false;
+	public static boolean isConsole = false;
+	public static boolean isFile = false;
+	public static boolean isDb = false;
 	
 	static{
 		levelMap.put(Log.TRACE, Log.LEVEL_TRACE);
@@ -47,6 +50,7 @@ public class LoggerFactory {
 			if(loggerLevel!=null){
 				consoleLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
 				consoleLogHandler = new ConsoleLogHandler();
+				isConsole = true;
 			}
 		}
 		{//文件输出模式
@@ -61,7 +65,7 @@ public class LoggerFactory {
 				String loggerFileMaxStr = properties.get("loggerFileMax");
 				loggerFileMax = loggerFileMaxStr!=null?Integer.parseInt(loggerFileMaxStr):loggerFileMax;
 				fileLogHandler = new FileLogHandler();
-				
+				isFile = true;
 			}
 		}
 		{//数据库输出模式
@@ -75,6 +79,7 @@ public class LoggerFactory {
 				}
 				DataBaseLogHandler.setDbInterface(loggerDbInterface);
 				dbLogHandler = new DataBaseLogHandler();
+				isDb = true;
 			}
 		}
 		String sqlIsFormatStr = properties.get("sqlIsFormat");
@@ -204,13 +209,13 @@ public class LoggerFactory {
 				methodName = getMethodNameGeneral(throwable);
 			}
 			int levelN = levelMap.get(level);
-			if(consoleLogHandler!=null && consoleLoggerLevel <= levelN){
+			if(isConsole && consoleLoggerLevel <= levelN){
 				consoleLogHandler.log(getMessage(throwable, level, className,methodName),isError);
 			}
-			if(fileLogHandler!=null && fileLoggerLevel <= levelN){
+			if(isFile && fileLoggerLevel <= levelN){
 				fileLogHandler.log(getMessage(throwable, level, className,methodName),isError);
 			}
-			if(dbLogHandler!=null && dbLoggerLevel <= levelN){
+			if(isDb && dbLoggerLevel <= levelN){
 				dbLogHandler.log(getMessage(throwable, level, className,methodName),isError);
 			}
 		}
@@ -223,13 +228,13 @@ public class LoggerFactory {
 				methodName = getMethodNameGeneral();
 			}
 			int levelN = levelMap.get(level);
-			if(consoleLogHandler!=null && consoleLoggerLevel <= levelN){
+			if(isConsole && consoleLoggerLevel <= levelN){
 				consoleLogHandler.log(getMessage(message, level, className,methodName),isError);
 			}
-			if(fileLogHandler!=null && fileLoggerLevel <= levelN){
+			if(isFile && fileLoggerLevel <= levelN){
 				fileLogHandler.log(getMessage(message, level, className,methodName),isError);
 			}
-			if(dbLogHandler!=null && dbLoggerLevel <= levelN){
+			if(isDb && dbLoggerLevel <= levelN){
 				dbLogHandler.log(getMessage(message, level, className,methodName),isError);
 			}
 		}
