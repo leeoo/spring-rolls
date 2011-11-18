@@ -30,6 +30,14 @@ public class SpecialFilter implements Filter{
 		response.setCharacterEncoding(encoding);
 		chain.doFilter(request, response);
 	}
+	
+	/**
+	 * 获得当前系统的字符集
+	 * @return
+	 */
+	public static String getEncoding(){
+		return encoding;
+	}
 
 	public void destroy() {
 	}
