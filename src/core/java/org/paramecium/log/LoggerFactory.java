@@ -199,9 +199,9 @@ public class LoggerFactory {
 		private void putLog(String level,Throwable throwable,boolean isError){
 			String methodName = null;
 			if(isError){
-				methodName = getMethodNameGeneral(throwable);
-			}else{
 				methodName = getMethodNameSpecial(throwable);
+			}else{
+				methodName = getMethodNameGeneral(throwable);
 			}
 			int levelN = levelMap.get(level);
 			if(consoleLogHandler!=null && consoleLoggerLevel <= levelN){
@@ -218,9 +218,9 @@ public class LoggerFactory {
 		private void putLog(String level,String message,boolean isError){
 			String methodName = null;
 			if(isError){
-				methodName = getMethodNameGeneral();
-			}else{
 				methodName = getMethodNameSpecial();
+			}else{
+				methodName = getMethodNameGeneral();
 			}
 			int levelN = levelMap.get(level);
 			if(consoleLogHandler!=null && consoleLoggerLevel <= levelN){
