@@ -8,8 +8,6 @@ import java.io.InputStreamReader;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
-import com.sun.xml.internal.ws.util.UtilException;
-
 /**
  * 功 能 描 述:<br>
  * 命令行工具
@@ -37,14 +35,11 @@ public class CommandUtils {
 
 
 	/**
-	 * 执行同步Shell命令并返回执行结果
-	 * 
+	 * 获得命令行返回结果
 	 * @param cmd
-	 *            命令行
-	 * @return 返回执行结果
-	 * @throws UtilException
+	 * @return
 	 */
-	public static String getSynchRunResult(String cmd) {
+	public static String getRunResult(String cmd) {
 		StringBuilder sb = new StringBuilder();
 		InputStream in = run(cmd).getInputStream();
 		InputStreamReader isr = new InputStreamReader(in);
@@ -83,11 +78,9 @@ public class CommandUtils {
 
 
 	/**
-	 * 检测程序。
-	 * 
+	 * 验证命令是否可用
 	 * @param processName
-	 *            线程的名字，请使用准确的名字
-	 * @return 找到返回true,没找到返回false
+	 * @return
 	 */
 	public static boolean findProcess(String processName) {
 		BufferedReader bufferedReader = null;
