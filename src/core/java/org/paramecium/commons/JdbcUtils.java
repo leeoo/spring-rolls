@@ -27,6 +27,11 @@ public abstract class JdbcUtils {
 	
 	private static final char[] END = new char[] { ' ', ',', ')', '(', '!', '|', '=', '+', '-', '*', '%', '/', '^', '\\', '<', '>', '"', '\'', ':', '&', ';','	' };
 
+	private static final String C_MARK = ":";
+	private static final String Q_MARK = "?";
+	private static final String N_MARK = " ";
+	
+	
 	private static boolean isEND(char c) {
 		if (Character.isWhitespace(c)) {
 			return true;
@@ -40,7 +45,7 @@ public abstract class JdbcUtils {
 	}
 	
 	public static String getNativeDMLSql(String sql){
-		int splite = sql.indexOf(": ");
+		int splite = sql.indexOf(C_MARK.concat(N_MARK));
 		if(splite>-1){
 			sql = sql.substring(splite+1,sql.length());
 		}
@@ -76,14 +81,14 @@ public abstract class JdbcUtils {
 			} else if (isReading) {
 				if (isEND(c)) {
 					isReading = false;
-					jdbcSql = jdbcSql.replaceFirst(":" + tempFildeName, "?");
+					jdbcSql = jdbcSql.replaceFirst(C_MARK.concat(tempFildeName.toString()), Q_MARK);
 					value.put(pcount++, mapParams.get(tempFildeName.toString()));
 					tempFildeName = new StringBuffer();;
 				} else {
 					tempFildeName.append(c);
 					if (i + 1 == cs.length) {
 						isReading = false;
-						jdbcSql = jdbcSql.replaceFirst(":" + tempFildeName, "?");
+						jdbcSql = jdbcSql.replaceFirst(C_MARK.concat(tempFildeName.toString()), Q_MARK);
 						value.put(pcount++, mapParams.get(tempFildeName.toString()));
 						tempFildeName = new StringBuffer();;
 					}
