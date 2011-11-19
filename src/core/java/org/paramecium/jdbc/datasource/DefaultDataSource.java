@@ -108,7 +108,7 @@ public class DefaultDataSource implements DataSource{
 				}
 				long currentTime = EncodeUtils.millisTime();
 				long lastUseTime = connectionPool.get(ds).get(connection);
-				if((currentTime-lastUseTime)>poolBase*poolMax){//只要有间隔，可错开多线程
+				if((currentTime-lastUseTime)>poolBase){//只要有间隔，可错开多线程
 					return connection;
 				}
 			} catch (Exception e) {
