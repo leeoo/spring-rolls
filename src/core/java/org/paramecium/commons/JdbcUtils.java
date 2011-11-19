@@ -61,7 +61,7 @@ public abstract class JdbcUtils {
 	public static Map<Integer, Object> getPreparedStatementSql(final String sql,Map<String, Object> mapParams) throws SQLException {
 		String jdbcSql = sql;
 		Map<Integer, Object> value = new HashMap<Integer, Object>();
-		StringBuffer tempFildeName = new StringBuffer("");
+		StringBuffer tempFildeName = new StringBuffer();
 		boolean isReading = false;
 		char[] cs = jdbcSql.toCharArray();
 		int pcount = 1;
@@ -78,14 +78,14 @@ public abstract class JdbcUtils {
 					isReading = false;
 					jdbcSql = jdbcSql.replaceFirst(":" + tempFildeName, "?");
 					value.put(pcount++, mapParams.get(tempFildeName.toString()));
-					tempFildeName = new StringBuffer("");;
+					tempFildeName = new StringBuffer();;
 				} else {
 					tempFildeName.append(c);
 					if (i + 1 == cs.length) {
 						isReading = false;
 						jdbcSql = jdbcSql.replaceFirst(":" + tempFildeName, "?");
 						value.put(pcount++, mapParams.get(tempFildeName.toString()));
-						tempFildeName = new StringBuffer("");;
+						tempFildeName = new StringBuffer();;
 					}
 				}
 			}
