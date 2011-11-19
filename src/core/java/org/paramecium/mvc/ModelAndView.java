@@ -58,7 +58,7 @@ public class ModelAndView implements Serializable,Cloneable{
 	 * @return
 	 */
 	public <T> T getBean(String beanName,Class<T> clazz){
-		String bn = beanName.concat(".");
+		String bn = beanName.concat(ServletConstant.dotStr);
 		T bean = null;
 		try {
 			bean = clazz.newInstance();
@@ -228,10 +228,10 @@ public class ModelAndView implements Serializable,Cloneable{
 	 * @param encoding
 	 */
 	public ModelAndView download(byte[] file,String fileName,String encoding){
-		encoding = encoding!=null?encoding:"utf-8";
-		fileName = fileName!=null?fileName:"file";
-		response.setContentType("application/octet-stream;charset="+encoding);
-		response.setHeader( "Content-Disposition", "attachment;filename="+fileName);
+		encoding = encoding!=null?encoding:SpecialFilter.getEncoding();
+		fileName = fileName!=null?fileName:ServletConstant.FILENAME;
+		response.setContentType(ServletConstant.APPLICATION.concat(encoding));
+		response.setHeader(ServletConstant.CONTENT, ServletConstant.ATTACH.concat(fileName));
 		try{
 			OutputStream outStream = response.getOutputStream();
 			outStream.write(file);
@@ -257,8 +257,8 @@ public class ModelAndView implements Serializable,Cloneable{
 	 * @param encoding
 	 */
 	public ModelAndView printXML(String xml,String encoding){
-		encoding = encoding!=null?encoding:"utf-8";
-		response.setContentType("text/xml;charset="+encoding);
+		encoding = encoding!=null?encoding:SpecialFilter.getEncoding();
+		response.setContentType(ServletConstant.TEXT_XML.concat(encoding));
 		try{
 			PrintWriter writer = response.getWriter();
 			writer.write(xml);
@@ -284,8 +284,8 @@ public class ModelAndView implements Serializable,Cloneable{
 	 * @param encoding
 	 */
 	public ModelAndView printJSON(String json,String encoding){
-		encoding = encoding!=null?encoding:"utf-8";
-		response.setContentType("text/html;charset="+encoding);
+		encoding = encoding!=null?encoding:SpecialFilter.getEncoding();
+		response.setContentType(ServletConstant.TEXT_HTML.concat(encoding));
 		try{
 			PrintWriter writer = response.getWriter();
 			writer.write(json);

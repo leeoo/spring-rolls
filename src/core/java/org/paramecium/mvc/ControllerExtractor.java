@@ -30,11 +30,10 @@ import org.paramecium.security.exception.UserKickException;
  * <br>开 发 日 期:2011-4-18下午02:02:53
  * <br>项 目 信 息:paramecium:org.paramecium.mvc.ControllerExtractor.java
  */
-public class ControllerExtractor {
+public class ControllerExtractor implements ServletConstant{
 	
 	private final static Log logger = LoggerFactory.getLogger();
-	private final static String dotStr = ".";
-	private final static String lineStr = "/";
+	
 	
 	/**
 	 * 开始提取
@@ -123,7 +122,7 @@ public class ControllerExtractor {
 			e.printStackTrace();
 			logger.error(e.getCause());
 			//将异常放入request,Jsp中的exception对象实际为request中定义的一个特定值KEY对应的Exception对象.
-			request.setAttribute(ServletConstant.PAGE_CONTEXT_EXCEPTION, e.getCause());
+			request.setAttribute(PAGE_CONTEXT_EXCEPTION, e.getCause());
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 		} catch (IOException ioe) {
 			logger.error(ioe);
