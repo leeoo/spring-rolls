@@ -39,7 +39,7 @@ public abstract class PropertiesUitls {
 		Map<String,String> values = null;
 		for(Object key : properties.keySet()){
 			String property = (String)key;
-			int dotIndex = property.indexOf(".");
+			int dotIndex = property.indexOf('.');
 			String newType = property.substring(0,dotIndex);//类型名
 			String value = property.substring(dotIndex+1,property.length());//同类型下的属性名
 			String proValue = properties.getProperty(property);//属性值

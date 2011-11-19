@@ -13,11 +13,13 @@ public abstract class PathUtils {
 	
 	public static String webClassRootPath = null;
 
+	private final static String P = "/";
+	
 	public static String getClassRootPath(){
 		if(webClassRootPath!=null){
 			return webClassRootPath;
 		}
-		return System.class.getResource("/").getFile();
+		return System.class.getResource(P).getFile();
 	}
 	
 	public static String getClassFile(String fileName){
