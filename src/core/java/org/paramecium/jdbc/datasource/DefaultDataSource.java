@@ -4,13 +4,12 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.sql.DataSource;
 
-import org.paramecium.commons.DateUtils;
+import org.paramecium.commons.EncodeUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
@@ -25,7 +24,7 @@ import org.paramecium.log.LoggerFactory;
 public class DefaultDataSource implements DataSource{
 	private final static Log logger = LoggerFactory.getLogger();
 	private boolean isInit = false;//判断是否实例化后被使用过
-	private final static ConcurrentMap<String,ConcurrentMap<Connection,Date>> connectionPool = new ConcurrentHashMap<String,ConcurrentMap<Connection,Date>>();
+	private final static ConcurrentMap<String,ConcurrentMap<Connection,Long>> connectionPool = new ConcurrentHashMap<String,ConcurrentMap<Connection,Long>>();
 	private PrintWriter printWriter;
 	private int poolMax = 2;//最大连接数
 	private int poolBase = 3;//控制并发基数
@@ -79,7 +78,7 @@ public class DefaultDataSource implements DataSource{
 				return;
 			}
 			if(connection!=null){
-				connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
+				connectionPool.get(ds).put(connection, EncodeUtils.millisTime());
 			}
 		}
 		logger.debug("新的连接被放入连接池,当前连接数："+connectionPool.get(ds).size());
@@ -90,10 +89,10 @@ public class DefaultDataSource implements DataSource{
 	 */
 	public synchronized Connection getConnection(){
 		if(connectionPool.get(ds)==null){//由于是运行时构建数据源实例，很多属性需要之后填充,之所以不把此处放在构造方法中，是因为当时ds还没有被赋值.
-			connectionPool.put(ds, new ConcurrentHashMap<Connection, Date>());
+			connectionPool.put(ds, new ConcurrentHashMap<Connection, Long>());
 		}
 		Connection connection = getConnectionFromPool();
-		connectionPool.get(ds).put(connection, DateUtils.getCurrentDateTime());
+		connectionPool.get(ds).put(connection, EncodeUtils.millisTime());
 		return connection;
 	}
 	
@@ -107,8 +106,8 @@ public class DefaultDataSource implements DataSource{
 				if (!connection.getAutoCommit()) {//查看是否正在使用，如果多线程的话可能会出现失误，不过没关系，下面仍有处理
 					continue;
 				}
-				long currentTime = DateUtils.getCurrentDateTime().getTime();
-				long lastUseTime = connectionPool.get(ds).get(connection).getTime();
+				long currentTime = EncodeUtils.millisTime();
+				long lastUseTime = connectionPool.get(ds).get(connection);
 				if((currentTime-lastUseTime)>poolBase*poolMax){//只要有间隔，可错开多线程
 					return connection;
 				}
@@ -146,13 +145,13 @@ public class DefaultDataSource implements DataSource{
 						continue;
 					}
 					logger.debug("默认数据源连接池当前数量为："+connectionPool.get(ds).size());
-					long currentTime = DateUtils.getCurrentDateTime().getTime();
+					long currentTime = EncodeUtils.millisTime();
 					for (Connection connection : connectionPool.get(ds).keySet()) {
 						try {
 							if(!connection.getAutoCommit()){
 								continue;
 							}
-							int bw = (int)((currentTime-(connectionPool.get(ds).get(connection)).getTime())/1000);//最近一次获得连接时间距现在有多久
+							int bw = (int)((currentTime-connectionPool.get(ds).get(connection))/1000);//最近一次获得连接时间距现在有多久
 							if(bw<connectLife){//如果间隔时间小于指定时间,说明使用较为频繁,暂不做清理
 								continue;
 							}

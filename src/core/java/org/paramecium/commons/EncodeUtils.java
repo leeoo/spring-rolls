@@ -59,6 +59,14 @@ public abstract class EncodeUtils {
 	}
 
 	/**
+	 * 获得当前豪秒值
+	 * @return
+	 */
+	public static long millisTime(){
+		return System.currentTimeMillis();
+	}
+
+	/**
 	 * BASE64解密
 	 * 
 	 * @param key
