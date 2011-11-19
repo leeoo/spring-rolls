@@ -162,7 +162,7 @@ public abstract class BeanUtils {
 		for (int i = 0; i < propertyName.length(); i++) {
 			char ch = propertyName.charAt(i);
 			if (Character.isUpperCase(ch)) {
-				strb.append("_");
+				strb.append('_');
 				strb.append(Character.toLowerCase(ch));
 			} else {
 				strb.append(ch);
