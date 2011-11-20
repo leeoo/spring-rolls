@@ -89,7 +89,8 @@ public class DefaultDataSource implements DataSource{
 	 */
 	public synchronized Connection getConnection(){
 		if(connectionPool.get(ds)==null){//由于是运行时构建数据源实例，很多属性需要之后填充,之所以不把此处放在构造方法中，是因为当时ds还没有被赋值.
-			connectionPool.put(ds, new ConcurrentHashMap<Connection, Long>());
+			ConcurrentMap<Connection, Long> connectionMap = new ConcurrentHashMap<Connection, Long>();
+			connectionPool.put(ds, connectionMap);
 		}
 		Connection connection = getConnectionFromPool();
 		connectionPool.get(ds).put(connection, EncodeUtils.millisTime());
