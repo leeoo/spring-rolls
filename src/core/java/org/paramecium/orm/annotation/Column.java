@@ -32,7 +32,7 @@ public @interface Column {
 	 * 是否参与动态查询
 	 * @return
 	 */
-	boolean isDynamicWhere() default true;
+	boolean isDynamicWhere() default false;
 	
 	/**
 	 * 逻辑运算符
