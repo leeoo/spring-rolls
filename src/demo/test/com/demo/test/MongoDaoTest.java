@@ -1,8 +1,14 @@
 package com.demo.test;
 
 import java.sql.SQLException;
-
-public class TestMongoDao {
+/**
+ * 功 能 描 述:<br>
+ * mongo测试
+ * <br>代 码 作 者:曹阳(CaoYang)
+ * <br>开 发 日 期:2011-11-23下午03:02:07
+ * <br>项 目 信 息:paramecium:com.demo.test.MongoDaoTest.java
+ */
+public class MongoDaoTest {
 	
 	public static void main(String[] args) throws SQLException {
 		/*MessageService messageService = (MessageService)ApplicationContext.getNotSecurityBean("messageService");
