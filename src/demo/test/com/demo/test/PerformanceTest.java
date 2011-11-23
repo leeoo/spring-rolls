@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.paramecium.commons.DateUtils;
 import org.paramecium.ioc.ApplicationContext;
 
+import com.demo.service.PriorityService;
+
 /**
  * 功 能 描 述:<br>
  * 性能测试
@@ -15,6 +17,7 @@ import org.paramecium.ioc.ApplicationContext;
 public class PerformanceTest {
 	
 	public static void main(String[] args) throws Exception {
+		PriorityService.createTables();
 		for(int i =0;i <4500;i++){
 			new TestRunner().start();
 		}
