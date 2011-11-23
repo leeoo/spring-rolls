@@ -2,21 +2,20 @@ package com.demo.test;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.UUID;
 
-import org.paramecium.commons.DateUtils;
-import org.paramecium.ioc.ApplicationContext;
 import org.paramecium.jdbc.datasource.MultiDataSourceFactory;
 
-
+/**
+ * 功 能 描 述:<br>
+ * 数据结构初始化
+ * <br>代 码 作 者:曹阳(CaoYang)
+ * <br>开 发 日 期:2011-11-23下午02:59:24
+ * <br>项 目 信 息:paramecium:com.demo.test.Init.java
+ */
 public class Init {
 	
-	static int j = 0;;
-
 	public static void main(String[] args) throws Exception {
-		for(int i =0;i <4500;i++){
-			new TestRunner().start();
-		}
+		createTables();
 	}
 	
 	public static void createTables() throws Exception{
@@ -29,28 +28,7 @@ public class Init {
 		st.execute("CREATE TABLE performance_test(id INT PRIMARY KEY AUTO_INCREMENT,name VARCHAR(500) NOT NULL,date DATE NOT NULL)");
 	}
 	
-	static class TestRunner extends Thread {
-		
-		PerformanceService performanceService =  (PerformanceService) ApplicationContext.getNotSecurityBean("performanceService");
-		
-		public void save(){
-			Performance performance = new Performance();
-			while(true){
-				performance.setName(UUID.randomUUID().toString());
-				performance.setDate(DateUtils.getCurrentDateTime());
-				try {
-					performanceService.save(performance);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		public void run() {
-			save();
-		}
-		
-	}
+	
 	
 }
 
