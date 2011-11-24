@@ -38,7 +38,7 @@ public class UserController extends BaseController{
 	@ShowLabel("获取列表数据")
 	@MappingMethod
 	public void data(ModelAndView mv){
-		int pageNo = mv.getValue("page", Integer.class);
+		int pageNo = mv.getValue("page", int.class);
 		Page page = new Page();
 		page.setPageNo(pageNo);
 		page.setPageSize(20);
