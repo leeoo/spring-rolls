@@ -89,6 +89,7 @@ public class ApplicationContext {
 				Object object = getNotSecurityBean(instanceName);
 				Method method = object.getClass().getMethod(methodName);
 				method.invoke(object);
+				logger.debug(priority.concat("优先执行成功!"));
 				destroy();
 			}
 		} catch (Throwable e) {
