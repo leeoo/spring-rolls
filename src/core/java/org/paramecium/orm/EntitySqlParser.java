@@ -18,13 +18,13 @@ import org.paramecium.orm.annotation.VirtualColumn;
 import org.paramecium.orm.annotation.PrimaryKey.AUTO_GENERATE_MODE;
 /**
  * 功能描述(Description):<br><b>
- * 构建实体所对应的Sql语句
+ * Sql语句分析器
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-10-13下午10:19:11</b>
  * <br>项目名称(Project Name): <b>paramecium</b>
- * <br>包及类名(Package Class): <b>org.paramecium.orm.EntitySqlBuilder.java</b>
+ * <br>包及类名(Package Class): <b>org.paramecium.orm.EntitySqlParser.java</b>
  */
-public class EntitySqlBuilder {
+public class EntitySqlParser {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 

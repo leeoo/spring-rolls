@@ -57,7 +57,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 	public Number insert(T bean) throws Exception {
 		Number value = genericOrmDao.insert(bean);
 		if(value != null){
-			BeanUtils.setFieldValue(bean, EntitySqlBuilder.getPkName(clazz), value);
+			BeanUtils.setFieldValue(bean, EntitySqlParser.getPkName(clazz), value);
 		}
 		SearchIndexCreator.createIndex(bean);
 		cache.clear();
@@ -70,7 +70,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 	 * @throws Exception
 	 */
 	public void update(T bean) throws Exception {
-		T oBean = genericOrmDao.select((PK)BeanUtils.getFieldValue(bean, EntitySqlBuilder.getPkName(clazz)));
+		T oBean = genericOrmDao.select((PK)BeanUtils.getFieldValue(bean, EntitySqlParser.getPkName(clazz)));
 		genericOrmDao.update(bean);
 		SearchIndexCreator.removeIndex(oBean);
 		SearchIndexCreator.createIndex(bean);
@@ -118,7 +118,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 			page.setPageNo(1);
 			return page;
 		}
-		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
+		String sql = EntitySqlParser.getSelectSqlByPk(clazz);
 		int last = sql.lastIndexOf("=");
 		int where = sql.toLowerCase().lastIndexOf("where");
 		String countSql = BaseDialect.getCountSql(sql.substring(0, where));
@@ -162,7 +162,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		if(pks == null){
 			Collection<String> keywords = SearchIndexCreator.searchKeyword(clazz, text,count);
 			List<Serializable> list = new LinkedList<Serializable>();
-			Class type = EntitySqlBuilder.getPkType(clazz);
+			Class type = EntitySqlParser.getPkType(clazz);
 			for(String keyword : keywords){
 				if (String.class.equals(type)){
 					list.add(keyword);

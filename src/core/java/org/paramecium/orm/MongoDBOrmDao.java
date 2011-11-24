@@ -63,7 +63,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public Number insert(T bean) throws Exception {
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
-		EntitySqlBuilder.isEntity(entity);
+		EntitySqlParser.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject object = new BasicDBObject();
 		long id = 0;
@@ -101,7 +101,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public void insert(Collection<T> beans) throws Exception {
 		Entity entity = beans.iterator().next().getClass().getAnnotation(Entity.class);
-		EntitySqlBuilder.isEntity(entity);
+		EntitySqlParser.isEntity(entity);
 		String tableName = entity.tableName();
 		List<DBObject> objects = new ArrayList<DBObject>();
 		for(T bean : beans){
@@ -148,7 +148,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	private void updateMongo(T bean,boolean isNoNull){
 		Entity entity = bean.getClass().getAnnotation(Entity.class);
-		EntitySqlBuilder.isEntity(entity);
+		EntitySqlParser.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject object = new BasicDBObject();
 		DBObject where = new BasicDBObject();
@@ -182,7 +182,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public void delete(PK primaryKey)throws Exception {
 		Entity entity = clazz.getAnnotation(Entity.class);
-		EntitySqlBuilder.isEntity(entity);
+		EntitySqlParser.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject where = new BasicDBObject();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -223,7 +223,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	private static DBObject buildWhere(Object whereBean){
 		Entity entity = whereBean.getClass().getAnnotation(Entity.class);
 		DBObject where = new BasicDBObject();
-		EntitySqlBuilder.isEntity(entity);
+		EntitySqlParser.isEntity(entity);
 		for (Class<?> superClass = whereBean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
@@ -279,7 +279,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	@SuppressWarnings("unchecked")
 	public T select(PK primaryKey){
 		Entity entity = clazz.getAnnotation(Entity.class);
-		EntitySqlBuilder.isEntity(entity);
+		EntitySqlParser.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject where = new BasicDBObject();
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -308,7 +308,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public Page select(Page page){
 		Entity entity = clazz.getAnnotation(Entity.class);
-		EntitySqlBuilder.isEntity(entity);
+		EntitySqlParser.isEntity(entity);
 		String tableName = entity.tableName();
 		long count = mongoDao.count(tableName);
 		page.setTotalCount((int)count);
@@ -338,7 +338,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public Page select(Page page,T whereBean){
 		Entity entity = clazz.getAnnotation(Entity.class);
-		EntitySqlBuilder.isEntity(entity);
+		EntitySqlParser.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject where = buildWhere(whereBean);
 		long count = mongoDao.count(tableName,where);
@@ -370,7 +370,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 	 */
 	public Collection<T> select(T whereBean){
 		Entity entity = clazz.getAnnotation(Entity.class);
-		EntitySqlBuilder.isEntity(entity);
+		EntitySqlParser.isEntity(entity);
 		String tableName = entity.tableName();
 		DBObject where = buildWhere(whereBean);
 		DBCursor dbCursor = null;

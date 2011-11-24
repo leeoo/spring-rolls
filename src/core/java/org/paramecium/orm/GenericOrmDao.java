@@ -57,7 +57,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 		if(isValidation){
 			Validator.validation(bean);
 		}
-		String sql = EntitySqlBuilder.getInsertSql(bean);
+		String sql = EntitySqlParser.getInsertSql(bean);
 		String isAuto = sql.substring(0, 1);
 		if(isAuto.equals("A")){
 			return genericJdbcDao.insertGetGeneratedKeyByBean(sql.substring(1, sql.length()), bean);
@@ -78,7 +78,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 				Validator.validation(bean);
 			}
 		}
-		String sql = EntitySqlBuilder.getInsertSql(beans.iterator().next());
+		String sql = EntitySqlParser.getInsertSql(beans.iterator().next());
 		genericJdbcDao.executeBatchDMLByBeans(sql.substring(1, sql.length()), beans);
 	}
 	
@@ -91,7 +91,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 		if(isValidation){
 			Validator.validationByUpdate(bean);
 		}
-		String sql = EntitySqlBuilder.getUpdateSql(bean);
+		String sql = EntitySqlParser.getUpdateSql(bean);
 		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
 	
@@ -101,7 +101,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 	 * @throws Exception
 	 */
 	public void updateNotNull(T bean) throws Exception {
-		String sql = EntitySqlBuilder.getUpdateSqlNotNull(bean);
+		String sql = EntitySqlParser.getUpdateSqlNotNull(bean);
 		genericJdbcDao.executeDMLByBean(sql, bean);
 	}
 	
@@ -111,7 +111,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 	 * @throws Exception
 	 */
 	public void delete(PK primaryKey)throws Exception {
-		String sql = EntitySqlBuilder.getDeleteSql(clazz);
+		String sql = EntitySqlParser.getDeleteSql(clazz);
 		genericJdbcDao.executeDMLByArray(sql, primaryKey);
 	}
 	
@@ -121,10 +121,10 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 	 * @throws Exception
 	 */
 	public void delete(T whereBean)throws Exception {
-		String sql = EntitySqlBuilder.getDeleteSql(clazz);
+		String sql = EntitySqlParser.getDeleteSql(clazz);
 		int start = sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
-		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
+		String where = EntitySqlParser.getDynamicWhereSql(whereBean);
 		if(where!=null&&!where.isEmpty()){
 			sql = sql.concat(" WHERE ").concat(where);
 			genericJdbcDao.executeDMLByBean(sql, whereBean);
@@ -138,7 +138,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 	 */
 	@SuppressWarnings("unchecked")
 	public T select(PK primaryKey){
-		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
+		String sql = EntitySqlParser.getSelectSqlByPk(clazz);
 		return (T) genericJdbcDao.queryUniqueByArray(sql, clazz, primaryKey);
 	}
 	
@@ -148,7 +148,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 	 * @return
 	 */
 	public Page select(Page page){
-		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
+		String sql = EntitySqlParser.getSelectSqlByPk(clazz);
 		int start = sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		Entity entity = clazz.getAnnotation(Entity.class);
@@ -168,10 +168,10 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 		if(whereBean==null){
 			return select(page);
 		}
-		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
+		String sql = EntitySqlParser.getSelectSqlByPk(clazz);
 		int start = sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
-		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
+		String where = EntitySqlParser.getDynamicWhereSql(whereBean);
 		if(where==null||where.isEmpty()){
 			return select(page);
 		}
@@ -193,10 +193,10 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 		if(whereBean==null){
 			return null;
 		}
-		String sql = EntitySqlBuilder.getSelectSqlByPk(clazz);
+		String sql = EntitySqlParser.getSelectSqlByPk(clazz);
 		int start = sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
-		String where = EntitySqlBuilder.getDynamicWhereSql(whereBean);
+		String where = EntitySqlParser.getDynamicWhereSql(whereBean);
 		if(where==null||where.isEmpty()){
 			return null;
 		}
