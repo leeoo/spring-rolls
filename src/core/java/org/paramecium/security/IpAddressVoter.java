@@ -24,10 +24,12 @@ public class IpAddressVoter{
 	private static boolean include = true;
 	
 	public static void put(String ip){
+		logger.debug("IP地址：".concat(ip).concat("已载入IP地址过滤列表!"));
 		ipAddressList.add(ip);
 	}
 	
 	public static void remove(String ip){
+		logger.debug("IP地址：".concat(ip).concat("已移除IP地址过滤列表!"));
 		ipAddressList.remove(ip);
 	}
 

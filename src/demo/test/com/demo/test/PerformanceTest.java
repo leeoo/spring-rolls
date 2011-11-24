@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.paramecium.commons.DateUtils;
 import org.paramecium.ioc.ApplicationContext;
 
-import com.demo.service.PriorityService;
+import com.demo.service.system.TableInitService;
 
 /**
  * 功 能 描 述:<br>
@@ -17,7 +17,7 @@ import com.demo.service.PriorityService;
 public class PerformanceTest {
 	
 	public static void main(String[] args) throws Exception {
-		PriorityService.createTables();
+		TableInitService.createTables();
 		for(int i =0;i <4500;i++){
 			new TestRunner().start();
 		}

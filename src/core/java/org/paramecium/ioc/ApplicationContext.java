@@ -22,7 +22,7 @@ public class ApplicationContext {
 	private final static Log logger = LoggerFactory.getLogger();
 	private final static ConcurrentMap<String, Object> applicationContext = new ConcurrentHashMap<String, Object>();
 	private final static ThreadLocal<Boolean> isSecurityThreadLocal = new ThreadLocal<Boolean>();
-	static String priorityStartClass;
+	static String priorityStart;
 	
 	static{
 		try {
@@ -61,17 +61,38 @@ public class ApplicationContext {
 	 * 优先 启动的业务类,随着服务一起启动。
 	 */
 	private static void priority(){
-		if(ApplicationContext.priorityStartClass!=null&&!ApplicationContext.priorityStartClass.isEmpty()){
-			try {
-				String className = priorityStartClass.substring(0,priorityStartClass.indexOf('#'));
-				String methodName = priorityStartClass.substring(priorityStartClass.indexOf('#')+1,priorityStartClass.length());
-				Class<?> clazz = Class.forName(className);
-				Object object = clazz.newInstance();
-				Method method = clazz.getMethod(methodName);
-				method.invoke(object);
-			} catch (Throwable e) {
-				logger.error(e);
+		if(priorityStart!=null&&!priorityStart.isEmpty()){
+			if(priorityStart.indexOf(',')>0){
+				String[] prioritys = priorityStart.split(",");
+				for(String priority : prioritys){
+					invoke(priority);
+				}
+			}else{
+				invoke(priorityStart);
 			}
+		}
+	}
+	
+	/**
+	 * 执行调用容器中的方法
+	 * @param instanceName
+	 * @param methodName
+	 */
+	private static void invoke(String priority){
+		try {
+			priority = priority.trim();
+			int length = priority.length();
+			if(length>3){
+				int methodIndex = priority.indexOf('#');
+				String instanceName = priority.substring(0,methodIndex);
+				String methodName = priority.substring(methodIndex+1,length);
+				Object object = getNotSecurityBean(instanceName);
+				Method method = object.getClass().getMethod(methodName);
+				method.invoke(object);
+				destroy();
+			}
+		} catch (Throwable e) {
+			logger.error(e);
 		}
 	}
 	

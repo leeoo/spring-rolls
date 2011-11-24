@@ -1,30 +1,22 @@
-package com.demo.service;
+package com.demo.service.system;
 
 import java.sql.Connection;
 import java.sql.Statement;
 
+import org.paramecium.ioc.annotation.Service;
 import org.paramecium.jdbc.datasource.MultiDataSourceFactory;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
-import org.paramecium.security.IpAddressVoter;
 
-/**
- * 功 能 描 述:<br>
- * 优先启动
- * <br>代 码 作 者:曹阳(CaoYang)
- * <br>开 发 日 期:2011-10-18下午02:23:20
- * <br>项 目 信 息:paramecium:com.demo.service.PriorityService.java
- */
-public class PriorityService {
+@Service
+public class TableInitService {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	
 	public void init(){
-		logger.debug("应用层初始化进行中...");
-		IpAddressVoter.setInclude(true);
-		IpAddressVoter.put("127.0.0.1");
 		try {
 			createTables();
+			logger.debug("DEMO用H2数据库内存表创建成功!");
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -44,5 +36,5 @@ public class PriorityService {
 		st.execute("CREATE TABLE performance_test(id INT PRIMARY KEY AUTO_INCREMENT,name VARCHAR(500) NOT NULL,date DATE NOT NULL)");
 		logger.debug("performance_test创建成功!");
 	}
-	
+
 }
