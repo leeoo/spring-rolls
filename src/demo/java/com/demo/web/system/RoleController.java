@@ -34,7 +34,7 @@ public class RoleController extends BaseController{
 	@ShowLabel("获取列表数据")
 	@MappingMethod
 	public void data(ModelAndView mv){
-		int pageNo = mv.getValue("page", Integer.class);
+		int pageNo = mv.getValue("page", int.class);
 		Page page = new Page();
 		page.setPageNo(pageNo);
 		page.setPageSize(20);
@@ -79,7 +79,7 @@ public class RoleController extends BaseController{
 			mv.setErrorMessage(e.getMessage());
 			return mv.forward(getPage("/role/input.jsp"));
 		}
-		return mv.redirect(getServletExt("/system/role/list"));
+		return mv.redirect(getRedirect("/system/role/list"));
 	}
 	
 	@ShowLabel("删除")

@@ -42,7 +42,7 @@ public class LoginController extends BaseController{
 			userDetails.setResources(userService.getUserAuth(username));
 		}
 		SecurityUitls.login(userDetails,mv.getRequest());
-		return mv.redirect(getServletExt("/system/index"));
+		return mv.redirect(getRedirect("/system/index"));
 	}
 	
 	@MappingMethod

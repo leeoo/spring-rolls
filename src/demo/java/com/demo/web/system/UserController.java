@@ -89,7 +89,7 @@ public class UserController extends BaseController{
 			mv.setErrorMessage(e.getMessage());
 			return mv.forward(getPage("/user/input.jsp"));
 		}
-		return mv.redirect(getServletExt("/system/user/list"));
+		return mv.redirect(getRedirect("/system/user/list"));
 	}
 	
 	@ShowLabel("删除")

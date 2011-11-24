@@ -9,7 +9,7 @@ public abstract class BaseController {
 	public final static String JSP_BASE_DIR = "/WEB-INF/demo/system";
 	
 	@Security(false)
-	public String getServletExt(String base){
+	public String getRedirect(String base){
 		return base.concat(EXT);
 	}
 	
