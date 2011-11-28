@@ -46,7 +46,7 @@ public class SearchIndexCreator {
 
 	public static String INDEX_PATH = null;
 	
-	private static Version version = Version.LUCENE_34;
+	private static Version version = Version.LUCENE_35;
 
 	public static String getPath() {
 		if (INDEX_PATH == null) {
@@ -58,7 +58,14 @@ public class SearchIndexCreator {
 	private static void close(IndexWriter writer,Directory directory){
 		try {
 			if(writer!=null){
-				writer.optimize();
+				writer.commit();
+			}
+		} catch (Throwable e) {
+			logger.error("索引写入器提交错误!");
+		}
+		try {
+			if(writer!=null){
+				writer.forceMerge(1);
 			}
 		} catch (Throwable e) {
 			logger.error("索引写入器优化错误!");
