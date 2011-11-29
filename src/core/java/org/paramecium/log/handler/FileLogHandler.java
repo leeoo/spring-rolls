@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.paramecium.log.LogConfig;
 import org.paramecium.log.LogHandler;
-import org.paramecium.log.LoggerFactory;
 /**
  * 功 能 描 述:<br>
  * 日志写入文件
@@ -19,7 +19,7 @@ import org.paramecium.log.LoggerFactory;
  */
 public class FileLogHandler implements LogHandler {
 	
-	private static String currentFileName = LoggerFactory.getLoggerFileName();
+	private static String currentFileName = LogConfig.loggerFileName;
 
 	public void log(String message, boolean isError) {
 		writFile(message);
@@ -52,14 +52,14 @@ public class FileLogHandler implements LogHandler {
 				return;
 			}
 			try {
-				if(inputStream.available()>LoggerFactory.loggerFileMax*1024*1024){//查看文件容量是否超出额定
-					int dotIndex = LoggerFactory.getLoggerFileName().lastIndexOf(".");
+				if(inputStream.available()>LogConfig.loggerFileMax*1024*1024){//查看文件容量是否超出额定
+					int dotIndex = LogConfig.loggerFileName.lastIndexOf(".");
 					if(dotIndex<0){
-						dotIndex = LoggerFactory.getLoggerFileName().length();
+						dotIndex = LogConfig.loggerFileName.length();
 					}
 					String newFileName = new SimpleDateFormat("yyyyMMdd-HHmmss",java.util.Locale.CHINA).format(new Date());
-					String f1 = LoggerFactory.getLoggerFileName().substring(0,dotIndex);
-					String f2 = LoggerFactory.getLoggerFileName().substring(dotIndex,LoggerFactory.getLoggerFileName().length());
+					String f1 = LogConfig.loggerFileName.substring(0,dotIndex);
+					String f2 = LogConfig.loggerFileName.substring(dotIndex,LogConfig.loggerFileName.length());
 					currentFileName = f1+newFileName+f2;
 					file = new File(currentFileName);
 				}

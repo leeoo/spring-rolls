@@ -6,6 +6,7 @@ import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.DateUtils;
 import org.paramecium.log.Log;
+import org.paramecium.log.LogConfig;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
@@ -21,13 +22,11 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 
 	private final static Log logger$ = LoggerFactory.getLogger();
 	
-	private static boolean enabled = LoggerFactory.jdbcLogCollector;
-	
 	@SuppressWarnings("unchecked")
 	private final static Cache<String,String> jdbcLogCache = CacheManager.getDefaultCache("CACHE_JDBC_LOG");
 
 	public synchronized Collection<String> getAll() {
-		if(!enabled){
+		if(!LogConfig.jdbcLogCollector){
 			return null;
 		}
 		Collection<String> logs = jdbcLogCache.getKeys();
@@ -37,7 +36,7 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 	}
 
 	public synchronized void put(STR log) {
-		if(enabled){
+		if(LogConfig.jdbcLogCollector){
 			StringBuffer logger = new StringBuffer();
 			logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
 			UserDetails<?> user = SecurityThread.getUserNotException();

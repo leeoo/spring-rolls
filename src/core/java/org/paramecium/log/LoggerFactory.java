@@ -19,23 +19,11 @@ import org.paramecium.log.system.CollectorFactory;
  * <br>项 目 信 息:paramecium:org.paramecium.log.LoggerFactory.java
  */
 public class LoggerFactory {
+	
+	private final static Map<String,Integer> levelMap = new HashMap<String,Integer>();
 	private static LogHandler consoleLogHandler;
 	private static LogHandler fileLogHandler;
 	private static LogHandler dbLogHandler;
-	private static int consoleLoggerLevel = Log.LEVEL_DEBUG;
-	private static int fileLoggerLevel = Log.LEVEL_WARN;
-	private static int dbLoggerLevel = Log.LEVEL_ERROR;
-	
-	private final static Map<String,Integer> levelMap = new HashMap<String,Integer>();
-	private static String loggerFileName;
-	public static int loggerFileMax = 10;
-	public static boolean sqlIsFormat = false;
-	public static boolean beanLogCollector = false;
-	public static boolean jdbcLogCollector = false;
-	public static boolean webLogCollector = false;
-	public static boolean isConsole = false;
-	public static boolean isFile = false;
-	public static boolean isDb = false;
 	
 	static{
 		levelMap.put(Log.TRACE, Log.LEVEL_TRACE);
@@ -48,30 +36,30 @@ public class LoggerFactory {
 		{//控制台输出模式
 			String loggerLevel = properties.get("consoleLoggerLevel");
 			if(loggerLevel!=null){
-				consoleLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
+				LogConfig.consoleLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
 				consoleLogHandler = new ConsoleLogHandler();
-				isConsole = true;
+				LogConfig.isConsole = true;
 			}
 		}
 		{//文件输出模式
 			String loggerLevel = properties.get("fileLoggerLevel");
 			if(loggerLevel!=null){
-				fileLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
-				loggerFileName = properties.get("loggerFileName");
-				if(loggerFileName==null){
+				LogConfig.fileLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
+				LogConfig.loggerFileName = properties.get("loggerFileName");
+				if(LogConfig.loggerFileName==null){
 					System.err.println("文件输出日志没有制定loggerFileName属性值!");
 					System.exit(0);
 				}
 				String loggerFileMaxStr = properties.get("loggerFileMax");
-				loggerFileMax = loggerFileMaxStr!=null?Integer.parseInt(loggerFileMaxStr):loggerFileMax;
+				LogConfig.loggerFileMax = loggerFileMaxStr!=null?Integer.parseInt(loggerFileMaxStr):LogConfig.loggerFileMax;
 				fileLogHandler = new FileLogHandler();
-				isFile = true;
+				LogConfig.isFile = true;
 			}
 		}
 		{//数据库输出模式
 			String loggerLevel = properties.get("dbLoggerLevel");
 			if(loggerLevel!=null){
-				dbLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
+				LogConfig.dbLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
 				String loggerDbInterface = properties.get("loggerDbInterface");
 				if(loggerDbInterface==null){
 					System.err.println("数据库输出日志没有制定loggerDbInterface属性值!");
@@ -79,26 +67,18 @@ public class LoggerFactory {
 				}
 				DataBaseLogHandler.setDbInterface(loggerDbInterface);
 				dbLogHandler = new DataBaseLogHandler();
-				isDb = true;
+				LogConfig.isDb = true;
 			}
 		}
 		String sqlIsFormatStr = properties.get("sqlIsFormat");
 		String beanLogCollectorStr = properties.get("beanLogCollector");
 		String jdbcLogCollectorStr = properties.get("jdbcLogCollector");
 		String webLogCollectorStr = properties.get("webLogCollector");
-		sqlIsFormat = sqlIsFormatStr != null ? Boolean.valueOf(sqlIsFormatStr) : false;
-		beanLogCollector = beanLogCollectorStr != null ? Boolean.valueOf(beanLogCollectorStr) : false;
-		jdbcLogCollector = jdbcLogCollectorStr != null ? Boolean.valueOf(jdbcLogCollectorStr) : false;
-		webLogCollector = webLogCollectorStr != null ? Boolean.valueOf(webLogCollectorStr) : false;
+		LogConfig.sqlIsFormat = sqlIsFormatStr != null ? Boolean.valueOf(sqlIsFormatStr) : false;
+		LogConfig.beanLogCollector = beanLogCollectorStr != null ? Boolean.valueOf(beanLogCollectorStr) : false;
+		LogConfig.jdbcLogCollector = jdbcLogCollectorStr != null ? Boolean.valueOf(jdbcLogCollectorStr) : false;
+		LogConfig.webLogCollector = webLogCollectorStr != null ? Boolean.valueOf(webLogCollectorStr) : false;
 		CollectorFactory.setLogCollector(properties.get("logCollectorInterface"));
-	}
-	
-	/**
-	 * 获得文件名
-	 * @return
-	 */
-	public static String getLoggerFileName(){
-		return loggerFileName;
 	}
 	
 	/**
@@ -209,13 +189,13 @@ public class LoggerFactory {
 				methodName = getMethodNameGeneral(throwable);
 			}
 			int levelN = levelMap.get(level);
-			if(isConsole && consoleLoggerLevel <= levelN){
+			if(LogConfig.isConsole && LogConfig.consoleLoggerLevel <= levelN){
 				consoleLogHandler.log(getMessage(throwable, level, className,methodName),isError);
 			}
-			if(isFile && fileLoggerLevel <= levelN){
+			if(LogConfig.isFile && LogConfig.fileLoggerLevel <= levelN){
 				fileLogHandler.log(getMessage(throwable, level, className,methodName),isError);
 			}
-			if(isDb && dbLoggerLevel <= levelN){
+			if(LogConfig.isDb && LogConfig.dbLoggerLevel <= levelN){
 				dbLogHandler.log(getMessage(throwable, level, className,methodName),isError);
 			}
 		}
@@ -228,13 +208,13 @@ public class LoggerFactory {
 				methodName = getMethodNameGeneral();
 			}
 			int levelN = levelMap.get(level);
-			if(isConsole && consoleLoggerLevel <= levelN){
+			if(LogConfig.isConsole && LogConfig.consoleLoggerLevel <= levelN){
 				consoleLogHandler.log(getMessage(message, level, className,methodName),isError);
 			}
-			if(isFile && fileLoggerLevel <= levelN){
+			if(LogConfig.isFile && LogConfig.fileLoggerLevel <= levelN){
 				fileLogHandler.log(getMessage(message, level, className,methodName),isError);
 			}
-			if(isDb && dbLoggerLevel <= levelN){
+			if(LogConfig.isDb && LogConfig.dbLoggerLevel <= levelN){
 				dbLogHandler.log(getMessage(message, level, className,methodName),isError);
 			}
 		}

@@ -13,7 +13,7 @@ import java.util.Map;
 
 import org.paramecium.jdbc.formatter.DDLFormatter;
 import org.paramecium.jdbc.formatter.DMLFormatter;
-import org.paramecium.log.LoggerFactory;
+import org.paramecium.log.LogConfig;
 
 /**
  * 功能描述(Description):<br><b>
@@ -49,11 +49,11 @@ public abstract class JdbcUtils {
 		if(splite>-1){
 			sql = sql.substring(splite+1,sql.length());
 		}
-		return LoggerFactory.sqlIsFormat ? DMLFormatter.format(sql) : sql;
+		return LogConfig.sqlIsFormat ? DMLFormatter.format(sql) : sql;
 	}
 
 	public static String getNativeDDLSql(String sql){
-		return LoggerFactory.sqlIsFormat ? DDLFormatter.format(sql) : sql;
+		return LogConfig.sqlIsFormat ? DDLFormatter.format(sql) : sql;
 	}
 
 	/**

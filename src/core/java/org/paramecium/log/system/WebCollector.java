@@ -8,6 +8,7 @@ import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.DateUtils;
 import org.paramecium.log.Log;
+import org.paramecium.log.LogConfig;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
@@ -23,13 +24,11 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 	
 	private final static Log logger$ = LoggerFactory.getLogger();
 	
-	private static boolean enabled = LoggerFactory.webLogCollector;
-	
 	@SuppressWarnings("unchecked")
 	private final static Cache<String,String> mvcLogCache = CacheManager.getDefaultCache("CACHE_WEB_LOG");
 
 	public synchronized Collection<String> getAll() {
-		if(!enabled){
+		if(!LogConfig.webLogCollector){
 			return null;
 		}
 		Collection<String> logs = mvcLogCache.getKeys();
@@ -39,7 +38,7 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 	}
 
 	public synchronized void put(Request request) {
-		if(enabled){
+		if(LogConfig.webLogCollector){
 			HttpServletRequest rq = (HttpServletRequest)request;
 			StringBuffer logger = new StringBuffer();
 			logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
