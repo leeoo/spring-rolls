@@ -29,10 +29,6 @@ public class NotPoolDataSource implements DataSource{
 	private String password;
 	private int loginTimeout = 5;
 	
-	public NotPoolDataSource(){
-		logger.debug("NotPoolDataSource："+this.hashCode()+"已经实例化");
-	}
-	
 	public Connection getConnection(){
 		Connection connection = null;
 		if(url!=null&&username!=null){
