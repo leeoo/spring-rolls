@@ -15,7 +15,7 @@ import org.paramecium.log.LoggerFactory;
 
 /**
  * 功能描述(Description):<br><b>
- * 默认数据源实现
+ * 默认数据源实现(如果出现事务错误，请将poolBase基数调大一些)
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-4-1下午08:11:11</b>
  * <br>项目名称(Project Name): <b>paramecium</b>

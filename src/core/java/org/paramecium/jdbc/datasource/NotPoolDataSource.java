@@ -12,7 +12,7 @@ import org.paramecium.log.LoggerFactory;
 
 /**
  * 功能描述(Description):<br><b>
- * 不包含连接池
+ * 不包含连接池,消耗数据库连接，容易使数据库报错(大多是连接不够用的错误)
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-12-1下午07:47:20</b>
  * <br>项目名称(Project Name): <b>paramecium</b>
