@@ -38,6 +38,10 @@ public abstract class DateUtils {
 		return date;
 	}
 	
+	public static String parse(DateFormat format,Date date) {
+		return format.format(date);
+	}
+	
 	/**
 	 * 获得当前日期时间
 	 * @return 返回当前时间

@@ -1,7 +1,9 @@
 package org.paramecium.commons;
 
 import java.lang.reflect.Field;
+import java.text.DateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -20,12 +22,16 @@ public abstract class JsonUitls {
 
 	private final static Log logger = LoggerFactory.getLogger();
 	
+	public static String getBeansJson(Collection<?> beans,boolean startAndEndMaker){
+		return getBeansJson(beans, startAndEndMaker,null);
+	}
+	
 	/**
 	 * bean集合变为json字符串
 	 * @param beans
 	 * @return
 	 */
-	public static String getBeansJson(Collection<?> beans,boolean startAndEndMaker){
+	public static String getBeansJson(Collection<?> beans,boolean startAndEndMaker,DateFormat format){
 		if(beans==null||beans.isEmpty()){
 			return null;
 		}
@@ -44,7 +50,11 @@ public abstract class JsonUitls {
 						if(field.get(bean)==null){
 							sb.append("\"\",");
 						}else{
-							sb.append("\"").append(field.get(bean)).append("\",");
+							if(format!=null&&field.getType()==Date.class){
+								sb.append("\"").append(DateUtils.parse(format,(Date)field.get(bean))).append("\",");
+							}else{
+								sb.append("\"").append(field.get(bean)).append("\",");
+							}
 						}
 					} catch (Exception e) {
 						logger.warn(e);
@@ -61,12 +71,16 @@ public abstract class JsonUitls {
 		return sb.toString();
 	}
 	
+	public static String getMapsJson(Collection<Map<String,Object>> maps,boolean startAndEndMaker){
+		return getMapsJson(maps,startAndEndMaker,null);
+	}
+	
 	/**
 	 * map集合转换为json字符串
 	 * @param maps
 	 * @return
 	 */
-	public static String getMapsJson(Collection<Map<String,Object>> maps,boolean startAndEndMaker){
+	public static String getMapsJson(Collection<Map<String,Object>> maps,boolean startAndEndMaker,DateFormat format){
 		if(maps==null||maps.isEmpty()){
 			return null;
 		}
@@ -81,7 +95,11 @@ public abstract class JsonUitls {
 				if(entry.getValue()==null){
 					sb.append("\"\",");
 				}else{
-					sb.append("\"").append(entry.getValue()).append("\",");
+					if(format!=null||entry.getValue().getClass()==Date.class){
+						sb.append("\"").append(DateUtils.parse(format,(Date)entry.getValue())).append("\",");
+					}else{
+						sb.append("\"").append(entry.getValue()).append("\",");
+					}
 				}
 			}
 			sb.delete(sb.length()-1, sb.length());
