@@ -6,7 +6,7 @@
 				<p><a href="${base}/system/role/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-key">角色设定</a></p>
 				<p><a href="${base}/system/user/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-user">登录账户</a></p>
 				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-ding">IP限制</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-group">在线用户</a></p>
+				<p><a href="${base}/system/online/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-group">在线用户</a></p>
 			</div>
 			<div title="日志系统" icon="icon-date" style="padding-left: 10px;padding-top: 20px;">
 				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-tools">日志配置</a></p>
