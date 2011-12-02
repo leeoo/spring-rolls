@@ -9,15 +9,19 @@
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="帮助信息">
-	<div>
+	<div style="padding-left: 20px;">
 		<div><h2>Controller信息</h2></div>
-		<c:forEach items="${controllers}" var="app">
-			<div>命名空间:${app.namespace}&nbsp;&nbsp;&nbsp;&nbsp;对应类:${app.clazz}</div>
-		</c:forEach>
+		<div style="padding-left: 20px;">
+			<c:forEach items="${controllers}" var="app">
+				<div>命名空间:${app.namespace}&nbsp;&nbsp;&nbsp;&nbsp;对应类:${app.clazz}</div>
+			</c:forEach>
+		</div>
 		<div><h2>Service信息</h2></div>
-		<c:forEach items="${services}" var="app">
-			<div>实例名:${app.uniqueName}&nbsp;&nbsp;&nbsp;&nbsp;事务代理:${app.transactional}&nbsp;&nbsp;&nbsp;&nbsp;对应类:${app.clazz}</div>
-		</c:forEach>
+		<div style="padding-left: 20px;">
+			<c:forEach items="${services}" var="app">
+				<div>实例名:${app.uniqueName}&nbsp;&nbsp;&nbsp;&nbsp;事务代理:${app.transactional}&nbsp;&nbsp;&nbsp;&nbsp;对应类:${app.clazz}</div>
+			</c:forEach>
+		</div>
 	</div>
 </div>
 </body>
