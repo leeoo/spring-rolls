@@ -28,7 +28,7 @@ public class LoginController extends BaseController{
 		UserDetails<?> userDetails = new UserDetails<Object>();
 		userDetails.setUsername(username);
 		userDetails.setAddress(mv.getRequest().getRemoteAddr());
-		if(username.equals("admin")&&password.equals("admin")){
+		if((username.equals("admin")&&password.equals("admin"))||(username.equals("sa")&&password.equals("sa"))){
 			userDetails.setEnable(true);
 			userDetails.setName("系统固化管理员");
 			userDetails.setResources(AuthorizationMenu.getAllAuthorizationMenu());
