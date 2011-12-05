@@ -61,4 +61,13 @@ public class OnlineUserController extends BaseController{
 		}
 	}
 
+	@ShowLabel("踢出所有用户")
+	@MappingMethod
+	public void killAll(ModelAndView mv){
+		try {
+			OnlineUserCache.allLogout();
+		} catch (Exception e) {
+		}
+	}
+
 }
