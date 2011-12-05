@@ -25,16 +25,11 @@ public class SecurityThread {
 	private final static ThreadLocal<Security> securityThreadLocal = new ThreadLocal<Security>();//安全限制级别本地线程
 	private final static Cache<String, Boolean> kickUserCache = CacheManager.getDefaultCache("CACHE_KICK_USER", 20);//判断重复登录用缓存
 	private final static Cache<String, Boolean> killUserCache = CacheManager.getDefaultCache("CACHE_KILL_USER", 20);//判断被强制踢出缓存
-	private final static Cache<String, Boolean> sessionCache = CacheManager.getDefaultCache("CACHE_SESSION_USER", 200);//session超时缓存,为防止内存溢出，200人登录为一个界限,可根据实际情况修改数量.
 	
 	public static void putKillUserCache(String sessionId){
 		killUserCache.put(sessionId,true);
 	}
 
-	public static void putSessionCache(String sessionId){
-		sessionCache.put(sessionId,true);
-	}
-	
 	/**
 	 * 功能描述(Description):<br><b>
 	 * 安全隐患
@@ -112,6 +107,7 @@ public class SecurityThread {
 			put(userDetails);
 			return;
 		}
+		request.getSession(true);//获得新session，一般来说到不了这里就已经创建新的session（startThread方法）
 		putSecurity(SecurityThread.Security.SessionExpiredException);
 		throw new SessionExpiredException("当前 Session已经过期!");
 	}
@@ -133,7 +129,6 @@ public class SecurityThread {
 				}
 			}
 		}
-		putSessionCache(userDetails.getSessionId());
 		OnlineUserCache.login(userDetails);
 	}
 	
@@ -154,10 +149,6 @@ public class SecurityThread {
 					putSecurity(SecurityThread.Security.UserKillException);
 					killUserCache.remove(sessionId);
 					throw new UserKillException("该账号被管理员强制退出!");
-				}else if(sessionCache.get(sessionId)==null){
-					putSecurity(SecurityThread.Security.SessionExpiredException);
-					sessionCache.remove(sessionId);//不要通过session监听过期删除，否则无法判断曾经存在.
-					throw new SessionExpiredException("当前 Session已经过期!");
 				}else{
 					putSecurity(SecurityThread.Security.AnonymousException);
 					throw new AnonymousException("匿名用户没有登录!");

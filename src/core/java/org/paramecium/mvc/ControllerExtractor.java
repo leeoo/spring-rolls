@@ -49,18 +49,19 @@ public class ControllerExtractor implements ServletConstant{
 				logger.warn("非法请求地址:"+servletPath);
 				return return404(response);
 			}
-			CollectorFactory.getWebCollector().put(request);//放入日志缓存
-			ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
-			if(classInfo==null){
-				logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
-				return return404(response);
-			}
-			Object controller = ApplicationContext.getBean(classInfo.getNamespace());
-			if(controller==null){
-				logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
-				return return404(response);
-			}
 			try{
+				SecurityThread.startThread(request);
+				CollectorFactory.getWebCollector().put(request);//放入日志缓存
+				ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
+				if(classInfo==null){
+					logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);
+					return return404(response);
+				}
+				Object controller = ApplicationContext.getBean(classInfo.getNamespace());
+				if(controller==null){
+					logger.warn("ApplicationContext无法构建该Controller:"+classInfo.getNamespace());
+					return return404(response);
+				}
 				return invoke(classInfo.getClazz(), request, response, controller, URIStrs);
 			} catch (Throwable e) {
 				return security(e, request,response);
@@ -120,8 +121,7 @@ public class ControllerExtractor implements ServletConstant{
 
 	private static boolean return500(final HttpServletRequest request,final HttpServletResponse response,Throwable e){
 		try {
-			e.printStackTrace();
-			logger.error(e.getCause());
+			logger.error(e);
 			//将异常放入request,Jsp中的exception对象实际为request中定义的一个特定值KEY对应的Exception对象.
 			request.setAttribute(PAGE_CONTEXT_EXCEPTION, e.getCause());
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
