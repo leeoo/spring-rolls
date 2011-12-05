@@ -21,6 +21,15 @@ public class OnlineUserCache {
 	private final static Log logger = LoggerFactory.getLogger();
 	
 	/**
+	 * 踢出所有用户
+	 */
+	public static void allLogout(){
+		onlineUsers.clear();
+		sessionIdIndex.clear();
+		logger.debug("系统已将所有用户强制退出登录！");
+	}
+	
+	/**
 	 * 用户登录
 	 * @param details
 	 */

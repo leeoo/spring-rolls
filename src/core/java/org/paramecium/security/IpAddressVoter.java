@@ -22,6 +22,8 @@ public class IpAddressVoter{
 	private static Collection<String> ipAddressList = new HashSet<String>();
 	
 	private static boolean include = true;
+
+	private static boolean enabled = true;
 	
 	public static void put(String ip){
 		logger.debug("IP地址：".concat(ip).concat("已载入IP地址过滤列表!"));
@@ -45,13 +47,22 @@ public class IpAddressVoter{
 		IpAddressVoter.ipAddressList = ipAddressList;
 	}
 	
+	public static boolean isInclude() {
+		return include;
+	}
+
 	public static void setInclude(boolean include) {
 		IpAddressVoter.include = include;
 	}
-
-	public static boolean getInclude() {
-		return IpAddressVoter.include;
+	
+	public static boolean isEnabled() {
+		return enabled;
 	}
+
+	public static void setEnabled(boolean enabled) {
+		IpAddressVoter.enabled = enabled;
+	}
+
 
 	/**
 	 * 对IPv4进行授权验证
@@ -59,6 +70,9 @@ public class IpAddressVoter{
 	 * @return true为安全
 	 */
 	public static boolean voteIPV4(String currentIp){
+		if(!enabled){
+			return true;
+		}
 		if(ipAddressList==null || ipAddressList.isEmpty()){
 			return true;
 		}
