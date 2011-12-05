@@ -69,19 +69,21 @@
 				        text: '全部踢出',
 			            iconCls: 'icon-cancel',
 			            handler:function(){
-							$.messager.confirm('提示','确认要踢出所有用户吗?',function(){
-								$.ajax({
-									   type: "get",
-									   url: "${base}/system/online/killAll${ext}",
-									   success: function(msg){
-										   $.messager.show({
-												title:'提示',
-												msg:'成功踢出所有用户！',
-												timeout:3000,
-												showType:'slide'
-											});
-									   }
-								});
+							$.messager.confirm('提示','确认要踢出所有用户吗?',function(d){
+								if(d){
+									$.ajax({
+										   type: "get",
+										   url: "${base}/system/online/killAll${ext}",
+										   success: function(msg){
+											   $.messager.show({
+													title:'提示',
+													msg:'成功踢出所有用户！',
+													timeout:3000,
+													showType:'slide'
+												});
+										   }
+									});
+								}
 								$('#list').datagrid('reload');
 								$('#list').datagrid('clearSelections');
 					        });
