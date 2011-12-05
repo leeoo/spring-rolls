@@ -31,7 +31,8 @@ public class IpAddressConfigController extends BaseController{
 	@MappingMethod
 	public ModelAndView list(ModelAndView mv){
 		mv.addValue("ips", IpAddressVoter.getIpAddressList());
-		mv.addValue("include", IpAddressVoter.getInclude());
+		mv.addValue("enabled", IpAddressVoter.isEnabled());
+		mv.addValue("include", IpAddressVoter.isInclude());
 		return mv.forward(getPage("/ip/list.jsp"));
 	}
 	
@@ -52,6 +53,7 @@ public class IpAddressConfigController extends BaseController{
 				}
 			}
 			IpAddressVoter.setInclude(mv.getValue("include", boolean.class));
+			IpAddressVoter.setEnabled(mv.getValue("enabled", boolean.class));
 			mv.setSuccessMessage("保存成功!");
 		}catch (Exception e) {
 			logger.error(e);

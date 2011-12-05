@@ -6,6 +6,7 @@ import org.paramecium.log.LoggerFactory;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
+import org.paramecium.security.OnlineUserCache;
 import org.paramecium.security.SecurityConfig;
 import org.paramecium.security.annotation.Security;
 
@@ -58,6 +59,7 @@ public class SecurityConfigController extends BaseController{
 			SecurityConfig.userDisabledExceptionPage = mv.getValue("userDisabledExceptionPage", String.class);
 			SecurityConfig.sessionExpiredExceptionPage = mv.getValue("sessionExpiredExceptionPage", String.class);
 			SecurityConfig.ipAddressExceptionPage = mv.getValue("ipAddressExceptionPage", String.class);
+			OnlineUserCache.allLogout();
 			mv.setSuccessMessage("保存成功!");
 		}catch (Exception e) {
 			logger.error(e);
