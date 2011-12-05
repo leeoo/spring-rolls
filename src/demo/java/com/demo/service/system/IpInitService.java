@@ -7,6 +7,7 @@ import org.paramecium.security.IpAddressVoter;
 
 @Service
 public class IpInitService {
+	
 	private final static Log logger = LoggerFactory.getLogger();
 	
 	public void init(){
