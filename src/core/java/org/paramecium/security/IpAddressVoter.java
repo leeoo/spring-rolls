@@ -49,6 +49,10 @@ public class IpAddressVoter{
 		IpAddressVoter.include = include;
 	}
 
+	public static boolean getInclude() {
+		return IpAddressVoter.include;
+	}
+
 	/**
 	 * 对IPv4进行授权验证
 	 * @param currentIp
