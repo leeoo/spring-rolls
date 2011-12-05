@@ -54,7 +54,7 @@ public class OnlineUserController extends BaseController{
 			if(idstr!=null){
 				String[] sessionIds = idstr.split(",");
 				for(String sessionId : sessionIds){
-					OnlineUserCache.logout(sessionId);
+					OnlineUserCache.kill(sessionId);
 				}
 			}
 		} catch (Exception e) {
@@ -65,7 +65,7 @@ public class OnlineUserController extends BaseController{
 	@MappingMethod
 	public void killAll(ModelAndView mv){
 		try {
-			OnlineUserCache.allLogout();
+			OnlineUserCache.killAll();
 		} catch (Exception e) {
 		}
 	}

@@ -23,6 +23,7 @@ import org.paramecium.security.exception.IpAddressException;
 import org.paramecium.security.exception.SessionExpiredException;
 import org.paramecium.security.exception.UserDisabledException;
 import org.paramecium.security.exception.UserKickException;
+import org.paramecium.security.exception.UserKillException;
 /**
  * 功 能 描 述:<br>
  * 通过Servlet提取Controller所需的信息
@@ -157,6 +158,8 @@ public class ControllerExtractor implements ServletConstant{
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.sessionExpiredExceptionPage));
 				}else if(SecurityThread.getSecurity() == SecurityThread.Security.IpAddressException){
 					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
+				}else if(SecurityThread.getSecurity() == SecurityThread.Security.UserKillException){
+					modelAndView.getResponse().sendRedirect(PathUtils.getNewPath(SecurityConfig.userKillExceptionPage));
 				}/*继续扩展，可在配置文件中加入更多安全问题*/
 				return false;
 			}
@@ -187,6 +190,8 @@ public class ControllerExtractor implements ServletConstant{
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.sessionExpiredExceptionPage));
 			}else if(e.getCause() instanceof IpAddressException||e instanceof IpAddressException){
 				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.ipAddressExceptionPage));
+			}else if(e.getCause() instanceof UserKillException||e instanceof UserKillException){
+				response.sendRedirect(PathUtils.getNewPath(SecurityConfig.userKillExceptionPage));
 			}/*继续扩展，可在配置文件中加入更多异常*/
 			else if(!(e.getCause() instanceof SecurityException)||!(e instanceof SecurityException)){//如果发生一个不是安全的异常，抛出500错误
 				return return500(request,response,e);//500

@@ -38,6 +38,7 @@ public class SecurityConfigController extends BaseController{
 		mv.addValue("userDisabledExceptionPage", SecurityConfig.userDisabledExceptionPage);
 		mv.addValue("sessionExpiredExceptionPage", SecurityConfig.sessionExpiredExceptionPage);
 		mv.addValue("ipAddressExceptionPage", SecurityConfig.ipAddressExceptionPage);
+		mv.addValue("userKillExceptionPage", SecurityConfig.userKillExceptionPage);
 		return mv.forward(getPage("/security/list.jsp"));
 	}
 	
@@ -59,7 +60,8 @@ public class SecurityConfigController extends BaseController{
 			SecurityConfig.userDisabledExceptionPage = mv.getValue("userDisabledExceptionPage", String.class);
 			SecurityConfig.sessionExpiredExceptionPage = mv.getValue("sessionExpiredExceptionPage", String.class);
 			SecurityConfig.ipAddressExceptionPage = mv.getValue("ipAddressExceptionPage", String.class);
-			OnlineUserCache.allLogout();
+			SecurityConfig.userKillExceptionPage = mv.getValue("userKillExceptionPage", String.class);
+			OnlineUserCache.killAll();
 			mv.setSuccessMessage("保存成功!");
 		}catch (Exception e) {
 			logger.error(e);

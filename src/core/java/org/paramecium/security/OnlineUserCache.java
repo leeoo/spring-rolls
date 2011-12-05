@@ -23,10 +23,22 @@ public class OnlineUserCache {
 	/**
 	 * 踢出所有用户
 	 */
-	public static void allLogout(){
+	public static void killAll(){
+		for(String sessionId : onlineUsers.keySet()){
+			kill(sessionId);
+		}
 		onlineUsers.clear();
 		sessionIdIndex.clear();
 		logger.debug("系统已将所有用户强制退出登录！");
+	}
+	
+	/**
+	 * 踢出用户
+	 * @param username
+	 */
+	public static void kill(String sessionId){
+		SecurityThread.putKillUserCache(sessionId);
+		logout(sessionId);
 	}
 	
 	/**

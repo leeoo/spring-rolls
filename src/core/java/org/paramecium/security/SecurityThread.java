@@ -9,6 +9,7 @@ import org.paramecium.security.exception.IpAddressException;
 import org.paramecium.security.exception.SessionExpiredException;
 import org.paramecium.security.exception.UserDisabledException;
 import org.paramecium.security.exception.UserKickException;
+import org.paramecium.security.exception.UserKillException;
 
 /**
  * 功 能 描 述:<br>
@@ -17,12 +18,22 @@ import org.paramecium.security.exception.UserKickException;
  * <br>开 发 日 期:2011-4-22下午01:47:50
  * <br>项 目 信 息:paramecium:org.paramecium.security.SecurityThread.java
  */
+@SuppressWarnings("unchecked")
 public class SecurityThread {
 	
-	private final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();
-	private final static ThreadLocal<Security> securityThreadLocal = new ThreadLocal<Security>();
-	@SuppressWarnings("unchecked")
-	private final static Cache<String, Boolean> kickUserCache = CacheManager.getDefaultCache("CACHE_KICK_USER", 20);
+	private final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();//session本地线程
+	private final static ThreadLocal<Security> securityThreadLocal = new ThreadLocal<Security>();//安全限制级别本地线程
+	private final static Cache<String, Boolean> kickUserCache = CacheManager.getDefaultCache("CACHE_KICK_USER", 20);//判断重复登录用缓存
+	private final static Cache<String, Boolean> killUserCache = CacheManager.getDefaultCache("CACHE_KILL_USER", 20);//判断被强制踢出缓存
+	private final static Cache<String, Boolean> sessionCache = CacheManager.getDefaultCache("CACHE_SESSION_USER", 200);//session超时缓存,为防止内存溢出，200人登录为一个界限,可根据实际情况修改数量.
+	
+	public static void putKillUserCache(String sessionId){
+		killUserCache.put(sessionId,true);
+	}
+
+	public static void putSessionCache(String sessionId){
+		sessionCache.put(sessionId,true);
+	}
 	
 	/**
 	 * 功能描述(Description):<br><b>
@@ -39,11 +50,12 @@ public class SecurityThread {
 		UserDisabledException,
 		AnonymousException,
 		AuthorizationException,
-		IpAddressException
+		IpAddressException,
+		UserKillException
 	}
 	
 	/**
-	 * 放入安全隐患
+	 * 放入安全隐患类型
 	 * @param security
 	 */
 	public static void putSecurity(Security security){
@@ -51,7 +63,7 @@ public class SecurityThread {
 	}
 
 	/**
-	 * 获取安全隐患
+	 * 获取安全隐患类型
 	 * @return
 	 */
 	public static Security getSecurity(){
@@ -121,6 +133,7 @@ public class SecurityThread {
 				}
 			}
 		}
+		putSessionCache(userDetails.getSessionId());
 		OnlineUserCache.login(userDetails);
 	}
 	
@@ -137,6 +150,14 @@ public class SecurityThread {
 					putSecurity(SecurityThread.Security.UserKickException);
 					kickUserCache.remove(sessionId);
 					throw new UserKickException("该账号重复登录被踢掉!");
+				}else if(killUserCache.get(sessionId)!=null&&killUserCache.get(sessionId)){
+					putSecurity(SecurityThread.Security.UserKillException);
+					killUserCache.remove(sessionId);
+					throw new UserKillException("该账号被管理员强制退出!");
+				}else if(sessionCache.get(sessionId)==null){
+					putSecurity(SecurityThread.Security.SessionExpiredException);
+					sessionCache.remove(sessionId);//不要通过session监听过期删除，否则无法判断曾经存在.
+					throw new SessionExpiredException("当前 Session已经过期!");
 				}else{
 					putSecurity(SecurityThread.Security.AnonymousException);
 					throw new AnonymousException("匿名用户没有登录!");
@@ -176,6 +197,7 @@ public class SecurityThread {
 	public static void remove(String sessionId){
 		OnlineUserCache.logout(sessionId);
 		kickUserCache.remove(sessionId);
+		killUserCache.remove(sessionId);
 	}
 
 }

@@ -57,6 +57,7 @@ public class ClassScanner {
 		SecurityConfig.userDisabledExceptionPage = properties.get("userDisabledExceptionPage");
 		SecurityConfig.sessionExpiredExceptionPage = properties.get("sessionExpiredExceptionPage");
 		SecurityConfig.ipAddressExceptionPage = properties.get("ipAddressExceptionPage");
+		SecurityConfig.userKillExceptionPage = properties.get("userKillExceptionPage");
 		init();
 	}
 	

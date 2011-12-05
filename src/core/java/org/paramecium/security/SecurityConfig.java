@@ -34,7 +34,7 @@ public class SecurityConfig {
 	public static String authorizationExceptionPage;
 
 	/**
-	 * 用户踢出错误页面
+	 * 用户重复登录错误页面
 	 */
 	public static String userKickExceptionPage;
 
@@ -52,5 +52,10 @@ public class SecurityConfig {
 	 * IP未授权错误页面
 	 */
 	public static String ipAddressExceptionPage;
+	
+	/**
+	 * 用户被踢出错误页面
+	 */
+	public static String userKillExceptionPage;
 	
 }

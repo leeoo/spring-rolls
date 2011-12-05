@@ -43,7 +43,7 @@
 					<td><input name="authorizationExceptionPage" value="${authorizationExceptionPage}" style="width: 300px;"/></td>
 				</tr>
 				<tr>
-					<td nowrap="nowrap">踢出系统对应页面:</td>
+					<td nowrap="nowrap">重复登录对应页面:</td>
 					<td><input name="userKickExceptionPage" value="${userKickExceptionPage}" style="width: 300px;"/></td>
 				</tr>
 				<tr>
@@ -57,6 +57,10 @@
 				<tr>
 					<td nowrap="nowrap">IP限制对应页面:</td>
 					<td><input name="ipAddressExceptionPage" value="${ipAddressExceptionPage}" style="width: 300px;"/></td>
+				</tr>
+				<tr>
+					<td nowrap="nowrap">强制踢出对应页面:</td>
+					<td><input name="userKillExceptionPage" value="${userKillExceptionPage}" style="width: 300px;"/></td>
 				</tr>
 				<tr>
 					<td></td>
