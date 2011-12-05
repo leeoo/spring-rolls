@@ -22,16 +22,6 @@ public class DefaultCache<KEY extends Object,VALUE extends Object> extends BaseC
 	public synchronized void put(KEY key, VALUE value) {
 		if(this.maxSize < size()){
 			map.remove(map.keySet().iterator().next());
-			/*Collection<Element> elements = map.values();
-			Object validationKey = elements.iterator().next().getKey();
-			long validationTime = elements.iterator().next().getAccessTime();
-			for(Element element : elements){
-				if(element.getAccessTime()<validationTime){
-					validationTime = element.getAccessTime();
-					validationKey = element.getKey();
-				}
-			}
-			remove(validationKey);*/
 		}
 		super.put(key, value);
 	}
