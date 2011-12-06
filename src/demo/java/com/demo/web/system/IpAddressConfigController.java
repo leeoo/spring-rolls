@@ -1,7 +1,5 @@
 package com.demo.web.system;
 
-import java.util.Collection;
-
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -45,13 +43,6 @@ public class IpAddressConfigController extends BaseController{
 	@MappingMethod
 	public ModelAndView save(ModelAndView mv){
 		try{
-			Collection<String> ips = mv.getValues("ips", String.class);
-			if(ips!=null&&!ips.isEmpty()){
-				IpAddressVoter.removeAll();
-				for(String ip : ips){
-					IpAddressVoter.put(ip);
-				}
-			}
 			IpAddressVoter.setInclude(mv.getValue("include", boolean.class));
 			IpAddressVoter.setEnabled(mv.getValue("enabled", boolean.class));
 			mv.setSuccessMessage("保存成功!");
@@ -61,6 +52,43 @@ public class IpAddressConfigController extends BaseController{
 		}
 		return mv.redirect(getRedirect("/system/config/ip/list"));
 	}
+
+	/**
+	 * 需要持久化需另行开发
+	 * @param mv
+	 * @return
+	 */
+	@ShowLabel("添加IP地址")
+	@MappingMethod
+	public ModelAndView add(ModelAndView mv){
+		try{
+			String ip = mv.getValue("ip", String.class);
+			IpAddressVoter.put(ip);
+			mv.setSuccessMessage("添加成功!");
+		}catch (Exception e) {
+			logger.error(e);
+			mv.setErrorMessage("添加失败!");
+		}
+		return mv.redirect(getRedirect("/system/config/ip/list"));
+	}
 	
+	/**
+	 * 需要持久化需另行开发
+	 * @param mv
+	 * @return
+	 */
+	@ShowLabel("移除IP地址")
+	@MappingMethod
+	public ModelAndView remove(ModelAndView mv){
+		try{
+			String ip = mv.getValue("ip", String.class);
+			IpAddressVoter.remove(ip);
+			mv.setSuccessMessage("移除成功!");
+		}catch (Exception e) {
+			logger.error(e);
+			mv.setErrorMessage("移除失败!");
+		}
+		return mv.redirect(getRedirect("/system/config/ip/list"));
+	}
 
 }
