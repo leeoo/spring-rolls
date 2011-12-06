@@ -97,7 +97,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td nowrap="nowrap">是否启用JDBC执行日志:</td>
+					<td nowrap="nowrap">是否记录JDBC执行日志:</td>
 					<td>
 					<select name="jdbcLogCollector">
 						<option value="true" <c:if test="${jdbcLogCollector}">selected="selected"</c:if> >启用</option>
@@ -106,7 +106,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td nowrap="nowrap">是否启用容器调用日志:</td>
+					<td nowrap="nowrap">是否记录容器调用日志:</td>
 					<td>
 					<select name="beanLogCollector">
 						<option value="true" <c:if test="${beanLogCollector}">selected="selected"</c:if> >启用</option>
@@ -115,7 +115,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td nowrap="nowrap">是否启用WEB请求日志:</td>
+					<td nowrap="nowrap">是否记录WEB请求日志:</td>
 					<td>
 					<select name="webLogCollector">
 						<option value="true" <c:if test="${webLogCollector}">selected="selected"</c:if> >启用</option>
