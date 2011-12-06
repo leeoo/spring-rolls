@@ -21,6 +21,7 @@ public class LogConfigController extends BaseController{
 	@ShowLabel("首页界面")
 	@MappingMethod
 	public ModelAndView list(ModelAndView mv){
+		mv.addValue("levels", LoggerFactory.getLoggerLevel());
 		mv.addValue("isConsole", LogConfig.isConsole);
 		mv.addValue("isFile", LogConfig.isFile);
 		mv.addValue("isDb", LogConfig.isDb);
@@ -30,8 +31,8 @@ public class LogConfigController extends BaseController{
 		mv.addValue("loggerFileName", LogConfig.loggerFileName);
 		mv.addValue("loggerFileMax", LogConfig.loggerFileMax);
 		mv.addValue("sqlIsFormat", LogConfig.sqlIsFormat);
-		mv.addValue("beanLogCollector", LogConfig.beanLogCollector);
 		mv.addValue("jdbcLogCollector", LogConfig.jdbcLogCollector);
+		mv.addValue("beanLogCollector", LogConfig.beanLogCollector);
 		mv.addValue("webLogCollector", LogConfig.webLogCollector);
 		return mv.forward(getPage("/log/list.jsp"));
 	}
@@ -54,8 +55,8 @@ public class LogConfigController extends BaseController{
 			LogConfig.loggerFileName = mv.getValue("loggerFileName", String.class);
 			LogConfig.loggerFileMax = mv.getValue("loggerFileMax", int.class);
 			LogConfig.sqlIsFormat = mv.getValue("sqlIsFormat", boolean.class);
-			LogConfig.beanLogCollector = mv.getValue("beanLogCollector", boolean.class);
 			LogConfig.jdbcLogCollector = mv.getValue("jdbcLogCollector", boolean.class);
+			LogConfig.beanLogCollector = mv.getValue("beanLogCollector", boolean.class);
 			LogConfig.webLogCollector = mv.getValue("webLogCollector", boolean.class);
 			mv.setSuccessMessage("保存成功!");
 		}catch (Exception e) {
