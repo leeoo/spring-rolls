@@ -1,6 +1,6 @@
 package org.paramecium.log;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.paramecium.commons.DateUtils;
@@ -20,7 +20,7 @@ import org.paramecium.log.system.CollectorFactory;
  */
 public class LoggerFactory {
 	
-	private final static Map<String,Integer> levelMap = new HashMap<String,Integer>();
+	private final static Map<String,Integer> levelMap = new LinkedHashMap<String,Integer>();
 	private static LogHandler consoleLogHandler;
 	private static LogHandler fileLogHandler;
 	private static LogHandler dbLogHandler;
@@ -79,6 +79,10 @@ public class LoggerFactory {
 		LogConfig.jdbcLogCollector = jdbcLogCollectorStr != null ? Boolean.valueOf(jdbcLogCollectorStr) : false;
 		LogConfig.webLogCollector = webLogCollectorStr != null ? Boolean.valueOf(webLogCollectorStr) : false;
 		CollectorFactory.setLogCollector(properties.get("logCollectorInterface"));
+	}
+	
+	public static Map<String,Integer> getLoggerLevel(){
+		return levelMap;
 	}
 	
 	/**
