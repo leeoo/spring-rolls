@@ -9,7 +9,7 @@
 				<p><a href="${base}/system/online/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-group">在线用户</a></p>
 			</div>
 			<div title="日志系统" icon="icon-date" style="padding-left: 10px;padding-top: 20px;">
-				<p><a href="${base}/system/config/log/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-tools">日志配置</a></p>
+				<p><a href="${base}/system/config/log/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-doc">日志配置</a></p>
 				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-warn">错误日志</a></p>
 				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-reload">请求日志</a></p>
 				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-undo">调用日志</a></p>
