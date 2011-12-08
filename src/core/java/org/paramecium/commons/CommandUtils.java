@@ -44,8 +44,12 @@ public class CommandUtils {
 	 * @return
 	 */
 	public static String getRunResult(String cmd,boolean isHtml) {
+		Process p = run(cmd);
+		if(p==null){
+			return null;
+		}
 		StringBuilder sb = new StringBuilder();
-		InputStream in = run(cmd).getInputStream();
+		InputStream in = p.getInputStream();
 		InputStreamReader isr = new InputStreamReader(in);
 		BufferedReader reader = new BufferedReader(isr);
 		try {
