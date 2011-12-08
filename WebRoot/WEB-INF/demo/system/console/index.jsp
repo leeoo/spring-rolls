@@ -18,7 +18,7 @@
 <body class="easyui-layout">
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
-<div region="center" title="控制台">
+<div region="center" title="控制台" style="background-color:#000000;font-size: 18px;color: #CCCCCC;">
 	<div id="console">
 		<div>
 			<c:if test="${result!=null&&result!=''}">
