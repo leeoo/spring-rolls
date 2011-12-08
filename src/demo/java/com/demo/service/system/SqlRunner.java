@@ -40,8 +40,8 @@ public class SqlRunner {
 				}
 				sb.append("</tr>");
 			}
-			sb.append("</table>");
-			return sql.concat("<br>"+rs.size()+"条返回结果!");
+			sb.append("</table><br>");
+			return sb.append(sql.concat("<br>"+rs.size()+"条返回结果!")).toString();
 		}
 	}
 	
