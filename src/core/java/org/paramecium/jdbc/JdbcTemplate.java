@@ -178,7 +178,7 @@ public interface JdbcTemplate extends Dialect{
 	 * @param sql
 	 * @throws SQLException
 	 */
-	public void executeDDL(final Connection connection,final String sql) throws SQLException ;
+	public boolean executeDDL(final Connection connection,final String sql) throws SQLException ;
 	
 	/**
 	 * 执行除select以外的DML语句,如：INSERT,UPDATE,DELETE语句

@@ -307,14 +307,16 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	/**
 	 * 执行无参数DDL的SQL语句，如：CREATE,DROP,ALTER,GRANT等语句
 	 * @param sql
+	 * @return 是否成功
 	 * @throws SQLException
 	 */
-	public void executeDDL(final Connection connection,final String sql) throws SQLException {
+	public boolean executeDDL(final Connection connection,final String sql) throws SQLException {
 		Statement statement = connection.createStatement();
-		statement.execute(sql);
+		boolean r = statement.execute(sql);
 		logger.debug(JdbcUtils.getNativeDDLSql(sql));
 		CollectorFactory.getJdbcCollector().put(sql);//放入日志缓存
 		JdbcUtils.close(statement);
+		return r;
 	}
 	
 	/**

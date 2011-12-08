@@ -346,10 +346,10 @@ public class GenericJdbcDao {
 	 * @param sql
 	 * @throws SQLException
 	 */
-	public void executeDDL(final String sql) throws SQLException {
+	public boolean executeDDL(final String sql) throws SQLException {
 		try{
 			logger.debug(sql);
-			this.jdbcTemplate.executeDDL(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
+			return this.jdbcTemplate.executeDDL(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
 		}catch (Exception e) {
 			logger.error(e);
 			throw new SQLException(e);
