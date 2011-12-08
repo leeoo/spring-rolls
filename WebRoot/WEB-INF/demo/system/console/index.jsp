@@ -7,8 +7,6 @@
 		#console{
 			background-color:#000000;
 			font-family: "Courier New", Courier, "宋体", monospace;
-			width:98%;
-			height:98%;
 			font-size: 18px;
 			color: #CCCCCC;
 			padding-left: 10px;
