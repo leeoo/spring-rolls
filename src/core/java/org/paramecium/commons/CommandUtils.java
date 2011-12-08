@@ -32,6 +32,10 @@ public class CommandUtils {
 		}
 		return null;
 	}
+	
+	public static String getRunResult(String cmd) {
+		return getRunResult(cmd,false);
+	}
 
 
 	/**

@@ -45,7 +45,7 @@ public class ConsoleController extends BaseController{
 			return mv.forward(getPage("/console/index.jsp"));
 		}
 		if(type.equalsIgnoreCase("system")){
-			String result = CommandUtils.getRunResult(cmd);
+			String result = CommandUtils.getRunResult(cmd,true);
 			mv.addValue("type", type);
 			mv.addValue("cmd", cmd);
 			mv.addValue("result", result);
