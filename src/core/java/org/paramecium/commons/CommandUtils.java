@@ -28,7 +28,6 @@ public class CommandUtils {
 		try {
 			return Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
-			logger.error(e);
 		}
 		return null;
 	}
