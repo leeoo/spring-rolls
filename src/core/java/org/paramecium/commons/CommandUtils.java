@@ -48,6 +48,7 @@ public class CommandUtils {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				sb.append(line);
+				sb.append("\r\n");
 			}
 		} catch (IOException e) {
 			logger.error(e);
