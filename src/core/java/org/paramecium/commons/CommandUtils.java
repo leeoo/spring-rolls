@@ -39,7 +39,7 @@ public class CommandUtils {
 	 * @param cmd
 	 * @return
 	 */
-	public static String getRunResult(String cmd) {
+	public static String getRunResult(String cmd,boolean isHtml) {
 		StringBuilder sb = new StringBuilder();
 		InputStream in = run(cmd).getInputStream();
 		InputStreamReader isr = new InputStreamReader(in);
@@ -48,7 +48,11 @@ public class CommandUtils {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				sb.append(line);
-				sb.append("\r\n");
+				if(isHtml){
+					sb.append("<br/>");
+				}else{
+					sb.append("\r\n");
+				}
 			}
 		} catch (IOException e) {
 			logger.error(e);
