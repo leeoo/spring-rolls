@@ -36,7 +36,7 @@ public class SqlRunner {
 			for(Map<String,Object> r2:rs){
 				sb.append("<tr>");
 				for(Object value : r2.values()){
-					sb.append("<td>").append((String)value).append("</td>");
+					sb.append("<td>").append(value).append("</td>");
 				}
 				sb.append("</tr>");
 			}
