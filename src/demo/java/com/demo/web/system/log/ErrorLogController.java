@@ -35,6 +35,7 @@ public class ErrorLogController extends BaseController{
 		page.setPageSize(20);
 		page = logService.getAll(page,0);
 		String json = JsonUitls.getBeansJson(page.getResult(),false);
+		json = JsonUitls.Html2Text(json);
 		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
 		mv.printJSON(json);
 	}
