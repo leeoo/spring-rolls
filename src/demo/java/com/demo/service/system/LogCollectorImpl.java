@@ -13,27 +13,32 @@ import com.demo.entity.system.Log;
  * <br>项 目 信 息:paramecium:com.demo.service.system.LogCollectorImpl.java
  */
 public class LogCollectorImpl implements LogCollector {
-	private LogService logService = (LogService)ApplicationContext.getNotSecurityBean("logService");
 	
 	public void putBeanLog(String log) {
 		try {
+			LogService logService = (LogService)ApplicationContext.getNotSecurityBean("logService");
 			logService.save(LogCollectorImpl.getLog(log, 1));
 		} catch (Exception e) {
 		}
+		ApplicationContext.destroy();
 	}
 	
 	public void putJdbcLog(String log) {
 		try {
+			LogService logService = (LogService)ApplicationContext.getNotSecurityBean("logService");
 			logService.save(LogCollectorImpl.getLog(log, 3));
 		} catch (Exception e) {
 		}
+		ApplicationContext.destroy();
 	}
 
 	public void putWebLog(String log) {
 		try {
+			LogService logService = (LogService)ApplicationContext.getNotSecurityBean("logService");
 			logService.save(LogCollectorImpl.getLog(log, 7));
 		} catch (Exception e) {
 		}
+		ApplicationContext.destroy();
 	}
 	
 	public static Log getLog(String log,Integer type){

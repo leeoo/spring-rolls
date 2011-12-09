@@ -11,13 +11,13 @@ import org.paramecium.log.handler.LoggerDB;
  */
 public class LoggerDBImpl implements LoggerDB{
 	
-	private LogService logService = (LogService)ApplicationContext.getNotSecurityBean("logService");
-	
 	public void saveErrorLogger(String log) {
 		try {
+			LogService logService = (LogService)ApplicationContext.getNotSecurityBean("logService");
 			logService.save(LogCollectorImpl.getLog(log, 0));
 		} catch (Exception e) {
 		}
+		ApplicationContext.destroy();
 	}
 
 	public void saveLogger(String log) {
