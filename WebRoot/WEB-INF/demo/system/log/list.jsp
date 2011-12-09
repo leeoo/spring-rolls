@@ -124,6 +124,10 @@
 					</td>
 				</tr>
 				<tr>
+					<td nowrap="nowrap">日志持久化长度约束:</td>
+					<td><input name="logLength" value="${logLength}" style="width: 100px;"/></td>
+				</tr>
+				<tr>
 					<td></td>
 					<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
 				</tr>
