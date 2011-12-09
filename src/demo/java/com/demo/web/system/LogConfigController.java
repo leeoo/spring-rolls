@@ -34,6 +34,7 @@ public class LogConfigController extends BaseController{
 		mv.addValue("jdbcLogCollector", LogConfig.jdbcLogCollector);
 		mv.addValue("beanLogCollector", LogConfig.beanLogCollector);
 		mv.addValue("webLogCollector", LogConfig.webLogCollector);
+		mv.addValue("logLength", LogConfig.logLength);
 		return mv.forward(getPage("/log/list.jsp"));
 	}
 	
@@ -58,6 +59,7 @@ public class LogConfigController extends BaseController{
 			LogConfig.jdbcLogCollector = mv.getValue("jdbcLogCollector", boolean.class);
 			LogConfig.beanLogCollector = mv.getValue("beanLogCollector", boolean.class);
 			LogConfig.webLogCollector = mv.getValue("webLogCollector", boolean.class);
+			LogConfig.logLength = mv.getValue("logLength", int.class);
 			mv.setSuccessMessage("保存成功!");
 		}catch (Exception e) {
 			logger.error(e);
