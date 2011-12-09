@@ -18,6 +18,7 @@ import javax.servlet.ServletResponse;
 public class SpecialFilter implements Filter{
 	
 	private static String encoding = null;
+	private final static String cn = "UTF-8";
 
 	public void init(FilterConfig config) throws ServletException {
 		if(SpecialFilter.encoding == null){
@@ -36,6 +37,9 @@ public class SpecialFilter implements Filter{
 	 * @return
 	 */
 	public static String getEncoding(){
+		if(encoding==null){
+			return cn;
+		}
 		return encoding;
 	}
 
