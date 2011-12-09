@@ -1,8 +1,5 @@
 package com.demo.service.system;
 
-import java.awt.Desktop;
-import java.awt.Desktop.Action;
-import java.net.URI;
 import java.sql.Connection;
 import java.sql.Statement;
 
@@ -17,17 +14,6 @@ public class TableInitService {
 	private final static Log logger = LoggerFactory.getLogger();
 	
 	public void init(){
-		if (java.awt.Desktop.isDesktopSupported()) {
-			try {
-				URI uri = java.net.URI.create("http://127.0.0.1");
-				Desktop dp = java.awt.Desktop.getDesktop();
-				if (dp.isSupported(Action.BROWSE)) {
-					dp.browse(uri);
-				}
-			} catch (java.lang.NullPointerException e) {
-			} catch (java.io.IOException e) {
-			}
-		}
 		/*try {
 			createTables();
 			logger.debug("DEMO用H2数据库内存表创建成功!");

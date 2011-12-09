@@ -1,4 +1,8 @@
 
+import java.awt.Desktop;
+import java.awt.Desktop.Action;
+import java.net.URI;
+
 import org.apache.catalina.Context;
 import org.apache.catalina.Engine;
 import org.apache.catalina.Host;
@@ -67,75 +71,22 @@ public abstract class  BaseWebServerEmbed{
 			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒  ▒▒░░▒▒░░▒▒░░▒▒  ▒▒░░▒▒░░▒▒  ▒▒░░▒▒░░▒  ░▒▒░░▒▒░░  ░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
 			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒                  ▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
 			System.err.println("░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒");
-			  System.err.print("░░▒▒░░▒▒░░▒▒");
-			System.err.print(" P");
-			Thread.sleep(100);
-			System.err.print("a");
-			Thread.sleep(100);
-			System.err.print("r");
-			Thread.sleep(100);
-			System.err.print("a");
-			Thread.sleep(100);
-			System.err.print("m");
-			Thread.sleep(100);
-			System.err.print("e");
-			Thread.sleep(100);
-			System.err.print("c");
-			Thread.sleep(100);
-			System.err.print("i");
-			Thread.sleep(100);
-			System.err.print("u");
-			Thread.sleep(100);
-			System.err.print("m");
-			Thread.sleep(100);
-			System.err.print("1");
-			Thread.sleep(100);
-			System.err.print(".");
-			Thread.sleep(100);
-			System.err.print("1");
-			Thread.sleep(100);
-			System.err.print("0");
-			Thread.sleep(100);
-			System.err.print(" • ");
-			Thread.sleep(100);
-			System.out.print(" • ");
-			Thread.sleep(100);
-			System.err.print(" • ");
-			Thread.sleep(100);
-			System.out.print(" • ");
-			Thread.sleep(100);
-			System.err.print(" • ");
-			Thread.sleep(100);
-			System.out.print(" • ");
-			Thread.sleep(100);
-			System.err.print(" • ");
-			Thread.sleep(100);
-			System.out.print(" • ");
-			Thread.sleep(100);
-			System.err.print(" • ");
-			Thread.sleep(100);
-			System.out.print(" • ");
-			Thread.sleep(100);
-			System.err.print("本 ");
-			Thread.sleep(100);
-			System.out.print("次 ");
-			Thread.sleep(100);
-			System.err.print("启 ");
-			Thread.sleep(100);
-			System.out.print("动 ");
-			Thread.sleep(100);
-			System.err.print("耗 ");
-			Thread.sleep(100);
-			System.out.print("时 ");
-			Thread.sleep(100);
-			System.err.print(""+l);
-			Thread.sleep(100);
-			System.out.print(" 毫 ");
-			Thread.sleep(100);
-			System.err.print("秒");
-			Thread.sleep(100);
-			System.err.println(" ▒░░▒▒░░▒▒░░▒▒");
-			Thread.sleep(100);
+			System.err.println("本次启动共耗时"+l+"毫秒!");
+			if (java.awt.Desktop.isDesktopSupported()) {
+				try {
+					String ip = "http://127.0.0.1";
+					if(DEFAULT_PORT!=80){
+						ip = ip.concat(":"+DEFAULT_PORT);
+					}
+					URI uri = java.net.URI.create(ip);
+					Desktop dp = java.awt.Desktop.getDesktop();
+					if (dp.isSupported(Action.BROWSE)) {
+						dp.browse(uri);
+					}
+				} catch (java.lang.NullPointerException e) {
+				} catch (java.io.IOException e) {
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
