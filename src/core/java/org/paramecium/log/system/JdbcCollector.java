@@ -36,7 +36,11 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 	}
 
 	public synchronized void put(STR log) {
-		if(LogConfig.jdbcLogCollector){
+		if(LogConfig.jdbcLogCollector&&log!=null){
+			int i =log.toString().toLowerCase().indexOf("log");
+			if(i>5&&i<15){
+				return;
+			}
 			StringBuffer logger = new StringBuffer();
 			logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
 			UserDetails<?> user = SecurityThread.getUserNotException();
