@@ -27,6 +27,15 @@ public abstract class JsonUitls {
 	}
 	
 	/**
+	 * 将html转译为文本内容
+	 * @param inputString
+	 * @return
+	 */
+	public static String Html2Text(String inputString) {
+		return inputString.replaceAll("\r\n", "").replaceAll("<[.[^<]]*>","").replaceAll("	", ""); 
+	}
+	
+	/**
 	 * bean集合变为json字符串
 	 * @param beans
 	 * @return
