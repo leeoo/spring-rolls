@@ -32,6 +32,9 @@ public abstract class JsonUitls {
 	 * @return
 	 */
 	public static String Html2Text(String inputString) {
+		if(inputString==null||inputString.isEmpty()){
+			return null;
+		}
 		return inputString.replaceAll("\r\n", "").replaceAll("<[.[^<]]*>","").replaceAll("	", ""); 
 	}
 	
