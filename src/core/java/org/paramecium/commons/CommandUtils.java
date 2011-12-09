@@ -8,7 +8,6 @@ import java.io.UnsupportedEncodingException;
 
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
-import org.paramecium.mvc.SpecialFilter;
 
 /**
  * 功 能 描 述:<br>
@@ -53,7 +52,7 @@ public class CommandUtils {
 		InputStream in = p.getInputStream();
 		InputStreamReader isr = null;
 		try {
-			isr = new InputStreamReader(in,SpecialFilter.getEncoding());
+			isr = new InputStreamReader(in,"GBK");
 		} catch (UnsupportedEncodingException e1) {
 			logger.error(e1);
 		}
