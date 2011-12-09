@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
+import org.paramecium.mvc.SpecialFilter;
 
 /**
  * 功 能 描 述:<br>
@@ -19,6 +20,26 @@ import org.paramecium.log.LoggerFactory;
 public class CommandUtils {
 	
 	private final static Log logger = LoggerFactory.getLogger();
+	
+	public static String getOSName(){
+		return System.getProperty("os.name");
+	}
+
+	public static String getOSVersion(){
+		return System.getProperty("sun.os.patch.level");
+	}
+
+	public static String getJavaVersion(){
+		return System.getProperty("java.specification.version");
+	}
+
+	public static String getClassPath(){
+		return System.getProperty("java.class.path");
+	}
+
+	public static String getJavaHome(){
+		return System.getProperty("java.home");
+	}
 	
 	/**
 	 * 执行命令
@@ -52,7 +73,11 @@ public class CommandUtils {
 		InputStream in = p.getInputStream();
 		InputStreamReader isr = null;
 		try {
-			isr = new InputStreamReader(in,"GBK");
+			String encode = SpecialFilter.getEncoding();//linux的shell为utf-8
+			if(getOSName().toLowerCase().indexOf("win")>-1){//win系统cmd命令行字符为GBK
+				encode = "GBK";
+			}
+			isr = new InputStreamReader(in,encode);
 		} catch (UnsupportedEncodingException e1) {
 			logger.error(e1);
 		}
