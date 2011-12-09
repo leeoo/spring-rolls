@@ -56,9 +56,9 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 			logger.append(username).append("|");
 			logger.append(log);
 			if(CollectorFactory.logCollector!=null){
-				CollectorFactory.logCollector.putJdbcLog(LogInfoUtils.getLog(logger.toString()));
+				CollectorFactory.logCollector.putJdbcLog(LogInfoUtils.cut(logger.toString()));
 			}else{
-				jdbcLogCache.put(LogInfoUtils.getLog(logger.toString()), null);
+				jdbcLogCache.put(LogInfoUtils.cut(logger.toString()), null);
 			}
 			logger$.debug(logger.toString());
 		}

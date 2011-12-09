@@ -52,9 +52,9 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 			logger.append(username).append("|");
 			logger.append(rq.getRequestURI());
 			if(CollectorFactory.logCollector!=null){
-				CollectorFactory.logCollector.putWebLog(LogInfoUtils.getLog(logger.toString()));
+				CollectorFactory.logCollector.putWebLog(LogInfoUtils.cut(logger.toString()));
 			}else{
-				mvcLogCache.put(LogInfoUtils.getLog(logger.toString()), null);
+				mvcLogCache.put(LogInfoUtils.cut(logger.toString()), null);
 			}
 			logger$.debug(logger.toString());
 		}

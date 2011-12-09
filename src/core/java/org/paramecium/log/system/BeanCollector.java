@@ -79,9 +79,9 @@ public class BeanCollector<STR extends Object> implements Collector<STR>{
 			logger.append(username).append("|");
 			logger.append(log);
 			if(CollectorFactory.logCollector!=null){
-				CollectorFactory.logCollector.putBeanLog(LogInfoUtils.getLog(logger.toString()));
+				CollectorFactory.logCollector.putBeanLog(LogInfoUtils.cut(logger.toString()));
 			}else{
-				beanLogCache.put(LogInfoUtils.getLog(logger.toString()), null);
+				beanLogCache.put(LogInfoUtils.cut(logger.toString()), null);
 			}
 			logger$.debug(logger.toString());
 		}
