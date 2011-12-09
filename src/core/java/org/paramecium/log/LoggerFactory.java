@@ -9,7 +9,9 @@ import org.paramecium.commons.PropertiesUitls;
 import org.paramecium.log.handler.ConsoleLogHandler;
 import org.paramecium.log.handler.DataBaseLogHandler;
 import org.paramecium.log.handler.FileLogHandler;
+import org.paramecium.log.system.BeanCollector;
 import org.paramecium.log.system.CollectorFactory;
+import org.paramecium.log.system.JdbcCollector;
 
 /**
  * 功 能 描 述:<br>
@@ -78,6 +80,24 @@ public class LoggerFactory {
 		LogConfig.beanLogCollector = beanLogCollectorStr != null ? Boolean.valueOf(beanLogCollectorStr) : false;
 		LogConfig.jdbcLogCollector = jdbcLogCollectorStr != null ? Boolean.valueOf(jdbcLogCollectorStr) : false;
 		LogConfig.webLogCollector = webLogCollectorStr != null ? Boolean.valueOf(webLogCollectorStr) : false;
+		LogConfig.notLogTableNames = properties.get("notLogTableNames");
+		LogConfig.notLogBeans = properties.get("notLogBeans");
+		if(LogConfig.notLogTableNames!=null&&!LogConfig.notLogTableNames.isEmpty()){
+			LogConfig.notLogTableNames = LogConfig.notLogTableNames.toLowerCase();
+			if(LogConfig.notLogTableNames.indexOf(',')>0){
+				JdbcCollector.notLogTableNames = LogConfig.notLogTableNames.split(",");
+			}else{
+				JdbcCollector.notLogTableNames = new String[]{LogConfig.notLogTableNames};
+			}
+		}
+		if(LogConfig.notLogBeans!=null&&!LogConfig.notLogBeans.isEmpty()){
+			LogConfig.notLogBeans = LogConfig.notLogBeans.toLowerCase();
+			if(LogConfig.notLogBeans.indexOf(',')>0){
+				BeanCollector.notLogBeans = LogConfig.notLogBeans.split(",");
+			}else{
+				BeanCollector.notLogBeans = new String[]{LogConfig.notLogBeans};
+			}
+		}
 		CollectorFactory.setLogCollector(properties.get("logCollectorInterface"));
 	}
 	

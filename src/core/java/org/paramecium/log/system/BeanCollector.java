@@ -23,6 +23,7 @@ import org.paramecium.security.UserDetails;
 public class BeanCollector<STR extends Object> implements Collector<STR>{
 	
 	private final static Log logger$ = LoggerFactory.getLogger();
+	public static String[] notLogBeans;
 	
 	private final static String undefin = "(无描述)";
 
@@ -60,6 +61,13 @@ public class BeanCollector<STR extends Object> implements Collector<STR>{
 
 	public synchronized void put(STR log) {
 		if(LogConfig.beanLogCollector&&log!=null){
+			if(notLogBeans!=null&&notLogBeans.length>0){
+				for(String bean : notLogBeans){
+					if(log.toString().toLowerCase().indexOf(bean)>0){
+						return;
+					}
+				}
+			}
 			StringBuffer logger = new StringBuffer();
 			logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
 			UserDetails<?> user = SecurityThread.getUserNotException();

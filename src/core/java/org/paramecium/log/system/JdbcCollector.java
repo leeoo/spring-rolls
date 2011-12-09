@@ -21,6 +21,7 @@ import org.paramecium.security.UserDetails;
 public class JdbcCollector<STR extends Object> implements Collector<STR>{
 
 	private final static Log logger$ = LoggerFactory.getLogger();
+	public static String[] notLogTableNames;
 	
 	@SuppressWarnings("unchecked")
 	private final static Cache<String,String> jdbcLogCache = CacheManager.getDefaultCache("CACHE_JDBC_LOG");
@@ -37,6 +38,13 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 
 	public synchronized void put(STR log) {
 		if(LogConfig.jdbcLogCollector&&log!=null){
+			if(notLogTableNames!=null&&notLogTableNames.length>0){
+				for(String table : notLogTableNames){
+					if(log.toString().toLowerCase().indexOf(table)>0){
+						return;
+					}
+				}
+			}
 			StringBuffer logger = new StringBuffer();
 			logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
 			UserDetails<?> user = SecurityThread.getUserNotException();

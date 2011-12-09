@@ -57,6 +57,16 @@ public class LogConfig {
 	public static boolean jdbcLogCollector = false;
 	
 	/**
+	 * 不被过滤的表
+	 */
+	public static String notLogTableNames;
+
+	/**
+	 * 不被过滤的Bean
+	 */
+	public static String notLogBeans;
+	
+	/**
 	 *  web请求日志是否启用
 	 */
 	public static boolean webLogCollector = false;
