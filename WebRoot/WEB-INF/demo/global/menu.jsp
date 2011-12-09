@@ -10,10 +10,10 @@
 			</div>
 			<div title="日志系统" icon="icon-date" style="padding-left: 10px;padding-top: 20px;">
 				<p><a href="${base}/system/config/log/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-doc">日志配置</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-warn">错误日志</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-reload">请求日志</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-undo">调用日志</a></p>
-				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-db">数据日志</a></p>
+				<p><a href="${base}/system/log/error/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-warn">错误日志</a></p>
+				<p><a href="${base}/system/log/web/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-reload">请求日志</a></p>
+				<p><a href="${base}/system/log/bean/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-undo">调用日志</a></p>
+				<p><a href="${base}/system/log/jdbc/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-db">数据日志</a></p>
 			</div>
 			<div title="功能演示" icon="icon-good" style="padding-left: 10px;padding-top: 20px;">
 				<p><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-cl">便利查询(Search)</a></p>

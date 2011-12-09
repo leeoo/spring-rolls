@@ -23,8 +23,10 @@ public class LogService {
 		ormDao.insert(log);
 	}
 	
-	public void delete(Integer id)throws Exception{
-		ormDao.delete(id);
+	public void delete(String[] ids)throws Exception{
+		for(String id : ids){
+			ormDao.delete(Integer.parseInt(id));
+		}
 	}
 	
 	public Page getAll(Page page,Integer type){

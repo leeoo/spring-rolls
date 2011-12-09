@@ -39,4 +39,17 @@ public class JdbcLogController extends BaseController{
 		mv.printJSON(json);
 	}
 
+	@ShowLabel("删除")
+	@MappingMethod
+	public void delete(ModelAndView mv){
+		String idstr = mv.getValue("ids",String.class);
+		try {
+			if(idstr!=null){
+				String[] ids = idstr.split(",");
+				logService.delete(ids);
+			}
+		} catch (Exception e) {
+		}
+	}
+	
 }

@@ -38,5 +38,18 @@ public class BeanLogController extends BaseController{
 		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
 		mv.printJSON(json);
 	}
+	
+	@ShowLabel("删除")
+	@MappingMethod
+	public void delete(ModelAndView mv){
+		String idstr = mv.getValue("ids",String.class);
+		try {
+			if(idstr!=null){
+				String[] ids = idstr.split(",");
+				logService.delete(ids);
+			}
+		} catch (Exception e) {
+		}
+	}
 
 }
