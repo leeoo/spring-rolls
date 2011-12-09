@@ -9,6 +9,7 @@ import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.DateUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LogConfig;
+import org.paramecium.log.LogInfoUtils;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
@@ -51,9 +52,9 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 			logger.append(username).append("|");
 			logger.append(rq.getRequestURI());
 			if(CollectorFactory.logCollector!=null){
-				CollectorFactory.logCollector.putWebLog(logger.toString());
+				CollectorFactory.logCollector.putWebLog(LogInfoUtils.getLog(logger.toString()));
 			}else{
-				mvcLogCache.put(logger.toString(), null);
+				mvcLogCache.put(LogInfoUtils.getLog(logger.toString()), null);
 			}
 			logger$.debug(logger.toString());
 		}

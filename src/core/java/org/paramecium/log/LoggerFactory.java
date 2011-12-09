@@ -98,6 +98,8 @@ public class LoggerFactory {
 				BeanCollector.notLogBeans = new String[]{LogConfig.notLogBeans};
 			}
 		}
+		String logLengthStr = properties.get("logLength");
+		LogConfig.logLength = logLengthStr != null ? Integer.valueOf(logLengthStr) : 1000;
 		CollectorFactory.setLogCollector(properties.get("logCollectorInterface"));
 	}
 	

@@ -1,6 +1,7 @@
 package org.paramecium.log.handler;
 
 import org.paramecium.log.LogHandler;
+import org.paramecium.log.LogInfoUtils;
 /**
  * 功 能 描 述:<br>
  * 日志存入数据库
@@ -27,11 +28,11 @@ public class DataBaseLogHandler implements LogHandler{
 	public void log(String message, boolean isError) {
 		if(isError){
 			if(loggerDB!=null){
-				loggerDB.saveErrorLogger(message);
+				loggerDB.saveErrorLogger(LogInfoUtils.getLog(message));
 			}
 		}else{
 			if(loggerDB!=null){
-				loggerDB.saveLogger(message);
+				loggerDB.saveLogger(LogInfoUtils.getLog(message));
 			}
 		}
 	}

@@ -9,6 +9,7 @@ import org.paramecium.commons.DateUtils;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.log.Log;
 import org.paramecium.log.LogConfig;
+import org.paramecium.log.LogInfoUtils;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
@@ -78,9 +79,9 @@ public class BeanCollector<STR extends Object> implements Collector<STR>{
 			logger.append(username).append("|");
 			logger.append(log);
 			if(CollectorFactory.logCollector!=null){
-				CollectorFactory.logCollector.putWebLog(logger.toString());
+				CollectorFactory.logCollector.putBeanLog(LogInfoUtils.getLog(logger.toString()));
 			}else{
-				beanLogCache.put(logger.toString(), null);
+				beanLogCache.put(LogInfoUtils.getLog(logger.toString()), null);
 			}
 			logger$.debug(logger.toString());
 		}

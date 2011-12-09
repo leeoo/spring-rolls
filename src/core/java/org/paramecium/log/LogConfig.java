@@ -67,6 +67,11 @@ public class LogConfig {
 	public static String notLogBeans;
 	
 	/**
+	 * log长度
+	 */
+	public static int logLength;
+	
+	/**
 	 *  web请求日志是否启用
 	 */
 	public static boolean webLogCollector = false;
