@@ -2,13 +2,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Paramecium开发平台演示——Web调用日志</title>
+<title>Paramecium开发平台演示——Web请求日志</title>
 <%@ include file="../../../global/head.jsp"%>
 </head>
 <body class="easyui-layout">
 	<%@ include file="../../../global/title.jsp"%>
 	<%@ include file="../../../global/menu.jsp"%>
-<div region="center" title="Web调用日志">
+<div region="center" title="Web请求日志">
 	<table id="list"></table>
 </div>
 <script>
@@ -26,8 +26,8 @@
 		                    {field:'id',checkbox:true}
 		                ]],
 			columns:[[
-						{field:'date',title:'时间',width:200},
-						{field:'log',title:'日志内容',align:'center'}
+						{field:'date',title:'时间',width:100},
+						{field:'log',title:'日志内容',width:800,align:'left'}
 					]],
 					toolbar: [{
 			            text: '删除',
