@@ -41,9 +41,6 @@ public class BeanCollector<STR extends Object> implements Collector<STR>{
 	
 	public static String getLog(Class<?> clazz,Method method){
 		if(LogConfig.beanLogCollector){
-			if(clazz.getName().toLowerCase().indexOf("log")>-1){
-				return null;
-			}
 			ShowLabel showLabel = clazz.getAnnotation(ShowLabel.class);;
 			ShowLabel showLabel2 = method.getAnnotation(ShowLabel.class);;
 			String cnClazz = undefin;
