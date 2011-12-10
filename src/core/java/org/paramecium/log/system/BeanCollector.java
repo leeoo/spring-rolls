@@ -22,18 +22,16 @@ public class BeanCollector implements Collector{
 	
 	private final static Log logger$ = LoggerFactory.getLogger();
 	public static String[] notLogBeans;
-	
-	private final static String undefin = "(无描述)";
 
 	public static String getLog(Class<?> clazz,Method method){
 		if(LogConfig.beanLogCollector){
 			ShowLabel showLabel = clazz.getAnnotation(ShowLabel.class);;
 			ShowLabel showLabel2 = method.getAnnotation(ShowLabel.class);;
-			String cnClazz = undefin;
+			String cnClazz = UNDEFIN;
 			if(showLabel!=null){
 				cnClazz = "(".concat(showLabel.value()).concat(")");
 			}
-			String cnMethod = undefin;
+			String cnMethod = UNDEFIN;
 			if(showLabel2!=null){
 				cnMethod = "(".concat(showLabel2.value()).concat(")");
 			}
@@ -55,7 +53,7 @@ public class BeanCollector implements Collector{
 			}
 			if(CollectorFactory.logCollector!=null){
 				StringBuffer logger = new StringBuffer();
-				logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
+				logger.append(DateUtils.getCurrentDateTimeStr()).append('|');
 				UserDetails<?> user = SecurityThread.getUserNotException();
 				String username = ANONYMOUS;
 				if(user!=null){

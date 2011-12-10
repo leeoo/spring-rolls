@@ -20,25 +20,25 @@ public class JdbcCollector implements Collector{
 	private final static Log logger$ = LoggerFactory.getLogger();
 	public static String[] notLogTableNames;
 	
-	public synchronized void put(String log) {
-		if(LogConfig.jdbcLogCollector&&log!=null){
+	public synchronized void put(String sql) {
+		if(LogConfig.jdbcLogCollector&&sql!=null){
 			if(notLogTableNames!=null&&notLogTableNames.length>0){
 				for(String table : notLogTableNames){
-					if(log.toString().toLowerCase().indexOf(table)>0){
+					if(sql.toString().toLowerCase().indexOf(table)>0){
 						return;
 					}
 				}
 			}
 			if(CollectorFactory.logCollector!=null){
 				StringBuffer logger = new StringBuffer();
-				logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
+				logger.append(DateUtils.getCurrentDateTimeStr()).append('|');
 				UserDetails<?> user = SecurityThread.getUserNotException();
 				String username = ANONYMOUS;
 				if(user!=null){
 					username = user.getUsername();
 				}
 				logger.append(username).append('|');
-				logger.append(log);
+				logger.append(sql);
 				CollectorFactory.logCollector.putJdbcLog(LogInfoUtils.cut(logger.toString()));
 				logger$.debug(logger.toString());
 			}

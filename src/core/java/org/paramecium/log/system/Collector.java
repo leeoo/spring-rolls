@@ -12,6 +12,8 @@ public interface Collector {
 	
 	public final static String ANONYMOUS = "匿名用户";
 	
+	public final static String UNDEFIN = "(无描述)";
+	
 	/**
 	 * 放入日志收集器队列
 	 * @param log
