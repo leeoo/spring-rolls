@@ -1,7 +1,5 @@
 package org.paramecium.log.system;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.paramecium.commons.DateUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LogConfig;
@@ -17,24 +15,23 @@ import org.paramecium.security.UserDetails;
  * <br>开 发 日 期:2011-9-15上午10:29:48
  * <br>项 目 信 息:paramecium:org.paramecium.log.system.WebCollector.java
  */
-public class WebCollector<Request extends Object> implements Collector<Request>{
+public class WebCollector implements Collector{
 	
 	private final static Log logger$ = LoggerFactory.getLogger();
 	
-	public synchronized void put(Request request) {
+	public synchronized void put(String URL) {
 		if(LogConfig.webLogCollector){
 			if(CollectorFactory.logCollector!=null){
-				HttpServletRequest rq = (HttpServletRequest)request;
 				StringBuffer logger = new StringBuffer();
-				logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
-				logger.append(rq.getRemoteAddr()).append("|");
+				logger.append(DateUtils.getCurrentDateTimeStr()).append('|');
 				UserDetails<?> user = SecurityThread.getUserNotException();
-				String username = "匿名用户";
+				String username = ANONYMOUS;
 				if(user!=null){
 					username = user.getUsername();
+					logger.append(user.getAddress()).append('|');
 				}
-				logger.append(username).append("|");
-				logger.append(rq.getRequestURI());
+				logger.append(username).append('|');
+				logger.append(URL);
 				CollectorFactory.logCollector.putWebLog(LogInfoUtils.cut(logger.toString()));
 				logger$.debug(logger.toString());
 			}

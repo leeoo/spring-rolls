@@ -18,7 +18,7 @@ import org.paramecium.security.UserDetails;
  * <br>开 发 日 期:2011-9-15上午11:02:26
  * <br>项 目 信 息:paramecium:org.paramecium.log.system.BeanCollector.java
  */
-public class BeanCollector<STR extends Object> implements Collector<STR>{
+public class BeanCollector implements Collector{
 	
 	private final static Log logger$ = LoggerFactory.getLogger();
 	public static String[] notLogBeans;
@@ -44,7 +44,7 @@ public class BeanCollector<STR extends Object> implements Collector<STR>{
 		return null;
 	}
 
-	public synchronized void put(STR log) {
+	public synchronized void put(String log) {
 		if(LogConfig.beanLogCollector&&log!=null){
 			if(notLogBeans!=null&&notLogBeans.length>0){
 				for(String bean : notLogBeans){
@@ -57,11 +57,11 @@ public class BeanCollector<STR extends Object> implements Collector<STR>{
 				StringBuffer logger = new StringBuffer();
 				logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
 				UserDetails<?> user = SecurityThread.getUserNotException();
-				String username = "匿名用户";
+				String username = ANONYMOUS;
 				if(user!=null){
 					username = user.getUsername();
 				}
-				logger.append(username).append("|");
+				logger.append(username).append('|');
 				logger.append(log);
 				CollectorFactory.logCollector.putBeanLog(LogInfoUtils.cut(logger.toString()));
 				logger$.debug(logger.toString());

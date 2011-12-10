@@ -1,7 +1,5 @@
 package org.paramecium.log.system;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
@@ -16,9 +14,9 @@ public class CollectorFactory {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	static LogCollector logCollector = null;//日志收集器一旦被实例化，各个收集器中的缓存将不会被使用，而是直接调用应用层持久化或在应用侧自行缓存。
-	private static WebCollector<HttpServletRequest> webCollector = new WebCollector<HttpServletRequest>();
-	private static BeanCollector<String> beanCollector = new BeanCollector<String>();
-	private static JdbcCollector<String> jdbcCollector = new JdbcCollector<String>();
+	private final static WebCollector webCollector = new WebCollector();
+	private final static BeanCollector beanCollector = new BeanCollector();
+	private final static JdbcCollector jdbcCollector = new JdbcCollector();
 	
 	public static void setLogCollector(String logCollectorInterface){
 		if(logCollectorInterface==null||logCollectorInterface.isEmpty()||logCollector!=null){
@@ -32,15 +30,15 @@ public class CollectorFactory {
 		}
 	}
 	
-	public static WebCollector<HttpServletRequest> getWebCollector(){
+	public static WebCollector getWebCollector(){
 		return webCollector;
 	}
 
-	public static BeanCollector<String> getBeanCollector(){
+	public static BeanCollector getBeanCollector(){
 		return beanCollector;
 	}
 
-	public static JdbcCollector<String> getJdbcCollector(){
+	public static JdbcCollector getJdbcCollector(){
 		return jdbcCollector;
 	}
 	

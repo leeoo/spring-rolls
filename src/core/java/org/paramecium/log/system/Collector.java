@@ -8,12 +8,14 @@ package org.paramecium.log.system;
  * <br>开 发 日 期:2011-9-15上午10:24:17
  * <br>项 目 信 息:paramecium:org.paramecium.log.system.Collector.java
  */
-public interface Collector<LOG extends Object> {
+public interface Collector {
+	
+	public final static String ANONYMOUS = "匿名用户";
 	
 	/**
 	 * 放入日志收集器队列
 	 * @param log
 	 */
-	public void put(LOG log);
+	public void put(String log);
 	
 }

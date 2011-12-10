@@ -51,7 +51,7 @@ public class ControllerExtractor implements ServletConstant{
 			}
 			try{
 				SecurityThread.startThread(request);
-				CollectorFactory.getWebCollector().put(request);//放入日志缓存
+				CollectorFactory.getWebCollector().put(request.getRequestURI());//放入日志缓存
 				ControllerClassInfo classInfo = IocContextIndex.getController(URIStrs[0]);
 				if(classInfo==null){
 					logger.warn("IocContextIndex未曾建立过的索引:"+URIStrs[0]);

@@ -15,12 +15,12 @@ import org.paramecium.security.UserDetails;
  * <br>开 发 日 期:2011-9-15上午11:02:26
  * <br>项 目 信 息:paramecium:org.paramecium.log.system.JdbcCollector.java
  */
-public class JdbcCollector<STR extends Object> implements Collector<STR>{
+public class JdbcCollector implements Collector{
 
 	private final static Log logger$ = LoggerFactory.getLogger();
 	public static String[] notLogTableNames;
 	
-	public synchronized void put(STR log) {
+	public synchronized void put(String log) {
 		if(LogConfig.jdbcLogCollector&&log!=null){
 			if(notLogTableNames!=null&&notLogTableNames.length>0){
 				for(String table : notLogTableNames){
@@ -33,11 +33,11 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 				StringBuffer logger = new StringBuffer();
 				logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
 				UserDetails<?> user = SecurityThread.getUserNotException();
-				String username = "匿名用户";
+				String username = ANONYMOUS;
 				if(user!=null){
 					username = user.getUsername();
 				}
-				logger.append(username).append("|");
+				logger.append(username).append('|');
 				logger.append(log);
 				CollectorFactory.logCollector.putJdbcLog(LogInfoUtils.cut(logger.toString()));
 				logger$.debug(logger.toString());
