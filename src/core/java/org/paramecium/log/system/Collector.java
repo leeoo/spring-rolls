@@ -1,6 +1,5 @@
 package org.paramecium.log.system;
 
-import java.util.Collection;
 
 /**
  * 功 能 描 述:<br>
@@ -16,11 +15,5 @@ public interface Collector<LOG extends Object> {
 	 * @param log
 	 */
 	public void put(LOG log);
-	
-	/**
-	 * 全部取出，取出后的日志会被清空
-	 * @return
-	 */
-	public Collection<String> getAll();
 	
 }

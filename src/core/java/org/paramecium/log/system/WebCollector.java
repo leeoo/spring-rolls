@@ -1,11 +1,7 @@
 package org.paramecium.log.system;
 
-import java.util.Collection;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.paramecium.cache.Cache;
-import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.DateUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LogConfig;
@@ -25,38 +21,23 @@ public class WebCollector<Request extends Object> implements Collector<Request>{
 	
 	private final static Log logger$ = LoggerFactory.getLogger();
 	
-	@SuppressWarnings("unchecked")
-	private final static Cache<String,String> mvcLogCache = CacheManager.getDefaultCache("CACHE_WEB_LOG");
-
-	public synchronized Collection<String> getAll() {
-		if(!LogConfig.webLogCollector){
-			return null;
-		}
-		Collection<String> logs = mvcLogCache.getKeys();
-		mvcLogCache.clear();
-		logger$.debug("MVC log cache is claer!");
-		return logs;
-	}
-
 	public synchronized void put(Request request) {
 		if(LogConfig.webLogCollector){
-			HttpServletRequest rq = (HttpServletRequest)request;
-			StringBuffer logger = new StringBuffer();
-			logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
-			logger.append(rq.getRemoteAddr()).append("|");
-			UserDetails<?> user = SecurityThread.getUserNotException();
-			String username = "匿名用户";
-			if(user!=null){
-				username = user.getUsername();
-			}
-			logger.append(username).append("|");
-			logger.append(rq.getRequestURI());
 			if(CollectorFactory.logCollector!=null){
+				HttpServletRequest rq = (HttpServletRequest)request;
+				StringBuffer logger = new StringBuffer();
+				logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
+				logger.append(rq.getRemoteAddr()).append("|");
+				UserDetails<?> user = SecurityThread.getUserNotException();
+				String username = "匿名用户";
+				if(user!=null){
+					username = user.getUsername();
+				}
+				logger.append(username).append("|");
+				logger.append(rq.getRequestURI());
 				CollectorFactory.logCollector.putWebLog(LogInfoUtils.cut(logger.toString()));
-			}else{
-				mvcLogCache.put(LogInfoUtils.cut(logger.toString()), null);
+				logger$.debug(logger.toString());
 			}
-			logger$.debug(logger.toString());
 		}
 	}
 

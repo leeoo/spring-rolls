@@ -1,9 +1,5 @@
 package org.paramecium.log.system;
 
-import java.util.Collection;
-
-import org.paramecium.cache.Cache;
-import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.DateUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LogConfig;
@@ -24,19 +20,6 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 	private final static Log logger$ = LoggerFactory.getLogger();
 	public static String[] notLogTableNames;
 	
-	@SuppressWarnings("unchecked")
-	private final static Cache<String,String> jdbcLogCache = CacheManager.getDefaultCache("CACHE_JDBC_LOG");
-
-	public synchronized Collection<String> getAll() {
-		if(!LogConfig.jdbcLogCollector){
-			return null;
-		}
-		Collection<String> logs = jdbcLogCache.getKeys();
-		jdbcLogCache.clear();
-		logger$.debug("JDBC log cache is claer!");
-		return logs;
-	}
-
 	public synchronized void put(STR log) {
 		if(LogConfig.jdbcLogCollector&&log!=null){
 			if(notLogTableNames!=null&&notLogTableNames.length>0){
@@ -46,21 +29,19 @@ public class JdbcCollector<STR extends Object> implements Collector<STR>{
 					}
 				}
 			}
-			StringBuffer logger = new StringBuffer();
-			logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
-			UserDetails<?> user = SecurityThread.getUserNotException();
-			String username = "匿名用户";
-			if(user!=null){
-				username = user.getUsername();
-			}
-			logger.append(username).append("|");
-			logger.append(log);
 			if(CollectorFactory.logCollector!=null){
+				StringBuffer logger = new StringBuffer();
+				logger.append(DateUtils.getCurrentDateTimeStr()).append("|");
+				UserDetails<?> user = SecurityThread.getUserNotException();
+				String username = "匿名用户";
+				if(user!=null){
+					username = user.getUsername();
+				}
+				logger.append(username).append("|");
+				logger.append(log);
 				CollectorFactory.logCollector.putJdbcLog(LogInfoUtils.cut(logger.toString()));
-			}else{
-				jdbcLogCache.put(LogInfoUtils.cut(logger.toString()), null);
+				logger$.debug(logger.toString());
 			}
-			logger$.debug(logger.toString());
 		}
 	}
 
