@@ -9,6 +9,7 @@ import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.annotation.Security;
 
+import com.demo.entity.system.Log;
 import com.demo.service.system.LogService;
 import com.demo.web.BaseController;
 
@@ -37,6 +38,20 @@ public class WebLogController extends BaseController{
 		String json = JsonUitls.getBeansJson(page.getResult(),false);
 		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
 		mv.printJSON(json);
+	}
+	
+	@ShowLabel("日志详情")
+	@MappingMethod
+	public ModelAndView detail(ModelAndView mv){
+		Integer id = mv.getValue("id", int.class);
+		if(id!=null){
+			Log log = logService.get(id);
+			if(log!=null){
+				mv.addValue("log",log.getLog());
+			}
+			return mv.forward(getPage("/log/detail.jsp"));
+		}
+		return mv.redirect(getRedirect("/system/log/web"));
 	}
 	
 	@ShowLabel("删除")

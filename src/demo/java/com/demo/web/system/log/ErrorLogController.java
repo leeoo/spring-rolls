@@ -9,6 +9,7 @@ import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.annotation.Security;
 
+import com.demo.entity.system.Log;
 import com.demo.service.system.LogService;
 import com.demo.web.BaseController;
 
@@ -22,8 +23,8 @@ public class ErrorLogController extends BaseController{
 	
 	@ShowLabel("首页界面")
 	@MappingMethod
-	public void list(ModelAndView mv){
-		mv.forward(getPage("/log/error/list.jsp"));
+	public ModelAndView list(ModelAndView mv){
+		return mv.forward(getPage("/log/error/list.jsp"));
 	}
 	
 	@ShowLabel("获取列表数据")
@@ -35,10 +36,25 @@ public class ErrorLogController extends BaseController{
 		page.setPageSize(20);
 		page = logService.getAll(page,0);
 		String json = JsonUitls.getBeansJson(page.getResult(),false);
-		json = JsonUitls.Html2Text(json);
 		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
 		mv.printJSON(json);
 	}
+	
+	@ShowLabel("日志详情")
+	@MappingMethod
+	public ModelAndView detail(ModelAndView mv){
+		Integer id = mv.getValue("id", int.class);
+		if(id!=null){
+			Log log = logService.get(id);
+			if(log!=null){
+				mv.addValue("log",log.getLog());
+			}
+			return mv.forward(getPage("/log/detail.jsp"));
+		}
+		return mv.redirect(getRedirect("/system/log/error"));
+	}
+	
+	
 	
 	@ShowLabel("删除")
 	@MappingMethod

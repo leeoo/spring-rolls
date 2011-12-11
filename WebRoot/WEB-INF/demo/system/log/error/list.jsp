@@ -27,7 +27,7 @@
 		                ]],
 			columns:[[
 						{field:'date',title:'时间',width:100},
-						{field:'log',title:'日志内容',width:800,align:'left'}
+						{field:'miniLog',title:'日志片段',width:800,align:'left'}
 					]],
 					toolbar: [{
 			            text: '删除',
@@ -61,6 +61,19 @@
 									$('#list').datagrid('clearSelections');
 					            }
 					        });
+						}
+					}, '-', {
+			            text: '详情',
+			            iconCls: 'icon-edit',
+			            handler:function(){
+				        	var ids = [];
+							var rows = $('#list').datagrid('getSelections');
+							if(rows.length!=1){
+								$.messager.alert('提示','必须选择一行!','warning');
+								$('#list').datagrid('clearSelections');
+								return false;
+							}
+							location.href ='${base}/system/log/error/detail${ext}?id='+rows[0].id;
 						}
 			        }, '-', {
 			            text: '查找',

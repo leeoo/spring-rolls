@@ -29,6 +29,10 @@ public class LogService {
 		}
 	}
 	
+	public Log get(Integer id){
+		return ormDao.select(id);
+	}
+	
 	public Page getAll(Page page,Integer type){
 		Log log = new Log();
 		log.setType(type);

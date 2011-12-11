@@ -62,6 +62,19 @@
 					            }
 					        });
 						}
+					 }, '-', {
+				            text: '详情',
+				            iconCls: 'icon-edit',
+				            handler:function(){
+					        	var ids = [];
+								var rows = $('#list').datagrid('getSelections');
+								if(rows.length!=1){
+									$.messager.alert('提示','必须选择一行!','warning');
+									$('#list').datagrid('clearSelections');
+									return false;
+								}
+								location.href ='${base}/system/log/bean/detail${ext}?id='+rows[0].id;
+							}
 			        }, '-', {
 			            text: '查找',
 			            iconCls: 'icon-search',
