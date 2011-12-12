@@ -2,6 +2,7 @@ package org.paramecium.log.handler;
 
 import org.paramecium.log.LogHandler;
 import org.paramecium.log.LogInfoUtils;
+import org.paramecium.log.system.JdbcCollector;
 /**
  * 功 能 描 述:<br>
  * 日志存入数据库
@@ -28,10 +29,24 @@ public class DataBaseLogHandler implements LogHandler{
 	public void log(String message, boolean isError) {
 		if(isError){
 			if(loggerDB!=null){
+				if(JdbcCollector.notLogTableNames!=null&&JdbcCollector.notLogTableNames.length>0){
+					for(String table : JdbcCollector.notLogTableNames){
+						if(message.toLowerCase().indexOf(table)>0){
+							return;
+						}
+					}
+				}
 				loggerDB.saveErrorLogger(LogInfoUtils.cut(message));
 			}
 		}else{
 			if(loggerDB!=null){
+				if(JdbcCollector.notLogTableNames!=null&&JdbcCollector.notLogTableNames.length>0){
+					for(String table : JdbcCollector.notLogTableNames){
+						if(message.toLowerCase().indexOf(table)>0){
+							return;
+						}
+					}
+				}
 				loggerDB.saveLogger(LogInfoUtils.cut(message));
 			}
 		}

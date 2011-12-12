@@ -24,7 +24,7 @@ public class JdbcCollector implements Collector{
 		if(LogConfig.jdbcLogCollector&&sql!=null){
 			if(notLogTableNames!=null&&notLogTableNames.length>0){
 				for(String table : notLogTableNames){
-					if(sql.toString().toLowerCase().indexOf(table)>0){
+					if(sql.toLowerCase().indexOf(table)>0){
 						return;
 					}
 				}

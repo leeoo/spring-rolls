@@ -46,7 +46,7 @@ public class BeanCollector implements Collector{
 		if(LogConfig.beanLogCollector&&log!=null){
 			if(notLogBeans!=null&&notLogBeans.length>0){
 				for(String bean : notLogBeans){
-					if(log.toString().toLowerCase().indexOf(bean)>0){
+					if(log.toLowerCase().indexOf(bean)>0){
 						return;
 					}
 				}
