@@ -22,7 +22,6 @@ public class HttpClientTest {
 		httppost.setEntity(entity);
 		HttpResponse response = httpclient.execute(target, httppost, localContext);
 		EntityUtils.consume(response.getEntity());*/
-
 	}
 	
 }
