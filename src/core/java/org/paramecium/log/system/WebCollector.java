@@ -19,7 +19,7 @@ public class WebCollector implements Collector{
 	
 	private final static Log logger$ = LoggerFactory.getLogger();
 	
-	public synchronized void put(String url) {
+	public synchronized void put(String log) {
 		if(LogConfig.webLogCollector){
 			if(CollectorFactory.logCollector!=null){
 				StringBuffer logger = new StringBuffer();
@@ -28,10 +28,9 @@ public class WebCollector implements Collector{
 				String username = ANONYMOUS;
 				if(user!=null){
 					username = user.getUsername();
-					logger.append(user.getAddress()).append('|');
 				}
 				logger.append(username).append('|');
-				logger.append(url);
+				logger.append(log);
 				CollectorFactory.logCollector.putWebLog(LogInfoUtils.cut(logger.toString()));
 				logger$.debug(logger.toString());
 			}
