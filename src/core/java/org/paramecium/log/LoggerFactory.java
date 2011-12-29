@@ -22,18 +22,21 @@ import org.paramecium.log.system.JdbcCollector;
  */
 public class LoggerFactory {
 	
-	private final static Map<String,Integer> levelMap = new LinkedHashMap<String,Integer>();
+	private final static Map<String,Integer> levelMap = new LinkedHashMap<String,Integer>(){
+		private static final long serialVersionUID = -5839983148167444784L;
+	{
+		put(Log.TRACE, Log.LEVEL_TRACE);
+		put(Log.DEBUG, Log.LEVEL_DEBUG);
+		put(Log.INFO, Log.LEVEL_INFO);
+		put(Log.WARN, Log.LEVEL_WARN);
+		put(Log.ERROR, Log.LEVEL_ERROR);
+		put(Log.FATAL, Log.LEVEL_FATAL);
+	}};
 	private static LogHandler consoleLogHandler;
 	private static LogHandler fileLogHandler;
 	private static LogHandler dbLogHandler;
 	
 	static{
-		levelMap.put(Log.TRACE, Log.LEVEL_TRACE);
-		levelMap.put(Log.DEBUG, Log.LEVEL_DEBUG);
-		levelMap.put(Log.INFO, Log.LEVEL_INFO);
-		levelMap.put(Log.WARN, Log.LEVEL_WARN);
-		levelMap.put(Log.ERROR, Log.LEVEL_ERROR);
-		levelMap.put(Log.FATAL, Log.LEVEL_FATAL);
 		Map<String,String> properties = PropertiesUitls.get("/logger.properties");
 		{//控制台输出模式
 			String loggerLevel = properties.get("consoleLoggerLevel");
