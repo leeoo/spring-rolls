@@ -1,9 +1,9 @@
 package org.paramecium.cache;
 
 import java.net.MalformedURLException;
-import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public class CacheManager {
 		if(synchClientIp!=null && synchClientIp.indexOf(',')>0){
 			CacheConfig.synchClientIps = synchClientIp.split(",");
 			for(int i=0 ; i<CacheConfig.synchClientIps.length;i++){
-				CacheConfig.synchClientIps[i] = "rmi://".concat(CacheConfig.synchClientIps[i]).concat("/");
+				CacheConfig.synchClientIps[i] = "//".concat(CacheConfig.synchClientIps[i]).concat("/");
 			}
 		}
 	}
@@ -86,12 +86,11 @@ public class CacheManager {
 			Cache<?,?> passiveCache = new PassiveCache<Object, Object>(name, maxSize);//被动接受缓存更新
 			if(CacheConfig.localServerIp!=null && !CacheConfig.localServerIp.isEmpty()){
 				try {
-					Naming.bind("rmi://".concat(CacheConfig.localServerIp).concat("/").concat(name), passiveCache);//发布被动接口
+					LocateRegistry.createRegistry(1099);
+					Naming.rebind("//".concat(CacheConfig.localServerIp).concat("/").concat(name), passiveCache);//发布被动接口
 				} catch (MalformedURLException e) {
 					logger.error(e);
 				} catch (RemoteException e) {
-					logger.error(e);
-				} catch (AlreadyBoundException e) {
 					logger.error(e);
 				}
 			}
