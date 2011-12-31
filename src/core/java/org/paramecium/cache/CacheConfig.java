@@ -10,6 +10,8 @@ package org.paramecium.cache;
 public class CacheConfig {
 	
 	public static int defaultCacheSize = 500;
+
+	public static int rmiPort = 1099;
 	
 	public static String localServerIp;
 	
