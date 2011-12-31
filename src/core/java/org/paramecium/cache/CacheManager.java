@@ -1,7 +1,17 @@
 package org.paramecium.cache;
 
+import java.net.MalformedURLException;
+import java.rmi.AlreadyBoundException;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.paramecium.cache.remote.InitiativeCache;
+import org.paramecium.cache.remote.PassiveCache;
+import org.paramecium.commons.PropertiesUitls;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 
 /**
  * 功 能 描 述:<br>
@@ -12,7 +22,22 @@ import java.util.Map;
  */
 public class CacheManager {
 	
+	private final static Log logger = LoggerFactory.getLogger();
 	private static Map<String,Cache<?,?>> map = new HashMap<String,Cache<?,?>>();
+	
+	static{
+		Map<String,String> properties = PropertiesUitls.get("/cache.properties");
+		String defaultCacheSizeStr = properties.get("defaultCacheSize");
+		CacheConfig.defaultCacheSize = defaultCacheSizeStr ==null ? 500 : Integer.parseInt(defaultCacheSizeStr);
+		CacheConfig.localServerIp = properties.get("localServerIp");
+		String synchClientIp = properties.get("synchClientIp");
+		if(synchClientIp!=null && synchClientIp.indexOf(',')>0){
+			CacheConfig.synchClientIps = synchClientIp.split(",");
+			for(int i=0 ; i<CacheConfig.synchClientIps.length;i++){
+				CacheConfig.synchClientIps[i] = "rmi://".concat(CacheConfig.synchClientIps[i]).concat("/");
+			}
+		}
+	}
 	
 	/**
 	 * 默认先进先出
@@ -21,7 +46,7 @@ public class CacheManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public static synchronized Cache getDefaultCache(String name){
-		return getDefaultCache(name, 500);
+		return getDefaultCache(name, CacheConfig.defaultCacheSize);
 	}
 
 	/**
@@ -46,7 +71,7 @@ public class CacheManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public static synchronized Cache getRemoteCache(String name){
-		return getRemoteCache(name, 500);
+		return getRemoteCache(name, CacheConfig.defaultCacheSize);
 	}
 	
 	/**
@@ -58,8 +83,20 @@ public class CacheManager {
 	@SuppressWarnings("unchecked")
 	public static synchronized Cache getRemoteCache(String name,int maxSize){
 		if(map.get(name)==null){
-			Cache<?,?> cache = new RemoteCache<Object, Object>(name, maxSize);
-			map.put(name, cache);
+			Cache<?,?> passiveCache = new PassiveCache<Object, Object>(name, maxSize);//被动接受缓存更新
+			if(CacheConfig.localServerIp!=null && !CacheConfig.localServerIp.isEmpty()){
+				try {
+					Naming.bind("rmi://".concat(CacheConfig.localServerIp).concat("/").concat(name), passiveCache);//发布被动接口
+				} catch (MalformedURLException e) {
+					logger.error(e);
+				} catch (RemoteException e) {
+					logger.error(e);
+				} catch (AlreadyBoundException e) {
+					logger.error(e);
+				}
+			}
+			Cache<?,?> initiativeCache = new InitiativeCache<Object, Object>(name, maxSize);//将缓存自身服务端放入本地缓存，如有变化，通知其他被动缓存主机。
+			map.put(name, initiativeCache);
 		}
 		return map.get(name);
 	}

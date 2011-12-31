@@ -57,7 +57,7 @@ public abstract class BaseCache<KEY extends Object,VALUE extends Object> impleme
 		map.put(key, element);
 	}
 
-	public synchronized void remove(Object key) {
+	public synchronized void remove(KEY key) {
 		map.remove(key);
 	}
 
