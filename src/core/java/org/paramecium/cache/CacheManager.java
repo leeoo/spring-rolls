@@ -14,15 +14,51 @@ public class CacheManager {
 	
 	private static Map<String,Cache<?,?>> map = new HashMap<String,Cache<?,?>>();
 	
+	/**
+	 * 默认先进先出
+	 * @param name
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static synchronized Cache getDefaultCache(String name){
 		return getDefaultCache(name, 500);
 	}
 
+	/**
+	 * 默认先进先出
+	 * @param name
+	 * @param maxSize
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static synchronized Cache getDefaultCache(String name,int maxSize){
 		if(map.get(name)==null){
 			Cache<?,?> cache = new DefaultCache<Object, Object>(name, maxSize);
+			map.put(name, cache);
+		}
+		return map.get(name);
+	}
+
+	/**
+	 * 远程同步缓存,在分布式环境下使用
+	 * @param name
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static synchronized Cache getRemoteCache(String name){
+		return getRemoteCache(name, 500);
+	}
+	
+	/**
+	 * 远程同步缓存,在分布式环境下使用
+	 * @param name
+	 * @param maxSize
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static synchronized Cache getRemoteCache(String name,int maxSize){
+		if(map.get(name)==null){
+			Cache<?,?> cache = new RemoteCache<Object, Object>(name, maxSize);
 			map.put(name, cache);
 		}
 		return map.get(name);

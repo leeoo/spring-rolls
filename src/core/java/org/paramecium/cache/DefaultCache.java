@@ -21,7 +21,7 @@ public class DefaultCache<KEY extends Object,VALUE extends Object> extends BaseC
 	
 	public synchronized void put(KEY key, VALUE value) {
 		if(this.maxSize < size()){
-			map.remove(map.keySet().iterator().next());
+			remove(map.keySet().iterator().next());
 		}
 		super.put(key, value);
 	}
