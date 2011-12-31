@@ -20,6 +20,7 @@ import org.paramecium.log.LoggerFactory;
  * <br>开 发 日 期:2011-7-1下午04:29:39
  * <br>项 目 信 息:paramecium:org.paramecium.cache.CacheManager.java
  */
+@SuppressWarnings("unchecked")
 public class CacheManager {
 	
 	private final static Log logger = LoggerFactory.getLogger();
@@ -33,6 +34,8 @@ public class CacheManager {
 		CacheConfig.rmiPort = rmiPortStr ==null ? 1099 : Integer.parseInt(rmiPortStr);
 		CacheConfig.localServerIp = properties.get("localServerIp");
 		String synchClientIp = properties.get("synchClientIp");
+		String cacheType = properties.get("cacheType");
+		CacheConfig.cacheType = cacheType==null||cacheType.isEmpty() ? "default" : cacheType;
 		if(synchClientIp!=null && synchClientIp.indexOf(',')>0){
 			CacheConfig.synchClientIps = synchClientIp.split(",");
 			for(int i=0 ; i<CacheConfig.synchClientIps.length;i++){
@@ -42,11 +45,38 @@ public class CacheManager {
 	}
 	
 	/**
+	 * 自动根据类型配置获取缓存实例
+	 * @param name
+	 * @return
+	 */
+	public static synchronized Cache getCacheByType(String name){
+		if(CacheConfig.cacheType.equalsIgnoreCase("remote")){
+			return getRemoteCache(name);
+		}else{
+			return getDefaultCache(name);
+		}
+	}
+
+	/**
+	 * 自动根据类型配置获取缓存实例
+	 * @param name
+	 * @param maxSize
+	 * @return
+	 */
+	public static synchronized Cache getCacheByType(String name,int maxSize){
+		if(CacheConfig.cacheType.equalsIgnoreCase("remote")){
+			return getRemoteCache(name,maxSize);
+		}else{
+			return getDefaultCache(name,maxSize);
+		}
+	}
+	
+	/**
 	 * 默认先进先出
 	 * @param name
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	
 	public static synchronized Cache getDefaultCache(String name){
 		return getDefaultCache(name, CacheConfig.defaultCacheSize);
 	}
@@ -57,7 +87,6 @@ public class CacheManager {
 	 * @param maxSize
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static synchronized Cache getDefaultCache(String name,int maxSize){
 		if(map.get(name)==null){
 			Cache<?,?> cache = new DefaultCache<Object, Object>(name, maxSize);
@@ -71,7 +100,6 @@ public class CacheManager {
 	 * @param name
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static synchronized Cache getRemoteCache(String name){
 		return getRemoteCache(name, CacheConfig.defaultCacheSize);
 	}
@@ -82,7 +110,6 @@ public class CacheManager {
 	 * @param maxSize
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static synchronized Cache getRemoteCache(String name,int maxSize){
 		if(map.get(name)==null){
 			Cache<?,?> passiveCache = new PassiveCache<Object, Object>(name, maxSize);//被动接受缓存更新

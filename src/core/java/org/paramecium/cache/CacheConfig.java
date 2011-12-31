@@ -16,5 +16,7 @@ public class CacheConfig {
 	public static String localServerIp;
 	
 	public static String[] synchClientIps;
+	
+	public static String cacheType = "default";
 
 }
