@@ -32,6 +32,11 @@ public class CacheManager {
 		CacheConfig.defaultCacheSize = defaultCacheSizeStr ==null ? 500 : Integer.parseInt(defaultCacheSizeStr);
 		String rmiPortStr = properties.get("rmiPort");
 		CacheConfig.rmiPort = rmiPortStr ==null ? 1099 : Integer.parseInt(rmiPortStr);
+		try {
+			LocateRegistry.createRegistry(CacheConfig.rmiPort);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
 		CacheConfig.localServerIp = properties.get("localServerIp");
 		String synchClientIp = properties.get("synchClientIp");
 		String cacheType = properties.get("cacheType");
@@ -132,7 +137,6 @@ public class CacheManager {
 			Cache<?,?> passiveCache = new PassiveCache<Object, Object>(name, maxSize);//被动接受缓存更新
 			if(CacheConfig.localServerIp!=null && !CacheConfig.localServerIp.isEmpty()){
 				try {
-					LocateRegistry.createRegistry(CacheConfig.rmiPort);
 					Naming.rebind("//".concat(CacheConfig.localServerIp).concat("/").concat(name), passiveCache);//发布被动接口
 				} catch (MalformedURLException e) {
 					logger.error(e);
