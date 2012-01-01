@@ -52,6 +52,8 @@ public class CacheManager {
 	public static synchronized Cache getCacheByType(String name){
 		if(CacheConfig.cacheType.equalsIgnoreCase("remote")){
 			return getRemoteCache(name);
+		}else if(CacheConfig.cacheType.equalsIgnoreCase("concurrent")){
+			return getConcurrentCache(name);
 		}else{
 			return getDefaultCache(name);
 		}
@@ -66,6 +68,8 @@ public class CacheManager {
 	public static synchronized Cache getCacheByType(String name,int maxSize){
 		if(CacheConfig.cacheType.equalsIgnoreCase("remote")){
 			return getRemoteCache(name,maxSize);
+		}else if(CacheConfig.cacheType.equalsIgnoreCase("concurrent")){
+			return getConcurrentCache(name);
 		}else{
 			return getDefaultCache(name,maxSize);
 		}
@@ -90,6 +94,19 @@ public class CacheManager {
 	public static synchronized Cache getDefaultCache(String name,int maxSize){
 		if(map.get(name)==null){
 			Cache<?,?> cache = new DefaultCache<Object, Object>(name, maxSize);
+			map.put(name, cache);
+		}
+		return map.get(name);
+	}
+	
+	/**
+	 * 获得高并发缓存
+	 * @param name
+	 * @return
+	 */
+	public static synchronized Cache getConcurrentCache(String name){
+		if(map.get(name)==null){
+			Cache<?,?> cache = new ConcurrentCache<Object, Object>(name);
 			map.put(name, cache);
 		}
 		return map.get(name);
