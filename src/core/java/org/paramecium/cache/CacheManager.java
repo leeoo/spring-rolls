@@ -98,7 +98,7 @@ public class CacheManager {
 	 */
 	public static synchronized Cache getDefaultCache(String name,int maxSize){
 		if(map.get(name)==null){
-			Cache<?,?> cache = new DefaultCache<Object, Object>(name, maxSize);
+			Cache<?,?> cache = new DefaultCache(name, maxSize);
 			map.put(name, cache);
 		}
 		return map.get(name);
@@ -111,7 +111,7 @@ public class CacheManager {
 	 */
 	public static synchronized Cache getConcurrentCache(String name){
 		if(map.get(name)==null){
-			Cache<?,?> cache = new ConcurrentCache<Object, Object>(name);
+			Cache<?,?> cache = new ConcurrentCache(name);
 			map.put(name, cache);
 		}
 		return map.get(name);
@@ -134,7 +134,7 @@ public class CacheManager {
 	 */
 	public static synchronized Cache getRemoteCache(String name,int maxSize){
 		if(map.get(name)==null){
-			Cache<?,?> passiveCache = new PassiveCache<Object, Object>(name, maxSize);//被动接受缓存更新
+			Cache<?,?> passiveCache = new PassiveCache(name, maxSize);//被动接受缓存更新
 			if(CacheConfig.localServerIp!=null && !CacheConfig.localServerIp.isEmpty()){
 				try {
 					Naming.rebind("//".concat(CacheConfig.localServerIp).concat("/").concat(name), passiveCache);//发布被动接口
@@ -144,7 +144,7 @@ public class CacheManager {
 					logger.error(e);
 				}
 			}
-			Cache<?,?> initiativeCache = new InitiativeCache<Object, Object>(name, maxSize);//将缓存自身服务端放入本地缓存，如有变化，通知其他被动缓存主机。
+			Cache<?,?> initiativeCache = new InitiativeCache(name, maxSize,passiveCache);//将缓存自身服务端放入本地缓存，如有变化，通知其他被动缓存主机。
 			map.put(name, initiativeCache);
 		}
 		return map.get(name);
