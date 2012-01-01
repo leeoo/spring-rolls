@@ -25,7 +25,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	
-	private final static Cache cache = CacheManager.getDefaultCache("CACHE_INDEX_PK",100);
+	private final static Cache cache = CacheManager.getCacheByType("LUCENE_INDEX_PK",100);
 	
 	private GenericOrmDao<T, PK> genericOrmDao;
 	

@@ -1,9 +1,9 @@
 package org.paramecium.security;
 
 import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
+import org.paramecium.cache.Cache;
+import org.paramecium.cache.CacheManager;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
@@ -14,17 +14,18 @@ import org.paramecium.log.LoggerFactory;
  * <br>开 发 日 期:2011-4-22下午03:06:15
  * <br>项 目 信 息:paramecium:org.paramecium.security.OnlineUserCache.java
  */
+@SuppressWarnings("unchecked")
 public class OnlineUserCache {
 	
-	private final static ConcurrentMap<String, UserDetails<?>> onlineUsers = new ConcurrentHashMap<String, UserDetails<?>>();
-	private final static ConcurrentMap<String, String> sessionIdIndex = new ConcurrentHashMap<String, String>();
+	private final static Cache<String, UserDetails<?>> onlineUsers = CacheManager.getCacheByType("ONLINE_USERS",1000);
+	private final static Cache<String, String> sessionIdIndex = CacheManager.getCacheByType("SESSION_ID", 1000);
 	private final static Log logger = LoggerFactory.getLogger();
 	
 	/**
 	 * 踢出所有用户
 	 */
 	public static void killAll(){
-		for(String sessionId : onlineUsers.keySet()){
+		for(String sessionId : onlineUsers.getKeys()){
 			kill(sessionId);
 		}
 		onlineUsers.clear();
@@ -71,7 +72,7 @@ public class OnlineUserCache {
 	 * @return
 	 */
 	public static Collection<UserDetails<?>> getAllOnlineUsers(){
-		return onlineUsers.values();
+		return onlineUsers.getValues();
 	}
 	
 	/**

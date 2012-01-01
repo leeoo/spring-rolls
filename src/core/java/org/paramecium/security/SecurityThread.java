@@ -23,8 +23,8 @@ public class SecurityThread {
 	
 	private final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();//session本地线程
 	private final static ThreadLocal<Security> securityThreadLocal = new ThreadLocal<Security>();//安全限制级别本地线程
-	private final static Cache<String, Boolean> kickUserCache = CacheManager.getDefaultCache("CACHE_KICK_USER", 20);//判断重复登录用缓存
-	private final static Cache<String, Boolean> killUserCache = CacheManager.getDefaultCache("CACHE_KILL_USER", 20);//判断被强制踢出缓存
+	private final static Cache<String, Boolean> kickUserCache = CacheManager.getCacheByType("KICK_USER", 20);//判断重复登录用缓存
+	private final static Cache<String, Boolean> killUserCache = CacheManager.getCacheByType("KILL_USER", 20);//判断被强制踢出缓存
 	
 	public static void putKillUserCache(String sessionId){
 		killUserCache.put(sessionId,true);

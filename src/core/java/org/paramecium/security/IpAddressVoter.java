@@ -1,8 +1,9 @@
 package org.paramecium.security;
 
 import java.util.Collection;
-import java.util.HashSet;
 
+import org.paramecium.cache.Cache;
+import org.paramecium.cache.CacheManager;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
@@ -15,11 +16,12 @@ import sun.net.util.IPAddressUtil;
  * <br>开 发 日 期:2011-10-18上午08:48:22
  * <br>项 目 信 息:paramecium:org.paramecium.security.IpAddressVoter.java
  */
+@SuppressWarnings("unchecked")
 public class IpAddressVoter{
 
 	private final static Log logger = LoggerFactory.getLogger();
 	
-	private static Collection<String> ipAddressList = new HashSet<String>();
+	private static Cache<String,String> ipAddressList = CacheManager.getCacheByType("IP_LIST", 50);
 	
 	private static boolean include = true;
 
@@ -27,7 +29,7 @@ public class IpAddressVoter{
 	
 	public static void put(String ip){
 		logger.debug("IP地址：".concat(ip).concat("已载入IP地址过滤列表!"));
-		ipAddressList.add(ip);
+		ipAddressList.put(ip,null);
 	}
 	
 	public static void remove(String ip){
@@ -40,11 +42,13 @@ public class IpAddressVoter{
 	}
 	
 	public static Collection<String> getIpAddressList() {
-		return ipAddressList;
+		return ipAddressList.getKeys();
 	}
 
-	public static void setIpAddressList(Collection<String> ipAddressList) {
-		IpAddressVoter.ipAddressList = ipAddressList;
+	public static void setIpAddressList(Collection<String> ips) {
+		for(String ip : ips){
+			put(ip);
+		}
 	}
 	
 	public static boolean isInclude() {
@@ -79,7 +83,7 @@ public class IpAddressVoter{
 		if(IPAddressUtil.isIPv6LiteralAddress(currentIp)){
 			return !include;//如果是IPV6
 		}
-		for(String ip:ipAddressList){
+		for(String ip:ipAddressList.getKeys()){
 			if(currentIp.equals(ip)){
 				return include;
 			}else if(ip.indexOf("-")>-1){

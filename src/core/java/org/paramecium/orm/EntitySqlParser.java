@@ -29,7 +29,7 @@ public class EntitySqlParser {
 	private final static Log logger = LoggerFactory.getLogger();
 
 	@SuppressWarnings("unchecked")
-	private final static Cache<String,String> sqlCache = CacheManager.getDefaultCache("CACHE_SQL_BUILDER");
+	private final static Cache<String,String> sqlCache = CacheManager.getCacheByType("ENTITY_SQL");
 	
 	public static String getInsertSql(Object bean){
 		String key = bean.getClass().getName()+":insert";
