@@ -137,7 +137,7 @@ public class CacheManager {
 			Cache<?,?> passiveCache = new PassiveCache(name, maxSize);//被动接受缓存更新
 			if(CacheConfig.localServerIp!=null && !CacheConfig.localServerIp.isEmpty()){
 				try {
-					Naming.rebind("//".concat(CacheConfig.localServerIp).concat("/").concat(name), passiveCache);//发布被动接口
+					Naming.rebind("//".concat(CacheConfig.localServerIp.concat(":"+CacheConfig.rmiPort+"/")).concat(name), passiveCache);//发布被动接口
 				} catch (MalformedURLException e) {
 					logger.error(e);
 				} catch (RemoteException e) {
