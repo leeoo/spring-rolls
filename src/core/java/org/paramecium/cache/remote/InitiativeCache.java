@@ -4,12 +4,11 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.LinkedHashMap;
+import java.util.Collection;
 
 import org.paramecium.cache.BaseCache;
 import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheConfig;
-import org.paramecium.cache.Element;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
@@ -20,18 +19,20 @@ import org.paramecium.log.LoggerFactory;
  * <br>开 发 日 期:2011-12-31下午03:58:36
  * <br>项 目 信 息:paramecium:org.paramecium.cache.remote.InitiativeCache.java
  */
+@SuppressWarnings("unchecked")
 public class InitiativeCache <KEY extends Object,VALUE extends Object> extends BaseCache<KEY, VALUE>{
 	
 	private static final long serialVersionUID = 2195981385896026876L;
 	private final static Log logger = LoggerFactory.getLogger();
+	private Cache<KEY,VALUE> cache;
 	
-	public InitiativeCache(String name,int initSize){
+	public InitiativeCache(String name,int initSize,Cache<KEY,VALUE> cache){
 		this.maxSize = initSize;
 		this.name = name;
-		map = new LinkedHashMap<KEY,Element<KEY,VALUE>>();
+		this.cache = cache;
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	public synchronized void put(KEY key, VALUE value) {
 		if(this.maxSize < size()){
 			remove(map.keySet().iterator().next());
@@ -50,10 +51,9 @@ public class InitiativeCache <KEY extends Object,VALUE extends Object> extends B
 				}
 			}
 		}
-		super.put(key, value);
+		cache.put(key, value);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public synchronized void clear() {
 		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
 			for(String ip : CacheConfig.synchClientIps){
@@ -69,10 +69,9 @@ public class InitiativeCache <KEY extends Object,VALUE extends Object> extends B
 				}
 			}
 		}
-		super.clear();
+		cache.clear();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public synchronized void remove(KEY key) {
 		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
 			for(String ip : CacheConfig.synchClientIps){
@@ -88,7 +87,27 @@ public class InitiativeCache <KEY extends Object,VALUE extends Object> extends B
 				}
 			}
 		}
-		super.remove(key);
+		cache.remove(key);
+	}
+	
+	public synchronized VALUE get(KEY key) {
+		return cache.get(key);
+	}
+
+	public synchronized Collection<KEY> getKeys() {
+		return cache.getKeys();
+	}
+
+	public synchronized Collection<VALUE> getValues() {
+		return cache.getValues();
+	}
+
+	public synchronized boolean isEmpty() {
+		return cache.isEmpty();
+	}
+
+	public synchronized int size() {
+		return cache.size();
 	}
 
 }

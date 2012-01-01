@@ -29,12 +29,4 @@ public class PassiveCache <KEY extends Object,VALUE extends Object> extends Base
 		super.put(key, value);
 	}
 	
-	public synchronized void clear() {
-		super.clear();
-	}
-	
-	public synchronized void remove(KEY key) {
-		super.remove(key);
-	}
-
 }
