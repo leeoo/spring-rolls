@@ -10,6 +10,7 @@ import java.util.HashSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -307,6 +308,87 @@ public class ModelAndView implements Serializable,Cloneable{
 	
 	public HttpSession getSession() {
 		return request.getSession(false);
+	}
+	
+	/**
+	 * 获得所有cookie
+	 * @return
+	 */
+	public Cookie[] getCookies(){
+		return getRequest().getCookies();
+	}
+	
+	/**
+	 * 删除某个Cookie
+	 * @param key
+	 */
+	public void removeCookie(String key){
+		Cookie cookie = getCookie(key);
+		if(cookie!=null){
+			cookie.setMaxAge(0);
+			cookie.setValue(null);
+			getResponse().addCookie(cookie);
+		}
+	}
+	
+	/**
+	 * 获得某个Cookie
+	 * @param key
+	 * @return
+	 */
+	public Cookie getCookie(String key){
+		Cookie[] cookies = getRequest().getCookies();
+		if(cookies!=null&&cookies.length>0){
+			for(Cookie cookie : cookies){
+				if(cookie.getName().equals(key)){
+					return cookie;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * 添加一个cookie
+	 * @param key
+	 * @param value
+	 */
+	public void addCookie(String key,String value){
+		addCookie(key, value, 30*24*60*60, ServletConstant.lineStr);
+	}
+	
+	/**
+	 * 添加一个cookie
+	 * @param key
+	 * @param value
+	 * @param path路径
+	 */
+	public void addCookie(String key,String value,String path){
+		addCookie(key, value, 30*24*60*60, path);
+	}
+	
+	/**
+	 * 添加一个cookie
+	 * @param key
+	 * @param value
+	 * @param age生命周期(秒)
+	 */
+	public void addCookie(String key,String value,int age){
+		addCookie(key, value, age, ServletConstant.lineStr);
+	}
+	
+	/**
+	 * 添加一个cookie
+	 * @param key
+	 * @param value
+	 * @param age生命周期(秒)
+	 * @param path路径
+	 */
+	public void addCookie(String key,String value,int age,String path){
+		Cookie cookie = new Cookie(key, value);
+		cookie.setMaxAge(age);
+		cookie.setPath(path);
+		getResponse().addCookie(cookie);
 	}
 
 	public boolean isRedirect() {
