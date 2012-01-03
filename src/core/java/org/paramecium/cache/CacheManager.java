@@ -57,8 +57,6 @@ public class CacheManager {
 	public static synchronized Cache getCacheByType(String name){
 		if(CacheConfig.cacheType.equalsIgnoreCase("remote")){
 			return getRemoteCache(name);
-		}else if(CacheConfig.cacheType.equalsIgnoreCase("concurrent")){
-			return getConcurrentCache(name);
 		}else{
 			return getDefaultCache(name);
 		}
@@ -73,8 +71,6 @@ public class CacheManager {
 	public static synchronized Cache getCacheByType(String name,int maxSize){
 		if(CacheConfig.cacheType.equalsIgnoreCase("remote")){
 			return getRemoteCache(name,maxSize);
-		}else if(CacheConfig.cacheType.equalsIgnoreCase("concurrent")){
-			return getConcurrentCache(name);
 		}else{
 			return getDefaultCache(name,maxSize);
 		}
@@ -104,18 +100,6 @@ public class CacheManager {
 		return map.get(name);
 	}
 	
-	/**
-	 * 获得高并发缓存
-	 * @param name
-	 * @return
-	 */
-	public static synchronized Cache getConcurrentCache(String name){
-		if(map.get(name)==null){
-			Cache<?,?> cache = new ConcurrentCache(name);
-			map.put(name, cache);
-		}
-		return map.get(name);
-	}
 
 	/**
 	 * 远程同步缓存,在分布式环境下使用

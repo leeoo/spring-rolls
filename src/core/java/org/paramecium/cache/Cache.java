@@ -28,5 +28,6 @@ public interface Cache<KEY extends Object,VALUE extends Object> extends Remote{
 	
 	public boolean isEmpty();
 	
+	public KEY peek();
 	
 }

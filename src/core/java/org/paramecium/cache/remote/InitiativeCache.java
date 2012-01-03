@@ -35,7 +35,7 @@ public class InitiativeCache <KEY extends Object,VALUE extends Object> extends B
 	
 	public synchronized void put(KEY key, VALUE value) {
 		if(this.maxSize < size()){
-			remove(map.keySet().iterator().next());
+			remove(cache.peek());
 		}
 		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
 			for(String ip : CacheConfig.synchClientIps){
@@ -110,4 +110,8 @@ public class InitiativeCache <KEY extends Object,VALUE extends Object> extends B
 		return cache.size();
 	}
 
+	public synchronized KEY peek() {
+		return cache.peek();
+	}
+	
 }

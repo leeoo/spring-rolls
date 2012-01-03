@@ -3,8 +3,10 @@ package org.paramecium.cache;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * 功 能 描 述:<br>
@@ -17,7 +19,8 @@ public abstract class BaseCache<KEY extends Object,VALUE extends Object> impleme
 
 	private static final long serialVersionUID = 8139192731446878665L;
 
-	protected Map<KEY,Element<KEY,VALUE>> map = new ConcurrentHashMap<KEY,Element<KEY,VALUE>>();
+	protected ConcurrentMap<KEY,Element<KEY,VALUE>> map = new ConcurrentHashMap<KEY,Element<KEY,VALUE>>();
+	protected Queue<KEY> index = new ConcurrentLinkedQueue<KEY>();
 	
 	public int maxSize = 500;
 	
@@ -25,6 +28,7 @@ public abstract class BaseCache<KEY extends Object,VALUE extends Object> impleme
 	
 	public synchronized void clear() {
 		map.clear();
+		index.clear();
 	}
 
 	public synchronized VALUE get(KEY key) {
@@ -33,7 +37,7 @@ public abstract class BaseCache<KEY extends Object,VALUE extends Object> impleme
 	}
 
 	public synchronized Collection<KEY> getKeys() {
-		return map.keySet();
+		return index;
 	}
 
 	public synchronized Collection<VALUE> getValues() {
@@ -55,14 +59,20 @@ public abstract class BaseCache<KEY extends Object,VALUE extends Object> impleme
 	public synchronized void put(KEY key, VALUE value) {
 		Element<KEY,VALUE> element = new Element<KEY,VALUE>(key, value);
 		map.put(key, element);
+		index.add(key);
 	}
 
 	public synchronized void remove(KEY key) {
 		map.remove(key);
+		index.remove(key);
 	}
 
 	public synchronized int size() {
 		return map.size();
+	}
+	
+	public synchronized KEY peek() {
+		return index.peek();
 	}
 
 }

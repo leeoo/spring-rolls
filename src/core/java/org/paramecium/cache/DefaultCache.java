@@ -1,6 +1,5 @@
 package org.paramecium.cache;
 
-import java.util.LinkedHashMap;
 
 /**
  * 功 能 描 述:<br>
@@ -16,12 +15,11 @@ public class DefaultCache<KEY extends Object,VALUE extends Object> extends BaseC
 	public DefaultCache(String name,int initSize){
 		this.maxSize = initSize;
 		this.name = name;
-		map = new LinkedHashMap<KEY,Element<KEY,VALUE>>();
 	}
 	
 	public synchronized void put(KEY key, VALUE value) {
 		if(this.maxSize < size()){
-			remove(map.keySet().iterator().next());
+			remove(this.index.peek());
 		}
 		super.put(key, value);
 	}
