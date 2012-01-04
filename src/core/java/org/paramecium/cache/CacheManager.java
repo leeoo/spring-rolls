@@ -42,10 +42,14 @@ public class CacheManager {
 			}
 			CacheConfig.localServerIp = properties.get("localServerIp");
 			String synchClientIp = properties.get("synchClientIp");
-			if(synchClientIp!=null && synchClientIp.indexOf(',')>0){
-				CacheConfig.synchClientIps = synchClientIp.split(",");
-				for(int i=0 ; i<CacheConfig.synchClientIps.length;i++){
-					CacheConfig.synchClientIps[i] = "//".concat(CacheConfig.synchClientIps[i]).concat("/");
+			if(synchClientIp!=null){
+				if(synchClientIp.indexOf(',')>0){
+					CacheConfig.synchClientIps = synchClientIp.split(",");
+					for(int i=0 ; i<CacheConfig.synchClientIps.length;i++){
+						CacheConfig.synchClientIps[i] = "//".concat(CacheConfig.synchClientIps[i]).concat("/");
+					}
+				}else{
+					CacheConfig.synchClientIps = new String[]{synchClientIp};
 				}
 			}
 		}
