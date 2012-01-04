@@ -36,14 +36,6 @@ public class RMITest {
 	
 	static class Server{
 		
-		static{
-			try {
-				LocateRegistry.createRegistry(1099);
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}
-		}
-
 		public void startServer(){
 			Test test = null;
 			try {
@@ -52,6 +44,7 @@ public class RMITest {
 				e1.printStackTrace();
 			}
 			try {
+				LocateRegistry.createRegistry(1099);
 				Naming.rebind("//192.168.71.98:1099/a", test);
 			} catch (RemoteException e) {
 				e.printStackTrace();
