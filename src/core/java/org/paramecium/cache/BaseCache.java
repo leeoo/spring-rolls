@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public abstract class BaseCache extends UnicastRemoteObject implements Cache,Cloneable{
 
-	public BaseCache() throws RemoteException {
+	protected BaseCache() throws RemoteException {
 		super();
 	}
 
