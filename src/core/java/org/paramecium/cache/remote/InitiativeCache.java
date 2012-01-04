@@ -42,7 +42,7 @@ public class InitiativeCache extends UnicastRemoteObject implements RemoteCache 
 				logger.error(e);
 			}
 		}
-		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
+		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length>0){
 			for(String ip : CacheConfig.synchClientIps){
 				try {
 					RemoteCache remoteCache = (RemoteCache) Naming.lookup(ip.concat(this.name));
@@ -64,7 +64,7 @@ public class InitiativeCache extends UnicastRemoteObject implements RemoteCache 
 	}
 	
 	public synchronized void clear() {
-		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
+		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length>0){
 			for(String ip : CacheConfig.synchClientIps){
 				try {
 					RemoteCache remoteCache = (RemoteCache) Naming.lookup(ip.concat(this.name));
@@ -86,7 +86,7 @@ public class InitiativeCache extends UnicastRemoteObject implements RemoteCache 
 	}
 	
 	public synchronized void remove(Object key) {
-		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
+		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length>0){
 			for(String ip : CacheConfig.synchClientIps){
 				try {
 					RemoteCache remoteCache = (RemoteCache) Naming.lookup(ip.concat(this.name));

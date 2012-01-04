@@ -49,7 +49,7 @@ public class CacheManager {
 						CacheConfig.synchClientIps[i] = "//".concat(CacheConfig.synchClientIps[i]).concat("/");
 					}
 				}else{
-					CacheConfig.synchClientIps = new String[]{synchClientIp};
+					CacheConfig.synchClientIps = new String[]{"//".concat(synchClientIp).concat("/")};
 				}
 			}
 		}
