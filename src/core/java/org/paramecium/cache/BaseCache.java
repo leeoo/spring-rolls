@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentMap;
  * <br>开 发 日 期:2011-7-1下午04:29:51
  * <br>项 目 信 息:paramecium:org.paramecium.cache.BaseCache.java
  */
-public abstract class BaseCache implements Cache,Cloneable {
+public abstract class BaseCache implements RemoteCache,Cloneable {
 
 	private static final long serialVersionUID = 8139192731446878665L;
 	protected ConcurrentMap<Object,Element> map = new ConcurrentHashMap<Object,Element>();

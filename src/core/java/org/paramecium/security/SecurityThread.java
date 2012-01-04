@@ -1,13 +1,9 @@
 package org.paramecium.security;
 
-import java.rmi.RemoteException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheManager;
-import org.paramecium.log.Log;
-import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.exception.AnonymousException;
 import org.paramecium.security.exception.IpAddressException;
 import org.paramecium.security.exception.SessionExpiredException;
@@ -22,20 +18,16 @@ import org.paramecium.security.exception.UserKillException;
  * <br>开 发 日 期:2011-4-22下午01:47:50
  * <br>项 目 信 息:paramecium:org.paramecium.security.SecurityThread.java
  */
+@SuppressWarnings("unchecked")
 public class SecurityThread {
 	
-	private final static Log logger = LoggerFactory.getLogger();
 	private final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();//session本地线程
 	private final static ThreadLocal<Security> securityThreadLocal = new ThreadLocal<Security>();//安全限制级别本地线程
-	private final static Cache kickUserCache = CacheManager.getCacheByType("KICK_USER", 20);//判断重复登录用缓存
-	private final static Cache killUserCache = CacheManager.getCacheByType("KILL_USER", 20);//判断被强制踢出缓存
+	private final static Cache<String,Boolean> kickUserCache = (Cache<String, Boolean>) CacheManager.getCacheByType("KICK_USER", 20);//判断重复登录用缓存
+	private final static Cache<String,Boolean> killUserCache = (Cache<String, Boolean>) CacheManager.getCacheByType("KILL_USER", 20);//判断被强制踢出缓存
 	
 	public static void putKillUserCache(String sessionId){
-		try {
-			killUserCache.put(sessionId,true);
-		} catch (RemoteException e) {
-			logger.error(e);
-		}
+		killUserCache.put(sessionId,true);
 	}
 
 	/**
@@ -129,11 +121,7 @@ public class SecurityThread {
 			UserDetails<?> onlineUser = OnlineUserCache.getOnlineUserByUsername(userDetails.getUsername());
 			if(onlineUser!=null){//用户信息相同,Session不同,说明用户出现重复登录或盗用,前者的在线用户信息删除
 				OnlineUserCache.logout(onlineUser.getSessionId());
-				try {
-					kickUserCache.put(onlineUser.getSessionId(), true);
-				} catch (RemoteException e) {
-					logger.error(e);
-				}//先记录下该用户被踢掉的状态
+				kickUserCache.put(onlineUser.getSessionId(), true);//先记录下该用户被踢掉的状态
 			}else{//Session相同,用户信息不同，说明用户用相同浏览器重新登录,Session保存，之前在线用户信息删除
 				onlineUser = OnlineUserCache.getOnlineUserBySessionId(userDetails.getSessionId());
 				if(onlineUser!=null){
@@ -155,19 +143,11 @@ public class SecurityThread {
 			if(userDetails==null){//如果在线用户列表不存在该用户，而该用户线程仍有信息，被视为强制被踢出(一般管理员可用使用该权限)
 				if(kickUserCache.get(sessionId)!=null){
 					putSecurity(SecurityThread.Security.UserKickException);
-					try {
-						kickUserCache.remove(sessionId);
-					} catch (RemoteException e) {
-						logger.error(e);
-					}
+					kickUserCache.remove(sessionId);
 					throw new UserKickException("该账号重复登录被踢掉!");
 				}else if(killUserCache.get(sessionId)!=null){
 					putSecurity(SecurityThread.Security.UserKillException);
-					try {
-						killUserCache.remove(sessionId);
-					} catch (RemoteException e) {
-						logger.error(e);
-					}
+					killUserCache.remove(sessionId);
 					throw new UserKillException("该账号被管理员强制退出!");
 				}else{
 					putSecurity(SecurityThread.Security.AnonymousException);
@@ -207,16 +187,8 @@ public class SecurityThread {
 	 */
 	public static void remove(String sessionId){
 		OnlineUserCache.logout(sessionId);
-		try {
-			kickUserCache.remove(sessionId);
-		} catch (RemoteException e) {
-			logger.error(e);
-		}
-		try {
-			killUserCache.remove(sessionId);
-		} catch (RemoteException e) {
-			logger.error(e);
-		}
+		kickUserCache.remove(sessionId);
+		killUserCache.remove(sessionId);
 	}
 
 }

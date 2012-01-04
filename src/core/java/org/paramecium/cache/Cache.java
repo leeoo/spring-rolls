@@ -1,35 +1,96 @@
 package org.paramecium.cache;
 
-import java.io.Serializable;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
 
-/**
- * 功 能 描 述:<br>
- * 缓存接口
- * <br>代 码 作 者:曹阳(CaoYang)
- * <br>开 发 日 期:2011-7-1下午04:30:02
- * <br>项 目 信 息:paramecium:org.paramecium.cache.Cache.java
- */
-public interface Cache extends Remote ,Serializable{
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 
-	public void clear() throws RemoteException;
+@SuppressWarnings("unchecked")
+public class Cache<KEY extends Object,VALUE extends Object> {
 	
-	public int size();
+	private RemoteCache cache;
+	private final static Log logger = LoggerFactory.getLogger();
 	
-	public void put(Object key,Object value) throws RemoteException;
+	public Cache(RemoteCache cache){
+		this.cache = cache;
+	}
+	public synchronized void put(KEY key, VALUE value) {
+		try {
+			cache.put(key, value);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+	}
 	
-	public Object get(Object key);
+	public synchronized void clear() {
+		try {
+			cache.clear();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+	}
 	
-	public void remove(Object key) throws RemoteException;
+	public synchronized void remove(KEY key) {
+		try {
+			cache.remove(key);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+	}
 	
-	public Collection<Object> getKeys();
-	
-	public Collection<Object> getValues();
-	
-	public boolean isEmpty();
-	
-	public Object peek();
-	
+	public synchronized VALUE get(KEY key) {
+		try {
+			return (VALUE) cache.get(key);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
+	}
+
+	public synchronized Collection<KEY> getKeys() {
+		try {
+			return (Collection<KEY>) cache.getKeys();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
+	}
+
+	public synchronized Collection<VALUE> getValues() {
+		try {
+			return (Collection<VALUE>) cache.getValues();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
+	}
+
+	public synchronized boolean isEmpty() {
+		try {
+			return cache.isEmpty();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return true;
+	}
+
+	public synchronized int size() {
+		try {
+			return cache.size();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return 0;
+	}
+
+	public synchronized Object peek() {
+		try {
+			return cache.peek();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
+	}
+
 }

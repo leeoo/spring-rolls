@@ -1,7 +1,6 @@
 package org.paramecium.orm;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -173,10 +172,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 					list.add(Long.parseLong(keyword));
 				}
 			}
-			try {
-				cache.put(clazz.getName()+"#"+text, list);
-			} catch (RemoteException e) {
-			}
+			cache.put(clazz.getName()+"#"+text, list);
 			pks = (List<PK>)cache.get(clazz.getName()+"#"+text);
 		}
 		return pks;

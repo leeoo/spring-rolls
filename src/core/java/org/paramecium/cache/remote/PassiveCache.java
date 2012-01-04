@@ -9,8 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
-import org.paramecium.cache.Cache;
 import org.paramecium.cache.Element;
+import org.paramecium.cache.RemoteCache;
 
 /**
  * 功 能 描 述:<br>
@@ -19,7 +19,7 @@ import org.paramecium.cache.Element;
  * <br>开 发 日 期:2011-12-31下午03:57:03
  * <br>项 目 信 息:paramecium:org.paramecium.cache.remote.PassiveCache.java
  */
-public class PassiveCache extends UnicastRemoteObject implements Cache {
+public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 	
 	private static final long serialVersionUID = 6255867402368962167L;
 	protected ConcurrentMap<Object,Element> map = new ConcurrentHashMap<Object,Element>();

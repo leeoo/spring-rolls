@@ -7,8 +7,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
-import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheConfig;
+import org.paramecium.cache.RemoteCache;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
@@ -19,15 +19,15 @@ import org.paramecium.log.LoggerFactory;
  * <br>开 发 日 期:2011-12-31下午03:58:36
  * <br>项 目 信 息:paramecium:org.paramecium.cache.remote.InitiativeCache.java
  */
-public class InitiativeCache extends UnicastRemoteObject implements Cache {
+public class InitiativeCache extends UnicastRemoteObject implements RemoteCache {
 	
 	private static final long serialVersionUID = 2195981385896026876L;
 	private final static Log logger = LoggerFactory.getLogger();
-	private Cache cache;
+	private RemoteCache cache;
 	protected int maxSize = 500;
 	protected String name;
 	
-	public InitiativeCache(String name,int initSize,Cache cache) throws RemoteException{
+	public InitiativeCache(String name,int initSize,RemoteCache cache) throws RemoteException{
 		this.maxSize = initSize;
 		this.name = name;
 		this.cache = cache;
@@ -36,12 +36,16 @@ public class InitiativeCache extends UnicastRemoteObject implements Cache {
 	
 	public synchronized void put(Object key, Object value) {
 		if(this.maxSize < size()){
-			remove(cache.peek());
+			try {
+				remove(cache.peek());
+			} catch (RemoteException e) {
+				logger.error(e);
+			}
 		}
 		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
 			for(String ip : CacheConfig.synchClientIps){
 				try {
-					Cache remoteCache = (Cache) Naming.lookup(ip.concat(this.name));
+					RemoteCache remoteCache = (RemoteCache) Naming.lookup(ip.concat(this.name));
 					remoteCache.put(key, value);
 				} catch (MalformedURLException e) {
 					logger.error(e);
@@ -63,7 +67,7 @@ public class InitiativeCache extends UnicastRemoteObject implements Cache {
 		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
 			for(String ip : CacheConfig.synchClientIps){
 				try {
-					Cache remoteCache = (Cache) Naming.lookup(ip.concat(this.name));
+					RemoteCache remoteCache = (RemoteCache) Naming.lookup(ip.concat(this.name));
 					remoteCache.clear();
 				} catch (MalformedURLException e) {
 					logger.error(e);
@@ -85,7 +89,7 @@ public class InitiativeCache extends UnicastRemoteObject implements Cache {
 		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
 			for(String ip : CacheConfig.synchClientIps){
 				try {
-					Cache remoteCache = (Cache) Naming.lookup(ip.concat(this.name));
+					RemoteCache remoteCache = (RemoteCache) Naming.lookup(ip.concat(this.name));
 					remoteCache.remove(key);
 				} catch (MalformedURLException e) {
 					logger.error(e);
@@ -104,27 +108,57 @@ public class InitiativeCache extends UnicastRemoteObject implements Cache {
 	}
 	
 	public synchronized Object get(Object key) {
-		return cache.get(key);
+		try {
+			return cache.get(key);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
 	}
 
 	public synchronized Collection<Object> getKeys() {
-		return cache.getKeys();
+		try {
+			return cache.getKeys();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
 	}
 
 	public synchronized Collection<Object> getValues() {
-		return cache.getValues();
+		try {
+			return cache.getValues();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
 	}
 
 	public synchronized boolean isEmpty() {
-		return cache.isEmpty();
+		try {
+			return cache.isEmpty();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return true;
 	}
 
 	public synchronized int size() {
-		return cache.size();
+		try {
+			return cache.size();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return 0;
 	}
 
 	public synchronized Object peek() {
-		return cache.peek();
+		try {
+			return cache.peek();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
 	}
 	
 }

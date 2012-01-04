@@ -20,10 +20,11 @@ import org.paramecium.log.LoggerFactory;
  * <br>开 发 日 期:2011-7-1下午04:29:39
  * <br>项 目 信 息:paramecium:org.paramecium.cache.CacheManager.java
  */
+@SuppressWarnings("unchecked")
 public class CacheManager {
 	
 	private final static Log logger = LoggerFactory.getLogger();
-	private static Map<String,Cache> map = new HashMap<String,Cache>();
+	private static Map<String,Cache<?,?>> map = new HashMap<String,Cache<?,?>>();
 	
 	static{
 		Map<String,String> properties = PropertiesUitls.get("/cache.properties");
@@ -55,7 +56,7 @@ public class CacheManager {
 	 * @param name
 	 * @return
 	 */
-	public static synchronized Cache getCacheByType(String name){
+	public static synchronized Cache<?,?> getCacheByType(String name){
 		if(CacheConfig.cacheType.equalsIgnoreCase("remote")){
 			return getRemoteCache(name);
 		}else{
@@ -69,7 +70,7 @@ public class CacheManager {
 	 * @param maxSize
 	 * @return
 	 */
-	public static synchronized Cache getCacheByType(String name,int maxSize){
+	public static synchronized Cache<?,?> getCacheByType(String name,int maxSize){
 		if(CacheConfig.cacheType.equalsIgnoreCase("remote")){
 			return getRemoteCache(name,maxSize);
 		}else{
@@ -83,7 +84,7 @@ public class CacheManager {
 	 * @return
 	 */
 	
-	public static synchronized Cache getDefaultCache(String name){
+	public static synchronized Cache<?,?> getDefaultCache(String name){
 		return getDefaultCache(name, CacheConfig.defaultCacheSize);
 	}
 
@@ -93,11 +94,11 @@ public class CacheManager {
 	 * @param maxSize
 	 * @return
 	 */
-	public static synchronized Cache getDefaultCache(String name,int maxSize){
+	public static synchronized Cache<?,?> getDefaultCache(String name,int maxSize){
 		if(map.get(name)==null){
-			Cache cache = null;
+			Cache<?,?> cache = null;
 			try {
-				cache = new DefaultCache(name, maxSize);
+				cache = new Cache(new DefaultCache(name, maxSize));
 			} catch (RemoteException e) {
 				logger.error(e);
 			}
@@ -112,7 +113,7 @@ public class CacheManager {
 	 * @param name
 	 * @return
 	 */
-	public static synchronized Cache getRemoteCache(String name){
+	public static synchronized Cache<?,?> getRemoteCache(String name){
 		return getRemoteCache(name, CacheConfig.defaultCacheSize);
 	}
 	
@@ -122,9 +123,9 @@ public class CacheManager {
 	 * @param maxSize
 	 * @return
 	 */
-	public static synchronized Cache getRemoteCache(String name,int maxSize){
+	public static synchronized Cache<?,?> getRemoteCache(String name,int maxSize){
 		if(map.get(name)==null){
-			Cache passiveCache = null;
+			RemoteCache passiveCache = null;
 			try {
 				passiveCache = new PassiveCache(name, maxSize);
 			} catch (RemoteException e1) {
@@ -139,9 +140,11 @@ public class CacheManager {
 					logger.error(e);
 				}
 			}
-			Cache initiativeCache = null;
+			Cache<?,?> initiativeCache = null;
 			try {
-				initiativeCache = new InitiativeCache(name, maxSize,passiveCache);
+				if(passiveCache!=null){
+					initiativeCache = new Cache(new InitiativeCache(name, maxSize,passiveCache));
+				}
 			} catch (RemoteException e) {
 				logger.error(e);
 			}//将缓存自身服务端放入本地缓存，如有变化，通知其他被动缓存主机。
