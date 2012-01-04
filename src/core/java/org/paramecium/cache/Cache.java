@@ -5,7 +5,14 @@ import java.util.Collection;
 
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
-
+/**
+ * 功能描述(Description):<br><b>
+ * 缓存封装类，封装带有分布式缓存功能
+ * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
+ * <br>建立日期(Create Date): <b>2012-1-4下午08:11:21</b>
+ * <br>项目名称(Project Name): <b>paramecium</b>
+ * <br>包及类名(Package Class): <b>org.paramecium.cache.Cache.java</b>
+ */
 @SuppressWarnings("unchecked")
 public class Cache<KEY extends Object,VALUE extends Object> {
 	
