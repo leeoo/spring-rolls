@@ -3,9 +3,9 @@ package org.paramecium.orm;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
-import org.paramecium.cache.Cache;
-import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.BeanUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -28,8 +28,7 @@ public class EntitySqlParser {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 
-	@SuppressWarnings("unchecked")
-	private final static Cache<String,String> sqlCache = CacheManager.getCacheByType("ENTITY_SQL");
+	private final static ConcurrentMap<String,String> sqlCache = new ConcurrentHashMap<String,String>();
 	
 	public static String getInsertSql(Object bean){
 		String key = bean.getClass().getName()+":insert";

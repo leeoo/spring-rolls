@@ -1,5 +1,6 @@
 package org.paramecium.security;
 
+import java.rmi.RemoteException;
 import java.util.Collection;
 
 import org.paramecium.cache.Cache;
@@ -14,22 +15,29 @@ import org.paramecium.log.LoggerFactory;
  * <br>开 发 日 期:2011-4-22下午03:06:15
  * <br>项 目 信 息:paramecium:org.paramecium.security.OnlineUserCache.java
  */
-@SuppressWarnings("unchecked")
 public class OnlineUserCache {
 	
-	private final static Cache<String, UserDetails<?>> onlineUsers = CacheManager.getCacheByType("ONLINE_USERS",1000);
-	private final static Cache<String, String> sessionIdIndex = CacheManager.getCacheByType("SESSION_ID", 1000);
+	private final static Cache onlineUsers = CacheManager.getCacheByType("ONLINE_USERS",1000);
+	private final static Cache sessionIdIndex = CacheManager.getCacheByType("SESSION_ID", 1000);
 	private final static Log logger = LoggerFactory.getLogger();
 	
 	/**
 	 * 踢出所有用户
 	 */
 	public static void killAll(){
-		for(String sessionId : onlineUsers.getKeys()){
-			kill(sessionId);
+		for(Object sessionId : onlineUsers.getKeys()){
+			kill((String)sessionId);
 		}
-		onlineUsers.clear();
-		sessionIdIndex.clear();
+		try {
+			onlineUsers.clear();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		try {
+			sessionIdIndex.clear();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
 		logger.debug("系统已将所有用户强制退出登录！");
 	}
 	
@@ -47,8 +55,16 @@ public class OnlineUserCache {
 	 * @param details
 	 */
 	public static void login(UserDetails<?> details){
-		onlineUsers.put(details.getSessionId(), details);
-		sessionIdIndex.put(details.getUsername(), details.getSessionId());
+		try {
+			onlineUsers.put(details.getSessionId(), details);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		try {
+			sessionIdIndex.put(details.getUsername(), details.getSessionId());
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
 		logger.debug(details.getUsername()+"登录成功!sessionId:"+details.getSessionId());
 	}
 	
@@ -62,8 +78,16 @@ public class OnlineUserCache {
 			logger.debug("sessionId:"+sessionId+"对应的用户之前被同账号挤掉或未登录过，系统自动销毁Session！");
 			return;
 		}
-		sessionIdIndex.remove(userDetails.getUsername());
-		onlineUsers.remove(sessionId);
+		try {
+			sessionIdIndex.remove(userDetails.getUsername());
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		try {
+			onlineUsers.remove(sessionId);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
 		logger.debug(userDetails.getUsername()+"退出成功!sessionId:"+sessionId);
 	}
 	
@@ -71,7 +95,7 @@ public class OnlineUserCache {
 	 * 获得所有在线用户列表
 	 * @return
 	 */
-	public static Collection<UserDetails<?>> getAllOnlineUsers(){
+	public static Collection<?> getAllOnlineUsers(){
 		return onlineUsers.getValues();
 	}
 	
@@ -85,7 +109,7 @@ public class OnlineUserCache {
 			logger.error("SessionID为空,不能正常获取用户信息!");
 			return null;
 		}
-		return onlineUsers.get(sessionId);
+		return (UserDetails<?>)onlineUsers.get(sessionId);
 	}
 	
 	/**
@@ -98,11 +122,11 @@ public class OnlineUserCache {
 			logger.error("username为空,不能正常获取用户信息!");
 			return null;
 		}
-		String sessionId = sessionIdIndex.get(username);
+		String sessionId = (String) sessionIdIndex.get(username);
 		if(sessionId==null){
 			return null;
 		}
-		return onlineUsers.get(sessionId);
+		return (UserDetails<?>) onlineUsers.get(sessionId);
 	}
 	
 }

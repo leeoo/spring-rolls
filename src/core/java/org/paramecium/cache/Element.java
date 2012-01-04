@@ -8,24 +8,24 @@ import java.io.Serializable;
  * <br>开 发 日 期:2011-7-1下午03:09:55
  * <br>项 目 信 息:paramecium:org.paramecium.cache.Element.java
  */
-public class Element<KEY extends Object,VALUE extends Object> implements Serializable, Cloneable {
+public class Element implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -6829091505751452721L;
 	private long accessTime;
-	private final KEY key;
-	private final VALUE value;
+	private final Object key;
+	private final Object value;
 	
-	public Element(KEY key,VALUE value){
+	public Element(Object key,Object value){
 		this.key = key;
 		this.value = value;
 		this.accessTime = System.currentTimeMillis();
 	}
 	
 	public boolean equals(Object object) {
-        if (object == null || !(object instanceof Element<?, ?>)) {
+        if (object == null || !(object instanceof Element)) {
             return false;
         }
-        Element<?, ?> element = (Element<?, ?>) object;
+        Element element = (Element) object;
         if (key == null || element.getKey() == null) {
             return false;
         }
@@ -36,12 +36,12 @@ public class Element<KEY extends Object,VALUE extends Object> implements Seriali
         return key.hashCode();
     }
 
-	public KEY getKey() {
+	public Object getKey() {
 		this.accessTime = System.currentTimeMillis();
 		return key;
 	}
 
-	public VALUE getValue() {
+	public Object getValue() {
 		this.accessTime = System.currentTimeMillis();
 		return value;
 	}

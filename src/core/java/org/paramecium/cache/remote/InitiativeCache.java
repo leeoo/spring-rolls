@@ -19,28 +19,27 @@ import org.paramecium.log.LoggerFactory;
  * <br>开 发 日 期:2011-12-31下午03:58:36
  * <br>项 目 信 息:paramecium:org.paramecium.cache.remote.InitiativeCache.java
  */
-@SuppressWarnings("unchecked")
-public class InitiativeCache <KEY extends Object,VALUE extends Object> extends BaseCache<KEY, VALUE>{
+public class InitiativeCache extends BaseCache{
 	
 	private static final long serialVersionUID = 2195981385896026876L;
 	private final static Log logger = LoggerFactory.getLogger();
-	private Cache<KEY,VALUE> cache;
+	private Cache cache;
 	
-	public InitiativeCache(String name,int initSize,Cache<KEY,VALUE> cache){
+	public InitiativeCache(String name,int initSize,Cache cache) throws RemoteException{
 		this.maxSize = initSize;
 		this.name = name;
 		this.cache = cache;
 	}
 	
 	
-	public synchronized void put(KEY key, VALUE value) {
+	public synchronized void put(Object key, Object value) {
 		if(this.maxSize < size()){
 			remove(cache.peek());
 		}
 		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
 			for(String ip : CacheConfig.synchClientIps){
 				try {
-					Cache<KEY,VALUE> remoteCache = (Cache<KEY, VALUE>) Naming.lookup(ip.concat(this.name));
+					Cache remoteCache = (Cache) Naming.lookup(ip.concat(this.name));
 					remoteCache.put(key, value);
 				} catch (MalformedURLException e) {
 					logger.error(e);
@@ -51,14 +50,18 @@ public class InitiativeCache <KEY extends Object,VALUE extends Object> extends B
 				}
 			}
 		}
-		cache.put(key, value);
+		try {
+			cache.put(key, value);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
 	}
 	
 	public synchronized void clear() {
 		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
 			for(String ip : CacheConfig.synchClientIps){
 				try {
-					Cache<KEY,VALUE> remoteCache = (Cache<KEY, VALUE>) Naming.lookup(ip.concat(this.name));
+					Cache remoteCache = (Cache) Naming.lookup(ip.concat(this.name));
 					remoteCache.clear();
 				} catch (MalformedURLException e) {
 					logger.error(e);
@@ -69,14 +72,18 @@ public class InitiativeCache <KEY extends Object,VALUE extends Object> extends B
 				}
 			}
 		}
-		cache.clear();
+		try {
+			cache.clear();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
 	}
 	
-	public synchronized void remove(KEY key) {
+	public synchronized void remove(Object key) {
 		if(CacheConfig.synchClientIps!=null && CacheConfig.synchClientIps.length<1){
 			for(String ip : CacheConfig.synchClientIps){
 				try {
-					Cache<KEY,VALUE> remoteCache = (Cache<KEY, VALUE>) Naming.lookup(ip.concat(this.name));
+					Cache remoteCache = (Cache) Naming.lookup(ip.concat(this.name));
 					remoteCache.remove(key);
 				} catch (MalformedURLException e) {
 					logger.error(e);
@@ -87,18 +94,22 @@ public class InitiativeCache <KEY extends Object,VALUE extends Object> extends B
 				}
 			}
 		}
-		cache.remove(key);
+		try {
+			cache.remove(key);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
 	}
 	
-	public synchronized VALUE get(KEY key) {
+	public synchronized Object get(Object key) {
 		return cache.get(key);
 	}
 
-	public synchronized Collection<KEY> getKeys() {
+	public synchronized Collection<Object> getKeys() {
 		return cache.getKeys();
 	}
 
-	public synchronized Collection<VALUE> getValues() {
+	public synchronized Collection<Object> getValues() {
 		return cache.getValues();
 	}
 
@@ -110,7 +121,7 @@ public class InitiativeCache <KEY extends Object,VALUE extends Object> extends B
 		return cache.size();
 	}
 
-	public synchronized KEY peek() {
+	public synchronized Object peek() {
 		return cache.peek();
 	}
 	

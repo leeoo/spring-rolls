@@ -20,11 +20,10 @@ import org.paramecium.log.LoggerFactory;
  * <br>开 发 日 期:2011-7-1下午04:29:39
  * <br>项 目 信 息:paramecium:org.paramecium.cache.CacheManager.java
  */
-@SuppressWarnings("unchecked")
 public class CacheManager {
 	
 	private final static Log logger = LoggerFactory.getLogger();
-	private static Map<String,Cache<?,?>> map = new HashMap<String,Cache<?,?>>();
+	private static Map<String,Cache> map = new HashMap<String,Cache>();
 	
 	static{
 		Map<String,String> properties = PropertiesUitls.get("/cache.properties");
@@ -94,7 +93,12 @@ public class CacheManager {
 	 */
 	public static synchronized Cache getDefaultCache(String name,int maxSize){
 		if(map.get(name)==null){
-			Cache<?,?> cache = new DefaultCache(name, maxSize);
+			Cache cache = null;
+			try {
+				cache = new DefaultCache(name, maxSize);
+			} catch (RemoteException e) {
+				logger.error(e);
+			}
 			map.put(name, cache);
 		}
 		return map.get(name);
@@ -118,8 +122,13 @@ public class CacheManager {
 	 */
 	public static synchronized Cache getRemoteCache(String name,int maxSize){
 		if(map.get(name)==null){
-			Cache<?,?> passiveCache = new PassiveCache(name, maxSize);//被动接受缓存更新
-			if(CacheConfig.localServerIp!=null && !CacheConfig.localServerIp.isEmpty()){
+			Cache passiveCache = null;
+			try {
+				passiveCache = new PassiveCache(name, maxSize);
+			} catch (RemoteException e1) {
+				logger.error(e1);
+			}//被动接受缓存更新
+			if(CacheConfig.localServerIp!=null && !CacheConfig.localServerIp.isEmpty() && passiveCache!= null){
 				try {
 					Naming.rebind("//".concat(CacheConfig.localServerIp.concat(":"+CacheConfig.rmiPort+"/")).concat(name), passiveCache);//发布被动接口
 				} catch (MalformedURLException e) {
@@ -128,8 +137,15 @@ public class CacheManager {
 					logger.error(e);
 				}
 			}
-			Cache<?,?> initiativeCache = new InitiativeCache(name, maxSize,passiveCache);//将缓存自身服务端放入本地缓存，如有变化，通知其他被动缓存主机。
-			map.put(name, initiativeCache);
+			Cache initiativeCache = null;
+			try {
+				initiativeCache = new InitiativeCache(name, maxSize,passiveCache);
+			} catch (RemoteException e) {
+				logger.error(e);
+			}//将缓存自身服务端放入本地缓存，如有变化，通知其他被动缓存主机。
+			if(initiativeCache != null){
+				map.put(name, initiativeCache);
+			}
 		}
 		return map.get(name);
 	}

@@ -1,5 +1,7 @@
 package org.paramecium.cache;
 
+import java.rmi.RemoteException;
+
 
 /**
  * 功 能 描 述:<br>
@@ -8,16 +10,16 @@ package org.paramecium.cache;
  * <br>开 发 日 期:2011-7-1下午04:30:23
  * <br>项 目 信 息:paramecium:org.paramecium.cache.DefaultCache.java
  */
-public class DefaultCache<KEY extends Object,VALUE extends Object> extends BaseCache<KEY, VALUE>{
+public class DefaultCache extends BaseCache{
 
 	private static final long serialVersionUID = -8179064197236303233L;
 	
-	public DefaultCache(String name,int initSize){
+	public DefaultCache(String name,int initSize) throws RemoteException{
 		this.maxSize = initSize;
 		this.name = name;
 	}
 	
-	public synchronized void put(KEY key, VALUE value) {
+	public synchronized void put(Object key, Object value) {
 		if(this.maxSize < size()){
 			remove(this.index.peek());
 		}

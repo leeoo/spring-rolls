@@ -1,6 +1,8 @@
 package org.paramecium.cache;
 
+import java.io.Serializable;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.Collection;
 
 /**
@@ -10,24 +12,24 @@ import java.util.Collection;
  * <br>开 发 日 期:2011-7-1下午04:30:02
  * <br>项 目 信 息:paramecium:org.paramecium.cache.Cache.java
  */
-public interface Cache<KEY extends Object,VALUE extends Object> extends Remote{
+public interface Cache extends Remote ,Serializable{
 
-	public void clear();
+	public void clear() throws RemoteException;
 	
 	public int size();
 	
-	public void put(KEY key,VALUE value);
+	public void put(Object key,Object value) throws RemoteException;
 	
-	public VALUE get(KEY key);
+	public Object get(Object key);
 	
-	public void remove(KEY key);
+	public void remove(Object key) throws RemoteException;
 	
-	public Collection<KEY> getKeys();
+	public Collection<Object> getKeys();
 	
-	public Collection<VALUE> getValues();
+	public Collection<Object> getValues();
 	
 	public boolean isEmpty();
 	
-	public KEY peek();
+	public Object peek();
 	
 }

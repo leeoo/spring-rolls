@@ -1,5 +1,6 @@
 package org.paramecium.security;
 
+import java.rmi.RemoteException;
 import java.util.Collection;
 
 import org.paramecium.cache.Cache;
@@ -16,12 +17,11 @@ import sun.net.util.IPAddressUtil;
  * <br>开 发 日 期:2011-10-18上午08:48:22
  * <br>项 目 信 息:paramecium:org.paramecium.security.IpAddressVoter.java
  */
-@SuppressWarnings("unchecked")
 public class IpAddressVoter{
 
 	private final static Log logger = LoggerFactory.getLogger();
 	
-	private static Cache<String,String> ipAddressList = CacheManager.getCacheByType("IP_LIST", 50);
+	private static Cache ipAddressList = CacheManager.getCacheByType("IP_LIST", 50);
 	
 	private static boolean include = true;
 
@@ -29,19 +29,31 @@ public class IpAddressVoter{
 	
 	public static void put(String ip){
 		logger.debug("IP地址：".concat(ip).concat("已载入IP地址过滤列表!"));
-		ipAddressList.put(ip,null);
+		try {
+			ipAddressList.put(ip,null);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
 	}
 	
 	public static void remove(String ip){
 		logger.debug("IP地址：".concat(ip).concat("已移除IP地址过滤列表!"));
-		ipAddressList.remove(ip);
+		try {
+			ipAddressList.remove(ip);
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
 	}
 
 	public static void removeAll(){
-		ipAddressList.clear();
+		try {
+			ipAddressList.clear();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
 	}
 	
-	public static Collection<String> getIpAddressList() {
+	public static Collection<?> getIpAddressList() {
 		return ipAddressList.getKeys();
 	}
 
@@ -83,7 +95,8 @@ public class IpAddressVoter{
 		if(IPAddressUtil.isIPv6LiteralAddress(currentIp)){
 			return !include;//如果是IPV6
 		}
-		for(String ip:ipAddressList.getKeys()){
+		for(Object ipo:ipAddressList.getKeys()){
+			String ip = (String) ipo;
 			if(currentIp.equals(ip)){
 				return include;
 			}else if(ip.indexOf("-")>-1){

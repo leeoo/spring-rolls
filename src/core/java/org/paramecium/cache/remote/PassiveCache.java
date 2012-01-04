@@ -1,5 +1,7 @@
 package org.paramecium.cache.remote;
 
+import java.rmi.RemoteException;
+
 import org.paramecium.cache.BaseCache;
 
 /**
@@ -9,16 +11,16 @@ import org.paramecium.cache.BaseCache;
  * <br>开 发 日 期:2011-12-31下午03:57:03
  * <br>项 目 信 息:paramecium:org.paramecium.cache.remote.PassiveCache.java
  */
-public class PassiveCache <KEY extends Object,VALUE extends Object> extends BaseCache<KEY, VALUE>{
+public class PassiveCache extends BaseCache{
 	
 	private static final long serialVersionUID = 6255867402368962167L;
 	
-	public PassiveCache(String name,int initSize){
+	public PassiveCache(String name,int initSize) throws RemoteException{
 		this.maxSize = initSize;
 		this.name = name;
 	}
 	
-	public synchronized void put(KEY key, VALUE value) {
+	public synchronized void put(Object key, Object value) {
 		if(this.maxSize < size()){
 			remove(this.index.peek());
 		}
