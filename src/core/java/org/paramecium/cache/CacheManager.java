@@ -29,21 +29,23 @@ public class CacheManager {
 		Map<String,String> properties = PropertiesUitls.get("/cache.properties");
 		String defaultCacheSizeStr = properties.get("defaultCacheSize");
 		CacheConfig.defaultCacheSize = defaultCacheSizeStr ==null ? 500 : Integer.parseInt(defaultCacheSizeStr);
-		String rmiPortStr = properties.get("rmiPort");
-		CacheConfig.rmiPort = rmiPortStr ==null ? 1099 : Integer.parseInt(rmiPortStr);
-		try {
-			LocateRegistry.createRegistry(CacheConfig.rmiPort);
-		} catch (RemoteException e) {
-			logger.error(e);
-		}
-		CacheConfig.localServerIp = properties.get("localServerIp");
-		String synchClientIp = properties.get("synchClientIp");
 		String cacheType = properties.get("cacheType");
 		CacheConfig.cacheType = cacheType==null||cacheType.isEmpty() ? "default" : cacheType;
-		if(synchClientIp!=null && synchClientIp.indexOf(',')>0){
-			CacheConfig.synchClientIps = synchClientIp.split(",");
-			for(int i=0 ; i<CacheConfig.synchClientIps.length;i++){
-				CacheConfig.synchClientIps[i] = "//".concat(CacheConfig.synchClientIps[i]).concat("/");
+		if(CacheConfig.cacheType.equalsIgnoreCase("remote")){
+			String rmiPortStr = properties.get("rmiPort");
+			CacheConfig.rmiPort = rmiPortStr ==null ? 1099 : Integer.parseInt(rmiPortStr);
+			try {
+				LocateRegistry.createRegistry(CacheConfig.rmiPort);
+			} catch (RemoteException e) {
+				logger.error(e);
+			}
+			CacheConfig.localServerIp = properties.get("localServerIp");
+			String synchClientIp = properties.get("synchClientIp");
+			if(synchClientIp!=null && synchClientIp.indexOf(',')>0){
+				CacheConfig.synchClientIps = synchClientIp.split(",");
+				for(int i=0 ; i<CacheConfig.synchClientIps.length;i++){
+					CacheConfig.synchClientIps[i] = "//".concat(CacheConfig.synchClientIps[i]).concat("/");
+				}
 			}
 		}
 	}

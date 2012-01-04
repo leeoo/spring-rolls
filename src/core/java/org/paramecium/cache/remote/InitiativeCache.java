@@ -4,9 +4,9 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
-import org.paramecium.cache.BaseCache;
 import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheConfig;
 import org.paramecium.log.Log;
@@ -19,11 +19,13 @@ import org.paramecium.log.LoggerFactory;
  * <br>开 发 日 期:2011-12-31下午03:58:36
  * <br>项 目 信 息:paramecium:org.paramecium.cache.remote.InitiativeCache.java
  */
-public class InitiativeCache extends BaseCache{
+public class InitiativeCache extends UnicastRemoteObject implements Cache {
 	
 	private static final long serialVersionUID = 2195981385896026876L;
 	private final static Log logger = LoggerFactory.getLogger();
 	private Cache cache;
+	protected int maxSize = 500;
+	protected String name;
 	
 	public InitiativeCache(String name,int initSize,Cache cache) throws RemoteException{
 		this.maxSize = initSize;

@@ -1,7 +1,5 @@
 package org.paramecium.cache;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Queue;
@@ -16,20 +14,13 @@ import java.util.concurrent.ConcurrentMap;
  * <br>开 发 日 期:2011-7-1下午04:29:51
  * <br>项 目 信 息:paramecium:org.paramecium.cache.BaseCache.java
  */
-public abstract class BaseCache extends UnicastRemoteObject implements Cache,Cloneable{
-
-	protected BaseCache() throws RemoteException {
-		super();
-	}
+public abstract class BaseCache implements Cache,Cloneable {
 
 	private static final long serialVersionUID = 8139192731446878665L;
-
 	protected ConcurrentMap<Object,Element> map = new ConcurrentHashMap<Object,Element>();
 	protected Queue<Object> index = new ConcurrentLinkedQueue<Object>();
-	
-	public int maxSize = 500;
-	
-	public String name;
+	protected int maxSize = 500;
+	protected String name;
 	
 	public synchronized void clear() {
 		map.clear();
