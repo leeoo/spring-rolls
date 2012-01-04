@@ -47,9 +47,8 @@ public class RMITest {
 		public void startServer(){
 			Test test = null;
 			try {
-				test = new TestImpl();
+				test = new TestImpl("接哈");
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			try {
@@ -69,16 +68,29 @@ public class RMITest {
 		
 	}
 	
-	static class TestImpl extends UnicastRemoteObject implements Test{
+	static abstract class AbTest extends UnicastRemoteObject implements Test{
 
-		public TestImpl() throws RemoteException {
+		protected AbTest() throws RemoteException {
 			super();
+		}
+
+		private static final long serialVersionUID = -671841927271620452L;
+		
+	}
+	
+	static class TestImpl extends AbTest{
+		private String name;
+		
+		protected TestImpl(String name) throws RemoteException {
+			this.name=name;
 		}
 
 		private static final long serialVersionUID = 7815650281092707812L;
 
+
+
 		public synchronized void haha() {
-			System.out.println("我运行了，哈哈!!!");
+			System.out.println(name+"我运行了，哈哈!!!");
 		}
 
 	}
