@@ -15,7 +15,7 @@ import org.paramecium.log.LoggerFactory;
 /**
  * 功 能 描 述:<br>
  * 系统级序列生成器,有些系统需要模拟序列<br>
- * 请自行创建sequence表<br>
+ * 请自行创建t_sequence表<br>
  *		主键为table_name，字符类型，长度在50左右长，要考虑某些长表名。<br>
  * 		seq_value，数值整形，长度自行控制，符合系统要求，如果数据量比较当，应该使用该库的长整型。<br>
  * <br>代 码 作 者:曹阳(CaoYang)
@@ -88,7 +88,7 @@ public class SequenceGenerator {
 		}
 		ResultSet rs = null;
 		try {
-			rs = statement.executeQuery("SELECT COUNT(0) ct FROM sequence WHERE table_name='"+dsName+"'");
+			rs = statement.executeQuery("SELECT COUNT(0) ct FROM t_sequence WHERE table_name='"+dsName+"'");
 		} catch (SQLException e1) {
 			logger.error(e1);
 		}
@@ -103,7 +103,7 @@ public class SequenceGenerator {
 		}
 		if(count<1){//一个新表刚刚使用该方法
 			try {
-				statement.execute("INSERT INTO sequence(table_name,seq_value) VALUES('"+tableName+"',"+sequenceCacheMax+")");
+				statement.execute("INSERT INTO t_sequence(table_name,seq_value) VALUES('"+tableName+"',"+sequenceCacheMax+")");
 				connection.commit();
 			} catch (Exception e) {
 				logger.error(e);
@@ -112,7 +112,7 @@ public class SequenceGenerator {
 			maxValueMap.put(dsName.concat(".").concat(tableName), Long.valueOf(sequenceCacheMax));
 		}else{
 			try {
-				ResultSet rs2 = statement.executeQuery("SELECT seq_value sv FROM sequence WHERE table_name='"+tableName+"'");
+				ResultSet rs2 = statement.executeQuery("SELECT seq_value sv FROM t_sequence WHERE table_name='"+tableName+"'");
 				long  currentCount = 0;
 				try {
 					if(rs2.next()) {    
@@ -123,7 +123,7 @@ public class SequenceGenerator {
 					logger.error(e1);
 				}
 				long maxID = currentCount+sequenceCacheMax;
-				statement.execute("UPDATE sequence SET seq_value="+maxID+" WHERE table_name='"+tableName+"'");
+				statement.execute("UPDATE t_sequence SET seq_value="+maxID+" WHERE table_name='"+tableName+"'");
 				connection.commit();
 				maxValueMap.put(dsName.concat(".").concat(tableName), Long.valueOf(maxID));
 				seqMap.put(dsName.concat(".").concat(tableName), Long.valueOf(currentCount));
