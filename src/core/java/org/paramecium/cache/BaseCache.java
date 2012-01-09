@@ -2,10 +2,8 @@ package org.paramecium.cache;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * 功 能 描 述:<br>
@@ -17,14 +15,12 @@ import java.util.concurrent.ConcurrentMap;
 public abstract class BaseCache implements RemoteCache,Cloneable {
 
 	private static final long serialVersionUID = 8139192731446878665L;
-	protected ConcurrentMap<Object,Element> map = new ConcurrentHashMap<Object,Element>();
-	protected Queue<Object> index = new ConcurrentLinkedQueue<Object>();
+	private ConcurrentMap<Object,Element> map = new ConcurrentSkipListMap<Object,Element>();
 	protected int maxSize = 500;
 	protected String name;
 	
 	public synchronized void clear() {
 		map.clear();
-		index.clear();
 	}
 
 	public synchronized Object get(Object key) {
@@ -33,7 +29,7 @@ public abstract class BaseCache implements RemoteCache,Cloneable {
 	}
 
 	public synchronized Collection<Object> getKeys() {
-		return index;
+		return map.keySet();
 	}
 
 	public synchronized Collection<Object> getValues() {
@@ -55,12 +51,10 @@ public abstract class BaseCache implements RemoteCache,Cloneable {
 	public synchronized void put(Object key, Object value) {
 		Element element = new Element(key, value);
 		map.put(key, element);
-		index.add(key);
 	}
 
 	public synchronized void remove(Object key) {
 		map.remove(key);
-		index.remove(key);
 	}
 
 	public synchronized int size() {
@@ -68,7 +62,7 @@ public abstract class BaseCache implements RemoteCache,Cloneable {
 	}
 	
 	public synchronized Object peek() {
-		return index.peek();
+		return map.keySet().isEmpty()?null:map.keySet().iterator().next();
 	}
 
 }

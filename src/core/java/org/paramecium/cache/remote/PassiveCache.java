@@ -4,10 +4,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.paramecium.cache.Element;
 import org.paramecium.cache.RemoteCache;
@@ -22,8 +20,7 @@ import org.paramecium.cache.RemoteCache;
 public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 	
 	private static final long serialVersionUID = 6255867402368962167L;
-	protected ConcurrentMap<Object,Element> map = new ConcurrentHashMap<Object,Element>();
-	protected Queue<Object> index = new ConcurrentLinkedQueue<Object>();
+	private ConcurrentMap<Object,Element> map = new ConcurrentSkipListMap<Object,Element>();
 	protected int maxSize = 500;
 	protected String name;
 	
@@ -33,7 +30,6 @@ public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 	}
 	public synchronized void clear() {
 		map.clear();
-		index.clear();
 	}
 
 	public synchronized Object get(Object key) {
@@ -42,7 +38,7 @@ public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 	}
 
 	public synchronized Collection<Object> getKeys() {
-		return index;
+		return map.keySet();
 	}
 
 	public synchronized Collection<Object> getValues() {
@@ -63,16 +59,14 @@ public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 
 	public synchronized void put(Object key, Object value) {
 		if(this.maxSize < size()){
-			remove(this.index.peek());
+			remove(peek());
 		}
 		Element element = new Element(key, value);
 		map.put(key, element);
-		index.add(key);
 	}
 
 	public synchronized void remove(Object key) {
 		map.remove(key);
-		index.remove(key);
 	}
 
 	public synchronized int size() {
@@ -80,7 +74,7 @@ public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 	}
 	
 	public synchronized Object peek() {
-		return index.peek();
+		return map.keySet().isEmpty()?null:map.keySet().iterator().next();
 	}
 	
 }

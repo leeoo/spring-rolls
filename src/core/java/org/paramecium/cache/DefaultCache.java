@@ -21,7 +21,7 @@ public class DefaultCache extends BaseCache{
 	
 	public synchronized void put(Object key, Object value) {
 		if(this.maxSize < size()){
-			remove(this.index.peek());
+			remove(peek());
 		}
 		super.put(key, value);
 	}
