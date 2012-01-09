@@ -41,6 +41,9 @@ public class CacheManager {
 				logger.error(e);
 			}
 			CacheConfig.localServerIp = properties.get("localServerIp");
+			if(CacheConfig.localServerIp!=null&&!CacheConfig.localServerIp.isEmpty()){
+				System.setProperty("java.rmi.server.hostname",CacheConfig.localServerIp);
+			}
 			String synchClientIp = properties.get("synchClientIp");
 			if(synchClientIp!=null){
 				if(synchClientIp.indexOf(',')>0){
