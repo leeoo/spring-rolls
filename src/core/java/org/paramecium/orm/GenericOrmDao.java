@@ -132,6 +132,17 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 	}
 	
 	/**
+	 * 快速清除表信息，谨慎使用，无事务、日志。
+	 * @throws Exception
+	 */
+	public void truncate()throws Exception {
+		Entity entity = clazz.getAnnotation(Entity.class);
+		EntitySqlParser.isEntity(entity);
+		String tableName = entity.tableName();
+		genericJdbcDao.executeDML("TRUNCATE TABLE ".concat(tableName));
+	}
+	
+	/**
 	 * 根据单一主键获得实体信息
 	 * @param primaryKey
 	 * @return
