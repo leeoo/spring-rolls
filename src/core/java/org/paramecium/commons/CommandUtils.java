@@ -17,7 +17,7 @@ import org.paramecium.mvc.SpecialFilter;
  * <br>开 发 日 期:2011-11-18上午09:40:48
  * <br>项 目 信 息:paramecium:org.paramecium.commons.CommandUtils.java
  */
-public class CommandUtils {
+public abstract class CommandUtils {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	

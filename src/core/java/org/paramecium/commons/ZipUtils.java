@@ -22,7 +22,7 @@ import org.paramecium.log.LoggerFactory;
  * 开 发 日 期:2012-1-11上午10:26:25 <br>
  * 项 目 信 息:paramecium:org.paramecium.commons.ZipUtils.java
  */
-public class ZipUtils {
+public abstract class ZipUtils {
 
 	private final static Log logger = LoggerFactory.getLogger();
 

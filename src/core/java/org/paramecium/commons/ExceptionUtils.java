@@ -12,7 +12,7 @@ import java.io.PrintStream;
  * <br>项目名称(Project Name): <b>paramecium</b>
  * <br>包及类名(Package Class): <b>org.paramecium.commons.ExceptionUtils.java</b>
  */
-public class ExceptionUtils {
+public abstract class ExceptionUtils {
 	
 	public static String getExceptionString(Throwable throwable){
 		OutputStream stream = new ByteArrayOutputStream();
