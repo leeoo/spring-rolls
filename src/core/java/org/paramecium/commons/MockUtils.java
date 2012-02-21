@@ -87,7 +87,7 @@ public abstract class MockUtils {
 	 * 获得随机的邮政编码
 	 * @return
 	 */
-	public static String getZipCode(){
+	public static String getPostal(){
 		StringBuffer sb = new StringBuffer();
 		Random random = new Random();
 		for(int j = 0 ; j<6 ; j++){
@@ -182,7 +182,7 @@ public abstract class MockUtils {
 	
 	public static void main(String[] args) {
 		for(int i =0 ;i<100;i++){
-			System.out.println(getFullName()+" | "+getAddress()+" | "+getZipCode()+" | "+getMobile()+" | "+getTel()+" | "+getIDCode()+" | "+getMail());
+			System.out.println(getFullName()+" | "+getAddress()+" | "+getPostal()+" | "+getMobile()+" | "+getTel()+" | "+getIDCode()+" | "+getMail());
 		}
 	}
 	
