@@ -44,6 +44,12 @@ public abstract class MockUtils {
 												"和睦街","爱心路","科技六路","富工大街","沧海路","爱都国际大街","温馨一街","上文路"};
 	private static final String[] emails = new String[]{"@126.com","@qq.com","@163.com","@sina.com","@yahoo.com.cn","@21cn.com","@139.com","@sohu.com","@hotmail.com","@gmail.com"};
 	
+	private static final char[] chs = new char[]{'甲','乙','丙','丁','戊','己','庚','辛','壬','癸',
+												'子','丑','寅','卯','辰','巳','午','未','申','酉',
+												'戌','亥','壹','贰','叁','肆','伍','陆','柒','捌',
+												'九','零','的','地','得','，','。','\n','！','？',
+												'兑','天','人','乾','坤','坎','离','震','艮','巽'};
+	
 	/**
 	 * 获得随机的姓名
 	 * @return
@@ -180,9 +186,32 @@ public abstract class MockUtils {
 		return sb.toString();
 	}
 	
+	/**
+	 * 生成随机的汉字信息
+	 * @param minLength最小长度
+	 * @param maxLength最大长度
+	 * @return
+	 */
+	public static String getChineseText(int minLength,int maxLength){
+		int chsCount = chs.length;
+		StringBuffer sb = new StringBuffer();
+		Random random = new Random();
+		int textLength = random.nextInt(maxLength);
+		if(textLength < minLength){
+			textLength = minLength;
+		}
+		for(int j = 0 ; j<textLength ; j++){
+			int randomChCount = random.nextInt(chsCount);
+			sb.append(chs[randomChCount]);
+		}
+		return sb.toString();
+	}
+	
 	public static void main(String[] args) {
 		for(int i =0 ;i<100;i++){
-			System.out.println(getFullName()+" | "+getAddress()+" | "+getPostal()+" | "+getMobile()+" | "+getTel()+" | "+getIDCode()+" | "+getMail());
+			//System.out.println(getFullName()+" | "+getAddress()+" | "+getPostal()+" | "+getMobile()+" | "+getTel()+" | "+getIDCode()+" | "+getMail());
+			System.out.println(getChineseText(2000,10000));
+			System.out.println("=================================================");
 		}
 	}
 	
