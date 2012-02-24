@@ -1,5 +1,6 @@
 package org.paramecium.commons;
 
+import java.util.Date;
 import java.util.Random;
 
 
@@ -207,11 +208,25 @@ public abstract class MockUtils {
 		return sb.toString();
 	}
 	
+	public static Date getDate(boolean isTodayBefore){
+		long current = EncodeUtils.millisTime();
+		Random random = new Random();
+		Date date = new Date(current);
+		if(isTodayBefore){
+			current = current - random.nextInt(Integer.MAX_VALUE)*1000L;
+		}else{
+			current = current - (random.nextLong()/3000000L);
+		}
+		date = new Date(current);
+		return date;
+	}
+	
 	public static void main(String[] args) {
 		for(int i =0 ;i<100;i++){
-			//System.out.println(getFullName()+" | "+getAddress()+" | "+getPostal()+" | "+getMobile()+" | "+getTel()+" | "+getIDCode()+" | "+getMail());
+			System.out.println(getFullName()+" | "+getAddress()+" | "+getPostal()+" | "+DateUtils.parse(DateUtils.DATE_FORMAT, getDate(true))+" | "+getMobile()+" | "+getTel()+" | "+getIDCode()+" | "+getMail());
 			System.out.println(getChineseText(2000,10000));
 			System.out.println("=================================================");
+			System.out.println();
 		}
 	}
 	
