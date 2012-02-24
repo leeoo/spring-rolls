@@ -223,10 +223,9 @@ public abstract class MockUtils {
 	
 	public static void main(String[] args) {
 		for(int i =0 ;i<100;i++){
-			System.out.println(getFullName()+" | "+getAddress()+" | "+getPostal()+" | "+DateUtils.parse(DateUtils.DATE_FORMAT, getDate(true))+" | "+getMobile()+" | "+getTel()+" | "+getIDCode()+" | "+getMail());
+			System.out.println(getFullName()+" | "+getAddress()+" | "+getPostal()+" | "+DateUtils.parse(DateUtils.DATE_TIME_FORMAT, getDate(true))+" | "+getMobile()+" | "+getTel()+" | "+getIDCode()+" | "+getMail());
 			System.out.println(getChineseText(2000,10000));
 			System.out.println("=================================================");
-			System.out.println();
 		}
 	}
 	
