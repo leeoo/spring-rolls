@@ -31,17 +31,6 @@ public class Log implements Serializable{
 	@Column(isDynamicWhere=true)
 	private Integer type=0;
 	
-	private String miniLog = getMiniLog();
-	
-	public String getMiniLog(){
-		if(this.log!=null&&this.log.length()>50){
-			this.miniLog = this.log.substring(0,50);
-		}else{
-			this.miniLog = this.log;
-		}
-		return miniLog;
-	}
-
 	public Integer getId() {
 		return id;
 	}
@@ -72,10 +61,6 @@ public class Log implements Serializable{
 
 	public void setType(Integer type) {
 		this.type = type;
-	}
-
-	public void setMiniLog(String miniLog) {
-		this.miniLog = miniLog;
 	}
 
 }
