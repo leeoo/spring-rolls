@@ -52,6 +52,8 @@ public abstract class BeanUtils {
 				field.set(bean,Double.parseDouble(value));
 			}else if (byte[].class.equals(clazz)) {
 				field.set(bean,value.getBytes());
+			}else if (char.class.equals(clazz) || Character.class.equals(clazz)) {
+				field.set(bean,value.charAt(0));
 			}else if (BigDecimal.class.equals(clazz)) {
 				field.set(bean,new BigDecimal(value));
 			}
@@ -87,6 +89,8 @@ public abstract class BeanUtils {
 			return Double.parseDouble(value);
 		}else if (byte[].class.equals(clazz)) {
 			return value.getBytes();
+		}else if (char.class.equals(clazz) || Character.class.equals(clazz)) {
+			return value.charAt(0);
 		}else if (BigDecimal.class.equals(clazz)) {
 			return new BigDecimal(value);
 		}
@@ -236,8 +240,6 @@ public abstract class BeanUtils {
 				Class<?> clazz = value.getClass();
 				if(Integer.class.equals(clazz)) {
 					clazz = int.class;
-				}else if (java.sql.Date.class.equals(clazz)) {
-					clazz = java.util.Date.class;
 				}else if (Long.class.equals(clazz)) {
 					clazz = long.class;
 				}else if (Boolean.class.equals(clazz)) {
@@ -250,8 +252,21 @@ public abstract class BeanUtils {
 					clazz = float.class;
 				}else if (Double.class.equals(clazz)) {
 					clazz = double.class;
+				}else if (Character.class.equals(clazz)) {
+					clazz = char.class;
+				}else if (java.sql.Date.class.equals(clazz)||java.sql.Time.class.equals(clazz)||java.sql.Timestamp.class.equals(clazz)) {
+					clazz = java.util.Date.class;
+				}else if (java.sql.Blob.class.equals(clazz)||java.sql.Array.class.equals(clazz)) {
+					clazz = byte[].class;
+				}else if (java.sql.Clob.class.equals(clazz)||java.sql.NClob.class.equals(clazz)) {
+					clazz = char[].class;
+				}else{
+					logger.warn(bean.getClass().toString().concat("中没有匹配到").concat(setMethodName).concat("方法!"));
+					return;
 				}
-				setMethodName = "set".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+				if(setMethodName != null){
+					setMethodName = "set".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+				}
 				method = bean.getClass().getMethod(setMethodName,clazz);
 			}catch (Exception e2) {
 				logger.warn(bean.getClass().toString().concat("中没有匹配到").concat(setMethodName).concat("方法!"));
