@@ -48,11 +48,7 @@ public class Page{
 	}
 
 	public void setPageNo(int pageNo) {
-		if(pageNo < 1){
-			this.pageNo = 1;
-		}else{
-			this.pageNo = pageNo;
-		}
+		this.pageNo = pageNo;
 	}
 
 	/**
