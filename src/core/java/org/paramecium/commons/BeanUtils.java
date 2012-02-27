@@ -1,6 +1,7 @@
 package org.paramecium.commons;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public abstract class BeanUtils {
 				field.set(bean,value);
 			}else if (int.class.equals(clazz) || Integer.class.equals(clazz)) {
 				field.set(bean,Integer.parseInt(value));
-			}else if (java.util.Date.class.equals(clazz)) {
+			}else if (java.util.Date.class.equals(clazz) || java.sql.Date.class.equals(clazz)) {
 				field.set(bean,DateUtils.parse(value));
 			}else if (long.class.equals(clazz) || Long.class.equals(clazz)) {
 				field.set(bean,Long.parseLong(value));
@@ -70,7 +71,7 @@ public abstract class BeanUtils {
 			return value;
 		}else if (int.class.equals(clazz) || Integer.class.equals(clazz)) {
 			return Integer.parseInt(value);
-		}else if (java.util.Date.class.equals(clazz)) {
+		}else if (java.util.Date.class.equals(clazz) || java.sql.Date.class.equals(clazz)) {
 			return DateUtils.parse(value);
 		}else if (long.class.equals(clazz) || Long.class.equals(clazz)) {
 			return Long.parseLong(value);
@@ -108,7 +109,7 @@ public abstract class BeanUtils {
 				}
 				field.setAccessible(true);
 				try {
-					map.put(field.getName(),field.get(bean));
+					map.put(field.getName(),getFieldValue(bean, field.getName()));
 				} catch (Exception e) {
 					logger.warn(e);
 				}
@@ -140,7 +141,7 @@ public abstract class BeanUtils {
 						if(isDBFormat){
 							name = getDbFieldName(name);
 						}
-						field.set(bean, map.get(name));
+						setFieldValue(bean, name, map.get(name));
 					} catch (Exception e) {
 						logger.warn(e);
 					}
@@ -201,21 +202,14 @@ public abstract class BeanUtils {
 	 */
 	public static Object getFieldValue(Object bean,String name){
 		try {
-			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
-				Field[] fields = superClass.getDeclaredFields();
-				for(Field field : fields){
-					field.setAccessible(true);
-					try {
-						if(field.getName().equals(name)){
-							return field.get(bean);
-						}
-					} catch (Exception e) {
-						logger.warn(e);
-					}
-				}
+			if(bean==null||name==null||name.isEmpty()){
+				return null;
 			}
+			String getMethodName = "get".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+			Method method = bean.getClass().getMethod(getMethodName);
+			return method.invoke(bean);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.warn(e);
 		}
 		return null;
 	}
@@ -226,24 +220,20 @@ public abstract class BeanUtils {
 	 * @param name
 	 * @param value
 	 */
-	public static void setFieldValue(Object bean,String name,Object value){
+	public static void setFieldValue(Object bean,String name,final Object value){
 		try {
-			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
-				Field[] fields = superClass.getDeclaredFields();
-				for(Field field : fields){
-					field.setAccessible(true);
-					try {
-						if(field.getName().equals(name)){
-							field.set(bean, value);
-							return;
-						}
-					} catch (Exception e) {
-						logger.warn(e);
-					}
-				}
+			if(bean==null||name==null||name.isEmpty()||value==null){
+				return;
 			}
+			Class<?> clazz = value.getClass();
+			if(clazz.equals(java.sql.Date.class)){
+				clazz = java.util.Date.class;
+			}
+			String setMethodName = "set".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+			Method method = bean.getClass().getMethod(setMethodName,clazz);
+			method.invoke(bean,value);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.warn(e);
 		}
 	}
 	

@@ -28,18 +28,6 @@ public abstract class JsonUitls {
 	}
 	
 	/**
-	 * 将html转译为文本内容
-	 * @param inputString
-	 * @return
-	 */
-	public static String Html2Text(String inputString) {
-		if(inputString==null||inputString.isEmpty()){
-			return null;
-		}
-		return inputString.replaceAll("\r\n", "").replaceAll("<[.[^<]]*>","").replaceAll("	", ""); 
-	}
-	
-	/**
 	 * bean集合变为json字符串
 	 * @param beans
 	 * @return
@@ -63,13 +51,15 @@ public abstract class JsonUitls {
 					field.setAccessible(true);
 					try {
 						sb.append("\"").append(field.getName()).append("\":");
-						if(field.get(bean)==null){
+						Object value = BeanUtils.getFieldValue(bean, field.getName());
+						if(value==null){
 							sb.append("\"\",");
 						}else{
 							if(format!=null&&field.getType()==Date.class){
-								sb.append("\"").append(DateUtils.parse(format,(Date)field.get(bean))).append("\",");
+								sb.append("\"").append(DateUtils.parse(format,(Date)value)).append("\",");
 							}else{
-								sb.append("\"").append(field.get(bean)).append("\",");
+								String json = string2Json(value);
+								sb.append("\"").append(json).append("\",");
 							}
 						}
 					} catch (Exception e) {
@@ -86,6 +76,56 @@ public abstract class JsonUitls {
 		}
 		return sb.toString();
 	}
+	
+	/**
+	 * JSON有些字符无法正常显示需要过滤
+	 * @param value
+	 * @return
+	 */
+	public static String string2Json(Object value) {
+		StringBuilder sb = new StringBuilder();
+		String str = sb.toString();
+		if(value == null){
+			return sb.toString();
+		}
+		if(!value.getClass().equals(String.class)){
+			str = value.toString();
+		}else{
+			str = (String)value;
+		}
+	    for (int i=0; i<str.length(); i++) { 
+	        char c = str.charAt(i); 
+	        switch (c) { 
+		        case '\"': 
+		            sb.append("\\\""); 
+		            break; 
+		        case '\\': 
+		            sb.append("\\\\"); 
+		            break; 
+		        case '/': 
+		            sb.append("\\/"); 
+		            break; 
+		        case '\b': 
+		            sb.append("\\b"); 
+		            break; 
+		        case '\f': 
+		            sb.append("\\f"); 
+		            break; 
+		        case '\n': 
+		            sb.append("\\n"); 
+		            break; 
+		        case '\r': 
+		            sb.append("\\r"); 
+		            break; 
+		        case '\t': 
+		            sb.append("\\t"); 
+		            break; 
+		        default: 
+		            sb.append(c); 
+	        } 
+	    } 
+	    return sb.toString(); 
+	 } 
 	
 	public static String getMapsJson(Collection<Map<String,Object>> maps,boolean startAndEndMaker){
 		return getMapsJson(maps,startAndEndMaker,null);
@@ -108,13 +148,14 @@ public abstract class JsonUitls {
 			sb.append('{');
 			for(Entry<String, Object> entry : map.entrySet()){
 				sb.append("\"").append(entry.getKey()).append("\":");
-				if(entry.getValue()==null){
+				Object value = entry.getValue();
+				if(value==null){
 					sb.append("\"\",");
 				}else{
-					if(format!=null||entry.getValue().getClass()==Date.class){
-						sb.append("\"").append(DateUtils.parse(format,(Date)entry.getValue())).append("\",");
+					if(format!=null||value.getClass()==Date.class){
+						sb.append("\"").append(DateUtils.parse(format,(Date)value)).append("\",");
 					}else{
-						sb.append("\"").append(entry.getValue()).append("\",");
+						sb.append("\"").append(string2Json(value)).append("\",");
 					}
 				}
 			}

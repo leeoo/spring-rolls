@@ -1,11 +1,13 @@
 package org.paramecium.validation;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.paramecium.commons.BeanUtils;
 import org.paramecium.ioc.ClassScanner;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.log.Log;
@@ -56,13 +58,16 @@ public class Validator {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					if(isUpdate && field.getAnnotation(NotUpdate.class)!=null){
 						continue;
 					}
 					Collection<String> messages = new LinkedList<String>();
-					Object value = field.get(bean);
+					Object value = BeanUtils.getFieldValue(bean, field.getName());
 					ShowLabel showLabel = field.getAnnotation(ShowLabel.class);
 					String show = field.getName();//获取错误消息中字段名称
 					if(showLabel!=null){

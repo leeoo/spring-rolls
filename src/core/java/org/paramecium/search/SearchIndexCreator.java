@@ -1,6 +1,7 @@
 package org.paramecium.search;
 
 import java.io.File;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -22,6 +23,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.paramecium.commons.BeanUtils;
 import org.paramecium.commons.PathUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -147,17 +149,20 @@ public class SearchIndexCreator {
 			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 				java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
 				for(java.lang.reflect.Field field : fields){
+					if(Modifier.isStatic(field.getModifiers())){
+						continue;
+					}
 					field.setAccessible(true);
 					String propertyName = field.getName();
 					if(isKeyWord(superClass, propertyName)){
-						Object value = field.get(bean);
+						Object value = BeanUtils.getFieldValue(bean, field.getName());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
 						Field textField = new Field(propertyName, value.toString(),Field.Store.YES, Field.Index.NOT_ANALYZED);
 						doc.add(textField);
 					}else if(isTextWord(superClass, propertyName)){
-						String propertyValue = (String)field.get(bean);
+						String propertyValue = (String)BeanUtils.getFieldValue(bean, field.getName());
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
 						}
@@ -167,7 +172,7 @@ public class SearchIndexCreator {
 						Field textField = new Field(propertyName, propertyValue,Field.Store.NO, Field.Index.ANALYZED);
 						doc.add(textField);
 					}else if(isSortWord(superClass, propertyName)){
-						Object value = field.get(bean);
+						Object value = BeanUtils.getFieldValue(bean, field.getName());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
@@ -199,17 +204,20 @@ public class SearchIndexCreator {
 			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 				java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
 				for(java.lang.reflect.Field field : fields){
+					if(Modifier.isStatic(field.getModifiers())){
+						continue;
+					}
 					field.setAccessible(true);
 					String propertyName = field.getName();
 					if(isKeyWord(superClass, propertyName)||isSortWord(superClass, propertyName)){
-						Object value = field.get(bean);
+						Object value = BeanUtils.getFieldValue(bean, field.getName());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
 						Term term = new Term(propertyName, value.toString());
 						writer.deleteDocuments(term);
 					}else if(isTextWord(superClass, propertyName)){
-						String propertyValue = (String)field.get(bean);
+						String propertyValue = (String)BeanUtils.getFieldValue(bean, field.getName());
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
 						}
@@ -288,6 +296,9 @@ public class SearchIndexCreator {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
 			for(java.lang.reflect.Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				String propertyName = field.getName();
 				if (isTextWord(superClass, propertyName)) {
@@ -314,6 +325,9 @@ public class SearchIndexCreator {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
 			for(java.lang.reflect.Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				String propertyName = field.getName();
 				if(isSortWord(superClass, propertyName)){
@@ -349,6 +363,9 @@ public class SearchIndexCreator {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			java.lang.reflect.Field[] fields = superClass.getDeclaredFields();
 			for(java.lang.reflect.Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				String propertyName = field.getName();
 				if(isKeyWord(superClass, propertyName)){

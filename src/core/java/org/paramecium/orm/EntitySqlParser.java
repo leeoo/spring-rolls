@@ -1,6 +1,7 @@
 package org.paramecium.orm;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,6 +49,9 @@ public class EntitySqlParser {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					Column column = field.getAnnotation(Column.class);
@@ -119,6 +123,9 @@ public class EntitySqlParser {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					NotUpdate notUpdate = field.getAnnotation(NotUpdate.class);
@@ -174,9 +181,12 @@ public class EntitySqlParser {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
-					if(field.get(bean)==null){
+					if(BeanUtils.getFieldValue(bean, field.getName())==null){
 						continue;
 					}
 					NotUpdate notUpdate = field.getAnnotation(NotUpdate.class);
@@ -234,6 +244,9 @@ public class EntitySqlParser {
 		root:for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					Column column = field.getAnnotation(Column.class);
@@ -279,6 +292,9 @@ public class EntitySqlParser {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					Column column = field.getAnnotation(Column.class);
@@ -332,6 +348,9 @@ public class EntitySqlParser {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					if(field.get(dynamicWhereBean)==null||field.get(dynamicWhereBean).toString().isEmpty()){
@@ -378,6 +397,9 @@ public class EntitySqlParser {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
@@ -397,6 +419,9 @@ public class EntitySqlParser {
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);

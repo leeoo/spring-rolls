@@ -2,12 +2,14 @@ package org.paramecium.orm;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import org.paramecium.commons.BeanUtils;
+import org.paramecium.commons.EncodeUtils;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -70,20 +72,23 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
 					String fieldName = getFieldName(field);
 					if(primaryKey!=null){
 						if(primaryKey.autoGenerateMode() == AUTO_GENERATE_MODE.NATIVE){
-							id = System.currentTimeMillis();
+							id = EncodeUtils.millisTime();
 						}else{
-							id = (Long)field.get(bean);
+							id = (Long)BeanUtils.getFieldValue(bean, field.getName());
 						}
 						object.put(fieldName, id);
 						continue;
 					}
-					object.put(fieldName, field.get(bean));
+					object.put(fieldName, BeanUtils.getFieldValue(bean, field.getName()));
 				} catch (Throwable e) {
 					logger.error(e);
 				}
@@ -109,10 +114,13 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 				Field[] fields = superClass.getDeclaredFields();
 				for(Field field : fields){
+					if(Modifier.isStatic(field.getModifiers())){
+						continue;
+					}
 					field.setAccessible(true);
 					try {
 						String fieldName = getFieldName(field);
-						object.put(fieldName, field.get(bean));
+						object.put(fieldName, BeanUtils.getFieldValue(bean, field.getName()));
 					} catch (Throwable e) {
 						logger.error(e);
 					}
@@ -155,10 +163,13 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
-					Object value = field.get(bean);
-					if(value==null&&isNoNull){
+					Object value = BeanUtils.getFieldValue(bean, field.getName());
+					if(value == null&&isNoNull){
 						continue;
 					}
 					String fieldName = getFieldName(field);
@@ -188,6 +199,9 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					String fieldName = getFieldName(field);
@@ -227,6 +241,9 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 		for (Class<?> superClass = whereBean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					if(field.get(whereBean)==null||field.get(whereBean).toString().isEmpty()){
@@ -285,6 +302,9 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
+				if(Modifier.isStatic(field.getModifiers())){
+					continue;
+				}
 				field.setAccessible(true);
 				try {
 					PrimaryKey primaryKey$ = field.getAnnotation(PrimaryKey.class);

@@ -13,7 +13,7 @@ import org.paramecium.search.SearchIndexCreator;
 public class SearchTest {
 	
 	public static void main(String[] args) {
-		/*SearchEntity test = new SearchEntity();
+		SearchEntity test = new SearchEntity();
 		test.setName("窦志");
 		test.setAddress("北京市青年大街!");
 		test.setSize(6);
@@ -29,7 +29,7 @@ public class SearchTest {
 		test.setName("谢雷");
 		test.setAddress("北京市青年大街!");
 		test.setSize(4);
-		SearchIndexCreator.createIndex(test);*/
+		SearchIndexCreator.createIndex(test);
 		Collection<String> list = SearchIndexCreator.searchKeyword(SearchEntity.class, "北京青年");
 		for(String o : list){
 			System.out.println(o);
