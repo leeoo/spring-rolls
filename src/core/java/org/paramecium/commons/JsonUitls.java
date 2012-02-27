@@ -1,6 +1,7 @@
 package org.paramecium.commons;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -56,6 +57,9 @@ public abstract class JsonUitls {
 			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 				Field[] fields = superClass.getDeclaredFields();
 				for(Field field : fields){
+					if(Modifier.isStatic(field.getModifiers())){
+						continue;
+					}
 					field.setAccessible(true);
 					try {
 						sb.append("\"").append(field.getName()).append("\":");
