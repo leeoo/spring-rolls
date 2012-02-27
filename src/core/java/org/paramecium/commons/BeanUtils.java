@@ -223,20 +223,48 @@ public abstract class BeanUtils {
 	 */
 	public static void setFieldValue(Object bean,String name,final Object value){
 		String setMethodName = null;
+		Method method = null;
 		try {
 			if(bean==null||name==null||name.isEmpty()||value==null){
 				return;
 			}
 			Class<?> clazz = value.getClass();
-			if(clazz.equals(java.sql.Date.class)){
-				clazz = java.util.Date.class;
-			}
 			setMethodName = "set".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
-			Method method = bean.getClass().getMethod(setMethodName,clazz);
-			method.invoke(bean,value);
+			method = bean.getClass().getMethod(setMethodName,clazz);
 		} catch (Exception e) {
-			logger.warn(bean.getClass().toString().concat("中没有匹配到").concat(setMethodName).concat("方法!"));
+			try {
+				Class<?> clazz = value.getClass();
+				if(Integer.class.equals(clazz)) {
+					clazz = int.class;
+				}else if (java.sql.Date.class.equals(clazz)) {
+					clazz = java.util.Date.class;
+				}else if (Long.class.equals(clazz)) {
+					clazz = long.class;
+				}else if (Boolean.class.equals(clazz)) {
+					clazz = boolean.class;
+				}else if (Byte.class.equals(clazz)) {
+					clazz = byte.class;
+				}else if (Short.class.equals(clazz)) {
+					clazz = short.class;
+				}else if (Float.class.equals(clazz)) {
+					clazz = float.class;
+				}else if (Double.class.equals(clazz)) {
+					clazz = double.class;
+				}
+				setMethodName = "set".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+				method = bean.getClass().getMethod(setMethodName,clazz);
+			}catch (Exception e2) {
+				logger.warn(bean.getClass().toString().concat("中没有匹配到").concat(setMethodName).concat("方法!"));
+			}
 		}
+		if(method != null){
+			try {
+				method.invoke(bean,value);
+			}catch (Exception e) {
+				logger.warn(bean.getClass().toString().concat("中的").concat(setMethodName).concat("方法执行失败!"));
+			}
+		}
+		
 	}
 	
 }
