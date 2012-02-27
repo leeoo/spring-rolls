@@ -201,15 +201,16 @@ public abstract class BeanUtils {
 	 * @return
 	 */
 	public static Object getFieldValue(Object bean,String name){
+		String getMethodName = null;
 		try {
 			if(bean==null||name==null||name.isEmpty()){
 				return null;
 			}
-			String getMethodName = "get".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+			getMethodName = "get".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
 			Method method = bean.getClass().getMethod(getMethodName);
 			return method.invoke(bean);
 		} catch (Exception e) {
-			logger.warn(e);
+			logger.warn(bean.getClass().toString().concat("中没有匹配到").concat(getMethodName).concat("方法!"));
 		}
 		return null;
 	}
@@ -221,6 +222,7 @@ public abstract class BeanUtils {
 	 * @param value
 	 */
 	public static void setFieldValue(Object bean,String name,final Object value){
+		String setMethodName = null;
 		try {
 			if(bean==null||name==null||name.isEmpty()||value==null){
 				return;
@@ -229,11 +231,11 @@ public abstract class BeanUtils {
 			if(clazz.equals(java.sql.Date.class)){
 				clazz = java.util.Date.class;
 			}
-			String setMethodName = "set".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+			setMethodName = "set".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
 			Method method = bean.getClass().getMethod(setMethodName,clazz);
 			method.invoke(bean,value);
 		} catch (Exception e) {
-			logger.warn(e);
+			logger.warn(bean.getClass().toString().concat("中没有匹配到").concat(setMethodName).concat("方法!"));
 		}
 	}
 	
