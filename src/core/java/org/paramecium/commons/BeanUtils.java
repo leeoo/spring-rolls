@@ -19,6 +19,9 @@ import org.paramecium.log.LoggerFactory;
 public abstract class BeanUtils {
 	
 	private final static Log logger = LoggerFactory.getLogger();
+	private final static String GET = "get";
+	private final static String IS = "is";
+	private final static String SET = "set";
 	
 	/**
 	 * 设置字段值
@@ -113,7 +116,7 @@ public abstract class BeanUtils {
 				}
 				field.setAccessible(true);
 				try {
-					map.put(field.getName(),getFieldValue(bean, field.getName()));
+					map.put(field.getName(),getFieldValue(bean, field.getName(), field.getType()));
 				} catch (Exception e) {
 					logger.warn(e);
 				}
@@ -199,18 +202,53 @@ public abstract class BeanUtils {
 	}
 	
 	/**
-	 * 根据属性获得值
+	 * 调用getter方法
 	 * @param name
 	 * @param bean
 	 * @return
 	 */
 	public static Object getFieldValue(Object bean,String name){
+		return getFieldValue(bean, name, GET);
+	}
+	
+	/**
+	 * 调用getter方法
+	 * @param name
+	 * @param bean
+	 * @return
+	 */
+	public static Object getFieldValue(Object bean,String name,Class<?> fieldType){
+		if(fieldType == null){
+			return getFieldValue(bean, name, GET);
+		}
+		if(fieldType.equals(Boolean.class) || fieldType.equals(boolean.class)){//根据属性类型判断对应的getter方法方式
+			return getFieldValue(bean, name, IS);
+		}
+		return getFieldValue(bean, name, GET);
+	}
+	
+	/**
+	 * 调用getter方法
+	 * @param bean
+	 * @param name
+	 * @param getterName普通的是get开头，boolean是is开头
+	 * @return
+	 */
+	private static Object getFieldValue(Object bean,String name,String getterName){
 		String getMethodName = null;
 		try {
 			if(bean==null||name==null||name.isEmpty()){
 				return null;
 			}
-			getMethodName = "get".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+			if(getterName.equals(IS)){//判断是否是is方式的getter
+				if(name.substring(0, 2).equals(IS)){//如果属性name已经是is开头，则对应getter方法无需在加is
+					getMethodName = name;
+				}else{
+					getMethodName = IS.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+				}
+			}else{//普通的getter方法
+				getMethodName = GET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+			}
 			Method method = bean.getClass().getMethod(getMethodName);
 			return method.invoke(bean);
 		} catch (Exception e) {
@@ -220,7 +258,7 @@ public abstract class BeanUtils {
 	}
 	
 	/**
-	 * 设置属性值在bean中
+	 * 调用setter方法
 	 * @param bean
 	 * @param name
 	 * @param value
@@ -228,15 +266,15 @@ public abstract class BeanUtils {
 	public static void setFieldValue(Object bean,String name,final Object value){
 		String setMethodName = null;
 		Method method = null;
-		try {
+		try {//获取普通数据库类型对应Entity每个属性的setter方法
 			if(bean==null||name==null||name.isEmpty()||value==null){
 				return;
 			}
 			Class<?> clazz = value.getClass();
-			setMethodName = "set".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+			setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
 			method = bean.getClass().getMethod(setMethodName,clazz);
 		} catch (Exception e) {
-			try {
+			try {//获取特殊类型对应Entity每个属性，如果setter方法中的属性参数为基本类型如int、long等，需要将对应封装类型转为基本类型.
 				Class<?> clazz = value.getClass();
 				if(Integer.class.equals(clazz)) {
 					clazz = int.class;
@@ -265,7 +303,7 @@ public abstract class BeanUtils {
 					return;
 				}
 				if(setMethodName != null){
-					setMethodName = "set".concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+					setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
 				}
 				method = bean.getClass().getMethod(setMethodName,clazz);
 			}catch (Exception e2) {

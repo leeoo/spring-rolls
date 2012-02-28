@@ -155,14 +155,14 @@ public class SearchIndexCreator {
 					field.setAccessible(true);
 					String propertyName = field.getName();
 					if(isKeyWord(superClass, propertyName)){
-						Object value = BeanUtils.getFieldValue(bean, field.getName());
+						Object value = BeanUtils.getFieldValue(bean, field.getName(), field.getType());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
 						Field textField = new Field(propertyName, value.toString(),Field.Store.YES, Field.Index.NOT_ANALYZED);
 						doc.add(textField);
 					}else if(isTextWord(superClass, propertyName)){
-						String propertyValue = (String)BeanUtils.getFieldValue(bean, field.getName());
+						String propertyValue = (String)BeanUtils.getFieldValue(bean, field.getName(), field.getType());
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
 						}
@@ -172,7 +172,7 @@ public class SearchIndexCreator {
 						Field textField = new Field(propertyName, propertyValue,Field.Store.NO, Field.Index.ANALYZED);
 						doc.add(textField);
 					}else if(isSortWord(superClass, propertyName)){
-						Object value = BeanUtils.getFieldValue(bean, field.getName());
+						Object value = BeanUtils.getFieldValue(bean, field.getName(), field.getType());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
@@ -210,14 +210,14 @@ public class SearchIndexCreator {
 					field.setAccessible(true);
 					String propertyName = field.getName();
 					if(isKeyWord(superClass, propertyName)||isSortWord(superClass, propertyName)){
-						Object value = BeanUtils.getFieldValue(bean, field.getName());
+						Object value = BeanUtils.getFieldValue(bean, field.getName(), field.getType());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
 						Term term = new Term(propertyName, value.toString());
 						writer.deleteDocuments(term);
 					}else if(isTextWord(superClass, propertyName)){
-						String propertyValue = (String)BeanUtils.getFieldValue(bean, field.getName());
+						String propertyValue = (String)BeanUtils.getFieldValue(bean, field.getName(), field.getType());
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
 						}

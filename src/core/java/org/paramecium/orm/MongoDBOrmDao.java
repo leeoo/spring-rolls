@@ -88,7 +88,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 						object.put(fieldName, id);
 						continue;
 					}
-					object.put(fieldName, BeanUtils.getFieldValue(bean, field.getName()));
+					object.put(fieldName, BeanUtils.getFieldValue(bean, field.getName(), field.getType()));
 				} catch (Throwable e) {
 					logger.error(e);
 				}
@@ -120,7 +120,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 					field.setAccessible(true);
 					try {
 						String fieldName = getFieldName(field);
-						object.put(fieldName, BeanUtils.getFieldValue(bean, field.getName()));
+						object.put(fieldName, BeanUtils.getFieldValue(bean, field.getName(), field.getType()));
 					} catch (Throwable e) {
 						logger.error(e);
 					}
@@ -168,7 +168,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 				}
 				field.setAccessible(true);
 				try {
-					Object value = BeanUtils.getFieldValue(bean, field.getName());
+					Object value = BeanUtils.getFieldValue(bean, field.getName(), field.getType());
 					if(value == null&&isNoNull){
 						continue;
 					}

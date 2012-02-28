@@ -186,7 +186,7 @@ public class EntitySqlParser {
 				}
 				field.setAccessible(true);
 				try {
-					if(BeanUtils.getFieldValue(bean, field.getName())==null){
+					if(BeanUtils.getFieldValue(bean, field.getName(), field.getType()) == null){
 						continue;
 					}
 					NotUpdate notUpdate = field.getAnnotation(NotUpdate.class);
