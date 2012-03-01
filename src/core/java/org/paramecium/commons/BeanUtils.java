@@ -297,10 +297,13 @@ public abstract class BeanUtils {
 				}else if (java.sql.Blob.class.equals(clazz)||java.sql.Array.class.equals(clazz)) {
 					clazz = byte[].class;
 				}else if (java.sql.Clob.class.equals(clazz)||java.sql.NClob.class.equals(clazz)) {
-					clazz = char[].class;
+					clazz = String.class;
+				}else if (java.math.BigInteger.class.equals(clazz)) {
+					clazz = long.class;
+				}else if (java.math.BigDecimal.class.equals(clazz)) {
+					clazz = double.class;
 				}else{
-					logger.warn(bean.getClass().toString().concat("中没有匹配到").concat(setMethodName).concat("方法!"));
-					return;
+					clazz = Object.class;
 				}
 				if(setMethodName != null){
 					setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
