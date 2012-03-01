@@ -27,7 +27,7 @@ public class SequenceGenerator {
 	private final static Log logger = LoggerFactory.getLogger();
 	private static ConcurrentMap<String,Long> seqMap = new ConcurrentHashMap<String,Long>();
 	private static ConcurrentMap<String,Long> maxValueMap = new ConcurrentHashMap<String,Long>();
-	public static long sequenceCacheMax = 255;
+	public static int sequenceCacheMax = 255;
 	
 	/**
 	 * 获取新主键ID值
