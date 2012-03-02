@@ -292,16 +292,28 @@ public abstract class BeanUtils {
 					clazz = double.class;
 				}else if (Character.class.equals(clazz)) {
 					clazz = char.class;
-				}else if (java.sql.Date.class.equals(clazz)||java.sql.Time.class.equals(clazz)||java.sql.Timestamp.class.equals(clazz)) {
-					clazz = java.util.Date.class;
-				}else if (java.sql.Blob.class.equals(clazz)||java.sql.Array.class.equals(clazz)) {
-					clazz = byte[].class;
-				}else if (java.sql.Clob.class.equals(clazz)||java.sql.NClob.class.equals(clazz)) {
-					clazz = String.class;
 				}else if (java.math.BigInteger.class.equals(clazz)) {
 					clazz = long.class;
 				}else if (java.math.BigDecimal.class.equals(clazz)) {
 					clazz = double.class;
+				}else if (java.sql.Clob.class.equals(clazz)) {
+					clazz = String.class;
+				}else if (java.sql.NClob.class.equals(clazz)) {
+					clazz = String.class;
+				}else if (java.sql.Blob.class.equals(clazz)) {
+					clazz = byte[].class;
+				}else if (java.sql.Ref.class.equals(clazz)) {
+					clazz = byte[].class;
+				}else if (java.sql.Array.class.equals(clazz)) {
+					clazz = Object[].class;
+				}else if (java.sql.Struct.class.equals(clazz)) {
+					clazz = Object[].class;
+				}else if (java.sql.Date.class.equals(clazz)) {
+					clazz = java.util.Date.class;
+				}else if (java.sql.Time.class.equals(clazz)) {
+					clazz = java.util.Date.class;
+				}else if (java.sql.Timestamp.class.equals(clazz)) {
+					clazz = java.util.Date.class;
 				}else{
 					clazz = Object.class;
 				}
