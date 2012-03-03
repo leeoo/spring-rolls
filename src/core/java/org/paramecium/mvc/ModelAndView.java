@@ -6,7 +6,9 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -80,6 +82,30 @@ public class ModelAndView implements Serializable,Cloneable{
 			logger.error(e);
 		}
 		return bean;
+	}
+	
+	/**
+	 * 根据提交的name构建Map,表单中mapName.key格式将被构建。
+	 * @param mapName
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String,Object> getMap(String mapName){
+		Map<String,Object> pmap = request.getParameterMap();
+		if(pmap == null || pmap.isEmpty()){
+			return null;
+		}
+		String bn = mapName.concat(ServletConstant.dotStr);
+		Map<String,Object> map = new HashMap<String, Object>();
+		for(String pkey : pmap.keySet()){
+			int mapNameIndex = pkey.indexOf(bn);
+			if(mapNameIndex > -1){
+				String key = pkey.substring(mapNameIndex);
+				Object value = pmap.get(pkey);
+				map.put(key, value);
+			}
+		}
+		return map;
 	}
 
 	/**
