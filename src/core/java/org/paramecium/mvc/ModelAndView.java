@@ -90,8 +90,8 @@ public class ModelAndView implements Serializable,Cloneable{
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<String,?> getMap(String mapName){
-		Map<String,?> pmap = request.getParameterMap();
+	public Map<String,Object> getMap(String mapName){
+		Map<String,Object> pmap = request.getParameterMap();
 		if(pmap == null || pmap.isEmpty()){
 			return null;
 		}
