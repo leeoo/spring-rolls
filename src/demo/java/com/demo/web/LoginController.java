@@ -1,5 +1,7 @@
 package com.demo.web;
 
+import java.util.Map;
+
 import org.paramecium.commons.SecurityUitls;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.mvc.ModelAndView;
@@ -20,8 +22,12 @@ public class LoginController extends BaseController{
 	
 	@MappingMethod
 	public ModelAndView login(ModelAndView mv){
-		String username = mv.getValue("username", String.class);
+		Map<String,Object> map = mv.getMap("login");
+		String username = (String)map.get("username");
+		String password = (String)map.get("password");
+/*		String username = mv.getValue("username", String.class);
 		String password = mv.getValue("password", String.class);
+*/
 		if(password==null||username==null||username.isEmpty()||password.isEmpty()){
 			return mv.redirect(SecurityConfig.loginExceptionPage);
 		}
