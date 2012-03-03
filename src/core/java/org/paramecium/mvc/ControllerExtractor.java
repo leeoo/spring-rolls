@@ -96,11 +96,14 @@ public class ControllerExtractor implements ServletConstant{
 					continue;
 				}
 				if(!mappingMethod.value().isEmpty()){
-					if(mappingMethod.value().equals(URIStrs[1])){
+					if(mappingMethod.value().equals(URIStrs[1])){//判断映射方法注解中是否有/，否则下面的判断加上/
+						method.invoke(controller, mv);
+						return security(mv);
+					}else if(lineStr.concat(mappingMethod.value()).equals(URIStrs[1])){//同上
 						method.invoke(controller, mv);
 						return security(mv);
 					}
-				}else if(ControllerExtractor.lineStr.concat(method.getName()).equals(URIStrs[1])){
+				}else if(lineStr.concat(method.getName()).equals(URIStrs[1])){
 					method.invoke(controller, mv);
 					return security(mv);
 				}
