@@ -86,12 +86,13 @@ public class ModelAndView implements Serializable,Cloneable{
 	
 	/**
 	 * 根据提交的name构建Map,表单中mapName.key格式将被构建。
+	 * value只有两种类型，一种是String单值，还有一种是String[]数组类型。
 	 * @param mapName
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String,Object> getMap(String mapName){
-		Map<String,Object> pmap = request.getParameterMap();
+		Map<String,String[]> pmap = request.getParameterMap();
 		if(pmap == null || pmap.isEmpty()){
 			return null;
 		}
@@ -100,9 +101,19 @@ public class ModelAndView implements Serializable,Cloneable{
 		for(String pkey : pmap.keySet()){
 			int mapNameIndex = pkey.indexOf(bn);
 			if(mapNameIndex > -1){
-				String key = pkey.substring(mapNameIndex);
-				Object value = pmap.get(pkey);
-				map.put(key, value);
+				String key = pkey.replaceAll(bn,"");
+				String[] value = pmap.get(pkey);
+				if(value!=null){
+					if(value.length==1){
+						map.put(key, value[0]);
+					}else if(value.length>1){
+						map.put(key, value);
+					}else{
+						map.put(key, "");
+					}
+				}else{
+					map.put(key, null);
+				}
 			}
 		}
 		return map;
