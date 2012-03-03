@@ -30,11 +30,11 @@
 			<table>
 				<tr>
 					<td>账号:</td>
-					<td><input type='text' name='username' style="width: 150px;" class="easyui-validatebox" required="true" validType="length[2,20]"/></td>
+					<td><input type='text' name='login.username' style="width: 150px;" class="easyui-validatebox" required="true" validType="length[2,20]"/></td>
 				</tr>
 				<tr>
 					<td>密码:</td>
-					<td><input type='password' name="password" style="width: 150px;" class="easyui-validatebox" required="true" validType="length[2,20]"/></td>
+					<td><input type='password' name="login.password" style="width: 150px;" class="easyui-validatebox" required="true" validType="length[2,20]"/></td>
 				</tr>
 				<tr>
 					<td></td>
