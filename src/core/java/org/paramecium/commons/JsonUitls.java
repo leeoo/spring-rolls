@@ -55,7 +55,7 @@ public abstract class JsonUitls {
 						if(value==null){
 							sb.append("\"\",");
 						}else{
-							if(format!=null&&field.getType()==Date.class){
+							if(format!=null&&Date.class.equals(value.getClass())){
 								sb.append("\"").append(DateUtils.parse(format,(Date)value)).append("\",");
 							}else{
 								String json = string2Json(value);
@@ -152,7 +152,7 @@ public abstract class JsonUitls {
 				if(value==null){
 					sb.append("\"\",");
 				}else{
-					if(format!=null||value.getClass()==Date.class){
+					if(format!=null&&Date.class.equals(value.getClass())){
 						sb.append("\"").append(DateUtils.parse(format,(Date)value)).append("\",");
 					}else{
 						sb.append("\"").append(string2Json(value)).append("\",");
