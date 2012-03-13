@@ -26,11 +26,6 @@ public abstract class ZipUtils {
 
 	private final static Log logger = LoggerFactory.getLogger();
 
-	public static void main(String[] args) {
-		//zip("c:\\fuck\\you.zip", "c:\\test\\a.doc","c:\\test\\b.doc","c:\\test\\c.doc");
-		//unZip("c:\\fuck\\you.zip","c:\\unzip\\sdf");
-	}
-	
 	/**
 	 * 把一个文件夹下的所有文件压缩
 	 * 例如:zip("c:\\zip\\hello.zip", "c:\\file")
