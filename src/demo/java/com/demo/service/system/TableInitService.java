@@ -14,12 +14,12 @@ public class TableInitService {
 	private final static Log logger = LoggerFactory.getLogger();
 	
 	public void init(){
-		/*try {
+		try {
 			createTables();
 			logger.debug("DEMO用H2数据库内存表创建成功!");
 		} catch (Exception e) {
 			logger.error(e);
-		}*/
+		}
 	}
 	
 	public static void createTables() throws Exception{
