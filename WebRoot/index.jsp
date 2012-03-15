@@ -7,7 +7,7 @@
 	<link rel="shortcut icon" href="${base}/commons/images/xeyes.png" type="image/x-icon" /> 
 	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/gray/easyui.css">
 	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/icon.css">
-	<script type="text/javascript" src="${base}/commons/js/jquery/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="${base}/commons/js/jquery/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery.easyui.min.js"></script>
 	<style>
 		body{TEXT-ALIGN: center;}
