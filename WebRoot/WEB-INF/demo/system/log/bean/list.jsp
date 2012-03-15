@@ -17,8 +17,8 @@
 			nowrap: true,
 			striped: true,
 			collapsible:true,
-			fitColumns: true,
 			rownumbers: true,
+			remoteSort: false,
 			pageList:[20],
 			url:'${base}/system/log/bean/data.json',
 			idField:'id',
@@ -83,6 +83,12 @@
 						}
 			        }],
 			pagination:true
+		});
+		var p = $('#list').datagrid('getPager');
+		$(p).pagination({
+			onBeforeRefresh:function(){
+				alert('before refresh');
+			}
 		});
 	});
 	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';
