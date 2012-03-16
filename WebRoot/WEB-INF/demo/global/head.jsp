@@ -14,4 +14,7 @@
 	            }
 	        });
 		}
+		function gotoUrl(url){
+			location.href = url;
+		}
 	</script>
