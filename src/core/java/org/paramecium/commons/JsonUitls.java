@@ -33,10 +33,10 @@ public abstract class JsonUitls {
 	 * @return
 	 */
 	public static String getBeansJson(Collection<?> beans,boolean startAndEndMaker,DateFormat format){
-		if(beans==null||beans.isEmpty()){
-			return null;
-		}
 		StringBuffer sb = new StringBuffer();
+		if(beans==null||beans.isEmpty()){
+			return sb.toString();
+		}
 		if(startAndEndMaker){
 			sb.append('{');
 		}
@@ -86,7 +86,7 @@ public abstract class JsonUitls {
 		StringBuilder sb = new StringBuilder();
 		String str = sb.toString();
 		if(value == null){
-			return sb.toString();
+			return str;
 		}
 		if(!value.getClass().equals(String.class)){
 			str = value.toString();
