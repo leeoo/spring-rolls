@@ -23,13 +23,11 @@ import org.paramecium.log.LoggerFactory;
  */
 public class DefaultDataSource implements DataSource{
 	private final static Log logger = LoggerFactory.getLogger();
-	private boolean isInit = false;//判断是否实例化后被使用过
 	private final static ConcurrentMap<String,ConcurrentMap<Connection,Long>> connectionPool = new ConcurrentHashMap<String,ConcurrentMap<Connection,Long>>();
 	private PrintWriter printWriter;
 	private int poolMax = 2;//最大连接数
 	private int poolBase = 3;//控制并发基数
 	private int connectLife = 120;//连接生命长度(秒)
-	private int reconnectionTime = 10;//失效后多久重连(秒)
 	private int poolThreadTime = 60;//连接池线程轮训间隔(秒)
 	private String ds;
 	private String driverClassName;
@@ -47,41 +45,35 @@ public class DefaultDataSource implements DataSource{
 	/**
 	 * 构建新连接到连接池中
 	 */
-	private synchronized void buildConnectionToPool(){
+	private synchronized DataSourceMode buildConnectionToPool(){
 		if(connectionPool.get(ds).size()>=poolMax){
-			return;
+			return DataSourceMode.FULL;
 		}
 		Connection connection = null;
 		if(url!=null&&username!=null){
 			try {
-				if(!isInit){
-					try {
-						Class.forName(driverClassName);
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-						logger.error(e);
-					}
-					isInit= true;
-				}
-				connection = DriverManager.getConnection(url, username, password);
+				connection = DriverManager.getConnection(url, username, password);//Class.forName在拼装连接属性时已经调用
 				DriverManager.setLoginTimeout(getLoginTimeout());
 				connection.setAutoCommit(true);
 				connection.setReadOnly(false);
 			} catch (SQLException e) {
 				logger.error(e);
-				connection = null;
-				try {//如果连接失败，等待n秒钟再次连接
-					Thread.sleep(reconnectionTime*1000);
-				} catch (InterruptedException e1) {
-					logger.error(e1);
+				if(connection != null){
+					try {
+						connection.close();
+					} catch (SQLException e1) {
+						logger.error(e1);
+					}
+					connection = null;
 				}
-				return;
+				return DataSourceMode.ERROR;
 			}
 			if(connection!=null){
 				connectionPool.get(ds).put(connection, EncodeUtils.millisTime());
 			}
 		}
 		logger.debug("新的连接被放入连接池,当前连接数："+connectionPool.get(ds).size());
+		return DataSourceMode.SUCCESS;
 	}
 	
 	/**
@@ -93,7 +85,9 @@ public class DefaultDataSource implements DataSource{
 			connectionPool.put(ds, connectionMap);
 		}
 		Connection connection = getConnectionFromPool();
-		connectionPool.get(ds).put(connection, EncodeUtils.millisTime());
+		if(connection != null){
+			connectionPool.get(ds).put(connection, EncodeUtils.millisTime());//放入连接池
+		}
 		return connection;
 	}
 	
@@ -102,6 +96,31 @@ public class DefaultDataSource implements DataSource{
 	 * @return
 	 */
 	private synchronized Connection getConnectionFromPool(){
+		if(connectionPool.get(ds).keySet().isEmpty()){//第一次判断,如果为空则构建
+			DataSourceMode mode = buildConnectionToPool();//重新构建几个连接并放入池中
+			if(mode.equals(DataSourceMode.ERROR)){//如果构建出错直接返回空
+				return null;
+			}
+		}
+		Connection connection = getConnected();
+		if(connection == null){//如果没有连接，可能连接不够用了
+			if(connectionPool.get(ds).keySet().size() < poolMax){//判断是否连接池中的被释放的连接过多，不够使用
+				DataSourceMode mode = buildConnectionToPool();//重新构建几个连接并放入池中
+				if(mode.equals(DataSourceMode.ERROR)){//如果构建出错直接返回空
+					return null;
+				}
+			}
+			try {
+				Thread.sleep(1);//如果上面没有找到可用连接，稍等片刻，重现递归调用
+			} catch (Exception e) {
+				logger.error(e);
+			}
+			return getConnectionFromPool();//递归
+		}
+		return connection;
+	}
+	
+	private synchronized Connection getConnected(){
 		for(Connection connection : connectionPool.get(ds).keySet()){
 			try {
 				if (!connection.getAutoCommit()) {//查看是否正在使用，如果多线程的话可能会出现失误，不过没关系，下面仍有处理
@@ -116,13 +135,7 @@ public class DefaultDataSource implements DataSource{
 				logger.error(e);
 			}
 		}
-		try {
-			Thread.sleep(1);//如果上面没有找到可用连接，稍等片刻，重现递归调用
-			buildConnectionToPool();//休息片刻初始化一下连接池，看看还有没有可用的新连接可以创建
-		} catch (Exception e) {
-			logger.error(e);
-		}
-		return getConnectionFromPool();//
+		return null;
 	}
 
 	/**
