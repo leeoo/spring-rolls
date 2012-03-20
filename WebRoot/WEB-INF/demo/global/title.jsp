@@ -1,4 +1,4 @@
-<c:set var="baseHeight" value="100"/>
+<c:set var="baseHeight" value="98"/>
 <%@ page contentType="text/html;charset=UTF-8"%>
 	<div region="north" border="false" style="height:70px;background-image: url('${base}/commons/images/head.gif');background-color: #EEF9FB;background-repeat: no-repeat;">
 		<div align="right" style="padding-right: 20px;padding-top: 5px;">
