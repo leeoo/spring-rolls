@@ -36,6 +36,7 @@
 			            iconCls: 'icon-add',
 			            handler:function(){
 							location.href ='${base}/system/user/input${ext}';
+							return false;
 						}
 			        }, '-', {
 			            text: '修改',
@@ -49,6 +50,7 @@
 								return false;
 							}
 							location.href ='${base}/system/user/input${ext}?id='+rows[0].id;
+							return false;
 						}
 			        }, '-', {
 			            text: '删除',
