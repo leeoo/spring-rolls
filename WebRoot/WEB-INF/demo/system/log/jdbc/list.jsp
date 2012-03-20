@@ -14,7 +14,7 @@
 <script>
 	$(function(){
 		$('#list').datagrid({
-			height: document.body.clientHeight-110,
+			height: document.body.clientHeight-${baseHeight},
 			nowrap: true,
 			striped: true,
 			collapsible:true,
