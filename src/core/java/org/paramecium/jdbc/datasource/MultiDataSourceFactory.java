@@ -81,4 +81,13 @@ public class MultiDataSourceFactory {
 		return multiDataSource.keySet();
 	}
 	
+	/**
+	 * 慎用，不能随意使用
+	 * @param dataSourceName
+	 * @param dataSource
+	 */
+	public static void putDataSource(String dataSourceName,DataSource dataSource){
+		multiDataSource.put(dataSourceName, dataSource);
+	}
+	
 }

@@ -191,6 +191,16 @@ public class DefaultDataSource implements DataSource{
 		
 	}
 	
+	/**
+	 * 清理某数据源连接池
+	 * @param dataSourceName
+	 */
+	public static void clearPool(String dataSourceName){
+		if(connectionPool.get(dataSourceName) != null){
+			connectionPool.get(dataSourceName).clear();
+		}
+	}
+	
 	public Connection getConnection(String arg0, String arg1)throws SQLException {
 		throw new UnsupportedOperationException("EN:The method can't using!;CN:不能使用该方法!;");
 	}
@@ -251,4 +261,44 @@ public class DefaultDataSource implements DataSource{
 		this.loginTimeout = loginTimeout;
 	}
 
+	public PrintWriter getPrintWriter() {
+		return printWriter;
+	}
+
+	public void setPrintWriter(PrintWriter printWriter) {
+		this.printWriter = printWriter;
+	}
+
+	public int getPoolMax() {
+		return poolMax;
+	}
+
+	public void setPoolMax(int poolMax) {
+		this.poolMax = poolMax;
+	}
+
+	public int getPoolBase() {
+		return poolBase;
+	}
+
+	public void setPoolBase(int poolBase) {
+		this.poolBase = poolBase;
+	}
+
+	public int getPoolThreadTime() {
+		return poolThreadTime;
+	}
+
+	public void setPoolThreadTime(int poolThreadTime) {
+		this.poolThreadTime = poolThreadTime;
+	}
+
+	public int getConnectLife() {
+		return connectLife;
+	}
+	
+	public void setConnectLife(int connectLife) {
+		this.connectLife = connectLife;
+	}
+	
 }

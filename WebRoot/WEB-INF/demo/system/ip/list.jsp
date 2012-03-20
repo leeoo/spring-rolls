@@ -25,8 +25,8 @@
 					<td nowrap="nowrap">IP过滤策略:</td>
 					<td>
 					<select name="include">
-						<option value="true" <c:if test="${include}">selected="selected"</c:if> >信任IP列表中的地址</option>
-						<option value="false" <c:if test="${!include}">selected="selected"</c:if> >拒绝IP列表中的地址</option>
+						<option value="true" <c:if test="${include}">selected="selected"</c:if> >白名单机制</option>
+						<option value="false" <c:if test="${!include}">selected="selected"</c:if> >黑名单机制</option>
 					</select>
 					</td>
 				</tr>

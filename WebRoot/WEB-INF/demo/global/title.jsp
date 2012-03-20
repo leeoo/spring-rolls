@@ -6,6 +6,7 @@
 			<a href="javascript:void(0)" id="$demo" class="easyui-splitbutton" menu="#demo" iconCls="icon-good">功能演示</a>
 		</div>
 		<div id="security" style="width:150px;">
+			<div iconCls="icon-db" onclick="gotoUrl('${base}/system/ds/list${ext}');">数据源配置</div>
 			<div iconCls="icon-tools" onclick="gotoUrl('${base}/system/config/security/list${ext}');">系统安全配置</div>
 			<div iconCls="icon-ding" onclick="gotoUrl('${base}/system/config/ip/list${ext}')">IP地址限制</div>
 			<div class="menu-sep"></div>

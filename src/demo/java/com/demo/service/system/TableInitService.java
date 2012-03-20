@@ -8,6 +8,13 @@ import org.paramecium.jdbc.datasource.MultiDataSourceFactory;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
+/**
+ * 功 能 描 述:<br>
+ * 对于内存表的初始化
+ * <br>代 码 作 者:曹阳(CaoYang)
+ * <br>开 发 日 期:2012-3-20下午02:40:35
+ * <br>项 目 信 息:paramecium:com.demo.service.system.TableInitService.java
+ */
 @Service
 public class TableInitService {
 	

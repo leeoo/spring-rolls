@@ -9,7 +9,7 @@ import org.paramecium.jdbc.GenericJdbcDao;
 import org.paramecium.transaction.annotation.Transactional;
 /**
  * 功 能 描 述:<br>
- * sql语句运行
+ * sql语句运行，由控制台管理
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2011-12-8上午11:21:26
  * <br>项 目 信 息:paramecium:com.demo.service.system.SqlRunner.java
