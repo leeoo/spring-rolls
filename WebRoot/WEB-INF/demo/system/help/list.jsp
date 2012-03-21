@@ -9,7 +9,7 @@
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="帮助信息">
-	<div style="padding-left: 20px;">
+	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
 		<div><h2>Controller信息</h2></div>
 		<div style="padding-left: 20px;">
 			<c:forEach items="${controllers}" var="app">

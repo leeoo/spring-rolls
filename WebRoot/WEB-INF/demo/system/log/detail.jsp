@@ -9,7 +9,7 @@
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="日志详情">
-		<div>
+		<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
 			${log}
 		</div>
 </div>
