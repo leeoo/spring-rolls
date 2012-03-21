@@ -16,11 +16,6 @@
 		$('#list').datagrid({
 			height: document.body.clientHeight-${baseHeight},
 			nowrap: true,
-			striped: true,
-			collapsible:true,
-			rownumbers: true,
-			remoteSort: false,
-			pageList:[20],
 			url:'${base}/system/online/data.json',
 			idField:'sessionId',
 			frozenColumns:[[
@@ -89,14 +84,7 @@
 								$('#list').datagrid('clearSelections');
 					        });
 						}
-			        }],
-			pagination:true
-		});
-		var p = $('#list').datagrid('getPager');
-		$(p).pagination({
-			onBeforeRefresh:function(){
-				alert('before refresh');
-			}
+			        }]
 		});
 	});
 	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';

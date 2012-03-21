@@ -9,10 +9,24 @@
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="角色列表">
+	<div title="按条件查询" id="search" icon="icon-search" close="true" style="padding:5px;width:350px;height:200px;">
+			<p>角色描述：<input type="text" name="name" id="name"/></p>
+			<p>角色标志：<input type="text" name="rolename" id="rolename"/></p>
+	</div>
 	<table id="list"></table>
 </div>
 <script>
 	$(function(){
+		$('#search').dialog({
+			buttons:[{
+				text:'查询',
+				iconCls:'icon-search',
+				handler:function(){
+					$('#search').dialog('close');
+				}
+			}]
+		});
+		$('#search').dialog('close');
 		$('#list').datagrid({
 			height: document.body.clientHeight-${baseHeight},
 			nowrap: true,
@@ -85,19 +99,13 @@
 					        });
 						}
 			        }, '-', {
-			            text: '查找',
+			            text: '查询',
 			            iconCls: 'icon-search',
 			            handler:function(){
-							alert('查找');
+			        		$('#search').dialog('open');
 						}
 			        }],
 			pagination:true
-		});
-		var p = $('#list').datagrid('getPager');
-		$(p).pagination({
-			onBeforeRefresh:function(){
-				alert('before refresh');
-			}
 		});
 	});
 	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';

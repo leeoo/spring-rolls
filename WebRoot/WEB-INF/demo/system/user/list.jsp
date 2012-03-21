@@ -9,10 +9,25 @@
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="用户列表">
+	<div title="按条件查询" id="search" icon="icon-search" close="true" style="padding:5px;width:350px;height:200px;">
+			<p>账号：<input type="text" name=username id="username"/></p>
+			<p>姓名：<input type="text" name="cnname" id="cnname"/></p>
+			<p>状态：<select name="enabled"><option>请选择</option><option value="true">激活</option><option value="false">冻结</option></select></p>
+	</div>
 	<table id="list"></table>
 </div>
 <script>
 	$(function(){
+		$('#search').dialog({
+			buttons:[{
+				text:'查询',
+				iconCls:'icon-search',
+				handler:function(){
+					$('#search').dialog('close');
+				}
+			}]
+		});
+		$('#search').dialog('close');
 		$('#list').datagrid({
 			height: document.body.clientHeight-${baseHeight},
 			nowrap: true,
@@ -155,16 +170,10 @@
 			            text: '查找',
 			            iconCls: 'icon-search',
 			            handler:function(){
-							alert('查找');
+			        		$('#search').dialog('open');
 						}
 			        }],
 			pagination:true
-		});
-		var p = $('#list').datagrid('getPager');
-		$(p).pagination({
-			onBeforeRefresh:function(){
-				alert('before refresh');
-			}
 		});
 	});
 	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';

@@ -9,10 +9,23 @@
 	<%@ include file="../../../global/title.jsp"%>
 	<%@ include file="../../../global/menu.jsp"%>
 <div region="center" title="Bean调用日志">
+	<div title="按条件查询" id="search" icon="icon-search" close="true" style="padding:5px;width:400px;height:120px;">
+			<p>日志时间：<input type="text" class="easyui-datetimebox" name="beginDate" id="beginDate"/>~<input type="text" class="easyui-datetimebox" name="endDate" id="endDate"/></p>
+	</div>
 	<table id="list"></table>
 </div>
 <script>
 	$(function(){
+		$('#search').dialog({
+			buttons:[{
+				text:'查询',
+				iconCls:'icon-search',
+				handler:function(){
+					$('#search').dialog('close');
+				}
+			}]
+		});
+		$('#search').dialog('close');
 		$('#list').datagrid({
 			height: document.body.clientHeight-${baseHeight},
 			nowrap: true,
@@ -80,16 +93,10 @@
 			            text: '查找',
 			            iconCls: 'icon-search',
 			            handler:function(){
-							alert('查找');
+			        		$('#search').dialog('open');
 						}
 			        }],
 			pagination:true
-		});
-		var p = $('#list').datagrid('getPager');
-		$(p).pagination({
-			onBeforeRefresh:function(){
-				alert('before refresh');
-			}
 		});
 	});
 	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';
