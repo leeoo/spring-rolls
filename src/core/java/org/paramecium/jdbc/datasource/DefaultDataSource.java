@@ -35,6 +35,7 @@ public class DefaultDataSource implements DataSource{
 	private String username;
 	private String password;
 	private int loginTimeout = 5;
+	private boolean isInit = false;//判断是否实例化后被使用过
 	
 	public DefaultDataSource(){
 		logger.debug("默认数据源被载入!");
@@ -52,6 +53,14 @@ public class DefaultDataSource implements DataSource{
 		Connection connection = null;
 		if(url!=null&&username!=null){
 			try {
+				if(!isInit){
+					try {
+						Class.forName(driverClassName);
+					} catch (ClassNotFoundException e) {
+						logger.error(e);
+					}
+					isInit= true;
+				}
 				connection = DriverManager.getConnection(url, username, password);//Class.forName在拼装连接属性时已经调用
 				DriverManager.setLoginTimeout(getLoginTimeout());
 				connection.setAutoCommit(true);
