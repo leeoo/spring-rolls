@@ -16,17 +16,17 @@ public class User implements Serializable{
 	@Column
 	private Integer id;
 	
-	@Column
+	@Column(isDynamicWhere=true)
 	private String username;
 	
-	@Column
+	@Column(isDynamicWhere=true)
 	private String name;
 	
 	@Column
 	private String password;
 	
-	@Column
-	private boolean enabled;
+	@Column(isDynamicWhere=true)
+	private Boolean enabled;
 	
 	private Collection<Role> roles;
 
@@ -70,11 +70,11 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 	

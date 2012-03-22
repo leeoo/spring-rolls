@@ -6,6 +6,7 @@ import java.util.Date;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
 import org.paramecium.orm.annotation.PrimaryKey;
+import org.paramecium.orm.annotation.VirtualColumn;
 /**
  * 功 能 描 述:<br>
  * 日志信息
@@ -27,6 +28,12 @@ public class Log implements Serializable{
 	
 	@Column
 	private Date date;
+	
+	@VirtualColumn(comparison=VirtualColumn.DYNAMIC_WHERE_COMPARISON.LESS_EQUAL,comparisonColumn="date")
+	private Date beginDate;
+	
+	@VirtualColumn(comparison=VirtualColumn.DYNAMIC_WHERE_COMPARISON.THAN_EQUAL,comparisonColumn="date")
+	private Date endDate;
 	
 	@Column(isDynamicWhere=true)
 	private Integer type=0;
@@ -64,6 +71,22 @@ public class Log implements Serializable{
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public Date getBeginDate() {
+		return beginDate;
+	}
+
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 }

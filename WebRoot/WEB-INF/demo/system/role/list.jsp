@@ -22,6 +22,18 @@
 				text:'查询',
 				iconCls:'icon-search',
 				handler:function(){
+				   $('#list').datagrid('options').queryParams = {
+			    	   'name': $.trim($("#name").val()),
+			    	   'rolename': $.trim($("#rolename").val())
+			    	};
+			       $('#list').datagrid('options').pageNumber = 1;
+			       var p = $('#list').datagrid('getPager');
+			       if (p){
+			           $(p).pagination({
+			              pageNumber:1
+			           });
+			       	}
+					$('#list').datagrid('reload');
 					$('#search').dialog('close');
 				}
 			}]

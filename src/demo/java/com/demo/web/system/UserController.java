@@ -42,7 +42,8 @@ public class UserController extends BaseController{
 		Page page = new Page();
 		page.setPageNo(pageNo);
 		page.setPageSize(20);
-		page = userService.getAll(page);
+		User user = mv.getBean(User.class);
+		page = userService.getAll(page,user);
 		String json = JsonUitls.getBeansJson(page.getResult(),false);
 		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
 		mv.printJSON(json);

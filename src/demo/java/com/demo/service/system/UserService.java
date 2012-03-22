@@ -93,8 +93,8 @@ public class UserService {
 	}
 	
 	@Transactional(readOnly=true)
-	public Page getAll(Page page){
-		return ormDao.select(page);
+	public Page getAll(Page page,User user){
+		return ormDao.select(page,user);
 	}
 
 }

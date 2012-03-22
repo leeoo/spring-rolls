@@ -16,10 +16,10 @@ public class Role implements Serializable{
 	@Column
 	private Integer id;
 	
-	@Column
+	@Column(isDynamicWhere=true)
 	private String rolename;
 	
-	@Column
+	@Column(isDynamicWhere=true)
 	private String name;
 	
 	private Collection<String> auth;

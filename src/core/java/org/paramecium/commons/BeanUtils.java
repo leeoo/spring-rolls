@@ -31,7 +31,7 @@ public abstract class BeanUtils {
 	 */
 	public static void setFieldValue(Field field,String value,Object bean){
 		try{
-			if(value==null||bean==null){
+			if(value==null||bean==null||value.isEmpty()){
 				return;
 			}
 			Class<?> clazz = field.getType();

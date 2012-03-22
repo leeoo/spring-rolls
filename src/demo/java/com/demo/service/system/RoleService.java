@@ -66,8 +66,8 @@ public class RoleService {
 	}
 	
 	@Transactional(readOnly=true)
-	public Page getAll(Page page){
-		return ormDao.select(page);
+	public Page getAll(Page page,Role role){
+		return ormDao.select(page,role);
 	}
 	
 	@SuppressWarnings("unchecked")

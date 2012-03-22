@@ -34,7 +34,9 @@ public class WebLogController extends BaseController{
 		Page page = new Page();
 		page.setPageNo(pageNo);
 		page.setPageSize(20);
-		page = logService.getAll(page,7);
+		Log log = mv.getBean(Log.class);
+		log.setType(7);
+		page = logService.getAll(page,log);
 		String json = JsonUitls.getBeansJson(page.getResult(),false);
 		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
 		mv.printJSON(json);

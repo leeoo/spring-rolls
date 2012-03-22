@@ -38,7 +38,8 @@ public class RoleController extends BaseController{
 		Page page = new Page();
 		page.setPageNo(pageNo);
 		page.setPageSize(20);
-		page = roleService.getAll(page);
+		Role role = mv.getBean(Role.class);
+		page = roleService.getAll(page,role);
 		String json = JsonUitls.getBeansJson(page.getResult(),false);
 		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
 		mv.printJSON(json);
