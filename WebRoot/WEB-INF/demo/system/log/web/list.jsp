@@ -100,6 +100,7 @@
 								return false;
 							}
 							location.href ='${base}/system/log/web/detail${ext}?id='+rows[0].id;
+							return false;
 						}
 			        }, '-', {
 			            text: '查找',
