@@ -52,7 +52,7 @@
 		                    {field:'id',checkbox:true}
 		                ]],
 			columns:[[
-						{field:'date',title:'时间',width:100},
+						{field:'date',title:'时间',width:200},
 						{field:'log',title:'日志内容',width:800,align:'left'}
 					]],
 					toolbar: [{
