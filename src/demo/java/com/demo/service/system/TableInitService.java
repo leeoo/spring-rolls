@@ -42,7 +42,7 @@ public class TableInitService {
 		logger.debug("t_role_auth创建成功!");
 		st.execute("CREATE TABLE performance_test(id INT PRIMARY KEY AUTO_INCREMENT,name VARCHAR(500) NOT NULL,date DATE NOT NULL)");
 		logger.debug("performance_test创建成功!");
-		st.execute("CREATE TABLE t_log(id INT PRIMARY KEY AUTO_INCREMENT,log VARCHAR(5000) NOT NULL,date DATE NOT NULL,type INT)");
+		st.execute("CREATE TABLE t_log(id INT PRIMARY KEY AUTO_INCREMENT,log VARCHAR(5000) NOT NULL,date DATETIME NOT NULL,type INT)");
 		logger.debug("t_log创建成功!");
 		st.execute("CREATE TABLE t_sequence(table_name VARCHAR(50) PRIMARY KEY,seq_value INT NOT NULL)");
 		logger.debug("t_sequence创建成功!");
