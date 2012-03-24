@@ -103,7 +103,7 @@
 								return false;
 							}
 			        }, '-', {
-			            text: '查找',
+			            text: '查询',
 			            iconCls: 'icon-search',
 			            handler:function(){
 			        		$('#search').dialog('open');
