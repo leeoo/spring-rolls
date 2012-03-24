@@ -57,7 +57,15 @@
 			columns:[[
 						{field:'username',title:'登录账号',width:200},
 						{field:'name',title:'姓名',width:200,align:'center'},
-						{field:'enabled',title:'状态',width:200,align:'center'}
+						{field:'enabled',title:'状态',width:200,align:'center',
+							formatter:function(value,rec){
+								if(value=='true'||value=='TRUE'){
+									return '<span style="color:green">激活</span>';
+								}else{
+									return '<span style="color:red">冻结</span>';
+								}
+							}
+						}
 					]],
 					toolbar: [{
 			            text: '新增',
