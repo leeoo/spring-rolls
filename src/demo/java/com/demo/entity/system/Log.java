@@ -38,6 +38,8 @@ public class Log implements Serializable{
 	@Column(isDynamicWhere=true)
 	private Integer type=0;
 	
+	private String miniLog;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -47,9 +49,6 @@ public class Log implements Serializable{
 	}
 
 	public String getLog() {
-		if(this.log!=null&&this.log.length()>130){
-			return this.log.substring(0, 130).concat("...");
-		}
 		return log;
 	}
 
@@ -87,6 +86,19 @@ public class Log implements Serializable{
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getMiniLog() {
+		if(this.log!=null&&this.log.length()>130){
+			this.miniLog = this.log.substring(0, 130).concat("...");
+		}else{
+			this.miniLog = this.log;
+		}
+		return this.miniLog;
+	}
+
+	public void setMiniLog(String miniLog) {
+		this.miniLog = miniLog;
 	}
 
 }
