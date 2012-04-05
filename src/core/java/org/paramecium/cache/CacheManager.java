@@ -56,6 +56,7 @@ public class CacheManager {
 				}
 			}
 		}
+		properties.clear();
 	}
 	
 	/**

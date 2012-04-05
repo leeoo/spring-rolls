@@ -45,6 +45,7 @@ public class ClassScanner {
 		Map<String,String> properties = PropertiesUitls.get("/context.properties");
 		iocScanBasePackage = properties.get("iocScanBasePackage");
 		ApplicationContext.priorityStart = properties.get("priorityStart");
+		properties.clear();
 		properties = PropertiesUitls.get("/security.properties");
 		String iocSecurityStr = properties.get("iocSecurity");
 		String sessionControlStr = properties.get("sessionControl");
@@ -59,6 +60,7 @@ public class ClassScanner {
 		SecurityConfig.ipAddressExceptionPage = properties.get("ipAddressExceptionPage");
 		SecurityConfig.userKillExceptionPage = properties.get("userKillExceptionPage");
 		init();
+		properties.clear();
 	}
 	
 	/**

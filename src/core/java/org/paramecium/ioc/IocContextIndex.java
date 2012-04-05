@@ -2,6 +2,7 @@ package org.paramecium.ioc;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 /**
  * 功能描述(Description):<br><b>
  * 依赖注入上下文容器索引
@@ -12,8 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class IocContextIndex {
 	
-	private final static ConcurrentHashMap<String, ControllerClassInfo> controllerClassInfos = new ConcurrentHashMap<String, ControllerClassInfo>();
-	private final static ConcurrentHashMap<String, ServiceClassInfo> serviceClassInfos = new ConcurrentHashMap<String, ServiceClassInfo>();
+	private final static ConcurrentMap<String, ControllerClassInfo> controllerClassInfos = new ConcurrentHashMap<String, ControllerClassInfo>();
+	private final static ConcurrentMap<String, ServiceClassInfo> serviceClassInfos = new ConcurrentHashMap<String, ServiceClassInfo>();
 	
 	public static Collection<ControllerClassInfo> getControllers(){
 		return controllerClassInfos.values();

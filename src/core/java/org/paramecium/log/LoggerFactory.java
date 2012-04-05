@@ -104,6 +104,7 @@ public class LoggerFactory {
 		String logLengthStr = properties.get("logLength");
 		LogConfig.logLength = logLengthStr != null ? Integer.valueOf(logLengthStr) : 1000;
 		CollectorFactory.setLogCollector(properties.get("logCollectorInterface"));
+		properties.clear();
 	}
 	
 	public static Map<String,Integer> getLoggerLevel(){

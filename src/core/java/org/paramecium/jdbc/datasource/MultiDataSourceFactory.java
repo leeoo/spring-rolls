@@ -62,6 +62,7 @@ public class MultiDataSourceFactory {
 				logger.error(e);
 			}
 		}
+		map.clear();
 	}
 	
 	/**

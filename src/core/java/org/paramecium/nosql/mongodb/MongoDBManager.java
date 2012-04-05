@@ -40,6 +40,7 @@ public class MongoDBManager {
 				logger.error(e);
 			}
 		}
+		map.clear();
 	}
 	
 	public static DB getMongoDB(String key){
