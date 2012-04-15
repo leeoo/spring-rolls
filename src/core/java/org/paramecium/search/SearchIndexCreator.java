@@ -98,13 +98,6 @@ public class SearchIndexCreator {
 		}
 		try {
 			if(reader!=null){
-				reader.flush();
-			}
-		} catch (Throwable e) {
-			logger.error("索引读取器栈清空错误!");
-		}
-		try {
-			if(reader!=null){
 				reader.close();
 			}
 		} catch (Throwable e) {
@@ -259,7 +252,7 @@ public class SearchIndexCreator {
 		Directory directory = null;
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(clazz) + "//"));
-			reader = IndexReader.open(directory, true);
+			reader = IndexReader.open(directory);
 			searcher = new IndexSearcher(reader);
 		    Query query = IKQueryParser.parseMultiField(textPropertyNames, queryText);
 		    TopDocs topDocs = null;
