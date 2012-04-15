@@ -48,7 +48,7 @@ public class SearchIndexCreator {
 
 	public static String INDEX_PATH = null;
 	
-	private static Version version = Version.LUCENE_35;
+	private static Version version = Version.LUCENE_36;
 
 	public static String getPath() {
 		if (INDEX_PATH == null) {
