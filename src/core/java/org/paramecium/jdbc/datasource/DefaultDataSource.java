@@ -129,19 +129,21 @@ public class DefaultDataSource implements DataSource{
 		return connection;
 	}
 	
-	private synchronized Connection getConnected(){
+	private Connection getConnected(){
 		for(Connection connection : connectionPool.get(ds).keySet()){
-			try {
-				if (!connection.getAutoCommit()) {//查看是否正在使用，如果多线程的话可能会出现失误，不过没关系，下面仍有处理
-					continue;
+			synchronized (connection) {
+				try {
+					if (!connection.getAutoCommit()) {//查看是否正在使用，如果多线程的话可能会出现失误，不过没关系，下面仍有处理
+						continue;
+					}
+					long currentTime = EncodeUtils.millisTime();
+					long lastUseTime = connectionPool.get(ds).get(connection);
+					if((currentTime-lastUseTime)>poolBase){//只要有间隔，可错开多线程
+						return connection;
+					}
+				} catch (Exception e) {
+					logger.error(e);
 				}
-				long currentTime = EncodeUtils.millisTime();
-				long lastUseTime = connectionPool.get(ds).get(connection);
-				if((currentTime-lastUseTime)>poolBase){//只要有间隔，可错开多线程
-					return connection;
-				}
-			} catch (Exception e) {
-				logger.error(e);
 			}
 		}
 		return null;
