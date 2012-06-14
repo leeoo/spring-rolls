@@ -7,8 +7,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.sql.DataSource;
-
 import org.paramecium.commons.PropertiesUitls;
 import org.paramecium.jdbc.JdbcTemplateFactory;
 import org.paramecium.log.Log;
@@ -24,7 +22,7 @@ public class MultiDataSourceFactory {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	public static String defaultDataSourceName = null;
-	private final static ConcurrentMap<String,DataSource> multiDataSource = new ConcurrentHashMap<String, DataSource>();
+	private final static ConcurrentMap<String,DefaultDataSource> multiDataSource = new ConcurrentHashMap<String, DefaultDataSource>();
 	
 	static{
 		Map<String,Map<String,String>> map = PropertiesUitls.getByType("/database.properties");
@@ -57,7 +55,7 @@ public class MultiDataSourceFactory {
 						}
 					}
 				}
-				multiDataSource.put(key,(DataSource)dataSource);
+				multiDataSource.put(key,(DefaultDataSource)dataSource);
 			} catch (Exception e) {
 				logger.error(e);
 			}
@@ -70,7 +68,7 @@ public class MultiDataSourceFactory {
 	 * @param dataSourceName
 	 * @return
 	 */
-	public static DataSource getDataSource(String dataSourceName){
+	public static DefaultDataSource getDataSource(String dataSourceName){
 		return multiDataSource.get(dataSourceName);
 	}
 	
@@ -87,8 +85,16 @@ public class MultiDataSourceFactory {
 	 * @param dataSourceName
 	 * @param dataSource
 	 */
-	public static void putDataSource(String dataSourceName,DataSource dataSource){
+	public static void putDataSource(String dataSourceName,DefaultDataSource dataSource){
 		multiDataSource.put(dataSourceName, dataSource);
+	}
+	
+	/**
+	 * 清理
+	 * @param dataSourceName
+	 */
+	public static void clearPool(String dataSourceName){
+		multiDataSource.get(dataSourceName).clearPool();
 	}
 	
 }

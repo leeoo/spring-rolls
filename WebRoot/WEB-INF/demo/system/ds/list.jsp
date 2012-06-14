@@ -35,10 +35,6 @@
 						<td><input name="${dataSource.key}.poolMax" value="${dataSource.value.poolMax}" style="width: 100px;"/></td>
 					</tr>
 					<tr>
-						<td nowrap="nowrap">连接池基数:</td>
-						<td><input name="${dataSource.key}.poolBase" value="${dataSource.value.poolBase}" style="width: 100px;"/>(视实际性能而定)</td>
-					</tr>
-					<tr>
 						<td nowrap="nowrap">空闲连接生命周期:</td>
 						<td><input name="${dataSource.key}.connectLife" value="${dataSource.value.connectLife}" style="width: 100px;"/>(秒)</td>
 					</tr>

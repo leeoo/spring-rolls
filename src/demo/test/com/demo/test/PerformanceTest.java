@@ -18,7 +18,7 @@ public class PerformanceTest {
 	
 	public static void main(String[] args) throws Exception {
 		TableInitService.createTables();
-		for(int i =0;i <4500;i++){
+		for(int i =0;i <100;i++){
 			new TestRunner().start();
 		}
 	}

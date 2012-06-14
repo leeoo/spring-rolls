@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.paramecium.jdbc.datasource.DefaultDataSource;
 import org.paramecium.jdbc.datasource.MultiDataSourceFactory;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -116,13 +115,14 @@ public class TransactionManager {
 					}else{
 						transaction.commit();
 					}
-					if(MultiDataSourceFactory.getDataSource(entry.getKey()) instanceof DefaultDataSource){//判断是否为默认数据源
-						transaction.over();//如果是默认数据源，内部连接池来管理Connection的关闭，无需手动关闭.
-					}else{
-						transaction.close();//其他数据源默认关闭
-					}
 				} catch (Throwable e) {
 					logger.error(e);
+				}finally{
+					try {
+						transaction.over();//如果是默认数据源，内部连接池来管理Connection的关闭，无需手动关闭.
+					} catch (SQLException e) {
+						logger.error(e);
+					}
 				}
 			}
 			transactionThreadLocal.remove();

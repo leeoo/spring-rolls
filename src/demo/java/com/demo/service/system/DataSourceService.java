@@ -43,7 +43,6 @@ public class DataSourceService {
 		String username = (String)map.get("username");
 		String password = (String)map.get("password");
 		String poolMax = (String)map.get("poolMax");
-		String poolBase = (String)map.get("poolBase");
 		String connectLife = (String)map.get("connectLife");
 		String poolThreadTime = (String)map.get("poolThreadTime");
 		String loginTimeout = (String)map.get("loginTimeout");
@@ -54,9 +53,6 @@ public class DataSourceService {
 		if(poolMax != null && !poolMax.isEmpty()){
 			dataSource.setPoolMax(Integer.parseInt(poolMax));
 		}
-		if(poolBase != null && !poolBase.isEmpty()){
-			dataSource.setPoolBase(Integer.parseInt(poolBase));
-		}
 		if(connectLife != null && !connectLife.isEmpty()){
 			dataSource.setConnectLife(Integer.parseInt(connectLife));
 		}
@@ -66,7 +62,7 @@ public class DataSourceService {
 		if(loginTimeout != null && !loginTimeout.isEmpty()){
 			dataSource.setLoginTimeout(Integer.parseInt(loginTimeout));
 		}
-		DefaultDataSource.clearPool(dataSourceName);
+		MultiDataSourceFactory.clearPool(dataSourceName);
 		MultiDataSourceFactory.putDataSource(dataSourceName, dataSource);
 	}
 	

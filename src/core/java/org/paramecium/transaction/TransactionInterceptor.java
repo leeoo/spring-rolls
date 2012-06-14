@@ -42,14 +42,14 @@ public class TransactionInterceptor extends BaseSecurityInterceptor {
 		Object result = null;
 		try{
 			result = proxy.invokeSuper(service, parameters);
+			TransactionManager.end();
+			return result;
 		}catch (Throwable e) {
 			logger.error(e);
 			TransactionManager.globalException();
 			TransactionManager.end();
 			throw new TransactionException(e.getMessage());
 		}
-		TransactionManager.end();
-		return result;
 	}
 
 }

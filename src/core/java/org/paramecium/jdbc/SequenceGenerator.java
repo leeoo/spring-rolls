@@ -74,12 +74,7 @@ public class SequenceGenerator {
 
 	
 	private void init(String dsName,String tableName){
-		Connection connection = null;
-		try {
-			connection = MultiDataSourceFactory.getDataSource(dsName).getConnection();
-		} catch (SQLException e1) {
-			logger.error(e1);
-		}
+		Connection connection = MultiDataSourceFactory.getDataSource(dsName).getConnection();
 		Statement statement = null;
 		try {
 			statement = connection.createStatement();

@@ -3,6 +3,7 @@ package org.paramecium.transaction;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.paramecium.jdbc.datasource.DefaultDataSource;
 import org.paramecium.jdbc.datasource.MultiDataSourceFactory;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -17,14 +18,23 @@ public class Transaction {
 
 	private final static Log logger = LoggerFactory.getLogger();
 	
-	private Connection connection = null;
+	private DefaultDataSource dataSource;
+	
+	private Connection connection;
 	
 	private boolean isException = false;
 	
 	public Transaction(final String dataSourceName) throws SQLException{
-		this.connection = MultiDataSourceFactory.getDataSource(dataSourceName).getConnection();
+		this.dataSource = MultiDataSourceFactory.getDataSource(dataSourceName);
+		if(this.dataSource==null){
+			throw new SQLException("EN:connection fail!CN:数据库连接错误!");
+		}
+		this.connection = this.dataSource.getConnection();
+		if(this.connection==null){
+			throw new SQLException("EN:connection fail!CN:数据库连接错误!");
+		}
 		this.connection.setAutoCommit(false);
-		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
+		logger.debug("TRANSACTION-CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
 	}
 	
 	/**
@@ -33,20 +43,7 @@ public class Transaction {
 	 * @throws SQLException
 	 */
 	public synchronized Connection getCurrentConnection() throws SQLException {
-		if(this.connection!=null&&!this.connection.isClosed()&&!this.connection.getAutoCommit()){
-			return this.connection;
-		}
-		throw new SQLException("EN:connection fail!CN:数据库连接错误!");
-	}
-	
-	private synchronized void connectionLife() throws SQLException{
-		if(this.connection==null){
-			throw new SQLException("EN:connection fail!CN:数据库连接错误!");
-		}else if(this.connection.isClosed()){
-			throw new SQLException("EN:connection closed!CN:数据库连接已关闭!");
-		}else if(this.connection.getAutoCommit()){
-			throw new SQLException("EN:connection valid!CN:数据库连接出现变更!");
-		}
+		return this.connection;
 	}
 	
 	/**
@@ -59,12 +56,10 @@ public class Transaction {
 	 * @throws SQLException
 	 */
 	public synchronized void setTransactionIsolation(int level) throws SQLException{
-		connectionLife();
 		connection.setTransactionIsolation(level);
 	}
 	
 	public synchronized void setReadOnly(boolean readOnly) throws SQLException{
-		connectionLife();
 		connection.setReadOnly(readOnly);
 	}
 
@@ -73,7 +68,6 @@ public class Transaction {
 	 * @throws SQLException
 	 */
 	public synchronized void commit() throws SQLException{
-		connectionLife();
 		connection.commit();
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS COMMIT!");
 	}
@@ -83,7 +77,6 @@ public class Transaction {
 	 * @throws SQLException
 	 */
 	public synchronized void rollback() throws SQLException{
-		connectionLife();
 		connection.rollback();
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS ROOLBACK!");
 	}
@@ -93,24 +86,12 @@ public class Transaction {
 	 * @throws SQLException
 	 */
 	public synchronized void over() throws SQLException{
-		connectionLife();
 		connection.setAutoCommit(true);
 		connection.setReadOnly(false);
+		dataSource.replace(connection);
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OVER!");
 	}
 
-	/**
-	 * 连接关闭
-	 * @throws SQLException
-	 */
-	public synchronized void close() throws SQLException{
-		if(!connection.isClosed()){
-			connection.close();
-		}
-		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS CLOSE!");
-	}
-	
-	
 
 	public synchronized boolean isException() {
 		return isException;
