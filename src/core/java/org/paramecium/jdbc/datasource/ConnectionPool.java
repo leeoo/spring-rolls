@@ -17,7 +17,7 @@ import org.paramecium.log.LoggerFactory;
 public class ConnectionPool {
 	private final static Log logger = LoggerFactory.getLogger();
 	private final ConcurrentMap<DefineConnection,Long> connectionPool = new ConcurrentHashMap<DefineConnection,Long>();
-	private final ConcurrentMap<Connection,DefineConnection> connectionPoolIndex = new ConcurrentHashMap<Connection,DefineConnection>();
+	private final ConcurrentMap<Integer,DefineConnection> connectionPoolIndex = new ConcurrentHashMap<Integer,DefineConnection>();
 	private int poolMax = 5;//最大连接数
 	private int connectLife = 120;//连接生命长度(秒)
 	private int poolThreadTime = 60;//连接池线程轮训间隔(秒)
@@ -65,7 +65,7 @@ public class ConnectionPool {
 			DefineConnection defineConnection = new DefineConnection(connection);
 			defineConnection.setIdle();
 			connectionPool.put(defineConnection, EncodeUtils.millisTime());
-			connectionPoolIndex.put(connection, defineConnection);
+			connectionPoolIndex.put(connection.hashCode(), defineConnection);
 			logger.debug("新的连接"+connection.hashCode()+"被放入连接池,当前连接数："+connectionPool.size());
 		} finally {
 			lock.unlock();
@@ -79,7 +79,7 @@ public class ConnectionPool {
 	public void replace(Connection connection){
 		lock.lock();
 		try{
-			DefineConnection defineConnection = connectionPoolIndex.get(connection);
+			DefineConnection defineConnection = connectionPoolIndex.get(connection.hashCode());
 			if(defineConnection!=null){
 				defineConnection.setIdle();
 				connectionPool.put(defineConnection,EncodeUtils.millisTime());
@@ -243,7 +243,7 @@ public class ConnectionPool {
 					}
 					for(DefineConnection connection : connectionPool.keySet()){
 						if(connection.getConnection().isClosed()){
-							connectionPoolIndex.remove(connection.getConnection());
+							connectionPoolIndex.remove(connection.getConnection().hashCode());
 							connectionPool.remove(connection);
 							logger.debug("EN:A closed connection is clean from pool! CN:一个被关闭的Connection从连接池中清除!"+connection.hashCode());
 						}
