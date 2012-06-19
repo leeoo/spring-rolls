@@ -18,10 +18,12 @@ public class ConnectionPool {
 	private final static Log logger = LoggerFactory.getLogger();
 	private final ConcurrentMap<DefineConnection,Long> connectionPool = new ConcurrentHashMap<DefineConnection,Long>();
 	private final ConcurrentMap<Integer,DefineConnection> connectionPoolIndex = new ConcurrentHashMap<Integer,DefineConnection>();
+	private int busyConnectTimeOut = 1800;//被占用连接多久超时(秒)
 	private int poolMax = 5;//最大连接数
 	private int connectLife = 120;//连接生命长度(秒)
 	private int poolThreadTime = 60;//连接池线程轮训间隔(秒)
 	private final ReentrantLock lock = new ReentrantLock();
+	private volatile int busyCount = 0;
 	
 	/**
 	 * 构造方法，用于初始化
@@ -29,10 +31,11 @@ public class ConnectionPool {
 	 * @param connectLife
 	 * @param poolThreadTime
 	 */
-	public ConnectionPool(int poolMax,int connectLife,int poolThreadTime){
+	public ConnectionPool(int poolMax,int connectLife,int poolThreadTime,int busyConnectTimeOut){
 		this.poolMax = poolMax;
 		this.connectLife = connectLife;
 		this.poolThreadTime = poolThreadTime;
+		this.busyConnectTimeOut = busyConnectTimeOut;
 		new Thread(new PoolHandlerThread()).start();
 	}
 	
@@ -66,7 +69,7 @@ public class ConnectionPool {
 			defineConnection.setIdle();
 			connectionPool.put(defineConnection, EncodeUtils.millisTime());
 			connectionPoolIndex.put(connection.hashCode(), defineConnection);
-			logger.debug("新的连接"+connection.hashCode()+"被放入连接池,当前连接数："+connectionPool.size());
+			logger.debug("新的连接"+connection.hashCode()+"被放入连接池,当前连接数:"+connectionPool.size());
 		} finally {
 			lock.unlock();
 		}
@@ -82,8 +85,9 @@ public class ConnectionPool {
 			DefineConnection defineConnection = connectionPoolIndex.get(connection.hashCode());
 			if(defineConnection!=null){
 				defineConnection.setIdle();
+				busyCount--;
 				connectionPool.put(defineConnection,EncodeUtils.millisTime());
-				logger.debug("一个使用完毕的连接被归还："+connection.hashCode());
+				logger.debug("一个使用完毕的连接被归还:"+connection.hashCode());
 			}
 		} finally {
 			lock.unlock();
@@ -100,6 +104,7 @@ public class ConnectionPool {
 			for(DefineConnection connection : connectionPool.keySet()){
 				if(!connection.isBusy()){
 					connection.setBusy();
+					busyCount++;
 					Connection conn = connection.getConnection();
 					logger.debug("一个空闲的连接被获取:"+conn.hashCode());
 					return conn;
@@ -115,9 +120,19 @@ public class ConnectionPool {
 	 * 清理池
 	 */
 	public void clear(){
-		connectionPool.clear();
-		connectionPoolIndex.clear();
-		logger.debug("连接池的连接被清空!");
+		for(DefineConnection connection : connectionPool.keySet()){
+			if(!connection.isBusy()){
+				try {
+					connection.getConnection().close();
+					connectionPool.remove(connection);
+					connectionPoolIndex.remove(connection.getConnection().hashCode());
+					logger.debug("连接池的连接"+connection.getConnection().hashCode()+"被手动移除!");
+				} catch (SQLException e) {
+					logger.error(e);
+				}
+			}
+			//剩下的繁忙连接交给清理线程
+		}
 	}
 	
 	/**
@@ -138,6 +153,7 @@ public class ConnectionPool {
 		private final ReentrantLock lock = new ReentrantLock();
 		private Connection connection;
 		private volatile CONNECTION_STATUS status = CONNECTION_STATUS.IDLE;
+		private volatile long busyLong = 0L;
 		
 		public DefineConnection(Connection connection){
 			this.connection = connection;
@@ -150,6 +166,7 @@ public class ConnectionPool {
 			lock.lock();
 			try{
 				this.status = CONNECTION_STATUS.BUSY;
+				this.busyLong = EncodeUtils.millisTime();
 			} finally {
 				lock.unlock();
 			}
@@ -162,6 +179,7 @@ public class ConnectionPool {
 			lock.lock();
 			try{
 				this.status = CONNECTION_STATUS.IDLE;
+				this.busyLong = 0L;
 			} finally {
 				lock.unlock();
 			}
@@ -178,6 +196,19 @@ public class ConnectionPool {
 					return true;
 				}
 				return false;
+			} finally {
+				lock.unlock();
+			}
+		}
+		
+		/**
+		 * 获得连接获取时间
+		 * @return
+		 */
+		public long getBusyLong(){
+			lock.lock();
+			try{
+				return this.busyLong;
 			} finally {
 				lock.unlock();
 			}
@@ -222,20 +253,29 @@ public class ConnectionPool {
 					if(connectionPool==null||connectionPool.isEmpty()){
 						continue;
 					}
-					logger.debug("默认数据源连接池当前数量为："+connectionPool.size());
+					logger.debug("##连接池监控"+this.hashCode()+"## 默认数据源连接池当前数量为:"+connectionPool.size() +" 繁忙连接数量:"+busyCount);
 					long currentTime = EncodeUtils.millisTime();
 					for (DefineConnection connection : connectionPool.keySet()) {
 						try {
 							if(connection.isBusy()){
-								continue;
+								int bl = (int)((currentTime-connection.getBusyLong())/1000);//获得多久没有结束的连接时长
+								logger.debug("##连接池监控"+this.hashCode()+"## 一个繁忙的连接:"+connection.getConnection().hashCode()+"已经被占用了"+bl+"秒");
+								if(bl<busyConnectTimeOut){
+									continue;
+								}else{
+									connection.setIdle();//释放掉，然后下面进行回收.
+									logger.debug("##连接池监控"+this.hashCode()+"## 一个繁忙的连接:"+connection.getConnection().hashCode()+"被连接池强制回收!由于该连接占用时间较长,自动转为闲置连接被清理，不被重复利用!");
+									busyCount--;
+								}
 							}
 							int bw = (int)((currentTime-connectionPool.get(connection))/1000);//最近一次获得连接时间距现在有多久
+							logger.debug("##连接池监控"+this.hashCode()+"## 一个空闲的连接:"+connection.getConnection().hashCode()+"已经闲置了"+bw+"秒");
 							if(bw<connectLife){//如果间隔时间小于指定时间,说明使用较为频繁,暂不做清理
 								continue;
 							}
 							if (!connection.isBusy()) {
 								connection.getConnection().close();
-								logger.debug("EN:A long time not use connection is colse! CN:一个长时间未被使用的Connection被关闭!"+connection.hashCode());
+								logger.debug("##连接池监控"+this.hashCode()+"## EN:A long time not use connection is colse! CN:一个长时间未被使用的Connection被关闭!"+connection.getConnection().hashCode());
 							}
 						} catch (SQLException e) {
 							logger.equals(e);
@@ -245,7 +285,7 @@ public class ConnectionPool {
 						if(connection.getConnection().isClosed()){
 							connectionPoolIndex.remove(connection.getConnection().hashCode());
 							connectionPool.remove(connection);
-							logger.debug("EN:A closed connection is clean from pool! CN:一个被关闭的Connection从连接池中清除!"+connection.hashCode());
+							logger.debug("##连接池监控"+this.hashCode()+"## EN:A closed connection is clean from pool! CN:一个被关闭的Connection从连接池中清除!"+connection.getConnection().hashCode());
 						}
 					}
 				} catch (Exception ex) {
@@ -278,6 +318,14 @@ public class ConnectionPool {
 
 	public void setPoolThreadTime(int poolThreadTime) {
 		this.poolThreadTime = poolThreadTime;
+	}
+
+	public int getBusyConnectTimeOut() {
+		return busyConnectTimeOut;
+	}
+
+	public void setBusyConnectTimeOut(int busyConnectTimeOut) {
+		this.busyConnectTimeOut = busyConnectTimeOut;
 	}
 	
 }

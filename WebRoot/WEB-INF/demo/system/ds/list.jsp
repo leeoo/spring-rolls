@@ -35,6 +35,10 @@
 						<td><input name="${dataSource.key}.poolMax" value="${dataSource.value.poolMax}" style="width: 100px;"/></td>
 					</tr>
 					<tr>
+						<td nowrap="nowrap">繁忙连接生命周期:</td>
+						<td><input name="${dataSource.key}.busyConnectTimeOut" value="${dataSource.value.busyConnectTimeOut}" style="width: 100px;"/>(秒)</td>
+					</tr>
+					<tr>
 						<td nowrap="nowrap">空闲连接生命周期:</td>
 						<td><input name="${dataSource.key}.connectLife" value="${dataSource.value.connectLife}" style="width: 100px;"/>(秒)</td>
 					</tr>

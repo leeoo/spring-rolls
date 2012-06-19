@@ -28,6 +28,7 @@ public class DefaultDataSource implements DataSource{
 	private String url;
 	private String username;
 	private String password;
+	private int busyConnectTimeOut = 1800;//被占用连接多久释放
 	private int loginTimeout = 5;
 	private boolean isInit = false;//判断是否实例化后被使用过
 	private ConnectionPool connectionPool;
@@ -50,7 +51,7 @@ public class DefaultDataSource implements DataSource{
 	 */
 	public synchronized Connection getConnection(){
 		if(connectionPool == null){//由于是运行时构建数据源实例，很多属性需要之后填充,之所以不把此处放在构造方法中，是因为当时ds还没有被赋值.
-			connectionPool = new ConnectionPool(poolMax, connectLife, poolThreadTime);
+			connectionPool = new ConnectionPool(poolMax, connectLife, poolThreadTime,busyConnectTimeOut);
 		}
 		return getConnectionFromPool();
 	}
@@ -217,6 +218,17 @@ public class DefaultDataSource implements DataSource{
 	public void setConnectLife(int connectLife) {
 		this.connectLife = connectLife;
 		connectionPool.setConnectLife(connectLife);
+	}
+
+
+	public int getBusyConnectTimeOut() {
+		return busyConnectTimeOut;
+	}
+
+
+	public void setBusyConnectTimeOut(int busyConnectTimeOut) {
+		this.busyConnectTimeOut = busyConnectTimeOut;
+		connectionPool.setBusyConnectTimeOut(busyConnectTimeOut);
 	}
 	
 }

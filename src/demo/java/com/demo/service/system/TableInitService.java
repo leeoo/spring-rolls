@@ -46,7 +46,7 @@ public class TableInitService {
 		logger.debug("t_log创建成功!");
 		st.execute("CREATE TABLE t_sequence(table_name VARCHAR(50) PRIMARY KEY,seq_value INT NOT NULL)");
 		logger.debug("t_sequence创建成功!");
-		MultiDataSourceFactory.getDataSource("ds1").replace(connection);
+		//MultiDataSourceFactory.getDataSource("ds1").replace(connection);
 	}
 
 }
