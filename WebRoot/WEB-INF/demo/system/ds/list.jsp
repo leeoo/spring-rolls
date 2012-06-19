@@ -32,23 +32,25 @@
 					</tr>
 					<tr>
 						<td nowrap="nowrap">连接池最大值:</td>
-						<td><input name="${dataSource.key}.poolMax" value="${dataSource.value.poolMax}" style="width: 100px;"/></td>
+						<td style="height: 60px;">
+						<input name="${dataSource.key}.poolMax" value="${dataSource.value.poolMax}" class="easyui-slider" showTip="true" max="200" rule="[1,'|',50,'|',100,'|',150,'|',200]" style="width:300px">
+						</td>
 					</tr>
 					<tr>
 						<td nowrap="nowrap">繁忙连接生命周期:</td>
-						<td><input name="${dataSource.key}.busyConnectTimeOut" value="${dataSource.value.busyConnectTimeOut}" style="width: 100px;"/>(秒)</td>
+						<td><input name="${dataSource.key}.busyConnectTimeOut" value="${dataSource.value.busyConnectTimeOut}" class="easyui-numberspinner" style="width: 100px;"/>(秒)</td>
 					</tr>
 					<tr>
 						<td nowrap="nowrap">空闲连接生命周期:</td>
-						<td><input name="${dataSource.key}.connectLife" value="${dataSource.value.connectLife}" style="width: 100px;"/>(秒)</td>
+						<td><input name="${dataSource.key}.connectLife" value="${dataSource.value.connectLife}" class="easyui-numberspinner" style="width: 100px;"/>(秒)</td>
 					</tr>
 					<tr>
 						<td nowrap="nowrap">线程监控执行周期:</td>
-						<td><input name="${dataSource.key}.poolThreadTime" value="${dataSource.value.poolThreadTime}" style="width: 100px;"/>(秒)</td>
+						<td><input name="${dataSource.key}.poolThreadTime" value="${dataSource.value.poolThreadTime}" class="easyui-numberspinner" style="width: 100px;"/>(秒)</td>
 					</tr>
 					<tr>
 						<td nowrap="nowrap">连接超时:</td>
-						<td><input name="${dataSource.key}.loginTimeout" value="${dataSource.value.loginTimeout}" style="width: 100px;"/>(秒)</td>
+						<td><input name="${dataSource.key}.loginTimeout" value="${dataSource.value.loginTimeout}" class="easyui-numberspinner" style="width: 100px;"/>(秒)</td>
 					</tr>
 					<tr>
 						<td></td>
