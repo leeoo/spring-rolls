@@ -42,7 +42,7 @@ public class OnlineUserController extends BaseController{
 		page.setPageSize(count);
 		page.setTotalCount(count);
 		String json = JsonUitls.getBeansJson(users,false,DateUtils.DATE_TIME_FORMAT);
-		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
+		json = ("{\"total\":\""+count+"\",\"rows\":["+json+"]}");
 		mv.printJSON(json);
 	}
 	

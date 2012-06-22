@@ -3,7 +3,6 @@ package com.demo.web.system;
 import java.util.Collection;
 import java.util.Map;
 
-import org.paramecium.commons.JsonUitls;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
@@ -40,8 +39,7 @@ public class RoleController extends BaseController{
 		page.setPageSize(20);
 		Role role = mv.getBean(Role.class);
 		page = roleService.getAll(page,role);
-		String json = JsonUitls.getBeansJson(page.getResult(),false);
-		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
+		String json = getJsonPageData(page);
 		mv.printJSON(json);
 	}
 	

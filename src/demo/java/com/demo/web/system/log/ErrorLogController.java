@@ -1,6 +1,5 @@
 package com.demo.web.system.log;
 
-import org.paramecium.commons.JsonUitls;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
@@ -37,8 +36,7 @@ public class ErrorLogController extends BaseController{
 		Log log = mv.getBean(Log.class);
 		log.setType(0);
 		page = logService.getAll(page,log);
-		String json = JsonUitls.getBeansJson(page.getResult(),false);
-		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
+		String json = getJsonPageData(page);
 		mv.printJSON(json);
 	}
 	

@@ -48,20 +48,20 @@ public class UserService {
 		}
 	}
 
-	public void delete(String[] ids) throws Exception{
+	public void delete(String... ids) throws Exception{
 		for(String id : ids){
 			ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_user_role WHERE username IN(SELECT su.username FROM t_security_user su WHERE su.id=?)",Integer.parseInt(id));
 			ormDao.delete(Integer.parseInt(id));
 		}
 	}
 
-	public void disabled(String[] ids) throws Exception{
+	public void disabled(String... ids) throws Exception{
 		for(String id : ids){
 			ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_security_user SET enabled=0 WHERE id=?",Integer.parseInt(id));
 		}
 	}
 
-	public void enabled(String[] ids) throws Exception{
+	public void enabled(String... ids) throws Exception{
 		for(String id : ids){
 			ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_security_user SET enabled=1 WHERE id=?",Integer.parseInt(id));
 		}

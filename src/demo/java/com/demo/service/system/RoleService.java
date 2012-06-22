@@ -46,7 +46,7 @@ public class RoleService {
 		}
 	}
 
-	public void delete(String[] ids) throws Exception{
+	public void delete(String... ids) throws Exception{
 		for(String id : ids){
 			ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_role_auth WHERE rolename IN(SELECT sr.rolename FROM t_security_role sr WHERE sr.id=?)",Integer.parseInt(id));
 			ormDao.delete(Integer.parseInt(id));
