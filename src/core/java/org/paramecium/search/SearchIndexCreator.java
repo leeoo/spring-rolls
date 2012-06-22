@@ -14,6 +14,8 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -32,7 +34,6 @@ import org.paramecium.search.annotation.KeyWord;
 import org.paramecium.search.annotation.SortWord;
 import org.paramecium.search.annotation.TextWord;
 import org.wltea.analyzer.lucene.IKAnalyzer;
-import org.wltea.analyzer.lucene.IKQueryParser;
 
 /**
  * 功能描述(Description):<br>
@@ -254,7 +255,8 @@ public class SearchIndexCreator {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(clazz) + "//"));
 			reader = IndexReader.open(directory);
 			searcher = new IndexSearcher(reader);
-		    Query query = IKQueryParser.parseMultiField(textPropertyNames, queryText);
+			QueryParser queryParser = new MultiFieldQueryParser(version, textPropertyNames, new IKAnalyzer());
+		    Query query = queryParser.parse(queryText);
 		    TopDocs topDocs = null;
 		    SortField[] sortFields = getSortFields(clazz);
 		    if(sortFields!=null && sortFields.length>0){

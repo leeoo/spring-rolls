@@ -15,22 +15,22 @@ public class SearchTest {
 	public static void main(String[] args) {
 		SearchEntity test = new SearchEntity();
 		test.setName("窦志");
-		test.setAddress("北京市青年大街!");
+		test.setAddress("北京市青年大路!");
 		test.setSize(6);
 		SearchIndexCreator.createIndex(test);
 		test.setName("曹阳");
-		test.setAddress("北京市青年大街!");
+		test.setAddress("沈阳市青年大街!");
 		test.setSize(5);
 		SearchIndexCreator.createIndex(test);
 		test.setName("张迪");
-		test.setAddress("北京市青年大街!");
+		test.setAddress("广洲市青年小巷!");
 		test.setSize(3);
 		SearchIndexCreator.createIndex(test);
 		test.setName("谢雷");
-		test.setAddress("北京市青年大街!");
+		test.setAddress("南京市青年胡同!");
 		test.setSize(4);
 		SearchIndexCreator.createIndex(test);
-		Collection<String> list = SearchIndexCreator.searchKeyword(SearchEntity.class, "北京青年");
+		Collection<String> list = SearchIndexCreator.searchKeyword(SearchEntity.class, "胡同");
 		for(String o : list){
 			System.out.println(o);
 		}
