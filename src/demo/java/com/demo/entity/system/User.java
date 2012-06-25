@@ -70,13 +70,12 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	public Boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-	
 
 }

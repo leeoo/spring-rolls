@@ -11,11 +11,13 @@
 <div region="center" title="用户信息维护">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
 		<form id="userForm" action="${base}/system/user/save${ext}" method="post">
-			<c:if test="${user.id!=null}">
+			<c:if test="${user!=null}">
 				<input type="hidden" name="user.id" value="${user.id}"/>
 				<input type="hidden" name="user.enabled" value="${user.enabled}"/>
 			</c:if>
-			<input type="hidden" name="user.enabled" value="true"/>
+			<c:if test="${user==null}">
+				<input type="hidden" name="user.enabled" value="true"/>
+			</c:if>
 			<div>
 				<table>
 					<tr>

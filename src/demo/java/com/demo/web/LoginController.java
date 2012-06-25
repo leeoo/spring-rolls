@@ -42,7 +42,7 @@ public class LoginController extends BaseController{
 			if(user==null||!user.getPassword().equals(password)){
 				return mv.redirect(SecurityConfig.loginExceptionPage);
 			}
-			userDetails.setEnable(user.isEnabled());
+			userDetails.setEnable(user.getEnabled());
 			userDetails.setName(user.getName());
 			userDetails.setResources(userService.getUserAuth(username));
 		}

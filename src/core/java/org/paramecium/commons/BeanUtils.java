@@ -221,7 +221,7 @@ public abstract class BeanUtils {
 		if(fieldType == null){
 			return getFieldValue(bean, name, GET);
 		}
-		if(fieldType.equals(Boolean.class) || fieldType.equals(boolean.class)){//根据属性类型判断对应的getter方法方式
+		if(fieldType.equals(boolean.class)){//根据属性类型判断对应的getter方法方式
 			return getFieldValue(bean, name, IS);
 		}
 		return getFieldValue(bean, name, GET);
