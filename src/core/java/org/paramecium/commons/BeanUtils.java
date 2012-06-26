@@ -222,7 +222,11 @@ public abstract class BeanUtils {
 			return getFieldValue(bean, name, GET);
 		}
 		if(fieldType.equals(boolean.class)){//根据属性类型判断对应的getter方法方式
-			return getFieldValue(bean, name, IS);
+			Object value = getFieldValue(bean, name, IS);
+			if(value==null){//如果真的没有按照getter规则命名，可以调用getter方法
+				return getFieldValue(bean, name, GET);
+			}
+			return value;
 		}
 		return getFieldValue(bean, name, GET);
 	}
