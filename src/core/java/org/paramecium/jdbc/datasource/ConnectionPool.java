@@ -257,7 +257,7 @@ public class ConnectionPool {
 					long currentTime = EncodeUtils.millisTime();
 					for (DefineConnection connection : connectionPool.keySet()) {
 						try {
-							if(connection.isBusy()){
+							if(connection.isBusy()&&busyConnectTimeOut>0){//如果不大于0，不管占用多久都不释放
 								int bl = (int)((currentTime-connection.getBusyLong())/1000);//获得多久没有结束的连接时长
 								logger.debug("##连接池监控"+this.hashCode()+"## 一个繁忙的连接:"+connection.getConnection().hashCode()+"已经被占用了"+bl+"秒");
 								if(bl<busyConnectTimeOut){
