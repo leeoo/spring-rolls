@@ -2,6 +2,9 @@ package org.paramecium.jdbc.datasource;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -24,6 +27,7 @@ public class ConnectionPool {
 	private int poolThreadTime = 60;//连接池线程轮训间隔(秒)
 	private final ReentrantLock lock = new ReentrantLock();
 	private volatile int busyCount = 0;
+	private Map<String,Object> poolStatus = new HashMap<String, Object>();
 	
 	/**
 	 * 构造方法，用于初始化
@@ -37,6 +41,34 @@ public class ConnectionPool {
 		this.poolThreadTime = poolThreadTime;
 		this.busyConnectTimeOut = busyConnectTimeOut;
 		new Thread(new PoolHandlerThread()).start();
+	}
+	
+	/**
+	 * 统计连接池信息使用
+	 * @return
+	 */
+	public Map<String,Object> getPoolStatus(){
+		poolStatus.clear();
+		poolStatus.put("poolMax", this.poolMax);
+		poolStatus.put("currentPoolMax", connectionPool.size());
+		poolStatus.put("busyPoolMax", this.busyCount);
+		poolStatus.put("connectLife", this.connectLife);
+		poolStatus.put("busyConnectTimeOut", this.busyConnectTimeOut);
+		long currentTime = EncodeUtils.millisTime();
+		int[] idleTimes = new int[connectionPool.size()];
+		int[] busyTimes = new int[this.busyCount];
+		Iterator<DefineConnection> it = connectionPool.keySet().iterator();
+		int j = 0;
+		for(int i=0;i<idleTimes.length;i++){
+			DefineConnection conn = it.next();
+			idleTimes[i] = (int)(currentTime - connectionPool.get(conn))/1000;
+			if(conn.isBusy()){
+				busyTimes[j++] =  (int)(currentTime - conn.busyLong)/1000;
+			}
+		}
+		poolStatus.put("idleTimes", idleTimes);
+		poolStatus.put("busyTimes", busyTimes);
+		return poolStatus;
 	}
 	
 	/**
