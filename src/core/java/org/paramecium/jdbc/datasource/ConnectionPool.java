@@ -49,11 +49,8 @@ public class ConnectionPool {
 	 */
 	public Map<String,Object> getPoolStatus(){
 		poolStatus.clear();
-		poolStatus.put("poolMax", this.poolMax);
 		poolStatus.put("currentPoolMax", connectionPool.size());
 		poolStatus.put("busyPoolMax", this.busyCount);
-		poolStatus.put("connectLife", this.connectLife);
-		poolStatus.put("busyConnectTimeOut", this.busyConnectTimeOut);
 		long currentTime = EncodeUtils.millisTime();
 		int[] idleTimes = new int[connectionPool.size()];
 		int[] busyTimes = new int[this.busyCount];

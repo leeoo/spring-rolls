@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -33,10 +34,21 @@ public class DefaultDataSource implements DataSource{
 	private boolean isInit = false;//判断是否实例化后被使用过
 	private ConnectionPool connectionPool;
 	
+	private int busyPoolMax;
+	private int currentPoolMax;
+	
 	public DefaultDataSource(){
 		logger.debug("默认数据源被载入!");
 	}
 	
+	/**
+	 * 刷新连接池的状态,供连接池状使用
+	 */
+	public synchronized void refreshPoolStatus(){
+		Map<String,Object> stauts = connectionPool.getPoolStatus();
+		busyPoolMax = (Integer)stauts.get("busyPoolMax");
+		currentPoolMax = (Integer)stauts.get("currentPoolMax");
+	}
 	
 	/**
 	 * 使用完后放回
@@ -123,6 +135,22 @@ public class DefaultDataSource implements DataSource{
 	 */
 	public void clearPool(){
 		connectionPool.clear();
+	}
+	
+	public int getBusyPoolMax() {
+		return busyPoolMax;
+	}
+
+	public void setBusyPoolMax(int busyPoolMax) {
+		this.busyPoolMax = busyPoolMax;
+	}
+
+	public int getCurrentPoolMax() {
+		return currentPoolMax;
+	}
+
+	public void setCurrentPoolMax(int currentPoolMax) {
+		this.currentPoolMax = currentPoolMax;
 	}
 	
 	public Connection getConnection(String arg0, String arg1)throws SQLException {

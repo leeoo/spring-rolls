@@ -28,7 +28,9 @@ public class DataSourceService {
 		Map<String,DataSource> map = new LinkedHashMap<String, DataSource>();
 		Collection<String> dataSourceNames = MultiDataSourceFactory.getDataSourceNames();
 		for(String dsName : dataSourceNames){
-			map.put(dsName, MultiDataSourceFactory.getDataSource(dsName));
+			DefaultDataSource dataSource = MultiDataSourceFactory.getDataSource(dsName);
+			dataSource.refreshPoolStatus();
+			map.put(dsName,dataSource);
 		}
 		return map;
 	}
