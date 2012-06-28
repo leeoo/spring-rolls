@@ -36,6 +36,8 @@ public class DefaultDataSource implements DataSource{
 	
 	private int busyPoolMax;
 	private int currentPoolMax;
+	private int[] idleTimes;
+	private int[] busyTimes;
 	
 	public DefaultDataSource(){
 		logger.debug("默认数据源被载入!");
@@ -48,6 +50,9 @@ public class DefaultDataSource implements DataSource{
 		Map<String,Object> stauts = connectionPool.getPoolStatus();
 		busyPoolMax = (Integer)stauts.get("busyPoolMax");
 		currentPoolMax = (Integer)stauts.get("currentPoolMax");
+		idleTimes = (int[])stauts.get("idleTimes");
+		busyTimes = (int[])stauts.get("busyTimes");
+		connectionPool.cleanPoolStatus();
 	}
 	
 	/**
@@ -257,6 +262,22 @@ public class DefaultDataSource implements DataSource{
 	public void setBusyConnectTimeOut(int busyConnectTimeOut) {
 		this.busyConnectTimeOut = busyConnectTimeOut;
 		connectionPool.setBusyConnectTimeOut(busyConnectTimeOut);
+	}
+
+	public int[] getIdleTimes() {
+		return idleTimes;
+	}
+
+	public void setIdleTimes(int[] idleTimes) {
+		this.idleTimes = idleTimes;
+	}
+
+	public int[] getBusyTimes() {
+		return busyTimes;
+	}
+
+	public void setBusyTimes(int[] busyTimes) {
+		this.busyTimes = busyTimes;
 	}
 	
 }

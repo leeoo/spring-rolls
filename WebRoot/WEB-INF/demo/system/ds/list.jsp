@@ -64,8 +64,8 @@
 				</div>
 				<div style="float: left;">
 					<script>
-						var meter = new Chart.Meter({
-							'title':'连接池容量状态',
+						new Chart.Meter({
+							'title':'连接池容量状态监控',
 						    'degreeStart':180,//起始角度
 						    'degreeMax':180,//最大角度
 						    'valueMax':${dataSource.value.poolMax},
@@ -81,8 +81,8 @@
 						    ],
 						    'item':${dataSource.value.currentPoolMax}    //指针数值
 						}).render('canvas-wrapper1');
-						var meter2 = new Chart.Meter({
-							'title':'连接池工作状态',
+						new Chart.Meter({
+							'title':'连接池工作状态监控',
 						    'degreeStart':180,//起始角度
 						    'degreeMax':180,//最大角度
 						    'valueMax':${dataSource.value.poolMax},
@@ -98,9 +98,54 @@
 						    ],
 						    'item':${dataSource.value.busyPoolMax}    //指针数值
 						}).render('canvas-wrapper2');
+						new Chart.Bar({
+							'title':'待释放连接监控',
+						    'item' : [
+								{'text':'','value':[
+								<c:forEach items="${dataSource.value.idleTimes}" var="conn">
+									${conn},
+								</c:forEach>
+								]}
+						    ],
+						    'categories':[
+								<c:forEach items="${dataSource.value.idleTimes}" var="conn">
+								${conn},
+								</c:forEach>
+							],
+						    'showValue':true,
+						    'focusEvent':'mousemove',//聚焦凸起事件,也可以是mousedown
+						    'grid':'h',//只显示水平网格
+						    'valueMax' : ${dataSource.value.connectLife},
+						    'valueMin' : 0,
+						    'valueUnit' : 200
+						}).render('canvas-wrapper3');
+						new Chart.Bar({
+							'title':'待收回连接监控',
+						    'item' : [
+								{'text':'','value':[
+								<c:forEach items="${dataSource.value.busyTimes}" var="conn">
+									${conn},
+								</c:forEach>
+								]}
+						    ],
+						    'categories':[
+								<c:forEach items="${dataSource.value.busyTimes}" var="conn">
+								${conn},
+								</c:forEach>
+							],
+						    'showValue':true,
+						    'focusEvent':'mousemove',//聚焦凸起事件,也可以是mousedown
+						    'grid':'h',//只显示水平网格
+						    'valueMax' : ${dataSource.value.busyConnectTimeOut},
+						    'valueMin' : 0,
+						    'valueUnit' : 200
+						}).render('canvas-wrapper4');
 					</script>
 					<div id="canvas-wrapper1" style="float: left;width: 300px;height: 200px;"></div>
 					<div id="canvas-wrapper2" style="float: left;width: 300px;height: 200px;"></div> 
+					<div></div>
+					<div id="canvas-wrapper3" style="float: left;width: 300px;height: 200px;"></div>
+					<div id="canvas-wrapper4" style="float: left;width: 300px;height: 200px;"></div> 
 				</div>
 			</div>
 	</c:forEach>

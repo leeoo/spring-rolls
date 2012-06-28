@@ -48,7 +48,6 @@ public class ConnectionPool {
 	 * @return
 	 */
 	public Map<String,Object> getPoolStatus(){
-		poolStatus.clear();
 		poolStatus.put("currentPoolMax", connectionPool.size());
 		poolStatus.put("busyPoolMax", this.busyCount);
 		long currentTime = EncodeUtils.millisTime();
@@ -66,6 +65,13 @@ public class ConnectionPool {
 		poolStatus.put("idleTimes", idleTimes);
 		poolStatus.put("busyTimes", busyTimes);
 		return poolStatus;
+	}
+	
+	/**
+	 * 清理连接池状态
+	 */
+	public void cleanPoolStatus(){
+		poolStatus.clear();
 	}
 	
 	/**
