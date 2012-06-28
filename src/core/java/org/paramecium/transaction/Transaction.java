@@ -33,7 +33,7 @@ public class Transaction {
 		if(this.connection==null){
 			throw new SQLException("EN:connection fail!CN:数据库连接错误!");
 		}
-		logger.debug("TRANSACTION-CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
+		logger.debug("TRANSACTION#"+this.hashCode()+" CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class Transaction {
 	 */
 	public synchronized void commit() throws SQLException{
 		connection.commit();
-		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS COMMIT!");
+		logger.debug("TRANSACTION#"+this.hashCode()+" CONNECTION#"+this.connection.hashCode()+" IS COMMIT!");
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class Transaction {
 	 */
 	public synchronized void rollback() throws SQLException{
 		connection.rollback();
-		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS ROOLBACK!");
+		logger.debug("TRANSACTION#"+this.hashCode()+" CONNECTION#"+this.connection.hashCode()+" IS ROOLBACK!");
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public class Transaction {
 	 */
 	public synchronized void over() throws SQLException{
 		dataSource.replace(connection);
-		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OVER!");
+		logger.debug("TRANSACTION#"+this.hashCode()+" CONNECTION#"+this.connection.hashCode()+" IS OVER!");
 	}
 
 

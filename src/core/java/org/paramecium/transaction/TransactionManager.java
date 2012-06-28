@@ -46,6 +46,8 @@ public class TransactionManager {
 			for(Transaction transaction : transactionMap.values()){
 				transaction.setException();
 			}
+		}else{
+			logger.warn("当前事务线程为空!");
 		}
 	}
 	
@@ -62,6 +64,8 @@ public class TransactionManager {
 					logger.error(e);
 				}
 			}
+		}else{
+			logger.warn("当前事务线程为空!");
 		}
 	}
 
@@ -78,6 +82,8 @@ public class TransactionManager {
 					logger.error(e);
 				}
 			}
+		}else{
+			logger.warn("当前事务线程为空!");
 		}
 	}
 	
@@ -91,8 +97,11 @@ public class TransactionManager {
 			try {
 				transactionMap = new HashMap<String, Transaction>();
 				for(String dataSourceName:MultiDataSourceFactory.getDataSourceNames()){
-					transactionMap.put(dataSourceName, new Transaction(dataSourceName));
+					Transaction transaction = new Transaction(dataSourceName);
+					transactionMap.put(dataSourceName, transaction);
 					transactionThreadLocal.set(transactionMap);
+					logger.debug("事务线程："+transactionMap.hashCode()+"已经建立!");
+					logger.debug("数据源:"+dataSourceName+" 事务:"+transaction.hashCode()+"已经开启!");
 				}
 			} catch (Throwable e) {
 				logger.error(e);
@@ -120,12 +129,17 @@ public class TransactionManager {
 				}finally{
 					try {
 						transaction.over();//如果是默认数据源，内部连接池来管理Connection的关闭，无需手动关闭.
+						logger.debug("数据源:"+entry.getKey()+" 事务:"+transaction.hashCode()+"已经结束!");
 					} catch (SQLException e) {
 						logger.error(e);
 					}
 				}
 			}
+			logger.debug("事务线程："+transactionMap.hashCode()+"已经销毁!");//如果放到最下面，对象实例也不存在!
+			transactionMap.clear();
 			transactionThreadLocal.remove();
+		}else{
+			logger.warn("当前事务线程为空!");
 		}
 	}
 	
