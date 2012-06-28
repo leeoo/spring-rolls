@@ -99,6 +99,7 @@ public class ConnectionPool {
 			}
 			DefineConnection defineConnection = new DefineConnection(connection);
 			defineConnection.setIdle();
+			defineConnection.reset();
 			connectionPool.put(defineConnection, EncodeUtils.millisTime());
 			connectionPoolIndex.put(connection.hashCode(), defineConnection);
 			logger.debug("新的连接"+connection.hashCode()+"被放入连接池,当前连接数:"+connectionPool.size());
@@ -117,6 +118,7 @@ public class ConnectionPool {
 			DefineConnection defineConnection = connectionPoolIndex.get(connection.hashCode());
 			if(defineConnection!=null){
 				defineConnection.setIdle();
+				defineConnection.reset();
 				busyCount--;
 				connectionPool.put(defineConnection,EncodeUtils.millisTime());
 				logger.debug("一个使用完毕的连接被归还:"+connection.hashCode());
@@ -136,6 +138,7 @@ public class ConnectionPool {
 			for(DefineConnection connection : connectionPool.keySet()){
 				if(!connection.isBusy()){
 					connection.setBusy();
+					connection.reset();
 					busyCount++;
 					Connection conn = connection.getConnection();
 					logger.debug("一个空闲的连接被获取:"+conn.hashCode());
@@ -255,6 +258,18 @@ public class ConnectionPool {
 			try{
 				return this.connection;
 			} finally {
+				lock.unlock();
+			}
+		}
+		
+		public void reset(){
+			lock.lock();
+			try{
+				this.connection.setAutoCommit(false);
+				this.connection.setReadOnly(false);
+			} catch (SQLException e){
+				logger.error(e);
+			}finally {
 				lock.unlock();
 			}
 		}

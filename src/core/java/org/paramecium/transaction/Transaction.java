@@ -33,7 +33,6 @@ public class Transaction {
 		if(this.connection==null){
 			throw new SQLException("EN:connection fail!CN:数据库连接错误!");
 		}
-		this.connection.setAutoCommit(false);
 		logger.debug("TRANSACTION-CONNECTION#"+this.connection.hashCode()+" IS OPEN!");
 	}
 	
@@ -86,8 +85,6 @@ public class Transaction {
 	 * @throws SQLException
 	 */
 	public synchronized void over() throws SQLException{
-		connection.setAutoCommit(true);
-		connection.setReadOnly(false);
 		dataSource.replace(connection);
 		logger.debug("CONNECTION#"+this.connection.hashCode()+" IS OVER!");
 	}
