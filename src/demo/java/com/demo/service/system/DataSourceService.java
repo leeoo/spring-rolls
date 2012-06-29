@@ -29,10 +29,19 @@ public class DataSourceService {
 		Collection<String> dataSourceNames = MultiDataSourceFactory.getDataSourceNames();
 		for(String dsName : dataSourceNames){
 			DefaultDataSource dataSource = MultiDataSourceFactory.getDataSource(dsName);
-			dataSource.refreshPoolStatus();
 			map.put(dsName,dataSource);
 		}
 		return map;
+	}
+	
+	/**
+	 * 获得数据源
+	 * @return
+	 */
+	public DataSource getDataSource(String dsName){
+		DefaultDataSource dataSource = MultiDataSourceFactory.getDataSource(dsName);
+		dataSource.refreshPoolStatus();
+		return dataSource;
 	}
 	
 	/**

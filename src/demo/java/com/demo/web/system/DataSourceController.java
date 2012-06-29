@@ -45,5 +45,14 @@ public class DataSourceController extends BaseController{
 		}
 		return mv.redirect(getRedirect("/system/ds/list"));
 	}
+	
+	@ShowLabel("数据源监控")
+	@MappingMethod
+	public ModelAndView monitor(ModelAndView mv){
+		String dsName = mv.getValue("dsName",String.class);
+		mv.addValue("dataSource", dataSourceService.getDataSource(dsName));
+		return mv.forward(getPage("/ds/monitor.jsp"));
+	}
+
 
 }
