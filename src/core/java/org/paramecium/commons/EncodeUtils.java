@@ -64,102 +64,125 @@ public abstract class EncodeUtils {
 
 	/**
 	 * BASE64解密
-	 * 
 	 * @param key
 	 * @return
-	 * @throws Exception
 	 */
-	public static byte[] decryptBASE64(String key) throws Exception {
-		return (new BASE64Decoder()).decodeBuffer(key);
+	public static byte[] decryptBASE64(String key){
+		try {
+			return (new BASE64Decoder()).decodeBuffer(key);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
 	 * BASE64加密
-	 * 
 	 * @param key
 	 * @return
-	 * @throws Exception
 	 */
-	public static String encryptBASE64(byte[] key) throws Exception {
-		return (new BASE64Encoder()).encodeBuffer(key);
+	public static String encryptBASE64(byte[] key){
+		try {
+			return (new BASE64Encoder()).encodeBuffer(key);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
 	 * MD5加密
-	 * 
 	 * @param data
 	 * @return
-	 * @throws Exception
 	 */
-	private static byte[] encryptMD5(byte[] data) throws Exception {
-		MessageDigest md5 = MessageDigest.getInstance(KEY_MD5);
-		md5.update(data);
-		return md5.digest();
-
+	private static byte[] encryptMD5(byte[] data){
+		try {
+			MessageDigest md5 = MessageDigest.getInstance(KEY_MD5);
+			md5.update(data);
+			return md5.digest();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
 	 * MD5加密
-	 * 
 	 * @param data
 	 * @return
-	 * @throws Exception
 	 */
-	public static String encryptMD5(String data) throws Exception {
-		byte[] md5 = encryptMD5(data.getBytes());
-		return new BigInt(md5).toString().replaceAll(" ", "");
+	public static String encryptMD5(String data){
+		try {
+			byte[] md5 = encryptMD5(data.getBytes());
+			return new BigInt(md5).toString().replaceAll(" ", "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
 	 * SHA加密
-	 * 
 	 * @param data
 	 * @return
-	 * @throws Exception
 	 */
-	private static byte[] encryptSHA(byte[] data) throws Exception {
-		MessageDigest sha = MessageDigest.getInstance(KEY_SHA);
-		sha.update(data);
-		return sha.digest();
+	private static byte[] encryptSHA(byte[] data){
+		try {
+			MessageDigest sha = MessageDigest.getInstance(KEY_SHA);
+			sha.update(data);
+			return sha.digest();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
 	 * SHA加密
-	 * 
 	 * @param data
 	 * @return
-	 * @throws Exception
 	 */
-	public static String encryptSHA(String data) throws Exception {
-		byte[] sha = encryptSHA(data.getBytes());
-		return new BigInt(sha).toString().replaceAll(" ", "");
+	public static String encryptSHA(String data){
+		try {
+			byte[] sha = encryptSHA(data.getBytes());
+			return new BigInt(sha).toString().replaceAll(" ", "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
 	 * 初始化HMAC密钥
-	 * 
 	 * @return
-	 * @throws Exception
 	 */
-	public static String initMacKey() throws Exception {
-		KeyGenerator keyGenerator = KeyGenerator.getInstance(KEY_MAC);
-		SecretKey secretKey = keyGenerator.generateKey();
-		return encryptBASE64(secretKey.getEncoded());
+	public static String initMacKey(){
+		try {
+			KeyGenerator keyGenerator = KeyGenerator.getInstance(KEY_MAC);
+			SecretKey secretKey = keyGenerator.generateKey();
+			return encryptBASE64(secretKey.getEncoded());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
 	 * HMAC加密
-	 * 
 	 * @param data
 	 * @param key
 	 * @return
-	 * @throws Exception
 	 */
-	public static byte[] encryptHMAC(byte[] data, String key) throws Exception {
-		SecretKey secretKey = new SecretKeySpec(decryptBASE64(key), KEY_MAC);
-		Mac mac = Mac.getInstance(secretKey.getAlgorithm());
-		mac.init(secretKey);
-		return mac.doFinal(data);
+	public static byte[] encryptHMAC(byte[] data, String key) {
+		try {
+			SecretKey secretKey = new SecretKeySpec(decryptBASE64(key), KEY_MAC);
+			Mac mac = Mac.getInstance(secretKey.getAlgorithm());
+			mac.init(secretKey);
+			return mac.doFinal(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
