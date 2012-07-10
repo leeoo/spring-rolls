@@ -9,6 +9,9 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 import sun.security.util.BigInt;
@@ -22,6 +25,7 @@ import sun.security.util.BigInt;
  */
 public abstract class EncodeUtils {
 	
+	private final static Log logger = LoggerFactory.getLogger();
 	public static final String KEY_SHA = "SHA";
 	public static final String KEY_MD5 = "MD5";
 
@@ -71,7 +75,7 @@ public abstract class EncodeUtils {
 		try {
 			return (new BASE64Decoder()).decodeBuffer(key);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -85,7 +89,7 @@ public abstract class EncodeUtils {
 		try {
 			return (new BASE64Encoder()).encodeBuffer(key);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -101,7 +105,7 @@ public abstract class EncodeUtils {
 			md5.update(data);
 			return md5.digest();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -116,7 +120,7 @@ public abstract class EncodeUtils {
 			byte[] md5 = encryptMD5(data.getBytes());
 			return new BigInt(md5).toString().replaceAll(" ", "");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -132,7 +136,7 @@ public abstract class EncodeUtils {
 			sha.update(data);
 			return sha.digest();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -147,7 +151,7 @@ public abstract class EncodeUtils {
 			byte[] sha = encryptSHA(data.getBytes());
 			return new BigInt(sha).toString().replaceAll(" ", "");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -162,7 +166,7 @@ public abstract class EncodeUtils {
 			SecretKey secretKey = keyGenerator.generateKey();
 			return encryptBASE64(secretKey.getEncoded());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -180,7 +184,7 @@ public abstract class EncodeUtils {
 			mac.init(secretKey);
 			return mac.doFinal(data);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -194,7 +198,7 @@ public abstract class EncodeUtils {
 		try {
 			return java.net.URLEncoder.encode(str,"UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return str;
 	}
