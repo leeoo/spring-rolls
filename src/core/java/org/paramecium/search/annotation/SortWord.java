@@ -34,4 +34,9 @@ public @interface SortWord {
 	 */
 	public int type() default SortField.INT;
 	
+	/**
+	 *未来4.x版本lucene会使用，将上标注属性替换即可
+		public SortField.Type type() default SortField.Type.INT;
+	**/
+	
 }
