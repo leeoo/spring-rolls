@@ -10,9 +10,46 @@
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="在线用户列表">
 	<table id="list"></table>
+	<div id="win" class="easyui-dialog" close="true" iconCls="icon-msg" title="发送消息">  
+	   <textarea id="content" rows="5" cols="20"></textarea>
+	</div>
 </div>
 <script>
 	$(function(){
+		$('#win').dialog({
+			buttons:[{
+				text:'发送',
+				iconCls:'icon-msg',
+				handler:function(){
+					var ids = [];
+					var rows = $('#list').datagrid('getSelections');
+					if(rows.length<1){
+						$.messager.alert('提示','至少选择一行!','warning');
+						return false;
+					}
+					for(var i=0;i<rows.length;i++){
+						ids.push(rows[i].sessionId);
+					}
+					$.ajax({
+						   type: "get",
+						   url: "${base}/system/message/send${ext}",
+						   data: "ids="+ids.join(',')+"&content="+$('#content').val(),
+						   success: function(msg){
+							   $.messager.show({
+									title:'提示',
+									msg:'发送成功！',
+									timeout:3000,
+									showType:'slide'
+								});
+						   }
+					});
+					$('#content').val('');
+					$('#list').datagrid('reload');
+					$('#win').dialog('close');
+				}
+			}]
+		});
+		$('#win').dialog('close');
 		$('#list').datagrid({
 			height: document.body.clientHeight-${baseHeight},
 			nowrap: true,
@@ -29,7 +66,18 @@
 						{field:'loginDate',title:'登录时间',width:200,align:'center'}
 					]],
 					toolbar: [{
-			            text: '踢出',
+			            text: '发送消息',
+			            iconCls: 'icon-msg',
+			            handler:function(){
+							var rows = $('#list').datagrid('getSelections');
+							if(rows.length<1){
+								$.messager.alert('提示','至少选择一行!','warning');
+								return false;
+							}
+							$('#win').dialog('open');
+						}
+					}, '-', {
+						text: '踢出',
 			            iconCls: 'icon-cancel',
 			            handler:function(){
 				        	var ids = [];
@@ -61,7 +109,7 @@
 					            }
 					        });
 						}
-			        },'-',{
+			        }, '-', {
 				        text: '全部踢出',
 			            iconCls: 'icon-cancel',
 			            handler:function(){
