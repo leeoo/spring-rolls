@@ -51,7 +51,8 @@ public class MessageController extends BaseController{
 		if(message==null){
 			return;
 		}
-		mv.printJSON(message.getContent()+"/n/r"+message.getAuth());
+		messages.remove(sessionId);
+		mv.printJSON("{\"content\":\""+message.getContent()+"\",\"auth\":\""+message.getAuth()+"\"}");
 	}
 
 }

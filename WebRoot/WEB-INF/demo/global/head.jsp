@@ -8,6 +8,23 @@
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="${base}/commons/js/jquery/locale/easyui-lang-zh_CN.js"></script>
 	<script>
+		function getMessage() {  
+	        $.ajax({  
+	            url: "${base}/system/message/receive.json",
+	            cache: false,
+	            dataType: "json",
+	            type: "post",
+	            timeout: 2000,  
+	            success: function (msg) {
+	            	if(msg!=null){
+	            		$.messager.alert('来自于&nbsp;'+msg.auth+'&nbsp;的站内消息',msg.content,'info');
+	            	}
+	            }
+	        })
+	    }
+		window.onload=function(){
+			window.setInterval(getMessage,10000);
+		};
 		function isExit(){
 			$.messager.confirm('提示','是否确认退出本系统?',function(d){
 	            if(d){

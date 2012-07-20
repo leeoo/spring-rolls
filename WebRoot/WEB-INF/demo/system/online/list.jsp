@@ -33,7 +33,7 @@
 					$.ajax({
 						   type: "get",
 						   url: "${base}/system/message/send${ext}",
-						   data: "ids="+ids.join(',')+"&content="+$('#content').val(),
+						   data: "ids="+ids.join(',')+"&content="+encodeURI($('#content').val()),
 						   success: function(msg){
 							   $.messager.show({
 									title:'提示',
