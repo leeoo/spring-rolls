@@ -23,8 +23,8 @@
 	</style>
 <title>登录首页</title>
 </head>
-<body style="background-image: url('${base}/commons/images/loginbg.gif')">
-	<div id="login" class="easyui-dialog" title="请在此登录" style="width:270px;height:155px;padding-top: 10px;"
+<body style="background-image: url('${base}/commons/images/bodybg.png')">
+	<div id="login" class="easyui-dialog" title="请在此登录" style="width:280px;height:160px;padding-top: 10px;"
 			buttons="#dlg-buttons" resizable="false" iconCls="icon-key">
 		<form action="${base}/login${ext}" method="post">
 		<center>

@@ -17,7 +17,6 @@
 			background: #000000;
 			border:1px solid #ffffff;
 			color: #ffffff;
-			width:95%;
 			overflow: auto;
 			margin: 0 auto;
 		}
@@ -27,35 +26,18 @@
 			color: #ff0000;
 		}
 	</style>
-	<script>
-		$(function(){
-			$('#errorDiv').append($('#error500'));
-			$('#errorMove').toggle(function(){
-				$(this).text('－详细信息');
-				$('#errorRequest').show('blind',function(){
-					$('#error500').show('blind');
-				});
-			},function(){
-				$(this).text('＋详细信息');
-				$('#error500').hide('blind',function(){
-					$('#errorRequest').hide('blind');
-				});
-			});
-		});
-	</script>
 </head>
 <body>
-	<div style="text-align: center;width: 100%;height: 100%;background-image: url('${base}/commons/images/loginbg.gif');">
-		<img alt="IE的404必须要求大于512字节，否则会被IE换成自己的界面。因此我用了这个图片占用一下字节。" src="${base}/commons/images/logo.gif">
+	<div style="text-align: center;width: 100%;height: 100%;background-image: url('${base}/commons/images/bodybg.png');">
 		<div style="color: #FFF;font-size: 280px;font-weight: bolder;">500</div>
 		<div style="color: #FFF;font-size: 50px;font-weight: bolder;">您访问的页面出现错误</div>
 		<div id="errorDiv">
-			<span id='errorMove'>＋详细信息</span>
-			<pre id='errorRequest' style="display: none;">
+			<span id='errorMove'>详细信息</span>
+			<pre id='errorRequest'>
 				<%
 					if(exception != null){
 				    	PrintWriter pout = new PrintWriter(out);
-				    	out.println("<pre id='error500' style='display:none;'>");
+				    	out.println("<pre id='error500'>");
 				    	out.println("<span id='error500title'>Exception: " + exception+"</span>");
 				    	exception.printStackTrace(pout);
 				    	out.println("</pre>");

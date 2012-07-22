@@ -11,7 +11,7 @@
 <div region="center" title="在线用户列表">
 	<table id="list"></table>
 	<div id="win" class="easyui-dialog" close="true" iconCls="icon-msg" title="发送消息">  
-	   <textarea id="content" rows="5" cols="20"></textarea>
+	   <textarea id="content" rows="10" cols="50"></textarea>
 	</div>
 </div>
 <script>
