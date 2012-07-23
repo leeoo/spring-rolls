@@ -25,7 +25,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	
-	private final static Cache cache = CacheManager.getDefaultCache("LUCENE_INDEX_PK",100);
+	private final static Cache<String, List<Serializable>> cache = (Cache<String, List<Serializable>>) CacheManager.getDefaultCache("LUCENE_INDEX_PK",100);
 	
 	private GenericOrmDao<T, PK> genericOrmDao;
 	
@@ -162,7 +162,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		if(pks == null){
 			Collection<String> keywords = SearchIndexCreator.searchKeyword(clazz, text,count);
 			List<Serializable> list = new LinkedList<Serializable>();
-			Class type = EntitySqlParser.getPkType(clazz);
+			Class<?> type = EntitySqlParser.getPkType(clazz);
 			for(String keyword : keywords){
 				if (String.class.equals(type)){
 					list.add(keyword);

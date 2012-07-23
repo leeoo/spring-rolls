@@ -236,7 +236,8 @@
 }
 .combobox-item-selected{
 	background:#FBEC88;
-}.datagrid .panel-body{
+}
+.datagrid .panel-body{
 	overflow:hidden;
 }
 .datagrid-wrap{
@@ -567,9 +568,10 @@
 .layout-expand-over{
 	background:#fafafa;
 }
+<!--background-image:url('images/gb.gif');-->
 .layout-body{
 	overflow:auto;
-	background:#fff;
+	background-color: #fafafa;
 }
 .layout-split-proxy-h{
 	position:absolute;

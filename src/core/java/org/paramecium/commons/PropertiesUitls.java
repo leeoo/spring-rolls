@@ -50,6 +50,13 @@ public abstract class PropertiesUitls {
 			values.put(value, proValue);
 			map.put(newType, values);
 		}
+		if(inputStream!=null){
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				logger.error(e);
+			}
+		}
 		return map;
 	}
 	
@@ -72,6 +79,13 @@ public abstract class PropertiesUitls {
 			String property = (String)key;
 			String proValue = properties.getProperty(property);
 			map.put(property, proValue);
+		}
+		if(inputStream!=null){
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				logger.error(e);
+			}
 		}
 		return map;
 	}

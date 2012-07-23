@@ -20,7 +20,6 @@ import org.paramecium.log.LoggerFactory;
  * <br>开 发 日 期:2011-7-1下午04:29:39
  * <br>项 目 信 息:paramecium:org.paramecium.cache.CacheManager.java
  */
-@SuppressWarnings("unchecked")
 public class CacheManager {
 	
 	private final static Log logger = LoggerFactory.getLogger();
@@ -106,7 +105,7 @@ public class CacheManager {
 		if(map.get(name)==null){
 			Cache<?,?> cache = null;
 			try {
-				cache = new Cache(new DefaultCache(name, maxSize));
+				cache = new Cache<Object, Object>(new DefaultCache(name, maxSize));
 			} catch (RemoteException e) {
 				logger.error(e);
 			}
@@ -151,7 +150,7 @@ public class CacheManager {
 			Cache<?,?> initiativeCache = null;
 			try {
 				if(passiveCache!=null){
-					initiativeCache = new Cache(new InitiativeCache(name, maxSize,passiveCache));
+					initiativeCache = new Cache<Object,Object>(new InitiativeCache(name, maxSize,passiveCache));
 				}
 			} catch (RemoteException e) {
 				logger.error(e);
