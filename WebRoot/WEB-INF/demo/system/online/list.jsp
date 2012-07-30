@@ -53,6 +53,7 @@
 		$('#list').datagrid({
 			height: document.body.clientHeight-${baseHeight},
 			nowrap: true,
+			striped: true,
 			url:'${base}/system/online/data.json',
 			idField:'sessionId',
 			frozenColumns:[[
