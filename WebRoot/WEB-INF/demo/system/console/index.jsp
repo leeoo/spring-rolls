@@ -5,7 +5,7 @@
 <title>Paramecium开发平台演示——CONSOLE控制台</title>
 	<style>
 		#console{
-			background-color:#000000;
+			background-color:#000;
 			font-family: "Courier New", Courier, "宋体", monospace;
 			font-size: 18px;
 			color: #CCCCCC;
@@ -18,9 +18,9 @@
 <body class="easyui-layout">
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
-<div region="center" title="控制台" style="background-color:#000000;font-size: 18px;color: #CCCCCC;">
-	<div id="console">
-		<div>
+<div region="center" title="控制台">
+	<div id="console" style="height: 100%;">
+		<div style="width: 100%;background-color:#000;">
 			<c:if test="${result!=null&&result!=''}">
 				${result}<br/><br/>
 			</c:if>
