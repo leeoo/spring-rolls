@@ -577,7 +577,7 @@
 }
 .layout-body{
 	overflow:auto;
-	background:#fff;
+	background-image: url('images/bgui.png');
 }
 .layout-split-proxy-h{
 	position:absolute;
