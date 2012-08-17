@@ -58,6 +58,8 @@ public class SearchIndexCreatorV4 {
 
 	public static String INDEX_PATH = null;
 	
+	public static org.apache.lucene.analysis.Analyzer analyzer = null;
+	
 	private static Version version = Version.LUCENE_40;
 
 	public static String getPath() {
@@ -65,6 +67,17 @@ public class SearchIndexCreatorV4 {
 			INDEX_PATH = PathUtils.getClassRootPath().replaceFirst("classes","index");
 		}
 		return INDEX_PATH;
+	}
+	
+	public static void initAnalyzer(org.apache.lucene.analysis.Analyzer _analyzer){
+		analyzer = _analyzer;
+	}
+	
+	private static org.apache.lucene.analysis.Analyzer getAnalyzer(){
+		if(analyzer==null){
+			analyzer = new StandardAnalyzer(version);
+		}
+		return analyzer;
 	}
 	
 	private static void close(IndexWriter writer,Directory directory){
@@ -137,7 +150,7 @@ public class SearchIndexCreatorV4 {
 		Directory directory = null;
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
-			IndexWriterConfig conf = new IndexWriterConfig(version, new IKAnalyzer());
+			IndexWriterConfig conf = new IndexWriterConfig(version, getAnalyzer());
 			conf.setMergeScheduler(new ConcurrentMergeScheduler());
 			conf.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 			writer = new IndexWriter(directory, conf);
@@ -208,7 +221,7 @@ public class SearchIndexCreatorV4 {
 		Directory directory = null;
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
-			IndexWriterConfig conf = new IndexWriterConfig(version, new IKAnalyzer());
+			IndexWriterConfig conf = new IndexWriterConfig(version, getAnalyzer());
 			conf.setMergeScheduler(new ConcurrentMergeScheduler());
 			writer = new IndexWriter(directory, conf);
 			for (Class<?> superClass = bean.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
@@ -271,7 +284,7 @@ public class SearchIndexCreatorV4 {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(clazz) + "//"));
 			reader = DirectoryReader.open(directory);
 			searcher = new IndexSearcher(reader);
-			QueryParser queryParser = new MultiFieldQueryParser(version, textPropertyNames, new IKAnalyzer());
+			QueryParser queryParser = new MultiFieldQueryParser(version, textPropertyNames, getAnalyzer());
 		    Query query = queryParser.parse(queryText);
 		    TopDocs topDocs = null;
 		    SortField[] sortFields = getSortFields(clazz);
@@ -455,5 +468,4 @@ public class SearchIndexCreatorV4 {
 	public static String html2Text(String inputString) {
 		return inputString.replaceAll("\r\n", "").replaceAll("<[.[^<]]*>","").replaceAll("	", ""); 
 	}
-
 }
