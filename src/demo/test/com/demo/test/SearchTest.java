@@ -19,7 +19,7 @@ public class SearchTest {
 		test.setSize(6);
 		SearchIndexCreator.createIndex(test);
 		test.setName("曹阳");
-		test.setAddress("沈阳市青年大街!");
+		test.setAddress("沈阳市青年大街旁边的小胡同里!");
 		test.setSize(5);
 		SearchIndexCreator.createIndex(test);
 		test.setName("张迪");
