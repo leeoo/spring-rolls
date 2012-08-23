@@ -27,7 +27,12 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	public Page queryPageBeansByArray(final Connection connection,final String sql, Class<?> clazz, Page page, Object... arrayParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByArray(connection,getCountSql(sql), arrayParameters);
+			Object obj = queryUniqueColumnValueByArray(connection,getCountSql(sql), arrayParameters);
+			if(obj!=null){
+				count = Long.parseLong(obj.toString()) ;
+			}else{
+				count = 0;
+			}
 			page.setTotalCount((int) count);
 		}
 		Collection<?> list = queryByArray(connection,getSql(sql, page), clazz, arrayParameters);
@@ -38,7 +43,12 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	public Page queryPageMapsByArray(final Connection connection,final String sql, Page page,Object... arrayParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByArray(connection,getCountSql(sql), arrayParameters);
+			Object obj = queryUniqueColumnValueByArray(connection,getCountSql(sql), arrayParameters);
+			if(obj!=null){
+				count = Long.parseLong(obj.toString()) ;
+			}else{
+				count = 0;
+			}
 			page.setTotalCount((int) count);
 		}
 		Collection<?> list = queryByArray(connection,getSql(sql, page), arrayParameters);
@@ -49,7 +59,12 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	public Page queryPageBeansByBean(final Connection connection,final String sql, Class<?> clazz, Page page, Object beanParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByBean(connection,getCountSql(sql), beanParameters);
+			Object obj = queryUniqueColumnValueByBean(connection,getCountSql(sql), beanParameters);
+			if(obj!=null){
+				count = Long.parseLong(obj.toString()) ;
+			}else{
+				count = 0;
+			}
 			page.setTotalCount((int) count);
 		}
 		Collection<?> list = queryByBean(connection,getSql(sql, page), clazz, beanParameters);
@@ -60,7 +75,12 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	public Page queryPageBeansByMap(final Connection connection,final String sql, Class<?> clazz, Page page, Map<String, Object> mapParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByMap(connection,getCountSql(sql), mapParameters);
+			Object obj = queryUniqueColumnValueByMap(connection,getCountSql(sql), mapParameters);
+			if(obj!=null){
+				count = Long.parseLong(obj.toString()) ;
+			}else{
+				count = 0;
+			}
 			page.setTotalCount((int) count);
 		}
 		Collection<?> list = queryByMap(connection,getSql(sql, page), clazz, mapParameters);
@@ -71,7 +91,12 @@ public abstract class BaseDialect extends BaseJdbcTemplate{
 	public Page queryPageMapsByMap(final Connection connection,final String sql, Page page, Map<String, Object> mapParameters) throws SQLException {
 		long count = 0;
 		if (page.isAutoCount()) {
-			count = (Long) queryUniqueColumnValueByMap(connection,getCountSql(sql), mapParameters);
+			Object obj = queryUniqueColumnValueByMap(connection,getCountSql(sql), mapParameters);
+			if(obj!=null){
+				count = Long.parseLong(obj.toString()) ;
+			}else{
+				count = 0;
+			}
 			page.setTotalCount((int) count);
 		}
 		Collection<?> list = queryByMap(connection,getSql(sql, page), mapParameters);
