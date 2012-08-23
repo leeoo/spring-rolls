@@ -123,10 +123,15 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		int where = sql.toLowerCase().lastIndexOf("where");
 		String countSql = BaseDialect.getCountSql(sql.substring(0, where));
 		sql = sql.substring(0, last).concat(" IN( ");
-		long count = 0;
+		int count = 0;
 		if (page.isAutoCount()) {
-			count = (Long)genericOrmDao.getGenericJdbcDao().queryUniqueColumnValueByArray(countSql);
-			page.setTotalCount((int)count);
+			Object obj = genericOrmDao.getGenericJdbcDao().queryUniqueColumnValueByArray(countSql);
+			if(obj!=null){
+				count = Integer.parseInt(obj.toString()) ;
+			}else{
+				count = 0;
+			}
+			page.setTotalCount(count);
 		}
 		List<PK> pks = getPKList(text,(int)count);
 		Object[] arrayParams = new Serializable[page.getPageSize()];
