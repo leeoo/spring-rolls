@@ -13,7 +13,7 @@ public class LoggerDBImpl implements LoggerDB{
 	
 	public LoggerDBImpl() {
 		try {
-			TableInitService.createTables();
+			TableInitService.createTablesByH2$MySql();
 		} catch (Exception e) {
 		}
 	}
