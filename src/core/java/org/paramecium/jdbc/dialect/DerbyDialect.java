@@ -14,7 +14,7 @@ public final class DerbyDialect extends BaseDialect implements Dialect {
 
 	public String getSql(final String sql,Page page){
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String queryLastSql=") temp_results) final_results WHERE row_number > "+page.getFirst()+" AND row_number <= "+page.getFirst()+page.getPageSize();
+			String queryLastSql=") temp_results) final_results WHERE row_number > "+page.getFirst()+" AND row_number <= "+(page.getFirst()+page.getPageSize());
 			int groupby=sql.toUpperCase().indexOf("GROUP BY");
 			int orderby=sql.toUpperCase().indexOf("ORDER BY");
 			if(orderby>groupby){

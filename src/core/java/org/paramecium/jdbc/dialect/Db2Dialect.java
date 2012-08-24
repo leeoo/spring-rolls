@@ -14,7 +14,7 @@ public final class Db2Dialect extends BaseDialect implements Dialect {
 
 	public String getSql(final String sql, Page page) {
 		if (page.isFirstSetted() && page.isPageSizeSetted()) {
-			String queryLastSql = ") rs1) rs2 WHERE rn > " + page.getFirst()+ " AND rn <= " + page.getFirst() + page.getPageSize();
+			String queryLastSql = ") rs1) rs2 WHERE rn > " + page.getFirst()+ " AND rn <= " + (page.getFirst() + page.getPageSize());
 			int groupby = sql.toUpperCase().indexOf("GROUP BY");
 			int orderby = sql.toUpperCase().indexOf("ORDER BY");
 			if (orderby > groupby) {

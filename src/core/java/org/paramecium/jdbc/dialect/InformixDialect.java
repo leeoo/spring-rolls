@@ -14,7 +14,7 @@ public final class InformixDialect extends BaseDialect implements Dialect {
 	public String getSql(final String sql,Page page){
 		String querySql=sql;
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			querySql="SELECT SKIP "+page.getFirst()+" FIRST "+page.getFirst()+page.getPageSize()+" "+querySql.substring(7, querySql.length());
+			querySql="SELECT SKIP "+page.getFirst()+" FIRST "+(page.getFirst()+page.getPageSize())+" "+querySql.substring(7, querySql.length());
 		}
 		return querySql;
 	}

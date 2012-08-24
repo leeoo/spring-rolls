@@ -13,7 +13,7 @@ public final class SqlServer2kxDialect extends BaseDialect implements Dialect {
 
 	public String getSql(final String sql,Page page){
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
-			String queryLastSql=") temp_results) final_results WHERE row_number > "+page.getFirst()+page.getPageSize();
+			String queryLastSql=") temp_results) final_results WHERE row_number > "+page.getFirst();
 			int groupby=sql.toUpperCase().indexOf("GROUP BY");
 			int orderby=sql.toUpperCase().indexOf("ORDER BY");
 			if(orderby>groupby){
@@ -23,7 +23,7 @@ public final class SqlServer2kxDialect extends BaseDialect implements Dialect {
 			if(orderby>0){
 				temp1 = sql.substring(orderby, groupby);
 			}
-			String queryFristSql="SELECT TOP "+page.getFirst()+" * FROM (SELECT ROW_NUMBER() OVER ("+temp1+") row_number,temp_results.* FROM(";
+			String queryFristSql="SELECT TOP "+page.getPageSize()+" * FROM (SELECT ROW_NUMBER() OVER ("+temp1+") row_number,temp_results.* FROM(";
 			String lastSql=queryFristSql.concat(sql.concat(queryLastSql));
 			return lastSql;
 		}else{

@@ -14,7 +14,7 @@ public final class OracleDialect extends BaseDialect implements Dialect {
 	public String getSql(final String sql,Page page){
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
 			String querySqlFirst="SELECT * FROM ( SELECT tempt.*,ROWNUM rn FROM ( ";
-			String querySqlLast=" ) tempt WHERE ROWNUM<="+page.getFirst()+page.getPageSize()+" ) WHERE rn>"+page.getFirst();
+			String querySqlLast=" ) tempt WHERE ROWNUM<="+(page.getFirst()+page.getPageSize())+" ) WHERE rn>"+page.getFirst();
 			String lastSql=querySqlFirst.concat(sql.concat(querySqlLast));
 			return lastSql;
 		}else{
