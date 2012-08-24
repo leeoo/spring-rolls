@@ -11,6 +11,9 @@ import java.sql.SQLException;
  */
 public final class SqlServer2kxDialect extends BaseDialect implements Dialect {
 
+	/**
+	 * 如果复杂语句中滥用orderby的话，会有问题，请根据业务优化好sql语句，避免无谓的orderby
+	 */
 	public String getSql(final String sql,Page page){
 		if (page.isFirstSetted()&&page.isPageSizeSetted()) {
 			String queryLastSql=") temp_results) final_results WHERE row_number > "+page.getFirst();
@@ -24,7 +27,8 @@ public final class SqlServer2kxDialect extends BaseDialect implements Dialect {
 				temp1 = sql.substring(orderby, groupby);
 			}
 			String queryFristSql="SELECT TOP "+page.getPageSize()+" * FROM (SELECT ROW_NUMBER() OVER ("+temp1+") row_number,temp_results.* FROM(";
-			String lastSql=queryFristSql.concat(sql.concat(queryLastSql));
+			String filterOrderBy=sql.replaceAll(temp1, "");//过滤orderby
+			String lastSql=queryFristSql.concat(filterOrderBy.concat(queryLastSql));
 			return lastSql;
 		}else{
 			return sql;
