@@ -39,7 +39,7 @@ public abstract class BeanUtils {
 				field.set(bean,value);
 			}else if (int.class.equals(clazz) || Integer.class.equals(clazz)) {
 				field.set(bean,Integer.parseInt(value));
-			}else if (java.util.Date.class.equals(clazz) || java.sql.Date.class.equals(clazz)) {
+			}else if (java.util.Date.class.equals(clazz) || java.sql.Date.class.equals(clazz) || java.sql.Timestamp.class.equals(clazz) || java.sql.Time.class.equals(clazz)) {
 				field.set(bean,DateUtils.parse(value));
 			}else if (long.class.equals(clazz) || Long.class.equals(clazz)) {
 				field.set(bean,Long.parseLong(value));
@@ -76,7 +76,7 @@ public abstract class BeanUtils {
 			return value;
 		}else if (int.class.equals(clazz) || Integer.class.equals(clazz)) {
 			return Integer.parseInt(value);
-		}else if (java.util.Date.class.equals(clazz) || java.sql.Date.class.equals(clazz)) {
+		}else if (java.util.Date.class.equals(clazz) || java.sql.Date.class.equals(clazz) || java.sql.Timestamp.class.equals(clazz) || java.sql.Time.class.equals(clazz)) {
 			return DateUtils.parse(value);
 		}else if (long.class.equals(clazz) || Long.class.equals(clazz)) {
 			return Long.parseLong(value);

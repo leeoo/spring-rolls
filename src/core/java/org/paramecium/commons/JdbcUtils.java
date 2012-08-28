@@ -204,4 +204,76 @@ public abstract class JdbcUtils {
 		}
 	}
 	
+	/**
+	 * 为JDBC提供原生的SQL日志
+	 * @param jdbcSql
+	 * @param params
+	 * @return
+	 */
+	public static String getNativeSql2(String jdbcSql, Map<String, Object> params){
+		return getNativeSql(jdbcSql, params.values());
+	}
+	
+	/**
+	 * 为JDBC提供原生的SQL日志
+	 * @param jdbcSql
+	 * @param params
+	 * @return
+	 */
+	public static String getNativeSql(String jdbcSql, Map<Integer, Object> params){
+		int count = params.size();
+		Object[] objs = new Object[count];
+		for(int i=1;i<=count;i++){
+			objs[i-1] = params.get(i);
+		}
+		return getNativeSql(jdbcSql, objs);
+	}
+	
+	/**
+	 * 为JDBC提供原生的SQL日志
+	 * @param jdbcSql
+	 * @param params
+	 * @return
+	 */
+	public static String getNativeSql(String jdbcSql, Object... params){
+		StringBuffer finalSql = new StringBuffer();
+		if(jdbcSql == null){
+			return "";
+		}
+		char[] cs = jdbcSql.toCharArray();
+		int i = 0;
+		for(char c : cs){
+			if(c == '?'){
+				try{
+					finalSql.append(getStringSqlValue(params[i++]));
+				}catch (java.lang.ArrayIndexOutOfBoundsException e) {
+					System.err.println("参数数量与SQL语句的?数量不匹配!");
+					e.printStackTrace();
+				}
+				
+			}else{
+				finalSql.append(c);
+			}
+		}
+		return finalSql.toString();
+	}
+	
+	/**
+	 * 根据类型取得sql语句中的？值
+	 * @param value
+	 * @return
+	 */
+	private static String getStringSqlValue(Object value){
+		if(value!=null){
+			if (value instanceof Number || value instanceof Boolean) {
+				return value.toString();
+			}else if (value instanceof java.util.Date) {
+				return "'"+ DateUtils.parse(DateUtils.DATE_TIME_FORMAT, (java.util.Date)value)+"'";
+			}else{
+				return "'"+value.toString()+"'";
+			}
+		}
+		return "NULL";
+	}
+	
 }

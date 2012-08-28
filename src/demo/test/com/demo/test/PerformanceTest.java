@@ -17,7 +17,7 @@ import com.demo.service.system.TableInitService;
 public class PerformanceTest {
 	
 	public static void main(String[] args) throws Exception {
-		TableInitService.createTables();
+		TableInitService.createTablesByH2$MySql();
 		for(int i =0;i <100;i++){
 			new TestRunner().start();
 		}
