@@ -57,13 +57,13 @@ public class UserService {
 
 	public void disabled(String... ids) throws Exception{
 		for(String id : ids){
-			ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_security_user SET enabled=0 WHERE id=?",Integer.parseInt(id));
+			ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_security_user SET enabled='0' WHERE id=?",Integer.parseInt(id));
 		}
 	}
 
 	public void enabled(String... ids) throws Exception{
 		for(String id : ids){
-			ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_security_user SET enabled=1 WHERE id=?",Integer.parseInt(id));
+			ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_security_user SET enabled='1' WHERE id=?",Integer.parseInt(id));
 		}
 	}
 	
