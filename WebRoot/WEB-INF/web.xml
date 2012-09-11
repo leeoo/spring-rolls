@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	
+	<display-name>exam1.0</display-name>
+	
+	<filter>
+		<filter-name>specialFilter</filter-name>
+		<filter-class>org.paramecium.mvc.SpecialFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	
+	<filter>
+		<filter-name>authFilter</filter-name>
+		<filter-class>com.exam.auth.SecurityFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>authFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>specialFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	
+	<listener>
+		<listener-class>org.paramecium.ioc.ApplicationContextListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>org.paramecium.security.SessionListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>controller</servlet-name>
+		<servlet-class>org.paramecium.mvc.EntranceServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>controller</servlet-name>
+		<url-pattern>*.jhtml</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>controller</servlet-name>
+		<url-pattern>*.json</url-pattern>
+	</servlet-mapping>
+	
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.jhtml</welcome-file>
+	</welcome-file-list>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/commons/500.jsp</location>
+	</error-page>
+	
+	<error-page>
+		<error-code>404</error-code>
+	    <location>/commons/404.jsp</location>
+	</error-page>
+
+</web-app>
