@@ -1,12 +1,7 @@
 package com.exam.auth;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -18,7 +13,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import sun.security.util.BigInt;
+import org.paramecium.commons.CommandUtils;
+import org.paramecium.commons.EncodeUtils;
 
 
 
@@ -103,113 +99,20 @@ public class SecurityFilter implements Filter{
 	 */
 	private static String getCPUID(){
 		if(cpuId==null){
-			cpuId = getRunResult("wmic cpu get processorid");
+			cpuId = CommandUtils.getRunResult("wmic cpu get processorid");
 			cpuId = new StringBuffer(cpuId).delete(0, 11).toString().trim().toUpperCase();
 		}
 		return cpuId;
 	}
 	
 	private static String getSN(String cpuId){
-		String str = encryptMD5(cpuId.toUpperCase()).toUpperCase();
+		String str = EncodeUtils.encryptMD5(cpuId.toUpperCase()).toUpperCase();
 		StringBuffer sb = new StringBuffer();
 		sb.append(str.substring(14, 18)).append("-");
 		sb.append(str.substring(5, 9)).append("-");
 		sb.append(str.substring(9, 13)).append("-");
 		sb.append(str.substring(1, 5));
 		return sb.toString();
-	}
-	
-	private static String getOSName(){
-		return System.getProperty("os.name");
-	}
-
-	private static Process run(String cmd) {
-		try {
-			return Runtime.getRuntime().exec(cmd);
-		} catch (IOException e) {
-		}
-		return null;
-	}
-	
-	private static String getRunResult(String cmd) {
-		Process p = run(cmd);
-		if(p==null){
-			return null;
-		}
-		StringBuilder sb = new StringBuilder();
-		InputStream in = p.getInputStream();
-		InputStreamReader isr = null;
-		try {
-			String encode = "UTF-8";//linux的shell为utf-8
-			if(getOSName().toLowerCase().indexOf("win")>-1){//win系统cmd命令行字符为GBK
-				encode = "GBK";
-			}
-			isr = new InputStreamReader(in,encode);
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
-		BufferedReader reader = new BufferedReader(isr);
-		try {
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			if(in!=null){
-				in.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			if(isr!=null){
-				isr.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			if(reader!=null){
-				reader.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return sb.toString();
-	}
-	
-	/**
-	 * MD5加密
-	 * @param data
-	 * @return
-	 */
-	private static byte[] encryptMD5(byte[] data){
-		try {
-			MessageDigest md5 = MessageDigest.getInstance("MD5");
-			md5.update(data);
-			return md5.digest();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	/**
-	 * MD5加密
-	 * @param data
-	 * @return
-	 */
-	public static String encryptMD5(String data){
-		try {
-			byte[] md5 = encryptMD5(data.getBytes());
-			return new BigInt(md5).toString().replaceAll(" ", "");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 }
