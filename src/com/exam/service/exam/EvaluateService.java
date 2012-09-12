@@ -17,64 +17,41 @@ import org.paramecium.ioc.annotation.Service;
 public class EvaluateService {
 
 	public static void main(String[] args) {
-		System.out.println(dimensionValidation("我不知道你是谁，我喜欢你。", "我喜欢你，我不知道你是谁。"));
-		System.out.println(stepValidation("我不知道你是谁，我喜欢你。", "我喜欢你，我不知道你是谁。"));
+		System.out.println(dimensionValidation("我不知道你是谁，我喜欢你。", "我道欢"));
+		System.out.println(stepValidation("我不知道你是谁，我喜欢你。", "我道欢",false));
 	}
 
 	/**
-	 * 逐字节验证，正向逐步验证，需要配合反向验证，取相似度最高第一次.
-	 * 
+	 * 逐字节验证
 	 * @param source
 	 * @param target
+	 * @param isSourceLength是否按照原文件的总字数算正确率
+	 * 			当等于true时，一般为按照原文进行判分，距离原文相差多少！
+	 * 			当等于false时，一般为按照现有文字进行判分，如计时考试，
 	 * @return
 	 */
-	public static String stepValidation(String source, String target) {
+	public static String stepValidation(String source, String target,boolean isSourceLength) {
 		int score = 0;
 		int d = 0;
-		for (char c : target.toCharArray()) {
-			char[] sc = source.toCharArray();
-			for (int i = d; i < sc.length; i++) {
-				if (sc[i] == c) {
+		for (char c : source.toCharArray()) {
+			char[] c2 = target.toCharArray();
+			for (int i = d; i < c2.length; i++) {
+				if (c2[i] == c) {
 					d = i;
 					score++;
 					break;
 				}
 			}
 		}
-		double finalscore = (double) score / source.length();
-		double combscore = oppositeValidation(source, target);
-		if (finalscore < combscore) {
-			finalscore = combscore;
+		int length = source.length();
+		if(!isSourceLength){
+			length = target.length();
 		}
-		return finalscore * 100 + "%";
+		return (double) score / length * 100 + "%";
 	}
 
 	/**
-	 * 对逐步验证进行反向验证，取相似度最高的一次.
-	 * 
-	 * @param target
-	 * @param source
-	 * @return
-	 */
-	private static double oppositeValidation(String target, String source) {
-		int score = 0;
-		int d = 0;
-		for (char c : target.toCharArray()) {
-			char[] sc = source.toCharArray();
-			for (int i = d; i < sc.length; i++) {
-				if (sc[i] == c) {
-					d = i;
-					score++;
-					break;
-				}
-			}
-		}
-		return (double) score / source.length();
-	}
-
-	/**
-	 * 通过二维方式进行xy的维度比较，这种算法可提高相似度验证
-	 * 
+	 * 通过二维方式进行xy的维度比较，这种算法可提高相似度验证，但只提高匹配了相似度，并不能有效提高的统计精确性
 	 * @param doc1
 	 * @param doc2
 	 * @return
