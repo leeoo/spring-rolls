@@ -10,3 +10,4 @@
 <c:set var="base" value="${pageContext.request.scheme}://${pageContext.request.serverName }:${pageContext.request.serverPort}${path}"/>
 <%@page import="com.exam.web.BaseController"%>
 <c:set var="ext" value="<%=BaseController.EXT %>"/>
+<c:set var="theme" value="<%=BaseController.THEME_NAME %>"/>
