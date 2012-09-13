@@ -4,48 +4,99 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-	<link rel="shortcut icon" href="${base}/commons/images/xeyes.png" type="image/x-icon" /> 
 	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/gray/easyui.css">
 	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/icon.css">
+	<link rel="stylesheet" type="text/css" href="${base}/commons/css/login/skin.css">
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery-1.8.0.min.js"></script>
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="${base}/commons/js/jquery/locale/easyui-lang-zh_CN.js"></script>
-	<style>
-		body{TEXT-ALIGN: center;}
-		#center{ MARGIN-RIGHT: auto;
-		MARGIN-LEFT: auto; 
-		height:200px;
-		background:#F00;
-		width:400px;
-		vertical-align:middle;
-		line-height:200px;
+	<style type="text/css">
+	<!--
+		body {
+			margin-left: 0px;
+			margin-top: 0px;
+			margin-right: 0px;
+			margin-bottom: 0px;
+			background-color: #1D3647;
 		}
+	-->
 	</style>
-<title>登录首页</title>
+<title>亚伟在线考试系统</title>
 </head>
-<body style="background-image: url('${base}/commons/images/bodybg.png')">
-	<div id="login" class="easyui-dialog" title="请在此登录" style="width:280px;height:160px;padding-top: 10px;"
-			buttons="#dlg-buttons" resizable="false" iconCls="icon-key">
-		<form action="${base}/login${ext}" method="post">
-		<center>
-			<table>
-				<tr>
-					<td>账号:</td>
-					<td><input type='text' name='login.username' style="width: 150px;" class="easyui-validatebox" required="true" validType="length[2,20]"/></td>
-				</tr>
-				<tr>
-					<td>密码:</td>
-					<td><input type='password' name="login.password" style="width: 150px;" class="easyui-validatebox" required="true" validType="length[2,20]"/></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-security">登录</button></td>
-				</tr>
-			</table>
-		</center>
-	</form>
-	</div>
+<body>
+	<table width="100%" height="166" border="0" cellpadding="0" cellspacing="0">
+	  <tr>
+	    <td height="42" valign="top">
+		    <table width="100%" height="42" border="0" cellpadding="0" cellspacing="0" class="login_top_bg">
+		      <tr>
+		        <td width="1%" height="21">&nbsp;</td>
+		        <td height="42">&nbsp;</td>
+		        <td width="17%">&nbsp;</td>
+		      </tr>
+		    </table>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td valign="top">
+	    <table width="100%" height="532" border="0" cellpadding="0" cellspacing="0" class="login_bg">
+	      <tr>
+	        <td width="49%" align="right">
+	        	<div style="background:url('/commons/images/exam-mini.gif') no-repeat;width: 500px;height: 317px;"></div>
+	        </td>
+	        <td width="1%" >&nbsp;</td>
+	        <td width="50%" valign="bottom"><table width="100%" height="59" border="0" align="center" cellpadding="0" cellspacing="0">
+	            <tr>
+	              <td width="4%">&nbsp;</td>
+	              <td width="96%" height="38"><span class="login_txt_bt" style="font-size: 18px;font-family: 微软雅黑;">亚伟在线考试系统</span></td>
+	            </tr>
+	            <tr>
+	              <td>&nbsp;</td>
+	              <td height="21"><table cellSpacing="0" cellPadding="0" width="100%" border="0" id="table211" height="328">
+	                  <tr>
+	                    <td height="164" colspan="2" align="middle">
+		                    <form action="${base}/login${ext}" method="post" method="post">
+		                        <table cellSpacing="0" cellPadding="0" width="100%" border="0" height="143" id="table212">
+		                          <tr>
+		                            <td width="10%" height="38" class="top_hui_text"><span class="login_txt">登录名：&nbsp;&nbsp; </span></td>
+		                            <td height="38" colspan="2" class="top_hui_text" align="left"><input name="login.username" class="editbox4" size="20"></td>
+		                          </tr>
+		                          <tr>
+		                            <td width="10%" height="35" class="top_hui_text"><span class="login_txt"> 密 码： &nbsp;&nbsp; </span></td>
+		                            <td height="35" colspan="2" class="top_hui_text" align="left"><input class="editbox4" type="password" size="20" name="login.password">
+		                              <img src="${base}/commons/css/login/luck.gif" width="19" height="18"> </td>
+		                          </tr>
+		                          <tr>
+		                            <td height="35" >&nbsp;</td>
+		                            <td width="10%" height="35" ><button type="submit" class="easyui-linkbutton" iconCls="icon-security">登录</button></td>
+		                            <td width="67%" class="top_hui_text" align="left"><button type="reset" class="easyui-linkbutton" iconCls="icon-undo">取消</button></td>
+		                          </tr>
+		                        </table>
+		                        <br>
+		                    </form>
+		                 </td>
+	                  </tr>
+	                  <tr>
+	                    <td width="433" height="164" align="right" valign="bottom"><img src="${base}/commons/css/login/login-wel.gif" width="242" height="138"></td>
+	                    <td width="57" align="right" valign="bottom">&nbsp;</td>
+	                  </tr>
+	              </table></td>
+	            </tr>
+	          </table>
+	          </td>
+	      </tr>
+	    </table></td>
+	  </tr>
+	  <tr>
+	    <td height="20"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="login-buttom-bg">
+	      <tr>
+	        <td align="center"><span class="login-buttom-txt">Copyright &copy; 2011-2012 沈阳亚伟科技有限公司 </span></td>
+	      </tr>
+	    </table></td>
+	  </tr>
+	</table>
 </body>
+
+
 <script>
 	var error = <%=request.getParameter("error")%>;
 	var msg = '';
