@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/${theme}/easyui.css">
 	<link rel="stylesheet" type="text/css" href="${base}/commons/css/jquery/icon.css">
 	<link rel="stylesheet" type="text/css" href="${base}/commons/css/login/skin.css">
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery-1.8.0.min.js"></script>
@@ -57,12 +57,12 @@
 		                    <form action="${base}/login${ext}" method="post" method="post">
 		                        <table cellSpacing="0" cellPadding="0" width="100%" border="0" height="143" id="table212">
 		                          <tr>
-		                            <td width="10%" height="38" class="top_hui_text"><span class="login_txt">登录名：&nbsp;&nbsp; </span></td>
-		                            <td height="38" colspan="2" class="top_hui_text" align="left"><input name="login.username" class="editbox4" size="20"></td>
+		                            <td width="5%" nowrap="nowrap" height="38" class="top_hui_text"><span class="login_txt_bt" style="font-size: 13px;font-weight: bold">登录名：</span></td>
+		                            <td height="38" colspan="2" class="top_hui_text" align="left"><input name="login.username" class="editbox4" style="width: 150px;"></td>
 		                          </tr>
 		                          <tr>
-		                            <td width="10%" height="35" class="top_hui_text"><span class="login_txt"> 密 码： &nbsp;&nbsp; </span></td>
-		                            <td height="35" colspan="2" class="top_hui_text" align="left"><input class="editbox4" type="password" size="20" name="login.password">
+		                            <td width="5%" nowrap="nowrap" height="35" class="top_hui_text"><span class="login_txt_bt" style="font-size: 13px;font-weight: bold">密&nbsp;&nbsp;码：</span></td>
+		                            <td height="35" colspan="2" class="top_hui_text" align="left"><input class="editbox4" type="password" style="width: 150px;" name="login.password">
 		                              <img src="${base}/commons/css/login/lock.gif" width="19" height="18"> </td>
 		                          </tr>
 		                          <tr>
