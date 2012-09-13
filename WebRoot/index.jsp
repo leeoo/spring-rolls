@@ -63,11 +63,11 @@
 		                          <tr>
 		                            <td width="10%" height="35" class="top_hui_text"><span class="login_txt"> 密 码： &nbsp;&nbsp; </span></td>
 		                            <td height="35" colspan="2" class="top_hui_text" align="left"><input class="editbox4" type="password" size="20" name="login.password">
-		                              <img src="${base}/commons/css/login/luck.gif" width="19" height="18"> </td>
+		                              <img src="${base}/commons/css/login/lock.gif" width="19" height="18"> </td>
 		                          </tr>
 		                          <tr>
 		                            <td height="35" >&nbsp;</td>
-		                            <td width="10%" height="35" ><button type="submit" class="easyui-linkbutton" iconCls="icon-security">登录</button></td>
+		                            <td width="10%" height="35" ><button type="submit" class="easyui-linkbutton" iconCls="icon-key">登录</button></td>
 		                            <td width="67%" class="top_hui_text" align="left"><button type="reset" class="easyui-linkbutton" iconCls="icon-undo">取消</button></td>
 		                          </tr>
 		                        </table>
