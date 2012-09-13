@@ -10,6 +10,17 @@
 			<a href="${base}/system/console/index${ext}" class="easyui-linkbutton" style="color: #FFF" plain="true" iconCls="icon-talk">控制台</a>
 			<a href="${base}/system/help/list${ext}" class="easyui-linkbutton" style="color: #FFF" plain="true" iconCls="icon-help">帮助</a>
 			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-undo" style="color: #FFF" onclick="return isExit();">退出</a>
+			<form id="themeId" action="${base}/system/themes/change${ext}" method="post" style="float: right;padding-left: 15px;">
+				<select name="themeName" onchange="javascript:document.forms[0].submit();">
+					<option value="default" <c:if test="${theme!=null && theme=='default'}">selected='selected'</c:if>>浅蓝</option>
+					<option value="gray" <c:if test="${theme!=null && theme=='gray'}">selected='selected'</c:if>>银灰</option>
+					<option value="cupertino" <c:if test="${theme!=null && theme=='cupertino'}">selected='selected'</c:if>>柔兰</option>
+					<option value="dark-hive" <c:if test="${theme!=null && theme=='dark-hive'}">selected='selected'</c:if>>暗室</option>
+					<option value="metro" <c:if test="${theme!=null && theme=='metro'}">selected='selected'</c:if>>都市</option>
+					<option value="pepper-grinder" <c:if test="${theme!=null && theme=='pepper-grinder'}">selected='selected'</c:if>>理石</option>
+					<option value="sunny" <c:if test="${theme!=null && theme=='sunny'}">selected='selected'</c:if>>晴朗</option>
+				</select>
+			</form>
 		</div>
 		<div id="security" style="width:150px;">
 			<div iconCls="icon-db" onclick="gotoUrl('${base}/system/ds/list${ext}');">数据源配置</div>
