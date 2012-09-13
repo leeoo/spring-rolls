@@ -10,6 +10,7 @@ import org.paramecium.security.annotation.Security;
 public abstract class BaseController {
 
 	public final static String EXT = ".jhtml";
+	public static String THEME_NAME = "default";
 	public final static String JSP_BASE_DIR = "/WEB-INF/pages/system";
 	
 	@Security(false)
