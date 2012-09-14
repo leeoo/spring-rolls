@@ -1,4 +1,4 @@
-package com.exam.auth;
+package com.exam.web;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,14 +15,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.paramecium.commons.CommandUtils;
 import org.paramecium.commons.EncodeUtils;
-
-
-
-public class SecurityFilter implements Filter{
+/**
+ * 产品授权过滤器
+ * @author caoyang
+ *
+ */
+public class AuthorizeFilter implements Filter{
 	
 	private static boolean isSecurity = false;
 	private static String cpuId = null;
 	private static String currentSN = null;
+	private static String url = null;
 	
 	
 	public void destroy() {
@@ -50,6 +53,13 @@ public class SecurityFilter implements Filter{
 				}
 			}
 		}
+		if(url==null){
+			url = "/authorize.auth";
+			String projectName = ((HttpServletRequest)request).getContextPath();
+			if(!projectName.equals("/")){
+				url = projectName+url;
+			}
+		}
 		error((HttpServletResponse)response);
 	}
 	
@@ -59,7 +69,7 @@ public class SecurityFilter implements Filter{
 		out.print("<html><meta content='text/html; charset=UTF-8' http-equiv='content-type'><head><title>请输入授权SN码!</title></head>");
 		out.print("<body>");
 		out.print("<font size='10' color='red'><b>请输入授权SN码!</b></font>");
-		out.print("<form action='/authorize.auth' method='post'>");
+		out.print("<form action='"+url+"' method='post'>");
 		out.print("<b>CPUID:"+getCPUID()+"</b><br>");
 		out.print("请输入SN:<input name='AUTH_SN'><br>");
 		out.print("<button type='submit'>提交</button>");

@@ -16,7 +16,7 @@
 	
 	<filter>
 		<filter-name>authFilter</filter-name>
-		<filter-class>com.exam.auth.SecurityFilter</filter-class>
+		<filter-class>com.exam.web.AuthorizeFilter</filter-class>
 	</filter>
 	
 	<filter-mapping>
