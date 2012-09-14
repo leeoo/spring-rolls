@@ -4,13 +4,8 @@
 		<div align="left" style="float: left;">
 			<div style="font-size: 25px;color: #FFF;padding-left: 10px;padding-top:5px;font-weight: bold;font-family: 微软雅黑">亚伟在线考试系统</div>
 		</div>
-		<div align="right" style="padding-right: 50px;padding-top: 5px;">
-			<a href="javascript:void(0)" id="$security" class="easyui-splitbutton" style="color: #FFF" menu="#security" iconCls="icon-security">系统管理</a>
-			<a href="javascript:void(0)" id="$logger" class="easyui-splitbutton" style="color: #FFF" menu="#logger" iconCls="icon-date">日志查看</a>
-			<a href="${base}/system/console/index${ext}" class="easyui-linkbutton" style="color: #FFF" plain="true" iconCls="icon-talk">控制台</a>
-			<a href="${base}/system/help/list${ext}" class="easyui-linkbutton" style="color: #FFF" plain="true" iconCls="icon-help">帮助</a>
-			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-undo" style="color: #FFF" onclick="return isExit();">退出</a>
-			<form id="themeId" action="${base}/system/themes/change${ext}" method="post" style="float: right;padding-left: 15px;">
+		<div align="right" style="padding-right: 50px;padding-top: 5px;float: right ;">
+			<form id="themeId" action="${base}/system/themes/change${ext}" method="post">
 				<select name="themeName" onchange="javascript:document.forms[0].submit();">
 					<option value="default" <c:if test="${theme!=null && theme=='default'}">selected='selected'</c:if>>浅蓝</option>
 					<option value="gray" <c:if test="${theme!=null && theme=='gray'}">selected='selected'</c:if>>银灰</option>
@@ -19,8 +14,15 @@
 					<option value="metro" <c:if test="${theme!=null && theme=='metro'}">selected='selected'</c:if>>都市</option>
 					<option value="pepper-grinder" <c:if test="${theme!=null && theme=='pepper-grinder'}">selected='selected'</c:if>>理石</option>
 					<option value="sunny" <c:if test="${theme!=null && theme=='sunny'}">selected='selected'</c:if>>晴朗</option>
-				</select>
+				</select><span style="color: #FFF;">切换主题</span>
 			</form>
+		</div>
+		<div align="right" style="padding-right: 50px;padding-top: 5px;float: right ;">
+			<a href="javascript:void(0)" id="$security" class="easyui-splitbutton" style="color: #FFF" menu="#security" iconCls="icon-security">系统管理</a>
+			<a href="javascript:void(0)" id="$logger" class="easyui-splitbutton" style="color: #FFF" menu="#logger" iconCls="icon-date">日志查看</a>
+			<a href="${base}/system/console/index${ext}" class="easyui-linkbutton" style="color: #FFF" plain="true" iconCls="icon-talk">控制台</a>
+			<a href="${base}/system/help/list${ext}" class="easyui-linkbutton" style="color: #FFF" plain="true" iconCls="icon-help">帮助</a>
+			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-undo" style="color: #FFF" onclick="return isExit();">退出</a>
 		</div>
 		<div id="security" style="width:150px;">
 			<div iconCls="icon-db" onclick="gotoUrl('${base}/system/ds/list${ext}');">数据源配置</div>
