@@ -41,7 +41,7 @@
 	    <table width="100%" height="532" border="0" cellpadding="0" cellspacing="0" class="login_bg">
 	      <tr>
 	        <td width="49%" align="right">
-	        	<div style="background:url('/commons/images/exam-mini.gif') no-repeat;width: 500px;height: 317px;"></div>
+	        	<div style="background:url('${base}/commons/images/exam-mini.gif') no-repeat;width: 500px;height: 317px;"></div>
 	        </td>
 	        <td width="1%" >&nbsp;</td>
 	        <td width="50%" valign="bottom"><table width="100%" height="59" border="0" align="center" cellpadding="0" cellspacing="0">
