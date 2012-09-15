@@ -38,6 +38,7 @@ public class LoggerFactory {
 	
 	static{
 		Map<String,String> properties = PropertiesUitls.get("/logger.properties");
+		//注意：在某些情况下，某些服务器会将properties的文件中的注释或者全角空格读入,比如使用记事本
 		System.out.println("Paramecium已装载logger.properties配置文件,日志功能将被启动!");
 		{//控制台输出模式
 			String loggerLevel = properties.get("consoleLoggerLevel");
