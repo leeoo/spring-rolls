@@ -38,12 +38,14 @@ public class LoggerFactory {
 	
 	static{
 		Map<String,String> properties = PropertiesUitls.get("/logger.properties");
+		System.out.println("Paramecium已装载logger.properties配置文件,日志功能将被启动!");
 		{//控制台输出模式
 			String loggerLevel = properties.get("consoleLoggerLevel");
 			if(loggerLevel!=null){
 				LogConfig.consoleLoggerLevel = levelMap.get(loggerLevel.toUpperCase());
 				consoleLogHandler = new ConsoleLogHandler();
 				LogConfig.isConsole = true;
+				System.out.println("Paramecium日志系统的控制台输出级别为"+loggerLevel);
 			}
 		}
 		{//文件输出模式
@@ -59,6 +61,7 @@ public class LoggerFactory {
 				LogConfig.loggerFileMax = loggerFileMaxStr!=null?Integer.parseInt(loggerFileMaxStr):LogConfig.loggerFileMax;
 				fileLogHandler = new FileLogHandler();
 				LogConfig.isFile = true;
+				System.out.println("Paramecium日志系统的文件输出输出级别为"+loggerLevel);
 			}
 		}
 		{//数据库输出模式
@@ -73,6 +76,7 @@ public class LoggerFactory {
 				DataBaseLogHandler.setDbInterface(loggerDbInterface);
 				dbLogHandler = new DataBaseLogHandler();
 				LogConfig.isDb = true;
+				System.out.println("Paramecium日志系统的数据库出输出级别为"+loggerLevel);
 			}
 		}
 		String sqlIsFormatStr = properties.get("sqlIsFormat");
