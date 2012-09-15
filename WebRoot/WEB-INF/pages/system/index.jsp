@@ -9,7 +9,7 @@
 	<%@ include file="../global/title.jsp"%>
 	<%@ include file="../global/menu.jsp"%>
 	<div region="center" title="欢迎登录亚伟在线考试系统">
-		<!-- <div style="background:url('/commons/images/exam.gif') no-repeat;width: 100%;height: 100%;">
+		<!-- <div style="background:url('${base}/commons/images/exam.gif') no-repeat;width: 100%;height: 100%;">
 			&nbsp;
 		</div> -->
 	</div>
