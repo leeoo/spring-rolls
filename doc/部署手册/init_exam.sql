@@ -1,10 +1,16 @@
 /*==============================================================*/
+/* DBMS name:      MySQL 5.0                                    */
+/* Created on:     2012/9/17 14:41:25                           */
+/*==============================================================*/
+
+
+/*==============================================================*/
 /* Table: t_exam                                                */
 /*==============================================================*/
 create table t_exam
 (
    id                   int not null auto_increment,
-   title                int not null,
+   title                varchar(1000) not null,
    score                int not null,
    cn_proportion        int,
    en_proportion        int,

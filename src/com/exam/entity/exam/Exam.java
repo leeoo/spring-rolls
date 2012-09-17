@@ -1,0 +1,173 @@
+package com.exam.entity.exam;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import org.paramecium.ioc.annotation.ShowLabel;
+import org.paramecium.orm.annotation.Column;
+import org.paramecium.orm.annotation.Entity;
+import org.paramecium.orm.annotation.NotUpdate;
+import org.paramecium.orm.annotation.PrimaryKey;
+import org.paramecium.validation.annotation.base.Length;
+import org.paramecium.validation.annotation.base.NotNull;
+
+/**
+ * 一场考试
+ * @author caoyang
+ */
+@Entity(tableName = "t_exam", orderBy = "id DESC")
+public class Exam implements Serializable {
+	
+	private static final long serialVersionUID = -1438114372794324572L;
+	
+	@PrimaryKey
+	@Column
+	private int id;
+	
+	@Column
+	@NotNull
+	@Length(min=10,max=500)
+	@ShowLabel("考试描述")
+	private String title;// 考试描述
+	
+	@Column
+	private int score;// 总分
+	
+	@Column
+	private int cnProportion;// 中文权重
+	
+	@Column
+	private int enProportion;// 英文权重
+	
+	@Column
+	private int punProportion;// 标点权重
+	
+	@Column
+	private int charProportion;// 字符权重
+	
+	@Column
+	private boolean scoreSource;// 是否依照原文计分
+	
+	@Column
+	private int status = 0;// 考试状态 0为没有开始,1正在进行,-1已经过期
+	
+	@Column
+	@NotNull
+	private Date startDate;// 开始时间
+	
+	@Column
+	@NotNull
+	private Date endDate;// 结束时间
+	
+	@Column
+	private int longTime = 60;// 考试时长，秒,最小一分钟
+	
+	@Column
+	@NotUpdate
+	private int questionId;// 题库ID
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public int getCnProportion() {
+		return cnProportion;
+	}
+
+	public void setCnProportion(int cnProportion) {
+		this.cnProportion = cnProportion;
+	}
+
+	public int getEnProportion() {
+		return enProportion;
+	}
+
+	public void setEnProportion(int enProportion) {
+		this.enProportion = enProportion;
+	}
+
+	public int getPunProportion() {
+		return punProportion;
+	}
+
+	public void setPunProportion(int punProportion) {
+		this.punProportion = punProportion;
+	}
+
+	public int getCharProportion() {
+		return charProportion;
+	}
+
+	public void setCharProportion(int charProportion) {
+		this.charProportion = charProportion;
+	}
+
+	public boolean isScoreSource() {
+		return scoreSource;
+	}
+
+	public void setScoreSource(boolean scoreSource) {
+		this.scoreSource = scoreSource;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public int getLongTime() {
+		return longTime;
+	}
+
+	public void setLongTime(int longTime) {
+		this.longTime = longTime;
+	}
+
+	public int getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(int questionId) {
+		this.questionId = questionId;
+	}
+
+}

@@ -5,16 +5,13 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.paramecium.ioc.annotation.Service;
-
 /**
  * 判分系统,通过不同算法，比对原文的相似度.
  * 
  * @author caoyang
  * 
  */
-@Service
-public class EvaluateService {
+public class ScoreEvaluate {
 
 	public static void main(String[] args) {
 		System.out.println(dimensionValidation("我不知道你是谁，我喜欢你。", "我道欢"));

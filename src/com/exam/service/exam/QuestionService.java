@@ -1,0 +1,48 @@
+package com.exam.service.exam;
+
+import org.paramecium.ioc.annotation.Service;
+import org.paramecium.ioc.annotation.ShowLabel;
+import org.paramecium.jdbc.dialect.Page;
+import org.paramecium.orm.GenericOrmDao;
+import org.paramecium.transaction.annotation.Transactional;
+
+import com.exam.entity.exam.Question;
+
+@ShowLabel("题库业务类")
+@Service
+@Transactional
+public class QuestionService {
+	
+	private GenericOrmDao<Question, Integer> ormDao = new GenericOrmDao<Question, Integer>(Question.class);
+	
+	public QuestionService(){
+		ormDao.setValidation(true);
+	}
+	
+	public void save(Question question) throws Exception{
+		ormDao.insert(question);
+	}
+	
+	public void update(Question question) throws Exception{
+		ormDao.update(question);
+	}
+	
+	public void delete(int id) throws Exception{
+		ormDao.delete(id);
+	}
+	
+	public void delete(String... ids) throws Exception{
+		for(String id : ids){
+			ormDao.delete(Integer.parseInt(id));
+		}
+	}
+	
+	public Question get(int id){
+		return ormDao.select(id);
+	}
+	
+	public Page getAll(Page page){
+		return ormDao.select(page);
+	}
+
+}
