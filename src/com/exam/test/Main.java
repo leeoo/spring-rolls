@@ -58,7 +58,7 @@ public class Main {
 		question.setTitle("考试，不能出错了的说法阿斯顿");
 		questionService.save(question);*/
 		QuestionChoiceService questionChoiceService = (QuestionChoiceService) ApplicationContext.getBean("questionChoiceService");
-		QuestionChoice questionChoice = new QuestionChoice();
+		/*QuestionChoice questionChoice = new QuestionChoice();
 		questionChoice.setAnswer("A");
 		questionChoice.setaOption("aaaaaa");
 		questionChoice.setbOption("bbb");
@@ -72,7 +72,9 @@ public class Main {
 		questionChoice.setQuestionId(1);
 		questionChoice.setScore(5);
 		questionChoice.setTitle("阿斯顿发水电费打发斯蒂芬");
-		questionChoiceService.save(questionChoice);
+		questionChoiceService.save(questionChoice);*/
+		QuestionChoice questionChoice =questionChoiceService.get(1);
+		System.out.println(questionChoice);
 		ApplicationContext.destroy();
 	}
 
