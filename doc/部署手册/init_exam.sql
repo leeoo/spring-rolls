@@ -1,30 +1,4 @@
 /*==============================================================*/
-/* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2012/9/17 14:14:57                           */
-/*==============================================================*/
-
-
-drop index index_exam_question_id on t_exam;
-
-drop table if exists t_exam;
-
-drop index index_examinee_code on t_examinee;
-
-drop table if exists t_examinee;
-
-drop table if exists t_question;
-
-drop index Index_question_choice_qid on t_question_choice;
-
-drop table if exists t_question_choice;
-
-drop index Index_score_exam_id on t_score;
-
-drop index Index_score_examinee_id on t_score;
-
-drop table if exists t_score;
-
-/*==============================================================*/
 /* Table: t_exam                                                */
 /*==============================================================*/
 create table t_exam
