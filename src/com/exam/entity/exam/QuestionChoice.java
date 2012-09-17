@@ -30,7 +30,7 @@ public class QuestionChoice implements Serializable {
 	private String title;// 问题题目
 	
 	@Column
-	private int score;//此题分数
+	private int proportion;//此题权重
 	
 	@Column
 	@NotNull
@@ -101,14 +101,6 @@ public class QuestionChoice implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
 	}
 
 	public String getaOption() {
@@ -197,6 +189,14 @@ public class QuestionChoice implements Serializable {
 
 	public void setQuestionId(int questionId) {
 		this.questionId = questionId;
+	}
+
+	public int getProportion() {
+		return proportion;
+	}
+
+	public void setProportion(int proportion) {
+		this.proportion = proportion;
 	}
 	
 }

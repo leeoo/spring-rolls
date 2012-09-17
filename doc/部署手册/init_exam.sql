@@ -77,7 +77,7 @@ create table t_question_choice
 (
    id                   int not null auto_increment,
    title                varchar(2000) not null,
-   score                int not null,
+   proportion           int not null,
    a_option             varchar(1000) not null,
    b_option             varchar(1000) not null,
    c_option             varchar(1000),
