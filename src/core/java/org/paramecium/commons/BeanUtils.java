@@ -262,6 +262,7 @@ public abstract class BeanUtils {
 				}else{//普通的getter方法
 					getMethodName = GET.concat(name);
 				}
+				method = bean.getClass().getMethod(getMethodName);
 			}
 			return method.invoke(bean);
 		} catch (Exception e) {
