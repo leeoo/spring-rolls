@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
+import org.paramecium.orm.annotation.Column;
 /**
  * 功 能 描 述:<br>
  * jdbc所涉及到的bean工具
@@ -116,7 +117,12 @@ public abstract class BeanUtils {
 				}
 				field.setAccessible(true);
 				try {
-					map.put(field.getName(),getFieldValue(bean, field.getName(), field.getType()));
+					Column column = field.getAnnotation(Column.class);
+					String fieldName = field.getName();
+					if(column!=null && !column.value().isEmpty()){
+						fieldName = column.value();//设置数据库的值
+					}
+					map.put(fieldName,getFieldValue(bean, field.getName(), field.getType()));
 				} catch (Exception e) {
 					logger.warn(e);
 				}
@@ -144,12 +150,18 @@ public abstract class BeanUtils {
 					}
 					field.setAccessible(true);
 					try {
-						String name = field.getName();
-						Object value = map.get(name);
-						if(value == null){
-							value = map.get(getDbFieldName(name));
+						Column column = field.getAnnotation(Column.class);
+						Object value = null;
+						if(column!=null && !column.value().isEmpty()){
+							value = map.get(column.value());//设置数据库的值
 						}
-						setFieldValue(bean, name, value);
+						if(value == null){
+							 value = map.get(field.getName());
+						}
+						if(value == null){
+							value = map.get(getDbFieldName(field.getName()));
+						}
+						setFieldValue(bean, field.getName(), value);
 					} catch (Exception e) {
 						logger.warn(e);
 					}
