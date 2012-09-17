@@ -318,7 +318,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 			}
 		}
 		DBObject object = mongoDao.findOne(tableName, where);
-		return (T) BeanUtils.map2Bean(clazz, object.toMap(), true);
+		return (T) BeanUtils.map2Bean(clazz, object.toMap());
 	}
 	
 	/**
@@ -428,7 +428,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 		Collection<T> beans = new ArrayList<T>();
 		for(Iterator<DBObject> it = dbCursor.iterator();it.hasNext();){
 			DBObject object = it.next();
-			beans.add((T) BeanUtils.map2Bean(clazz, object.toMap(), true));
+			beans.add((T) BeanUtils.map2Bean(clazz, object.toMap()));
 		}
 		return beans;
 	}

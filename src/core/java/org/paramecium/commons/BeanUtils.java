@@ -132,7 +132,7 @@ public abstract class BeanUtils {
 	 * @param isDBFormat
 	 * @return
 	 */
-	public static Object map2Bean(Class<?> clazz,Map<String, Object> map,boolean isDBFormat){
+	public static Object map2Bean(Class<?> clazz,Map<String, Object> map){
 		Object bean = null;
 		try {
 			bean = clazz.newInstance();
@@ -145,10 +145,11 @@ public abstract class BeanUtils {
 					field.setAccessible(true);
 					try {
 						String name = field.getName();
-						if(isDBFormat){
-							name = getDbFieldName(name);
+						Object value = map.get(name);
+						if(value == null){
+							value = map.get(getDbFieldName(name));
 						}
-						setFieldValue(bean, name, map.get(name));
+						setFieldValue(bean, name, value);
 					} catch (Exception e) {
 						logger.warn(e);
 					}

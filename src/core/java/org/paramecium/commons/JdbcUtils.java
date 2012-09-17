@@ -155,7 +155,7 @@ public abstract class JdbcUtils {
 				Object columnValue = resultSet.getObject(columnLabel);
 				map.put(columnLabel.toLowerCase(), columnValue);
 			}
-			bean = BeanUtils.map2Bean(clazz, map, true);
+			bean = BeanUtils.map2Bean(clazz, map);
 			collection.add(bean);
 		}
 		return collection;
