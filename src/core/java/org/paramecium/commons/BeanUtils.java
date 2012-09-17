@@ -253,7 +253,16 @@ public abstract class BeanUtils {
 			}else{//普通的getter方法
 				getMethodName = GET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
 			}
-			Method method = bean.getClass().getMethod(getMethodName);
+			Method method = null;
+			try{
+				method = bean.getClass().getMethod(getMethodName);
+			} catch (NoSuchMethodException e) {//如果错误，有可能是出现了aName,bName等名称，eclipse等工具会将autoGetter变成getaName，以下为补漏.
+				if(getterName.equals(IS)){//判断是否是is方式的getter
+					getMethodName = IS.concat(name);
+				}else{//普通的getter方法
+					getMethodName = GET.concat(name);
+				}
+			}
 			return method.invoke(bean);
 		} catch (Exception e) {
 			logger.warn(bean.getClass().toString().concat("中没有匹配到").concat(getMethodName).concat("方法!"));
@@ -276,7 +285,12 @@ public abstract class BeanUtils {
 			}
 			Class<?> clazz = value.getClass();
 			setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
-			method = bean.getClass().getMethod(setMethodName,clazz);
+			try{
+				method = bean.getClass().getMethod(setMethodName,clazz);
+			} catch (NoSuchMethodException e) {//如果错误，有可能是出现了aName,bName等名称，eclipse等工具会将autoSetter变成setaName，以下为补漏.
+				setMethodName = SET.concat(name);
+				method = bean.getClass().getMethod(setMethodName,clazz);
+			}
 		} catch (Exception e) {
 			try {//获取特殊类型对应Entity每个属性，如果setter方法中的属性参数为基本类型如int、long等，需要将对应封装类型转为基本类型.
 				Class<?> clazz = value.getClass();
