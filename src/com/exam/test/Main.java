@@ -2,11 +2,8 @@ package com.exam.test;
 
 import org.paramecium.ioc.ApplicationContext;
 
-import com.exam.entity.exam.Question;
 import com.exam.entity.exam.QuestionChoice;
-import com.exam.service.exam.ExamService;
 import com.exam.service.exam.QuestionChoiceService;
-import com.exam.service.exam.QuestionService;
 
 public class Main {
 
