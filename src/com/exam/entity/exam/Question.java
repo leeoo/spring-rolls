@@ -20,7 +20,7 @@ public class Question implements Serializable {
 	
 	@PrimaryKey
 	@Column
-	private int id;
+	private Integer id;
 	
 	@Column
 	@NotNull
@@ -38,14 +38,6 @@ public class Question implements Serializable {
 	@NotNull
 	@ShowLabel("题库正文")
 	private String textContent;//文本正文
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getTitle() {
 		return title;
@@ -77,6 +69,14 @@ public class Question implements Serializable {
 
 	public void setTextContent(String textContent) {
 		this.textContent = textContent;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 }

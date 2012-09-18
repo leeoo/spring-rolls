@@ -46,8 +46,8 @@ public class ExamineeService {
 		return ormDao.select(id);
 	}
 	
-	public Page getAll(Page page){
-		return ormDao.select(page);
+	public Page getAll(Page page,Examinee examinee){
+		return ormDao.select(page,examinee);
 	}
 	
 }

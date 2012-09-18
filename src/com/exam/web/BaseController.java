@@ -12,6 +12,7 @@ public abstract class BaseController {
 	public final static String EXT = ".jhtml";
 	public static String THEME_NAME = "default";
 	public final static String JSP_BASE_DIR = "/WEB-INF/pages/system";
+	public final static String JSP_EXAM_DIR = "/WEB-INF/pages/exam";
 	
 	@Security(false)
 	public String getRedirect(String base){
@@ -21,6 +22,11 @@ public abstract class BaseController {
 	@Security(false)
 	public String getPage(String jsp){
 		return JSP_BASE_DIR.concat(jsp);
+	}
+	
+	@Security(false)
+	public String getExamPage(String jsp){
+		return JSP_EXAM_DIR.concat(jsp);
 	}
 	
 	@Security(false)

@@ -22,7 +22,7 @@ public class Exam implements Serializable {
 	
 	@PrimaryKey
 	@Column
-	private int id;
+	private Integer id;
 	
 	@Column
 	@NotNull
@@ -34,16 +34,16 @@ public class Exam implements Serializable {
 	private int score;// 总分
 	
 	@Column
-	private int cnProportion;// 中文权重
+	private int cnProportion = 1;// 中文权重
 	
 	@Column
-	private int enProportion;// 英文权重
+	private int enProportion = 1;// 英文权重
 	
 	@Column
-	private int punProportion;// 标点权重
+	private int punProportion = 1;// 标点权重
 	
 	@Column
-	private int numProportion;// 数字权重
+	private int numProportion = 1;// 数字权重
 	
 	@Column
 	private int status = 0;// 考试状态 0为没有开始,1正在进行,-1已经过期
@@ -62,14 +62,6 @@ public class Exam implements Serializable {
 	@Column
 	@NotUpdate
 	private int questionId;// 题库ID
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getTitle() {
 		return title;
@@ -157,6 +149,14 @@ public class Exam implements Serializable {
 
 	public void setNumProportion(int numProportion) {
 		this.numProportion = numProportion;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 }

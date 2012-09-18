@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>亚伟在线考试系统——数据源配置——监控器</title>
 <meta http-equiv="refresh" content="5">
 <%@ include file="/commons/global.jsp"%>
+<title>${title}——数据源配置——监控器</title>
 <script type="text/javascript" src="${base}/commons/js/chart/chart.js"></script>
 <script type="text/javascript" src="${base}/commons/js/chart/hlight.js"></script>
 </head>

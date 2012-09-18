@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 	<div region="north" border="false" style="height:45px;background-image: url('${base}/commons/images/head.gif');background-color: #EEF9FB;">
 		<div align="left" style="float: left;">
-			<div style="font-size: 25px;color: #FFF;padding-left: 10px;padding-top:5px;font-weight: bold;font-family: 微软雅黑">亚伟在线考试系统</div>
+			<div style="font-size: 25px;color: #FFF;padding-left: 10px;padding-top:5px;font-weight: bold;font-family: 微软雅黑">${title}</div>
 		</div>
 		<div align="right" style="padding-right: 50px;padding-top: 5px;float: right ;">
 			<form id="themeId" action="${base}/system/themes/change${ext}" method="post">

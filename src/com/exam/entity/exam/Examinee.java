@@ -10,8 +10,6 @@ import org.paramecium.orm.annotation.Entity;
 import org.paramecium.orm.annotation.NotUpdate;
 import org.paramecium.orm.annotation.PrimaryKey;
 import org.paramecium.validation.annotation.Chinese;
-import org.paramecium.validation.annotation.IDCard;
-import org.paramecium.validation.annotation.Mobile;
 import org.paramecium.validation.annotation.base.Length;
 import org.paramecium.validation.annotation.base.NotNull;
 
@@ -26,15 +24,15 @@ public class Examinee implements Serializable {
 
 	@PrimaryKey
 	@Column
-	private int id;
+	private Integer id;
 
-	@Column
+	@Column(isDynamicWhere=true)
 	@NotNull
 	@Length(min=3,max=15)
 	@ShowLabel("学号")
 	private String code;
 	
-	@Column
+	@Column(isDynamicWhere=true)
 	@NotNull
 	@Length(min=2,max=10)
 	@Chinese
@@ -48,29 +46,11 @@ public class Examinee implements Serializable {
 	private String password;
 	
 	@Column
-	@IDCard
-	@ShowLabel("密码")
-	private String card;
-	
-	@Column
-	@Mobile
-	@ShowLabel("手机号码")
-	private String tel;
-	
-	@Column
 	@NotUpdate
 	private Date regDate = DateUtils.getCurrentDateTime();
 	
 	@Column
 	private int canDays = 0;//账户有效期多少天 0为永远有效
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getCode() {
 		return code;
@@ -96,22 +76,6 @@ public class Examinee implements Serializable {
 		this.password = password;
 	}
 
-	public String getCard() {
-		return card;
-	}
-
-	public void setCard(String card) {
-		this.card = card;
-	}
-
-	public String getTel() {
-		return tel;
-	}
-
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
-
 	public Date getRegDate() {
 		return regDate;
 	}
@@ -126,6 +90,14 @@ public class Examinee implements Serializable {
 
 	public void setCanDays(int canDays) {
 		this.canDays = canDays;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 }

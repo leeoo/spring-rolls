@@ -21,7 +21,7 @@ public class QuestionChoice implements Serializable {
 
 	@PrimaryKey
 	@Column
-	private int id;
+	private Integer id;
 	
 	@Column
 	@NotNull
@@ -86,14 +86,6 @@ public class QuestionChoice implements Serializable {
 	@Column
 	@NotUpdate
 	private int questionId;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getTitle() {
 		return title;
@@ -197,6 +189,14 @@ public class QuestionChoice implements Serializable {
 
 	public void setProportion(int proportion) {
 		this.proportion = proportion;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 }

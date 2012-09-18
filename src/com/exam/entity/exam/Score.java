@@ -21,7 +21,7 @@ public class Score implements Serializable{
 
 	@PrimaryKey
 	@Column
-	private int id;
+	private Integer id;
 	
 	@Column
 	@NotUpdate
@@ -43,14 +43,6 @@ public class Score implements Serializable{
 	@Column
 	@NotUpdate
 	private int examId;//考试信息id
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public Date getStartDate() {
 		return startDate;
@@ -98,6 +90,14 @@ public class Score implements Serializable{
 
 	public void setExamId(int examId) {
 		this.examId = examId;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 }

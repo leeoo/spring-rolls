@@ -2,7 +2,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>亚伟在线考试系统——CONSOLE控制台</title>
 	<style>
 		#console{
 			background-color:#000;
@@ -13,7 +12,7 @@
 		}
 	</style>
 <%@ include file="../../global/head.jsp"%>
-<%@ include file="/commons/global.jsp"%>
+<title>${title}——CONSOLE控制台</title>
 </head>
 <body class="easyui-layout">
 	<%@ include file="../../global/title.jsp"%>

@@ -21,7 +21,7 @@
 		}
 	-->
 	</style>
-<title>亚伟在线考试系统</title>
+<title>${title}</title>
 </head>
 <body>
 	<table width="100%" height="166" border="0" cellpadding="0" cellspacing="0">
@@ -47,7 +47,7 @@
 	        <td width="50%" valign="bottom"><table width="100%" height="59" border="0" align="center" cellpadding="0" cellspacing="0">
 	            <tr>
 	              <td width="4%">&nbsp;</td>
-	              <td width="96%" height="38"><span class="login_txt_bt" style="font-size: 18px;font-family: 微软雅黑;">亚伟在线考试系统</span></td>
+	              <td width="96%" height="38"><span class="login_txt_bt" style="font-size: 18px;font-family: 微软雅黑;">${title}</span></td>
 	            </tr>
 	            <tr>
 	              <td>&nbsp;</td>

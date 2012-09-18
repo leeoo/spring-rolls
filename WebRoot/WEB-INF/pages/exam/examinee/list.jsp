@@ -2,15 +2,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<%@ include file="../../../global/head.jsp"%>
-<title>${title}——SQL语句日志</title>
+<%@ include file="../../global/head.jsp"%>
+<title>${title}——考生列表</title>
 </head>
 <body class="easyui-layout">
-	<%@ include file="../../../global/title.jsp"%>
-	<%@ include file="../../../global/menu.jsp"%>
-<div region="center" title="SQL语句日志">
-	<div title="按条件查询" id="search" icon="icon-search" close="true" style="padding:5px;width:400px;height:120px;">
-			<p>日志时间：<input type="text" class="easyui-datetimebox" name="beginDate" id="beginDate"/>~<input type="text" class="easyui-datetimebox" name="endDate" id="endDate"/></p>
+	<%@ include file="../../global/title.jsp"%>
+	<%@ include file="../../global/menu.jsp"%>
+<div region="center" title="考生列表">
+	<div title="按条件查询" id="search" icon="icon-search" close="true" style="padding:5px;width:350px;height:210px;">
+			<p>考号：<input type="text" name=code id="code"/></p>
+			<p>姓名：<input type="text" name="username" id="username"/></p>
 	</div>
 	<table id="list"></table>
 </div>
@@ -21,9 +22,9 @@
 				text:'查询',
 				iconCls:'icon-search',
 				handler:function(){
-					$('#list').datagrid('options').queryParams = {
-						'beginDate': $("#beginDate").datebox('getValue'),
-				    	'endDate': $("#endDate").datebox('getValue')
+				   $('#list').datagrid('options').queryParams = {
+			    	   'code': $.trim($("#code").val()),
+			    	   'username': $.trim($("#username").val())
 			    	};
 			       $('#list').datagrid('options').pageNumber = 1;
 			       var p = $('#list').datagrid('getPager');
@@ -46,16 +47,39 @@
 			rownumbers: true,
 			remoteSort: false,
 			pageList:[20],
-			url:'${base}/system/log/jdbc/data.json',
+			url:'${base}/exam/examinee/data.json',
 			idField:'id',
 			frozenColumns:[[
 		                    {field:'id',checkbox:true}
 		                ]],
 			columns:[[
-						{field:'date',title:'时间',width:200},
-						{field:'miniLog',title:'日志内容',width:800,align:'left'}
+						{field:'code',title:'学号',width:200},
+						{field:'username',title:'姓名',width:200,align:'center'},
+						{field:'regDate',title:'注册时间',width:300},
+						{field:'canDays',title:'有效天数',width:100}
 					]],
 					toolbar: [{
+			            text: '新增',
+			            iconCls: 'icon-add',
+			            handler:function(){
+							location.href ='${base}/exam/examinee/input${ext}';
+							return false;
+						}
+			        }, '-', {
+			            text: '修改',
+			            iconCls: 'icon-edit',
+			            handler:function(){
+				        	var ids = [];
+							var rows = $('#list').datagrid('getSelections');
+							if(rows.length!=1){
+								$.messager.alert('提示','必须选择一行!','warning');
+								$('#list').datagrid('clearSelections');
+								return false;
+							}
+							location.href ='${base}/exam/examinee/input${ext}?id='+rows[0].id;
+							return false;
+						}
+			        }, '-', {
 			            text: '删除',
 			            iconCls: 'icon-cancel',
 			            handler:function(){
@@ -72,7 +96,7 @@
 					            if(d){
 					            	$.ajax({
 										   type: "get",
-										   url: "${base}/system/log/jdbc/delete${ext}",
+										   url: "${base}/exam/examinee/delete${ext}",
 										   data: "ids="+ids.join(','),
 										   success: function(msg){
 											   $.messager.show({
@@ -88,18 +112,11 @@
 					            }
 					        });
 						}
-					}, '-', {
-			            text: '详情',
-			            iconCls: 'icon-edit',
+			        }, '-', {
+			        	text: '批量导入',
+			            iconCls: 'icon-add',
 			            handler:function(){
-				        	var ids = [];
-							var rows = $('#list').datagrid('getSelections');
-							if(rows.length!=1){
-								$.messager.alert('提示','必须选择一行!','warning');
-								$('#list').datagrid('clearSelections');
-								return false;
-							}
-							location.href ='${base}/system/log/jdbc/detail${ext}?id='+rows[0].id;
+							location.href ='${base}/exam/examinee/input_imp${ext}';
 							return false;
 						}
 			        }, '-', {

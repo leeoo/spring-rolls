@@ -41,8 +41,6 @@ create table t_examinee
    code                 varchar(20) not null,
    username             varchar(20) not null,
    password             varchar(20) not null,
-   card                 varchar(20),
-   tel                  varchar(20),
    reg_date             datetime not null,
    can_days             int,
    primary key (id)

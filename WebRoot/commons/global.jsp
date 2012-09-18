@@ -11,3 +11,4 @@
 <%@page import="com.exam.web.BaseController"%>
 <c:set var="ext" value="<%=BaseController.EXT %>"/>
 <c:set var="theme" value="<%=BaseController.THEME_NAME %>"/>
+<c:set var="title" value="速录师在线考试平台"/>
