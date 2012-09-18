@@ -149,8 +149,7 @@ public abstract class ContentUtils {
 		if (str != null && !str.isEmpty()) {
 			int i = 0;
 			for (int n = str.length(); i < n; i++) {
-				map.put(Character.valueOf(str.charAt(i)),
-						Character.valueOf(str.charAt(i)));
+				map.put(Character.valueOf(str.charAt(i)),Character.valueOf(str.charAt(i)));
 			}
 		}
 		return map;
