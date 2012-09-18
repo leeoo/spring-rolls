@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class ContentUtils {
 	
@@ -155,12 +153,6 @@ public abstract class ContentUtils {
 		return map;
 	}
 
-	public static String parse(String temp) {
-		Pattern p = Pattern.compile("\\s*|\t|\r|\n");
-		Matcher m = p.matcher(temp);
-		return m.replaceAll("");
-	}
-	
 	public static class RecordVO {
 		private Map<Character,Character> map;
 		private float record = 0.0F;
