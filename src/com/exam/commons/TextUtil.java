@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TextUtil {
+public abstract class TextUtil {
 
 	public static MatchPair[] LCS_DN_refined(String[] txt1, String[] txt2) {
 		List<int[]> list = new ArrayList<int[]>();

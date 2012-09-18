@@ -48,8 +48,8 @@ public class ScoreEvaluate {
 	}
 	
 	public int getScore(String target){
-		float totalSoc = ContentUtils.getContentSoc(source, cn, en, pun, num);
-		float errorSoc = ContentUtils.compareSoc(source, target, cn, en, pun, num);
+		float totalSoc = ContentUtils.getTotalSoc(source, cn, en, pun, num);
+		float errorSoc = ContentUtils.getErrorScore(source, target, cn, en, pun, num);
 		float socore;
 		if (errorSoc >= totalSoc){
 			socore = 0.0f;
