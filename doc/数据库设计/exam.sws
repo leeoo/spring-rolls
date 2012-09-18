@@ -7,6 +7,9 @@
 		<Model Expanded="Yes" ID="{4D71948A-C0EB-41C9-995B-7B7F6C3EF776}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="exam.pdm"/>
 		<Model Expanded="Yes" ID="{4D71948A-C0EB-41C9-995B-7B7F6C3EF776}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="exam.pdm"/>
 		<Model Expanded="Yes" ID="{4D71948A-C0EB-41C9-995B-7B7F6C3EF776}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="exam.pdm"/>
+		<Model Expanded="Yes" ID="{4D71948A-C0EB-41C9-995B-7B7F6C3EF776}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="exam.pdm"/>
+		<Model Expanded="Yes" ID="{4D71948A-C0EB-41C9-995B-7B7F6C3EF776}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="exam2.pdm"/>
+		<Model Expanded="Yes" ID="{4D71948A-C0EB-41C9-995B-7B7F6C3EF776}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="exam.pdm"/>
 		<Model Expanded="Yes" ID="{4D71948A-C0EB-41C9-995B-7B7F6C3EF776}" Name="PhysicalDataModel_1" Selected="Yes" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="exam.pdm"/>
 	</Local>
 	<BrowserModule Name="Repository"/>
