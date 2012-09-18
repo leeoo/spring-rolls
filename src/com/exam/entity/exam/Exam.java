@@ -43,10 +43,7 @@ public class Exam implements Serializable {
 	private int punProportion;// 标点权重
 	
 	@Column
-	private int charProportion;// 字符权重
-	
-	@Column
-	private boolean scoreSource;// 是否依照原文计分
+	private int numProportion;// 数字权重
 	
 	@Column
 	private int status = 0;// 考试状态 0为没有开始,1正在进行,-1已经过期
@@ -114,22 +111,6 @@ public class Exam implements Serializable {
 		this.punProportion = punProportion;
 	}
 
-	public int getCharProportion() {
-		return charProportion;
-	}
-
-	public void setCharProportion(int charProportion) {
-		this.charProportion = charProportion;
-	}
-
-	public boolean isScoreSource() {
-		return scoreSource;
-	}
-
-	public void setScoreSource(boolean scoreSource) {
-		this.scoreSource = scoreSource;
-	}
-
 	public int getStatus() {
 		return status;
 	}
@@ -168,6 +149,14 @@ public class Exam implements Serializable {
 
 	public void setQuestionId(int questionId) {
 		this.questionId = questionId;
+	}
+
+	public int getNumProportion() {
+		return numProportion;
+	}
+
+	public void setNumProportion(int numProportion) {
+		this.numProportion = numProportion;
 	}
 
 }

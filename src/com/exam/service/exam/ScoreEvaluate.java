@@ -1,6 +1,7 @@
 package com.exam.service.exam;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,12 +13,49 @@ import java.util.Map;
  * 
  */
 public class ScoreEvaluate {
+	
+	private String source;
+	private int sourceProportion = 0;//原文权重分数
+	private int fullScore = 100;
+	private int cn = 1;
+	private int en = 1;
+	private int pun = 0;
+	private int num = 0;
 
 	public static void main(String[] args) {
-		System.out.println(dimensionValidation("我不知道你是谁，我喜欢你。", "我道欢"));
-		System.out.println(stepValidation("我不知道你是谁，我喜欢你。", "我道欢",false));
+		ScoreEvaluate evaluate = new ScoreEvaluate("你好，我是好人。Oh mygod够都不认识你狗", 100, 1, 1, 0, 0);
+		System.out.println(evaluate.stepValidation("你好，我是好人。oh mygod！狗都不认识你够"));
 	}
-
+	
+	/**
+	 * 构造函数
+	 * @param source原文
+	 * @param fullScore满分
+	 * @param cn中文权重
+	 * @param en英文权重
+	 * @param pun标点权重
+	 * @param chart字符权重
+	 */
+	public ScoreEvaluate(String source,int fullScore,int cn,int en,int pun,int num){
+		this.source = source;
+		this.fullScore = fullScore;
+		this.cn = cn;
+		this.en = en;
+		this.pun = pun;
+		this.num = num;
+		initSourceProportion();
+	}
+	
+	/**
+	 * 初始化原文章的加权总分
+	 */
+	private void initSourceProportion(){
+		for (char c : source.toCharArray()) {
+			sourceProportion += getProportionScore(c);
+		}
+		System.out.println("sourceProportion:"+sourceProportion);
+	}
+	
 	/**
 	 * 逐字节验证
 	 * @param source
@@ -27,24 +65,42 @@ public class ScoreEvaluate {
 	 * 			当等于false时，一般为按照现有文字进行判分，如计时考试，
 	 * @return
 	 */
-	public static String stepValidation(String source, String target,boolean isSourceLength) {
-		int score = 0;
+	public int stepValidation(String target) {
+		int targetProportion = 0;//目标权重
 		int d = 0;
 		for (char c : source.toCharArray()) {
 			char[] c2 = target.toCharArray();
 			for (int i = d; i < c2.length; i++) {
 				if (c2[i] == c) {
 					d = i;
-					score++;
+					System.out.println(c);
+					targetProportion += getProportionScore(c);
 					break;
 				}
 			}
 		}
-		int length = source.length();
-		if(!isSourceLength){
-			length = target.length();
+		System.out.println("targetProportion:"+targetProportion);
+		double proportion = (double)targetProportion/(double)sourceProportion * fullScore;
+		BigDecimal bd = new BigDecimal(proportion).setScale(0, BigDecimal.ROUND_HALF_UP);
+		return bd.intValue();
+	}
+	
+	/**
+	 * 获得权重分数
+	 * @param c
+	 * @return
+	 */
+	private int getProportionScore(Character c){
+		if(c.toString().matches("^[\u4e00-\u9fa5]+$")){
+			return 1 * cn;
+		}else if(c.toString().matches("^[a-zA-Z]+$")){
+			return 1 * en;
+		}else if(c.toString().matches("\\pP+$")){
+			return 1 * pun;
+		}else if(c.toString().matches("^[0-9]+$")){
+			return 1 * num;
 		}
-		return (double) score / length * 100 + "%";
+		return 0;
 	}
 
 	/**
@@ -53,7 +109,7 @@ public class ScoreEvaluate {
 	 * @param doc2
 	 * @return
 	 */
-	public static String dimensionValidation(String doc1, String doc2) {
+	public String dimensionValidation(String doc1, String doc2) {
 		if (doc1 != null && doc1.trim().length() > 0 && doc2 != null&& doc2.trim().length() > 0) {
 			Map<Integer, int[]> AlgorithmMap = new LinkedHashMap<Integer, int[]>();
 			// 将两个字符串中的中文字符以及出现的总数封装到，AlgorithmMap中
