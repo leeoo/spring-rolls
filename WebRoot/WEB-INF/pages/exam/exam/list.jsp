@@ -25,8 +25,8 @@
 				handler:function(){
 				   $('#list').datagrid('options').queryParams = {
 			    	   'title': $.trim($("#title").val()),
-			    	   'title': $.trim($("#choice").val()),
-			    	   'title': $.trim($("#status").val())
+			    	   'choice': $.trim($("#choice").val()),
+			    	   'status': $.trim($("#status").val())
 			    	};
 			       $('#list').datagrid('options').pageNumber = 1;
 			       var p = $('#list').datagrid('getPager');
