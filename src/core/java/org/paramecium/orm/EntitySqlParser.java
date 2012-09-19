@@ -12,6 +12,7 @@ import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
+import org.paramecium.orm.annotation.Lazy;
 import org.paramecium.orm.annotation.NotUpdate;
 import org.paramecium.orm.annotation.PrimaryKey;
 import org.paramecium.orm.annotation.ReferenceColumn;
@@ -277,7 +278,7 @@ public class EntitySqlParser {
 		return sb.toString();
 	}
 	
-	public static String getSelectSqlByPk(Class<?> clazz){
+	public static String getSelectSqlByPk(Class<?> clazz,boolean isLazy){
 		String key = clazz.getName()+":select";
 		String sql = sqlCache.get(key);
 		if(sql!=null){
@@ -297,6 +298,12 @@ public class EntitySqlParser {
 				}
 				field.setAccessible(true);
 				try {
+					if(isLazy){
+						Lazy lazy = field.getAnnotation(Lazy.class);
+						if(lazy!=null){
+							continue;
+						}
+					}
 					Column column = field.getAnnotation(Column.class);
 					ReferenceColumn referenceColumn = field.getAnnotation(ReferenceColumn.class);
 					PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);

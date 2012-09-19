@@ -149,7 +149,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 	 */
 	@SuppressWarnings("unchecked")
 	public T select(PK primaryKey){
-		String sql = EntitySqlParser.getSelectSqlByPk(clazz);
+		String sql = EntitySqlParser.getSelectSqlByPk(clazz,false);
 		return (T) genericJdbcDao.queryUniqueByArray(sql, clazz, primaryKey);
 	}
 	
@@ -159,7 +159,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 	 * @return
 	 */
 	public Page select(Page page){
-		String sql = EntitySqlParser.getSelectSqlByPk(clazz);
+		String sql = EntitySqlParser.getSelectSqlByPk(clazz,true);
 		int start = sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		Entity entity = clazz.getAnnotation(Entity.class);
@@ -179,7 +179,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 		if(whereBean==null){
 			return select(page);
 		}
-		String sql = EntitySqlParser.getSelectSqlByPk(clazz);
+		String sql = EntitySqlParser.getSelectSqlByPk(clazz,true);
 		int start = sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		String where = EntitySqlParser.getDynamicWhereSql(whereBean);
@@ -204,7 +204,7 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 		if(whereBean==null){
 			return null;
 		}
-		String sql = EntitySqlParser.getSelectSqlByPk(clazz);
+		String sql = EntitySqlParser.getSelectSqlByPk(clazz,true);
 		int start = sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		String where = EntitySqlParser.getDynamicWhereSql(whereBean);

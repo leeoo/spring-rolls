@@ -118,7 +118,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 			page.setPageNo(1);
 			return page;
 		}
-		String sql = EntitySqlParser.getSelectSqlByPk(clazz);
+		String sql = EntitySqlParser.getSelectSqlByPk(clazz,true);
 		int last = sql.lastIndexOf("=");
 		int where = sql.toLowerCase().lastIndexOf("where");
 		String countSql = BaseDialect.getCountSql(sql.substring(0, where));
