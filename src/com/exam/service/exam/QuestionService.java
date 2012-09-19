@@ -27,10 +27,6 @@ public class QuestionService {
 		ormDao.update(question);
 	}
 	
-	public void delete(int id) throws Exception{
-		ormDao.delete(id);
-	}
-	
 	public void delete(String... ids) throws Exception{
 		for(String id : ids){
 			ormDao.delete(Integer.parseInt(id));
@@ -41,8 +37,8 @@ public class QuestionService {
 		return ormDao.select(id);
 	}
 	
-	public Page getAll(Page page){
-		return ormDao.select(page);
+	public Page getAll(Page page,Question question){
+		return ormDao.select(page,question);
 	}
 
 }

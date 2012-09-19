@@ -27,8 +27,8 @@ public class QuestionChoiceService {
 		ormDao.update(question);
 	}
 	
-	public void delete(int id) throws Exception{
-		ormDao.delete(id);
+	public void deleteByQuestionId(int questionId) throws Exception{
+		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_question_choice WHERE question_id=?",questionId);
 	}
 	
 	public void delete(String... ids) throws Exception{

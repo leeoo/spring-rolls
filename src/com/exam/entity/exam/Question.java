@@ -5,7 +5,9 @@ import java.io.Serializable;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
+import org.paramecium.orm.annotation.NotUpdate;
 import org.paramecium.orm.annotation.PrimaryKey;
+import org.paramecium.orm.annotation.VirtualColumn.DYNAMIC_WHERE_COMPARISON;
 import org.paramecium.validation.annotation.base.Length;
 import org.paramecium.validation.annotation.base.NotNull;
 
@@ -13,7 +15,7 @@ import org.paramecium.validation.annotation.base.NotNull;
  * 题库信息
  * @author caoyang
  */
-@Entity(tableName = "t_question", orderBy = "id DESC")
+@Entity(tableName = "t_question", orderBy = "id DESC",where="choice=0")
 public class Question implements Serializable {
 	
 	private static final long serialVersionUID = -2479730194663938800L;
@@ -22,13 +24,14 @@ public class Question implements Serializable {
 	@Column
 	private Integer id;
 	
-	@Column
+	@Column(isDynamicWhere = true,comparison = DYNAMIC_WHERE_COMPARISON.LIKE)
 	@NotNull
-	@Length(min=10,max=500)
+	@Length(min=3,max=500)
 	@ShowLabel("题库描述")
 	private String title;// 考试描述
 	
 	@Column
+	@NotUpdate
 	private boolean choice = false;//是否是选择题 
 	
 	@Column
