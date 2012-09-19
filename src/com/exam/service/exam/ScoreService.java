@@ -27,8 +27,8 @@ public class ScoreService {
 		ormDao.update(score);
 	}
 	
-	public void delete(int id) throws Exception{
-		ormDao.delete(id);
+	public void deleteByExamineeId(int examineeId) throws Exception{
+		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_score WHERE examinee_id=?",examineeId);
 	}
 	
 	public void delete(String... ids) throws Exception{

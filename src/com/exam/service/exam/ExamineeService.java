@@ -32,13 +32,13 @@ public class ExamineeService {
 	
 	public void delete(int id) throws Exception{
 		ormDao.delete(id);
-		scoreService.delete(id);
+		scoreService.deleteByExamineeId(id);
 	}
 	
 	public void delete(String... ids) throws Exception{
 		for(String id : ids){
 			ormDao.delete(Integer.parseInt(id));
-			scoreService.delete(Integer.parseInt(id));
+			scoreService.deleteByExamineeId(Integer.parseInt(id));
 		}
 	}
 	
