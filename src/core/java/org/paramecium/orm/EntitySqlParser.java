@@ -279,7 +279,7 @@ public class EntitySqlParser {
 	}
 	
 	public static String getSelectSqlByPk(Class<?> clazz,boolean isLazy){
-		String key = clazz.getName()+":select";
+		String key = clazz.getName()+":select_is_lazy:"+isLazy;
 		String sql = sqlCache.get(key);
 		if(sql!=null){
 			return sql;
