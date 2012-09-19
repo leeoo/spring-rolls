@@ -51,7 +51,7 @@ public abstract class JsonUitls {
 					field.setAccessible(true);
 					try {
 						sb.append("\"").append(field.getName()).append("\":");
-						Object value = BeanUtils.getFieldValue(bean, field.getName(),field.getType());
+						Object value = BeanUtils.getFieldValue(bean, superClass, field.getName(),field.getType());
 						if(value==null){
 							sb.append("\"\",");
 						}else{

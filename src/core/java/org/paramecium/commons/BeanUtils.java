@@ -122,7 +122,7 @@ public abstract class BeanUtils {
 					if(column!=null && !column.value().isEmpty()){
 						fieldName = column.value();//设置数据库的值
 					}
-					map.put(fieldName,getFieldValue(bean, field.getName(), field.getType()));
+					map.put(fieldName,getFieldValue(bean, superClass, field.getName(), field.getType()));
 				} catch (Exception e) {
 					logger.warn(e);
 				}
@@ -161,7 +161,7 @@ public abstract class BeanUtils {
 						if(value == null){
 							value = map.get(getDbFieldName(field.getName()));
 						}
-						setFieldValue(bean, field.getName(), value);
+						setFieldValue(bean, superClass, field.getName(), value);
 					} catch (Exception e) {
 						logger.warn(e);
 					}
@@ -220,8 +220,8 @@ public abstract class BeanUtils {
 	 * @param bean
 	 * @return
 	 */
-	public static Object getFieldValue(Object bean,String name){
-		return getFieldValue(bean, name, GET);
+	public static Object getFieldValue(Object bean,Class<?> clazz,String name){
+		return getFieldValue(bean, clazz, name, GET);
 	}
 	
 	/**
@@ -230,18 +230,18 @@ public abstract class BeanUtils {
 	 * @param bean
 	 * @return
 	 */
-	public static Object getFieldValue(Object bean,String name,Class<?> fieldType){
+	public static Object getFieldValue(Object bean,Class<?> clazz,String name,Class<?> fieldType){
 		if(fieldType == null){
-			return getFieldValue(bean, name, GET);
+			return getFieldValue(bean, clazz, name, GET);
 		}
 		if(fieldType.equals(boolean.class)){//根据属性类型判断对应的getter方法方式
-			Object value = getFieldValue(bean, name, IS);
+			Object value = getFieldValue(bean, clazz, name, IS);
 			if(value==null){//如果真的没有按照getter规则命名，可以调用getter方法
-				return getFieldValue(bean, name, GET);
+				return getFieldValue(bean, clazz, name, GET);
 			}
 			return value;
 		}
-		return getFieldValue(bean, name, GET);
+		return getFieldValue(bean, clazz, name, GET);
 	}
 	
 	/**
@@ -251,10 +251,10 @@ public abstract class BeanUtils {
 	 * @param getterName普通的是get开头，boolean是is开头
 	 * @return
 	 */
-	private static Object getFieldValue(Object bean,String name,String getterName){
+	private static Object getFieldValue(Object bean,Class<?> clazz,String name,String getterName){
 		String getMethodName = null;
 		try {
-			if(bean==null||name==null||name.isEmpty()){
+			if(bean==null||name==null||name.isEmpty()||clazz==null){
 				return null;
 			}
 			if(getterName.equals(IS)){//判断是否是is方式的getter
@@ -268,18 +268,18 @@ public abstract class BeanUtils {
 			}
 			Method method = null;
 			try{
-				method = bean.getClass().getMethod(getMethodName);
+				method = clazz.getMethod(getMethodName);
 			} catch (NoSuchMethodException e) {//如果错误，有可能是出现了aName,bName等名称，eclipse等工具会将autoGetter变成getaName，以下为补漏.
 				if(getterName.equals(IS)){//判断是否是is方式的getter
 					getMethodName = IS.concat(name);
 				}else{//普通的getter方法
 					getMethodName = GET.concat(name);
 				}
-				method = bean.getClass().getMethod(getMethodName);
+				method = clazz.getMethod(getMethodName);
 			}
 			return method.invoke(bean);
 		} catch (Exception e) {
-			logger.warn(bean.getClass().toString().concat("中没有匹配到").concat(getMethodName).concat("方法!"));
+			logger.warn(clazz.toString().concat("中没有匹配到").concat(getMethodName).concat("方法!"));
 		}
 		return null;
 	}
@@ -290,78 +290,78 @@ public abstract class BeanUtils {
 	 * @param name
 	 * @param value
 	 */
-	public static void setFieldValue(Object bean,String name,final Object value){
+	public static void setFieldValue(Object bean,Class<?> clazz,String name,final Object value){
 		String setMethodName = null;
 		Method method = null;
 		try {//获取普通数据库类型对应Entity每个属性的setter方法
-			if(bean==null||name==null||name.isEmpty()||value==null){
+			if(bean==null||name==null||name.isEmpty()||value==null||clazz==null){
 				return;
 			}
-			Class<?> clazz = value.getClass();
+			Class<?> fieldClazz = value.getClass();
 			setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
 			try{
-				method = bean.getClass().getMethod(setMethodName,clazz);
+				method = clazz.getMethod(setMethodName,fieldClazz);
 			} catch (NoSuchMethodException e) {//如果错误，有可能是出现了aName,bName等名称，eclipse等工具会将autoSetter变成setaName，以下为补漏.
 				setMethodName = SET.concat(name);
-				method = bean.getClass().getMethod(setMethodName,clazz);
+				method = clazz.getMethod(setMethodName,fieldClazz);
 			}
 		} catch (Exception e) {
 			try {//获取特殊类型对应Entity每个属性，如果setter方法中的属性参数为基本类型如int、long等，需要将对应封装类型转为基本类型.
-				Class<?> clazz = value.getClass();
-				if(Integer.class.equals(clazz)) {
-					clazz = int.class;
-				}else if (Long.class.equals(clazz)) {
-					clazz = long.class;
-				}else if (Boolean.class.equals(clazz)) {
-					clazz = boolean.class;
-				}else if (Byte.class.equals(clazz)) {
-					clazz = byte.class;
-				}else if (Short.class.equals(clazz)) {
-					clazz = short.class;
-				}else if (Float.class.equals(clazz)) {
-					clazz = float.class;
-				}else if (Double.class.equals(clazz)) {
-					clazz = double.class;
-				}else if (Character.class.equals(clazz)) {
-					clazz = char.class;
-				}else if (java.math.BigInteger.class.equals(clazz)) {
-					clazz = long.class;
-				}else if (java.math.BigDecimal.class.equals(clazz)) {
-					clazz = double.class;
-				}else if (java.sql.Clob.class.equals(clazz)) {
-					clazz = String.class;
-				}else if (java.sql.NClob.class.equals(clazz)) {
-					clazz = String.class;
-				}else if (java.sql.Blob.class.equals(clazz)) {
-					clazz = byte[].class;
-				}else if (java.sql.Ref.class.equals(clazz)) {
-					clazz = byte[].class;
-				}else if (java.sql.Array.class.equals(clazz)) {
-					clazz = Object[].class;
-				}else if (java.sql.Struct.class.equals(clazz)) {
-					clazz = Object[].class;
-				}else if (java.sql.Date.class.equals(clazz)) {
-					clazz = java.util.Date.class;
-				}else if (java.sql.Time.class.equals(clazz)) {
-					clazz = java.util.Date.class;
-				}else if (java.sql.Timestamp.class.equals(clazz)) {
-					clazz = java.util.Date.class;
+				Class<?> fieldClazz = value.getClass();
+				if(Integer.class.equals(fieldClazz)) {
+					fieldClazz = int.class;
+				}else if (Long.class.equals(fieldClazz)) {
+					fieldClazz = long.class;
+				}else if (Boolean.class.equals(fieldClazz)) {
+					fieldClazz = boolean.class;
+				}else if (Byte.class.equals(fieldClazz)) {
+					fieldClazz = byte.class;
+				}else if (Short.class.equals(fieldClazz)) {
+					fieldClazz = short.class;
+				}else if (Float.class.equals(fieldClazz)) {
+					fieldClazz = float.class;
+				}else if (Double.class.equals(fieldClazz)) {
+					fieldClazz = double.class;
+				}else if (Character.class.equals(fieldClazz)) {
+					fieldClazz = char.class;
+				}else if (java.math.BigInteger.class.equals(fieldClazz)) {
+					fieldClazz = long.class;
+				}else if (java.math.BigDecimal.class.equals(fieldClazz)) {
+					fieldClazz = double.class;
+				}else if (java.sql.Clob.class.equals(fieldClazz)) {
+					fieldClazz = String.class;
+				}else if (java.sql.NClob.class.equals(fieldClazz)) {
+					fieldClazz = String.class;
+				}else if (java.sql.Blob.class.equals(fieldClazz)) {
+					fieldClazz = byte[].class;
+				}else if (java.sql.Ref.class.equals(fieldClazz)) {
+					fieldClazz = byte[].class;
+				}else if (java.sql.Array.class.equals(fieldClazz)) {
+					fieldClazz = Object[].class;
+				}else if (java.sql.Struct.class.equals(fieldClazz)) {
+					fieldClazz = Object[].class;
+				}else if (java.sql.Date.class.equals(fieldClazz)) {
+					fieldClazz = java.util.Date.class;
+				}else if (java.sql.Time.class.equals(fieldClazz)) {
+					fieldClazz = java.util.Date.class;
+				}else if (java.sql.Timestamp.class.equals(fieldClazz)) {
+					fieldClazz = java.util.Date.class;
 				}else{
-					clazz = Object.class;
+					fieldClazz = Object.class;
 				}
 				if(setMethodName != null){
 					setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
 				}
-				method = bean.getClass().getMethod(setMethodName,clazz);
+				method = clazz.getMethod(setMethodName,fieldClazz);
 			}catch (Exception e2) {
-				logger.warn(bean.getClass().toString().concat("中没有匹配到").concat(setMethodName).concat("方法!"));
+				logger.warn(clazz.toString().concat("中没有匹配到").concat(setMethodName).concat("方法!"));
 			}
 		}
 		if(method != null){
 			try {
 				method.invoke(bean,value);
 			}catch (Exception e) {
-				logger.warn(bean.getClass().toString().concat("中的").concat(setMethodName).concat("方法执行失败!"));
+				logger.warn(clazz.toString().concat("中的").concat(setMethodName).concat("方法执行失败!"));
 			}
 		}
 		

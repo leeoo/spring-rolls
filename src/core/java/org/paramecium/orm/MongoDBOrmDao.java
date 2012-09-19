@@ -83,12 +83,12 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 						if(primaryKey.autoGenerateMode() == AUTO_GENERATE_MODE.NATIVE){
 							id = EncodeUtils.millisTime();
 						}else{
-							id = (Long)BeanUtils.getFieldValue(bean, field.getName());
+							id = (Long)BeanUtils.getFieldValue(bean, superClass, field.getName());
 						}
 						object.put(fieldName, id);
 						continue;
 					}
-					object.put(fieldName, BeanUtils.getFieldValue(bean, field.getName(), field.getType()));
+					object.put(fieldName, BeanUtils.getFieldValue(bean, superClass, field.getName(), field.getType()));
 				} catch (Throwable e) {
 					logger.error(e);
 				}
@@ -120,7 +120,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 					field.setAccessible(true);
 					try {
 						String fieldName = getFieldName(field);
-						object.put(fieldName, BeanUtils.getFieldValue(bean, field.getName(), field.getType()));
+						object.put(fieldName, BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType()));
 					} catch (Throwable e) {
 						logger.error(e);
 					}
@@ -168,7 +168,7 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 				}
 				field.setAccessible(true);
 				try {
-					Object value = BeanUtils.getFieldValue(bean, field.getName(), field.getType());
+					Object value = BeanUtils.getFieldValue(bean, superClass, field.getName(), field.getType());
 					if(value == null&&isNoNull){
 						continue;
 					}

@@ -67,7 +67,7 @@ public class Validator {
 						continue;
 					}
 					Collection<String> messages = new LinkedList<String>();
-					Object value = BeanUtils.getFieldValue(bean, field.getName(), field.getType());
+					Object value = BeanUtils.getFieldValue(bean, superClass, field.getName(), field.getType());
 					ShowLabel showLabel = field.getAnnotation(ShowLabel.class);
 					String show = field.getName();//获取错误消息中字段名称
 					if(showLabel!=null){

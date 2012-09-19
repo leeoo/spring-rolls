@@ -57,7 +57,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 	public Number insert(T bean) throws Exception {
 		Number value = genericOrmDao.insert(bean);
 		if(value != null){
-			BeanUtils.setFieldValue(bean, EntitySqlParser.getPkName(clazz), value);
+			BeanUtils.setFieldValue(bean, clazz, EntitySqlParser.getPkName(clazz), value);
 		}
 		SearchIndexCreator.createIndex(bean);
 		cache.clear();
@@ -70,7 +70,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 	 * @throws Exception
 	 */
 	public void update(T bean) throws Exception {
-		T oBean = genericOrmDao.select((PK)BeanUtils.getFieldValue(bean, EntitySqlParser.getPkName(clazz)));
+		T oBean = genericOrmDao.select((PK)BeanUtils.getFieldValue(bean,clazz, EntitySqlParser.getPkName(clazz)));
 		genericOrmDao.update(bean);
 		SearchIndexCreator.removeIndex(oBean);
 		SearchIndexCreator.createIndex(bean);
