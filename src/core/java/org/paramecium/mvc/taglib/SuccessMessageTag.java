@@ -28,7 +28,7 @@ public class SuccessMessageTag extends TagSupport{
 		}
 		if(message!=null&&!message.isEmpty()){
 			try {
-				this.pageContext.getOut().write(message);
+				this.pageContext.getOut().write(message.replace('\'', '`').replace('"', '`').replace('\n', ' ').replace('\r', ' '));
 			} catch (IOException e) {
 				logger.error(e);
 			}
