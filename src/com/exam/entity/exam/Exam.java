@@ -24,14 +24,14 @@ public class Exam implements Serializable {
 	@Column
 	private Integer id;
 	
-	@Column
+	@Column(isDynamicWhere=true)
 	@NotNull
 	@Length(min=10,max=500)
 	@ShowLabel("考试描述")
 	private String title;// 考试描述
 	
 	@Column
-	private int score;// 总分
+	private int score = 100;// 总分
 	
 	@Column
 	private int cnProportion = 1;// 中文权重
@@ -48,10 +48,12 @@ public class Exam implements Serializable {
 	@Column
 	private int status = 0;// 考试状态 0为没有开始,1正在进行,-1已经过期
 	
+	@ShowLabel("考试开始时间")
 	@Column
 	@NotNull
 	private Date startDate;// 开始时间
 	
+	@ShowLabel("考试结束时间")
 	@Column
 	@NotNull
 	private Date endDate;// 结束时间
@@ -59,9 +61,14 @@ public class Exam implements Serializable {
 	@Column
 	private int longTime = 60;// 考试时长，秒,最小一分钟
 	
+	@ShowLabel("题库")
+	@Column
+	@NotNull
+	private Integer questionId;// 题库ID
+	
 	@Column
 	@NotUpdate
-	private int questionId;// 题库ID
+	private boolean choice = false;//是否是理论考试及选择题
 
 	public String getTitle() {
 		return title;
@@ -135,14 +142,6 @@ public class Exam implements Serializable {
 		this.longTime = longTime;
 	}
 
-	public int getQuestionId() {
-		return questionId;
-	}
-
-	public void setQuestionId(int questionId) {
-		this.questionId = questionId;
-	}
-
 	public int getNumProportion() {
 		return numProportion;
 	}
@@ -157,6 +156,22 @@ public class Exam implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(Integer questionId) {
+		this.questionId = questionId;
+	}
+
+	public boolean isChoice() {
+		return choice;
+	}
+
+	public void setChoice(boolean choice) {
+		this.choice = choice;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.exam.service.exam;
 
+import java.util.Collection;
+
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
@@ -8,7 +10,7 @@ import org.paramecium.transaction.annotation.Transactional;
 
 import com.exam.entity.exam.Question;
 
-@ShowLabel("题库业务类")
+@ShowLabel("速录考试题库业务类")
 @Service
 @Transactional
 public class QuestionService {
@@ -35,6 +37,11 @@ public class QuestionService {
 	
 	public Question get(int id){
 		return ormDao.select(id);
+	}
+	
+	public Collection<Question> getAll(){
+		Question question = null;
+		return ormDao.select(question);
 	}
 	
 	public Page getAll(Page page,Question question){

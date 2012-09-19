@@ -12,6 +12,7 @@ create table t_exam
    id                   int not null auto_increment,
    title                varchar(1000) not null,
    score                int not null,
+   choice               bit not null,
    cn_proportion        int,
    en_proportion        int,
    pun_proportion       int,

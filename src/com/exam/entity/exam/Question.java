@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
+import org.paramecium.orm.annotation.Lazy;
 import org.paramecium.orm.annotation.NotUpdate;
 import org.paramecium.orm.annotation.PrimaryKey;
 import org.paramecium.orm.annotation.VirtualColumn.DYNAMIC_WHERE_COMPARISON;
@@ -39,8 +40,11 @@ public class Question implements Serializable {
 	
 	@Column
 	@NotNull
+	@Lazy
 	@ShowLabel("题库正文")
 	private String textContent;//文本正文
+	
+	private String miniTitle;//带...的
 
 	public String getTitle() {
 		return title;
@@ -81,5 +85,13 @@ public class Question implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
+	public String getMiniTitle() {
+		miniTitle = title;
+		if(miniTitle.length()>20){
+			return miniTitle.substring(0, 20).concat("...");
+		}
+		return miniTitle;
+	}
+
 }

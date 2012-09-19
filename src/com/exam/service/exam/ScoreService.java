@@ -31,6 +31,10 @@ public class ScoreService {
 		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_score WHERE examinee_id=?",examineeId);
 	}
 	
+	public void deleteByExamId(int examId) throws Exception{
+		ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_score WHERE exam_id=?",examId);
+	}
+	
 	public void delete(String... ids) throws Exception{
 		for(String id : ids){
 			ormDao.delete(Integer.parseInt(id));
