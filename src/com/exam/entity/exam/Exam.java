@@ -45,8 +45,8 @@ public class Exam implements Serializable {
 	@Column
 	private int numProportion = 1;// 数字权重
 	
-	@Column
-	private int status = 0;// 考试状态 0为没有开始,1正在进行,-1已经过期
+	@Column(isDynamicWhere=true)
+	private Integer status;// 考试状态 0为没有开始,1正在进行,-1已经过期
 	
 	@ShowLabel("考试开始时间")
 	@Column
@@ -59,17 +59,19 @@ public class Exam implements Serializable {
 	private Date endDate;// 结束时间
 	
 	@Column
-	private int longTime = 60;// 考试时长，秒,最小一分钟
+	private int longTime = 60;// 考试时长，分钟,最小一分钟
 	
 	@ShowLabel("题库")
 	@Column
 	@NotNull
 	private Integer questionId;// 题库ID
 	
-	@Column
+	@Column(isDynamicWhere=true)
 	@NotUpdate
-	private boolean choice = false;//是否是理论考试及选择题
+	private Boolean choice;//是否是理论考试及选择题
 
+	private String miniTitle;//带...的
+	
 	public String getTitle() {
 		return title;
 	}
@@ -108,14 +110,6 @@ public class Exam implements Serializable {
 
 	public void setPunProportion(int punProportion) {
 		this.punProportion = punProportion;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
 	}
 
 	public Date getStartDate() {
@@ -166,12 +160,28 @@ public class Exam implements Serializable {
 		this.questionId = questionId;
 	}
 
-	public boolean isChoice() {
+	public Boolean getChoice() {
 		return choice;
 	}
 
-	public void setChoice(boolean choice) {
+	public void setChoice(Boolean choice) {
 		this.choice = choice;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getMiniTitle() {
+		miniTitle = title;
+		if(miniTitle.length()>20){
+			return miniTitle.substring(0, 20).concat("...");
+		}
+		return miniTitle;
 	}
 
 }

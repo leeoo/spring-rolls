@@ -61,7 +61,7 @@ public class ExamController extends BaseController{
 		if(id!=null){
 			Exam exam = examService.get(id);
 			mv.addValue("exam", exam);
-			if(exam.isChoice()){
+			if(exam.getChoice()){
 				Collection<ChoiceTypeQuestion> choiceQuestions = choiceTypeQuestionService.getAll();
 				mv.addValue("choiceQuestions", choiceQuestions);
 			}else{

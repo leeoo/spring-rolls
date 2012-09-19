@@ -3,14 +3,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <%@ include file="../../global/head.jsp"%>
-<title>${title}——理论考试题库列表</title>
+<title>${title}——考试信息列表</title>
 </head>
 <body class="easyui-layout">
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
-<div region="center" title="理论考试题库列表">
+<div region="center" title="考试信息列表">
 	<div title="按条件查询" id="search" icon="icon-search" close="true" style="padding:5px;width:350px;height:210px;">
-			<p>题库描述：<input type="text" name=title id="title"/></p>
+			<p>考试描述：<input type="text" name=title id="title"/></p>
+			<p>考试方式：<select name=choice id="choice"><option value="">请选择</option><option value="false">速录(打字)</option><option value="true">理论(选择题)</option></select></p>
+			<p>考试状态：<select name="status" id="status"><option value="">请选择</option><option value="0">未开始</option><option value="1">正在进行</option><option value="-1">已结束</option></select></p>
 	</div>
 	<table id="list"></table>
 </div>
@@ -22,7 +24,9 @@
 				iconCls:'icon-search',
 				handler:function(){
 				   $('#list').datagrid('options').queryParams = {
-			    	   'title': $.trim($("#title").val())
+			    	   'title': $.trim($("#title").val()),
+			    	   'title': $.trim($("#choice").val()),
+			    	   'title': $.trim($("#status").val())
 			    	};
 			       $('#list').datagrid('options').pageNumber = 1;
 			       var p = $('#list').datagrid('getPager');
@@ -45,19 +49,44 @@
 			rownumbers: true,
 			remoteSort: false,
 			pageList:[20],
-			url:'${base}/exam/question_c/data.json',
+			url:'${base}/exam/exam/data.json',
 			idField:'id',
 			frozenColumns:[[
 		                    {field:'id',checkbox:true}
 		                ]],
 			columns:[[
-						{field:'miniTitle',title:'题库描述',width:800}
+						{field:'miniTitle',title:'考试描述',width:300},
+						{field:'score',title:'总分数',width:50},
+						{field:'choice',title:'考试方式',width:50,
+							formatter:function(value,rec){
+								if(value=='0'||value==false){
+									return '速录';
+								}else if(value=='1'){
+									return '理论';
+								}
+						}},
+						{field:'status',title:'状态',width:50,
+						formatter:function(value,rec){
+							if(value=='0'){
+								return '未开始';
+							}else if(value=='1'){
+								return '正在进行';
+							}else if(value=='-1'){
+								return '已结束';
+							}
+						}},
+						{field:'startDate',title:'开始时间',width:100},
+						{field:'endDate',title:'结束时间',width:100},
+						{field:'longTime',title:'考试时长',width:100,
+						formatter:function(value,rec){
+							return value+'分钟';
+						}}
 					]],
 					toolbar: [{
 			            text: '新增',
 			            iconCls: 'icon-add',
 			            handler:function(){
-							location.href ='${base}/exam/question_c/input${ext}';
+							location.href ='${base}/exam/exam/input${ext}';
 							return false;
 						}
 			        }, '-', {
@@ -71,7 +100,7 @@
 								$('#list').datagrid('clearSelections');
 								return false;
 							}
-							location.href ='${base}/exam/question_c/input${ext}?id='+rows[0].id;
+							location.href ='${base}/exam/exam/input${ext}?id='+rows[0].id;
 							return false;
 						}
 			        }, '-', {
@@ -91,7 +120,7 @@
 					            if(d){
 					            	$.ajax({
 										   type: "get",
-										   url: "${base}/exam/question_c/delete${ext}",
+										   url: "${base}/exam/exam/delete${ext}",
 										   data: "ids="+ids.join(','),
 										   success: function(msg){
 											   $.messager.show({

@@ -51,7 +51,7 @@
 		                    {field:'id',checkbox:true}
 		                ]],
 			columns:[[
-						{field:'title',title:'题库描述',width:700},
+						{field:'miniTitle',title:'题库描述',width:700},
 						{field:'audioPath',title:'打字方式',width:100,
 						formatter:function(value,rec){
 							if(value==null||value==''){
