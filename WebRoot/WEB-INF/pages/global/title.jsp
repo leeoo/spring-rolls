@@ -1,10 +1,10 @@
 <c:set var="baseHeight" value="73"/>
 <%@ page contentType="text/html;charset=UTF-8"%>
-	<div region="north" border="false" style="height:45px;background-image: url('${base}/commons/images/head.gif');background-color: #EEF9FB;">
+	<div region="north" border="false" style="height:45px;background-image: url('${base}/commons/images/head.gif');overflow-y:hidden;">
 		<div align="left" style="float: left;">
 			<div style="font-size: 25px;color: #FFF;padding-left: 10px;padding-top:5px;font-weight: bold;font-family: 微软雅黑">${title}</div>
 		</div>
-		<div align="right" style="padding-right: 50px;padding-top: 5px;float: right ;">
+		<div align="right" style="padding-right: 40px;padding-top: 10px;float: right ;">
 			<form id="themeId" action="${base}/system/themes/change${ext}" method="post">
 				<select name="themeName" onchange="javascript:document.forms[0].submit();">
 					<option value="default" <c:if test="${theme!=null && theme=='default'}">selected='selected'</c:if>>浅蓝</option>
@@ -17,7 +17,7 @@
 				</select><span style="color: #FFF;">切换主题</span>
 			</form>
 		</div>
-		<div align="right" style="padding-right: 50px;padding-top: 5px;float: right ;">
+		<div align="right" style="padding-right: 50px;padding-top: 10px;float: right ;">
 			<a href="javascript:void(0)" id="$security" class="easyui-splitbutton" style="color: #FFF" menu="#security" iconCls="icon-security">系统管理</a>
 			<a href="javascript:void(0)" id="$logger" class="easyui-splitbutton" style="color: #FFF" menu="#logger" iconCls="icon-date">日志查看</a>
 			<a href="${base}/system/console/index${ext}" class="easyui-linkbutton" style="color: #FFF" plain="true" iconCls="icon-talk">控制台</a>
