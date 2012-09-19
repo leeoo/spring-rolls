@@ -31,7 +31,7 @@
 					<tr>
 						<td>有效天数:</td>
 						<td>
-							<input name="examinee.canDays" class="easyui-numberbox" value="${examinee.password==null?0:examinee.password}"/>(0为永久有效)
+							<input name="examinee.canDays" class="easyui-numberbox" value="${examinee.password==null?0:examinee.canDays}"/>(0为永久有效)
 						</td>
 					</tr>
 					<tr>

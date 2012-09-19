@@ -8,7 +8,7 @@
 <body class="easyui-layout">
 	<%@ include file="../global/title.jsp"%>
 	<%@ include file="../global/menu.jsp"%>
-	<div region="center" title="欢迎登录亚伟在线考试系统">
+	<div region="center" title="欢迎登录${title}">
 		<!-- <div style="background:url('${base}/commons/images/exam.gif') no-repeat;width: 100%;height: 100%;">
 			&nbsp;
 		</div> -->
