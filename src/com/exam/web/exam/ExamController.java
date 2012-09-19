@@ -89,6 +89,15 @@ public class ExamController extends BaseController{
 			}
 			mv.setSuccessMessage("操作成功!");
 		} catch (Exception e) {
+			if(exam!=null&&exam.getChoice()!=null){
+				if(exam.getChoice()){
+					Collection<ChoiceTypeQuestion> choiceQuestions = choiceTypeQuestionService.getAll();
+					mv.addValue("choiceQuestions", choiceQuestions);
+				}else{
+					Collection<Question> questions = questionService.getAll();
+					mv.addValue("questions", questions);
+				}
+			}
 			mv.addValue("exam", exam);
 			mv.setErrorMessage(e.getMessage());
 			return mv.forward(getExamPage("/exam/input.jsp"));

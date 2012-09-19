@@ -57,7 +57,7 @@
 			columns:[[
 						{field:'miniTitle',title:'考试描述',width:300},
 						{field:'score',title:'总分数',width:50},
-						{field:'choice',title:'考试方式',width:50,
+						{field:'choice',title:'考试方式',width:100,
 							formatter:function(value,rec){
 								if(value=='0'||value=='false'||value=='FALSE'){
 									return '速录';
@@ -65,7 +65,7 @@
 									return '理论';
 								}
 						}},
-						{field:'status',title:'状态',width:50,
+						{field:'status',title:'状态',width:100,
 						formatter:function(value,rec){
 							if(value=='0'){
 								return '未开始';
@@ -75,8 +75,8 @@
 								return '已结束';
 							}
 						}},
-						{field:'startDate',title:'开始时间',width:100},
-						{field:'endDate',title:'结束时间',width:100},
+						{field:'startDate',title:'开始时间',width:130},
+						{field:'endDate',title:'结束时间',width:130},
 						{field:'longTime',title:'考试时长',width:100,
 						formatter:function(value,rec){
 							return value+'分钟';

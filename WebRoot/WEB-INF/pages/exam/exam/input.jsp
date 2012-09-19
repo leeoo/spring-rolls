@@ -3,36 +3,42 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <%@ include file="../../global/head.jsp"%>
-<title>${title}——考生信息维护</title>
+<title>${title}——考试信息维护</title>
 </head>
 <body class="easyui-layout">
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
-<div region="center" title="考生信息维护">
+<div region="center" title="考试信息维护">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
-		<form id="examineeForm" action="${base}/exam/examinee/save${ext}" method="post">
+		<form id="examineeForm" action="${base}/exam/exam/save${ext}" method="post">
 			<c:if test="${examinee!=null}">
-				<input type="hidden" name="examinee.id" value="${examinee.id}"/>
+				<input type="hidden" name="exam.id" value="${exam.id}"/>
 			</c:if>
 			<div>
 				<table>
 					<tr>
-						<td nowrap="nowrap">学号:</td>
-						<td><input name="examinee.code" class="easyui-validatebox" required="true" validType="length[3,15]" style="width: 300px;" value="${examinee.code}"/></td>
+						<td nowrap="nowrap">考试描述:</td>
+						<td><input name="exam.title" class="easyui-validatebox" required="true"  validType="length[3,500]" style="width: 500px;" value="${exam.title}"/></td>
 					</tr>
 					<tr>
-						<td>姓名:</td>
-						<td><input name="examinee.username" class="easyui-validatebox" required="true" validType="length[2,10]" style="width: 300px;" value="${examinee.username}"/></td>
-					</tr>
-					<tr>
-						<td>密码:</td>
-						<td><input name="examinee.password" type="password" class="easyui-validatebox" required="true" validType="length[3,15]" style="width: 300px;" value="${examinee.password}"/></td>
-					</tr>
-					<tr>
-						<td>有效天数:</td>
+						<td>总分数:</td>
 						<td>
-							<input name="examinee.canDays" class="easyui-numberbox" value="${examinee.password==null?0:examinee.canDays}"/>(0为永久有效)
+							<input name="exam.score" class="easyui-numberbox" required="true" value="${exam.score==null?100:exam.score}"/>分
 						</td>
+					</tr>
+					<tr>
+						<td>考试时长:</td>
+						<td>
+							<input name="exam.longTime" class="easyui-numberbox" required="true" value="${exam.longTime==null?60:exam.longTime}"/>分钟
+						</td>
+					</tr>
+					<tr>
+						<td>开始时间:</td>
+						<td><input name="exam.startDate" class="easyui-datetimebox" value="${exam.startDate}"/></td>
+					</tr>
+					<tr>
+						<td>结束时间:</td>
+						<td><input name="exam.endDate" class="easyui-datetimebox" value="${exam.endDate}"/></td>
 					</tr>
 					<tr>
 						<td></td>
