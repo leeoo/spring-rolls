@@ -59,7 +59,7 @@
 						{field:'score',title:'总分数',width:50},
 						{field:'choice',title:'考试方式',width:50,
 							formatter:function(value,rec){
-								if(value=='0'||value==false){
+								if(value=='0'||value=='false'||value=='FALSE'){
 									return '速录';
 								}else if(value=='1'){
 									return '理论';
