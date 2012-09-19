@@ -45,7 +45,7 @@ public class ChoiceTypeQuestionService {
 	}
 	
 	public Collection<ChoiceTypeQuestion> getAll(){
-		ChoiceTypeQuestion question = null;
+		ChoiceTypeQuestion question = new ChoiceTypeQuestion();
 		return ormDao.select(question);
 	}
 	

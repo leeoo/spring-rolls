@@ -40,7 +40,7 @@ public class QuestionService {
 	}
 	
 	public Collection<Question> getAll(){
-		Question question = null;
+		Question question = new Question();
 		return ormDao.select(question);
 	}
 	
