@@ -88,7 +88,7 @@ public class Question implements Serializable {
 
 	public String getMiniTitle() {
 		miniTitle = title;
-		if(miniTitle.length()>20){
+		if(miniTitle!=null && miniTitle.length()>20){
 			return miniTitle.substring(0, 20).concat("...");
 		}
 		return miniTitle;
