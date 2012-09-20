@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.paramecium.commons.EncodeUtils;
 import org.paramecium.commons.PathUtils;
 import org.paramecium.ioc.annotation.ShowLabel;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
@@ -22,6 +24,8 @@ import org.paramecium.security.annotation.Security;
 @Controller("/file")
 public class UploadHandle {
 	
+	private final static Log logger = LoggerFactory.getLogger();
+	
 	@ShowLabel("上传")
 	@MappingMethod
 	public void upload(ModelAndView mv) {
@@ -29,10 +33,10 @@ public class UploadHandle {
 			// 调用Decode方法，返回一个哈希表
 			Map<String, Object> hashtable = decode(mv.getRequest());
 			// 以字节数据的方式获得文件的内容
-			byte[] filecontent = (byte[]) hashtable.get("Filedata");
+			byte[] filecontent = (byte[]) hashtable.get("file");
 			String filename = (String) hashtable.get("filename");
 			String dName = PathUtils.getWebRootPath() + "//upload//temp";
-			String fName = EncodeUtils.millisTime() + filename;
+			String fName = EncodeUtils.millisTime() + filename.substring(filename.lastIndexOf('.'));
 
 			File dir = new File(dName);
 			File file = new File(dir, fName);
@@ -47,23 +51,24 @@ public class UploadHandle {
 				fileOutputStream = new FileOutputStream(file);
 				fileOutputStream.write(filecontent);
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e);
 			} finally {
 				if(fileOutputStream!=null){
 					try {
 						fileOutputStream.flush();
 					} catch (IOException e) {
-						e.printStackTrace();
+						logger.error(e);
 					}
 					try {
 						fileOutputStream.close();
 					} catch (IOException e) {
-						e.printStackTrace();
+						logger.error(e);
 					}
 				}
+				mv.printJSON(fName);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 

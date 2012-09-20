@@ -10,11 +10,17 @@
 <script>
 	$(function() {
 		$("#file_upload").uploadify({
-			buttonText 	  : '上传音频文件',
-			height        : 20,
-			swf           : '${base}/commons/js/uploadify/uploadify.swf',
-			uploader      : '${base}/file/upload${ext}',
-			width         : 100
+			buttonText:'上传音频文件',
+			fileTypeExts:'*.mp3',
+			fileObjName:'file',
+			fileTypeDesc:'请选择mp3格式的音频文件',
+			swf:'${base}/commons/js/uploadify/uploadify.swf',
+			uploader:'${base}/file/upload${ext}',
+			height:20,
+			width:100,
+			onUploadSuccess:function(file, data, response) {
+				$('#audioPath').val(data);
+	        }
 		});
 	});
 </script>
@@ -28,6 +34,7 @@
 			<input type="hidden" name="question.choice" value="false"/>
 			<c:if test="${question!=null}">
 				<input type="hidden" name="question.id" value="${question.id}"/>
+				<input type="hidden" name="oldAudioPath" value="${question.audioPath}"/>
 			</c:if>
 			<div>
 				<table>
@@ -37,7 +44,7 @@
 					</tr>
 					<tr>
 						<td>音频文件:</td>
-						<td nowrap="nowrap"><input name="question.audioPath" class="easyui-validatebox" style="width: 300px;" value="${question.audioPath}"/>(如果看打无需上传音频)</td>
+						<td nowrap="nowrap"><input id="audioPath" readonly="readonly" name="question.audioPath" class="easyui-validatebox" style="width: 300px;" value="${question.audioPath}"/>(如果看打无需上传音频)</td>
 						<td nowrap="nowrap"><input type="file" name="file" id="file_upload" /></td>
 					</tr>
 					<tr>

@@ -1,5 +1,8 @@
 package com.exam.web.exam;
 
+import java.io.File;
+
+import org.paramecium.commons.PathUtils;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
@@ -61,8 +64,20 @@ public class QuestionController extends BaseController{
 			question.setChoice(false);
 			if(question.getId()==null){
 				questionService.save(question);
+				if(question.getAudioPath()!=null&&!question.getAudioPath().trim().isEmpty()){
+					renameAudioFile(question.getAudioPath());
+				}
 			}else{
 				questionService.update(question);
+				String oldAudioPath = mv.getValue("oldAudioPath", String.class);
+				if(oldAudioPath!=null&&!oldAudioPath.trim().isEmpty()&&(question.getAudioPath()==null||question.getAudioPath().trim().isEmpty())){
+					deleteAudioFile(oldAudioPath);//如果以前有，现在没有，就说明删除。基本不成立.因为没有可能修改audioPath
+				}else if(question.getAudioPath()!=null&&oldAudioPath!=null&&!oldAudioPath.equals(question.getAudioPath())){
+					deleteAudioFile(oldAudioPath);//以前和现在都不为空，但还是文件名不同,删除以前的，给现在的临时改名
+					renameAudioFile(question.getAudioPath());
+				}else if((oldAudioPath==null||oldAudioPath.trim().isEmpty())&&(question.getAudioPath()!=null&&!question.getAudioPath().trim().isEmpty())){
+					renameAudioFile(question.getAudioPath());//以前是空的，现在上传了
+				}
 			}
 			mv.setSuccessMessage("操作成功!");
 		} catch (Exception e) {
@@ -71,6 +86,24 @@ public class QuestionController extends BaseController{
 			return mv.forward(getExamPage("/question/input.jsp"));
 		}
 		return mv.redirect(getRedirect("/exam/question/list"));
+	}
+	
+	private void renameAudioFile(String fileName){
+		String dTempName = PathUtils.getWebRootPath() + "//upload//temp";
+		String dAudioName = PathUtils.getWebRootPath() + "//upload//audio";
+		File dir = new File(dAudioName);
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
+		File tempFile = new File(dTempName+"//"+fileName);
+		File audioFile = new File(dAudioName+"//"+fileName);
+		tempFile.renameTo(audioFile);
+	}
+	
+	private void deleteAudioFile(String fileName){
+		String dAudioName = PathUtils.getWebRootPath() + "//upload//audio";
+		File audioFile = new File(dAudioName+"//"+fileName);
+		audioFile.delete();
 	}
 	
 	@ShowLabel("删除")
