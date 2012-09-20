@@ -15,6 +15,16 @@ public abstract class PathUtils {
 
 	private final static String P = "/";
 	
+	public static String webRootPath = null;
+	
+	/**
+	 * 必须启动web服务才能用
+	 * @return
+	 */
+	public static String getWebRootPath(){
+		return webRootPath;
+	}
+	
 	public static String getClassRootPath(){
 		if(webClassRootPath!=null){
 			return webClassRootPath;
