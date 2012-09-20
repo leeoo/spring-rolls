@@ -4,6 +4,20 @@
 <head>
 <%@ include file="../../global/head.jsp"%>
 <title>${title}——速录考试题库维护</title>
+<link rel="stylesheet" type="text/css" href="${base}/commons/css/uploadify/uploadify.css">
+<script type="text/javascript" src="${base}/commons/js/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" src="${base}/commons/js/uploadify/jquery.uploadify.min.js"></script>
+<script>
+	$(function() {
+		$("#file_upload").uploadify({
+			buttonText 	  : '上传音频文件',
+			height        : 20,
+			swf           : '${base}/commons/js/uploadify/uploadify.swf',
+			uploader      : '${base}/file/upload${ext}',
+			width         : 100
+		});
+	});
+</script>
 </head>
 <body class="easyui-layout">
 	<%@ include file="../../global/title.jsp"%>
@@ -19,21 +33,22 @@
 				<table>
 					<tr>
 						<td nowrap="nowrap">题库描述:</td>
-						<td><input name="question.title" class="easyui-validatebox" required="true" validType="length[3,500]" style="width: 500px;" value="${question.title}"/></td>
+						<td colspan="2"><input name="question.title" class="easyui-validatebox" required="true" validType="length[3,500]" style="width: 500px;" value="${question.title}"/></td>
 					</tr>
 					<tr>
-						<td>音频上传:</td>
-						<td><input name="question.audioPath" class="easyui-validatebox" style="width: 300px;" value="${question.audioPath}"/>(如果看打无需上传音频)</td>
+						<td>音频文件:</td>
+						<td nowrap="nowrap"><input name="question.audioPath" class="easyui-validatebox" style="width: 300px;" value="${question.audioPath}"/>(如果看打无需上传音频)</td>
+						<td nowrap="nowrap"><input type="file" name="file" id="file_upload" /></td>
 					</tr>
 					<tr>
 						<td>原文:</td>
-						<td>
+						<td colspan="2">
 							<textarea rows="25" cols="90" name="question.textContent" class="easyui-validatebox" required="true" validType="length[10,9999999]">${question.textContent}</textarea>
 						</td>
 					</tr>
 					<tr>
 						<td></td>
-						<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
+						<td align="right" colspan="2"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
 					</tr>
 				</table>
 			</div>
