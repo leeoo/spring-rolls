@@ -66,6 +66,7 @@ public class Exam implements Serializable {
 	@NotNull
 	private Integer questionId;// 题库ID
 	
+	@ShowLabel("考试方式")
 	@Column(isDynamicWhere=true)
 	@NotUpdate
 	private Boolean choice;//是否是理论考试及选择题

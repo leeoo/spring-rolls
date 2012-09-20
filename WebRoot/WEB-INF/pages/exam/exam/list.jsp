@@ -83,10 +83,17 @@
 						}}
 					]],
 					toolbar: [{
-			            text: '新增',
+			            text: '新增速录考试',
 			            iconCls: 'icon-add',
 			            handler:function(){
-							location.href ='${base}/exam/exam/input${ext}';
+							location.href ='${base}/exam/exam/input${ext}?choice=false';
+							return false;
+						}
+					}, '-', {
+			            text: '新增理论考试',
+			            iconCls: 'icon-add',
+			            handler:function(){
+							location.href ='${base}/exam/exam/input${ext}?choice=true';
 							return false;
 						}
 			        }, '-', {
@@ -97,6 +104,11 @@
 							var rows = $('#list').datagrid('getSelections');
 							if(rows.length!=1){
 								$.messager.alert('提示','必须选择一行!','warning');
+								$('#list').datagrid('clearSelections');
+								return false;
+							}
+							if(rows[0].status==1){
+								$.messager.alert('提示','该考试正在进行中，不能修改该信息!','warning');
 								$('#list').datagrid('clearSelections');
 								return false;
 							}
@@ -114,6 +126,11 @@
 								return false;
 							}
 							for(var i=0;i<rows.length;i++){
+								if(rows[i].status==1){
+									$.messager.alert('提示','该考试正在进行中，不能修删除信息!','warning');
+									$('#list').datagrid('clearSelections');
+									return false;
+								}
 								ids.push(rows[i].id);
 							}
 							$.messager.confirm('提示','确认删除吗?',function(d){
