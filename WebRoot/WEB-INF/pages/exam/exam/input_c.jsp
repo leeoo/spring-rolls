@@ -58,7 +58,7 @@
 					</tr>
 					<tr>
 						<td>选择题库:</td>
-						<td><select id="selectABC" name="exam.questionId" required="true" style="width:250px;"></select></td>
+						<td><select id="selectABC" name="exam.questionId" style="width:250px;"></select></td>
 					</tr>
 					<tr>
 						<td></td>

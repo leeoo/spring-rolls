@@ -75,8 +75,8 @@
 								return '已结束';
 							}
 						}},
-						{field:'startDate',title:'开始时间',width:130},
-						{field:'endDate',title:'结束时间',width:130},
+						{field:'startDate',title:'开始时间',width:150},
+						{field:'endDate',title:'结束时间',width:150},
 						{field:'longTime',title:'考试时长',width:100,
 						formatter:function(value,rec){
 							return value+'分钟';
