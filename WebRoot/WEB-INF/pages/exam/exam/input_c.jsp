@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <%@ include file="../../global/head.jsp"%>
-<title>${title}——速录考试信息维护</title>
+<title>${title}——理论考试信息维护</title>
 </head>
 <body class="easyui-layout">
 	<%@ include file="../../global/title.jsp"%>
@@ -15,30 +15,21 @@
 				value:'${exam.questionId}',
 				idField:'id',
 				textField:'miniTitle',
-				url:'${base}/exam/exam/qdata.json',
+				url:'${base}/exam/exam/qcdata.json',
 				columns:[[
-					{field:'miniTitle',title:'题库标题',width:300},
-					{field:'audioPath',title:'打字方式',width:100,
-						formatter:function(value,rec){
-							if(value==null||value==''){
-								return '看打';
-							}else{
-								return '听打';
-							}
-						}
-					}
+					{field:'miniTitle',title:'题库标题',width:400}
 				]]
 			});
 		});
 </script>
-<div region="center" title="速录考试信息维护">
+<div region="center" title="理论考试信息维护">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
 		<form id="examForm" action="${base}/exam/exam/save${ext}" method="post">
 			<c:if test="${exam!=null}">
 				<input type="hidden" name="exam.id" value="${exam.id}"/>
 			</c:if>
 				<input type="hidden" name="exam.status" value="${exam.status}"/>
-				<input type="hidden" name="exam.choice" value="false"/>
+				<input type="hidden" name="exam.choice" value="true"/>
 			<div>
 				<table>
 					<tr>
@@ -64,22 +55,6 @@
 					<tr>
 						<td>结束时间:</td>
 						<td><input name="exam.endDate" class="easyui-datetimebox" value="${exam.endDate}"/></td>
-					</tr>
-					<tr>
-						<td>汉字权重:</td>
-						<td><input name="exam.cnProportion" class="easyui-numberbox" required="true" value="${exam.cnProportion==null?1:exam.cnProportion}"/></td>
-					</tr>
-					<tr>
-						<td>字母权重:</td>
-						<td><input name="exam.enProportion" class="easyui-numberbox" required="true" value="${exam.enProportion==null?1:exam.enProportion}"/></td>
-					</tr>
-					<tr>
-						<td>标点权重:</td>
-						<td><input name="exam.punProportion" class="easyui-numberbox" required="true" value="${exam.punProportion==null?1:exam.punProportion}"/></td>
-					</tr>
-					<tr>
-						<td>数字权重:</td>
-						<td><input name="exam.numProportion" class="easyui-numberbox" required="true" value="${exam.numProportion==null?1:exam.numProportion}"/></td>
 					</tr>
 					<tr>
 						<td>选择题库:</td>
