@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,6 +69,9 @@ public class ModelAndView implements Serializable,Cloneable{
 			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 				Field[] fields = superClass.getDeclaredFields();
 				for(Field field : fields){
+					if(Modifier.isStatic(field.getModifiers())){
+						continue;
+					}
 					field.setAccessible(true);
 					try {
 						String name = bn.concat(field.getName());
@@ -131,6 +135,9 @@ public class ModelAndView implements Serializable,Cloneable{
 			for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 				Field[] fields = superClass.getDeclaredFields();
 				for(Field field : fields){
+					if(Modifier.isStatic(field.getModifiers())){
+						continue;
+					}
 					field.setAccessible(true);
 					try {
 						String name = field.getName();
