@@ -83,9 +83,9 @@
 								<div class="jp-type-single">
 									<div class="jp-gui jp-interface">
 										<ul class="jp-controls">
-											<li><a href="javascript:;" class="jp-play" tabindex="1">播放</a></li>
-											<li><a href="javascript:;" class="jp-pause" tabindex="1">暂停</a></li>
-											<li><a href="javascript:;" class="jp-stop" tabindex="1">停止</a></li>
+											<li><a href="javascript:;" class="jp-play" tabindex="1" title="播放">播放</a></li>
+											<li><a href="javascript:;" class="jp-pause" tabindex="1" title="暂停">暂停</a></li>
+											<li><a href="javascript:;" class="jp-stop" tabindex="1" title="停止">停止</a></li>
 											<li><a href="javascript:;" class="jp-mute" tabindex="1" title="小声">小声</a></li>
 											<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="静音">静音</a></li>
 											<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="大声">大声</a></li>
