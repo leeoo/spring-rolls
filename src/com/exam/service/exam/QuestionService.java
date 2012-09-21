@@ -1,7 +1,5 @@
 package com.exam.service.exam;
 
-import java.util.Collection;
-
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
@@ -39,9 +37,8 @@ public class QuestionService {
 		return ormDao.select(id);
 	}
 	
-	public Collection<Question> getAll(){
-		Question question = new Question();
-		return ormDao.select(question);
+	public Page getAll(Page page){
+		return ormDao.select(page);
 	}
 	
 	public Page getAll(Page page,Question question){

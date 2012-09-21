@@ -1,7 +1,5 @@
 package com.exam.service.exam;
 
-import java.util.Collection;
-
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
@@ -44,9 +42,8 @@ public class ChoiceTypeQuestionService {
 		return ormDao.select(id);
 	}
 	
-	public Collection<ChoiceTypeQuestion> getAll(){
-		ChoiceTypeQuestion question = new ChoiceTypeQuestion();
-		return ormDao.select(question);
+	public Page getAll(Page page){
+		return ormDao.select(page);
 	}
 	
 	public Page getAll(Page page,ChoiceTypeQuestion question){
