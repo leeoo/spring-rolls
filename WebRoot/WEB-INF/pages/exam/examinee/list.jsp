@@ -53,7 +53,7 @@
 		                    {field:'id',checkbox:true}
 		                ]],
 			columns:[[
-						{field:'code',title:'学号',width:200},
+						{field:'code',title:'考号',width:200},
 						{field:'username',title:'姓名',width:200,align:'center'},
 						{field:'regDate',title:'注册时间',width:300},
 						{field:'canDays',title:'有效天数',width:100,

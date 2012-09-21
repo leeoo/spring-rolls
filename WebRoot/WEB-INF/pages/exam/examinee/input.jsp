@@ -17,7 +17,7 @@
 			<div>
 				<table>
 					<tr>
-						<td nowrap="nowrap">学号:</td>
+						<td nowrap="nowrap">考号:</td>
 						<td><input name="examinee.code" class="easyui-validatebox" required="true" validType="length[3,15]" style="width: 300px;" value="${examinee.code}"/></td>
 					</tr>
 					<tr>

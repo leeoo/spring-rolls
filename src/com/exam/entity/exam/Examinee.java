@@ -29,7 +29,7 @@ public class Examinee implements Serializable {
 	@Column(isDynamicWhere=true)
 	@NotNull
 	@Length(min=3,max=15)
-	@ShowLabel("学号")
+	@ShowLabel("考号")
 	private String code;
 	
 	@Column(isDynamicWhere=true)
