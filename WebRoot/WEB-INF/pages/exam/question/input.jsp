@@ -44,8 +44,8 @@
 					</tr>
 					<tr>
 						<td>音频文件:</td>
-						<td nowrap="nowrap"><input id="audioPath" readonly="readonly" name="question.audioPath" class="easyui-validatebox" style="width: 300px;" value="${question.audioPath}"/>(如果看打无需上传音频)</td>
-						<td nowrap="nowrap"><input type="file" name="file" id="file_upload" /></td>
+						<td nowrap="nowrap" width="50%"><input id="audioPath" readonly="readonly" name="question.audioPath" class="easyui-validatebox" style="width: 300px;" value="${question.audioPath}"/>(如果看打无需上传音频)</td>
+						<td nowrap="nowrap" align="left" valign="middle"><input type="file" name="file" id="file_upload" /></td>
 					</tr>
 					<tr>
 						<td>原文:</td>
