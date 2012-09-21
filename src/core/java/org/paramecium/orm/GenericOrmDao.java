@@ -163,6 +163,9 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 		int start = sql.lastIndexOf(" WHERE ");
 		sql = sql.substring(0, start);
 		Entity entity = clazz.getAnnotation(Entity.class);
+		if(entity != null && !entity.where().isEmpty()){
+			sql = sql.concat(" WHERE ").concat(entity.where());
+		}
 		if(entity!=null&&!entity.orderBy().isEmpty()){
 			sql = sql.concat(" ORDER BY "+entity.orderBy());
 		}
