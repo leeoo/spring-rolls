@@ -1,10 +1,8 @@
 package com.exam.web.exam;
 
-import java.util.Collection;
 import java.util.Date;
 
 import org.paramecium.commons.DateUtils;
-import org.paramecium.commons.JsonUitls;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
@@ -13,9 +11,7 @@ import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.annotation.Security;
 
-import com.exam.entity.exam.ChoiceTypeQuestion;
 import com.exam.entity.exam.Exam;
-import com.exam.entity.exam.Question;
 import com.exam.service.exam.ChoiceTypeQuestionService;
 import com.exam.service.exam.ExamService;
 import com.exam.service.exam.QuestionService;
@@ -60,24 +56,24 @@ public class ExamController extends BaseController{
 	@ShowLabel("获取速录题库数据")
 	@MappingMethod
 	public void qdata(ModelAndView mv){
-		Exam exam = mv.getBean(Exam.class);
-		if(exam!=null && exam.getTitle()!=null){
-			exam.setTitle("%"+exam.getTitle()+"%");
-		}
-		Collection<Question> questions = questionService.getAll();
-		String json = '['+JsonUitls.getBeansJson(questions,false)+']';
+		int pageNo = mv.getValue("page", int.class);
+		Page page = new Page();
+		page.setPageNo(pageNo);
+		page.setPageSize(5);
+		page = questionService.getAll(page);
+		String json = getJsonPageData(page);
 		mv.printJSON(json);
 	}
 	
 	@ShowLabel("获取理论题库数据")
 	@MappingMethod
 	public void qcdata(ModelAndView mv){
-		Exam exam = mv.getBean(Exam.class);
-		if(exam!=null && exam.getTitle()!=null){
-			exam.setTitle("%"+exam.getTitle()+"%");
-		}
-		Collection<ChoiceTypeQuestion> choiceQuestions = choiceTypeQuestionService.getAll();
-		String json = '['+JsonUitls.getBeansJson(choiceQuestions,false)+']';
+		int pageNo = mv.getValue("page", int.class);
+		Page page = new Page();
+		page.setPageNo(pageNo);
+		page.setPageSize(5);
+		page = choiceTypeQuestionService.getAll(page);
+		String json = getJsonPageData(page);
 		mv.printJSON(json);
 	}
 	
@@ -120,15 +116,6 @@ public class ExamController extends BaseController{
 			}
 			mv.setSuccessMessage("操作成功!");
 		} catch (Exception e) {
-			if(exam!=null&&exam.getChoice()!=null){
-				if(exam.getChoice()){
-					Collection<ChoiceTypeQuestion> choiceQuestions = choiceTypeQuestionService.getAll();
-					mv.addValue("choiceQuestions", choiceQuestions);
-				}else{
-					Collection<Question> questions = questionService.getAll();
-					mv.addValue("questions", questions);
-				}
-			}
 			mv.addValue("exam", exam);
 			mv.setErrorMessage(e.getMessage());
 			return mv.forward(getExamPage("/exam/input.jsp"));
