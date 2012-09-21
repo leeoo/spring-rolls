@@ -16,6 +16,13 @@
 				idField:'id',
 				textField:'miniTitle',
 				url:'${base}/exam/exam/qdata.json',
+				pagination : true,//是否分页  
+                rownumbers:true,//序号 
+                collapsible:false,//是否可折叠的  
+                pageSize: 5,//每页显示的记录条数，默认为5  
+                pageList: [5],//可以设置每页记录条数的列表
+                method:'post',
+                fit: true,//自动大小 
 				columns:[[
 					{field:'miniTitle',title:'题库标题',width:300},
 					{field:'audioPath',title:'打字方式',width:100,
