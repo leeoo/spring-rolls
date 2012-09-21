@@ -30,6 +30,13 @@ public class ExamineeService {
 		ormDao.update(examinee);
 	}
 	
+	public void delete() throws Exception{
+		String sqlA = "DELETE FROM t_score WHERE examinee_id IN(SELECT id FROM t_examinee WHERE can_days!=0 AND can_days<DATEDIFF(NOW(),reg_date))";
+		String sqlB = "DELETE FROM t_examinee WHERE can_days!=0 AND can_days<DATEDIFF(NOW(),reg_date)";
+		ormDao.getGenericJdbcDao().executeDML(sqlA);
+		ormDao.getGenericJdbcDao().executeDML(sqlB);
+	}
+	
 	public void delete(int id) throws Exception{
 		ormDao.delete(id);
 		scoreService.deleteByExamineeId(id);
