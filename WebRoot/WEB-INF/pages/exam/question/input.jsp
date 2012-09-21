@@ -5,8 +5,10 @@
 <%@ include file="../../global/head.jsp"%>
 <title>${title}——速录考试题库维护</title>
 <link rel="stylesheet" type="text/css" href="${base}/commons/css/uploadify/uploadify.css">
+<link rel="stylesheet" type="text/css" href="${base}/commons/css/jplayer/blue.monday/jplayer.blue.monday.css">
 <script type="text/javascript" src="${base}/commons/js/uploadify/jquery.uploadify.js"></script>
 <script type="text/javascript" src="${base}/commons/js/uploadify/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="${base}/commons/js/jplayer/jquery.jplayer.min.js"></script>
 <script>
 	$(function() {
 		$("#file_upload").uploadify({
@@ -20,10 +22,35 @@
 			width:100,
 			onUploadSuccess:function(file, data, response) {
 				$('#audioPath').val(data);
+				$('#jquery_jplayer_1').jPlayer("setMedia", {//该方法肯定为新上传到temp
+					mp3: '${base}/upload/temp/'+data
+				});
+				first_track = false;
+				$('#jquery_jplayer_1').blur();
+				return false;
+
 	        }
 		});
 	});
+	
+	//<![CDATA[
+	$(document).ready(function(){
+		$("#jquery_jplayer_1").jPlayer({
+			ready: function () {
+				var audioPath = $('#audioPath').val();
+				$(this).jPlayer("setMedia", {
+					mp3:'${base}/upload/<c:if test="${question!=null}">audio</c:if><c:if test="${question==null}">temp</c:if>/'+audioPath
+				});
+			},
+			swfPath: "${base}/commons/js/jplayer/Jplayer.swf",
+			supplied: "mp3",
+			wmode: "window"
+		});
+	});
+	//]]>
+
 </script>
+
 </head>
 <body class="easyui-layout">
 	<%@ include file="../../global/title.jsp"%>
@@ -46,6 +73,40 @@
 						<td>音频文件:</td>
 						<td nowrap="nowrap" width="50%"><input id="audioPath" readonly="readonly" name="question.audioPath" class="easyui-validatebox" style="width: 300px;" value="${question.audioPath}"/>(如果看打无需上传音频)</td>
 						<td nowrap="nowrap" align="left" valign="middle"><input type="file" name="file" id="file_upload" /></td>
+					</tr>
+					<tr>
+						<td>音频预览:</td>
+						<td colspan="2">
+							<div id="jquery_jplayer_1" class="jp-jplayer">
+							</div>
+							<div id="jp_container_1" class="jp-audio">
+								<div class="jp-type-single">
+									<div class="jp-gui jp-interface">
+										<ul class="jp-controls">
+											<li><a href="javascript:;" class="jp-play" tabindex="1">播放</a></li>
+											<li><a href="javascript:;" class="jp-pause" tabindex="1">暂停</a></li>
+											<li><a href="javascript:;" class="jp-stop" tabindex="1">停止</a></li>
+											<li><a href="javascript:;" class="jp-mute" tabindex="1" title="小声">小声</a></li>
+											<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="静音">静音</a></li>
+											<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="大声">大声</a></li>
+										</ul>
+										<div class="jp-progress">
+											<div class="jp-seek-bar">
+												<div class="jp-play-bar"></div>
+											</div>
+										</div>
+										<div class="jp-volume-bar">
+											<div class="jp-volume-bar-value"></div>
+										</div>
+										<div class="jp-time-holder">
+											<div class="jp-current-time"></div>
+											<div class="jp-duration"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</td>
 					</tr>
 					<tr>
 						<td>原文:</td>
