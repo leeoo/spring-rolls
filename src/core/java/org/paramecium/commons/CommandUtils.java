@@ -82,6 +82,12 @@ public abstract class CommandUtils {
 			logger.error(e1);
 		}
 		BufferedReader reader = new BufferedReader(isr);
+		try{
+			p.getOutputStream().flush();
+			p.getOutputStream().close();
+		}catch (IOException e) {
+			logger.error(e);
+		}
 		try {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
