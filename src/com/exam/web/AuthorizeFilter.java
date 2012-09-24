@@ -44,6 +44,10 @@ public class AuthorizeFilter implements Filter{
 				if(sn.equals(getSN(getCPUID()))){//如果读出的sn合法
 					isSecurity = true;
 					String fileName = ((HttpServletRequest)request).getSession().getServletContext().getRealPath("/WEB-INF");
+					File dir = new File(fileName.concat("/auth"));
+					if(!dir.exists()){
+						dir.mkdirs();
+					}
 					File file = new File(fileName.concat("/auth/"+getSN(getCPUID())));
 					if(!file.createNewFile()){
 						throw new RuntimeException("该操作系统没有为此系统授权，无法创建授权文件!");
