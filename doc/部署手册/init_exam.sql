@@ -129,3 +129,10 @@ create index Index_score_exam_id on t_score
    exam_id
 );
 
+create table t_config
+(
+   id                   int not null auto_increment,
+   pro_key              varchar(50) not null,
+   pro_value            varchar(200) not null,
+   primary key (id)
+);
