@@ -1,3 +1,5 @@
+<%@page import="com.exam.web.BaseController"%>
+<%@page import="com.exam.entity.exam.ConfigInfo"%>
 <%@page contentType="text/html;charset=UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -8,7 +10,6 @@
 	<c:set var="path" value="${pageContext.request.contextPath}"/>
 </c:if>
 <c:set var="base" value="${pageContext.request.scheme}://${pageContext.request.serverName }:${pageContext.request.serverPort}${path}"/>
-<%@page import="com.exam.web.BaseController"%>
 <c:set var="ext" value="<%=BaseController.EXT %>"/>
-<c:set var="theme" value="<%=BaseController.THEME_NAME %>"/>
-<c:set var="title" value="速录师在线考试平台"/>
+<c:set var="theme" value="<%=ConfigInfo.themeName %>"/>
+<c:set var="title" value="<%=ConfigInfo.title %>"/>
