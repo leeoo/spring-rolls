@@ -1,7 +1,10 @@
 package com.exam.service.system;
 
+import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.security.IpAddressVoter;
+
+import com.exam.service.exam.ConfigService;
 
 /**
  * 功 能 描 述:<br>
@@ -13,8 +16,12 @@ import org.paramecium.security.IpAddressVoter;
 @Service
 public class IpInitService {
 	
+	@AutoInject
+	private ConfigService configService;
+	
 	public void init(){
 		IpAddressVoter.setEnabled(false);//不要启动IP过滤
+		configService.getConfig();
 	}
 	
 }
