@@ -41,38 +41,46 @@
 	    <table width="100%" height="532" border="0" cellpadding="0" cellspacing="0" class="login_bg">
 	      <tr>
 	        <td width="49%" align="right">
-	        	<div style="background:url('${base}/commons/images/exam-mini.gif') no-repeat;width: 500px;height: 317px;"></div>
+		        <div style="width: 600px;height: 317px;background-image: url('${base}/commons/images/exam-mini.gif');background-repeat: no-repeat;" align="right">
+		        	<div style="width: 330px;height: 317px;padding-top: 70px;padding-right: -1000px;" align="left">
+		        		<div><img src="${base}/commons/images/jian.gif" alt="推荐" /><a href="#" style="font-family: 微软雅黑;font-size: 13px;">安装谷歌浏览器，使您更流畅、更稳定的考试！</a></div>
+		        		<div><img src="${base}/commons/images/jian.gif" alt="推荐" /><a href="#" style="font-family: 微软雅黑;font-size: 13px;">友情提示：如果您是第一次使用，请注册新考号。</a></div>
+		        		<div><img src="${base}/commons/images/jian.gif" alt="推荐" /><a href="#" style="font-family: 微软雅黑;font-size: 13px;">友情提示：如果您不会使用,可以使用向导帮助。</a></div>
+		        	</div>
+		        </div>
 	        </td>
 	        <td width="1%" >&nbsp;</td>
 	        <td width="50%" valign="bottom"><table width="100%" height="59" border="0" align="center" cellpadding="0" cellspacing="0">
 	            <tr>
 	              <td width="4%">&nbsp;</td>
-	              <td width="96%" height="38"><span class="login_txt_bt" style="font-size: 18px;font-family: 微软雅黑;">${title}</span></td>
+	              <td width="96%" height="38"><span class="login_txt_bt" style="padding-left:30px;font-size: 18px;font-family: 微软雅黑;">${title}</span></td>
 	            </tr>
 	            <tr>
 	              <td>&nbsp;</td>
 	              <td height="21"><table cellSpacing="0" cellPadding="0" width="100%" border="0" id="table211" height="328">
 	                  <tr>
 	                    <td height="164" colspan="2" align="middle">
-		                    <form action="${base}/login${ext}" method="post" method="post">
-		                        <table cellSpacing="0" cellPadding="0" width="100%" border="0" height="143" id="table212">
-		                          <tr>
-		                            <td width="5%" nowrap="nowrap" height="38" class="top_hui_text"><span class="login_txt_bt" style="font-size: 13px;font-weight: bold">登录名：</span></td>
-		                            <td height="38" colspan="2" class="top_hui_text" align="left"><input name="login.username" class="editbox4" style="width: 150px;"></td>
-		                          </tr>
-		                          <tr>
-		                            <td width="5%" nowrap="nowrap" height="35" class="top_hui_text"><span class="login_txt_bt" style="font-size: 13px;font-weight: bold">密&nbsp;&nbsp;码：</span></td>
-		                            <td height="35" colspan="2" class="top_hui_text" align="left"><input class="editbox4" type="password" style="width: 150px;" name="login.password">
-		                              <img src="${base}/commons/css/login/lock.gif" width="19" height="18"> </td>
-		                          </tr>
-		                          <tr>
-		                            <td height="35" >&nbsp;</td>
-		                            <td width="10%" height="35" ><button type="submit" class="easyui-linkbutton" iconCls="icon-key">登录</button></td>
-		                            <td width="67%" class="top_hui_text" align="left"><button type="reset" class="easyui-linkbutton" iconCls="icon-undo">取消</button></td>
-		                          </tr>
-		                        </table>
-		                        <br>
-		                    </form>
+	                    	<div style="padding-left: 40px;">
+			                    <form action="${base}/login${ext}" method="post" method="post">
+			                        <table cellSpacing="0" cellPadding="0" width="100%" border="0" height="143" id="table212">
+			                          <tr>
+			                            <td width="5%" nowrap="nowrap" height="38" class="top_hui_text"><span class="login_txt_bt" style="font-size: 13px;font-weight: bold">登录名：</span></td>
+			                            <td height="38" colspan="2" class="top_hui_text" align="left"><input name="login.username" class="editbox4" style="width: 150px;"></td>
+			                          </tr>
+			                          <tr>
+			                            <td width="5%" nowrap="nowrap" height="35" class="top_hui_text"><span class="login_txt_bt" style="font-size: 13px;font-weight: bold">密&nbsp;&nbsp;码：</span></td>
+			                            <td height="35" colspan="2" class="top_hui_text" align="left"><input class="editbox4" type="password" style="width: 150px;" name="login.password">
+			                              <img src="${base}/commons/css/login/lock.gif" width="19" height="18"> </td>
+			                          </tr>
+			                          <tr>
+			                            <td height="35" >&nbsp;</td>
+			                            <td width="10%" height="35" ><button type="submit" class="easyui-linkbutton" iconCls="icon-key">登录</button></td>
+			                            <td width="67%" class="top_hui_text" align="left"><button type="button" class="easyui-linkbutton" iconCls="icon-user">新生注册</button></td>
+			                          </tr>
+			                        </table>
+			                        <br>
+			                    </form>
+		                    </div>
 		                 </td>
 	                  </tr>
 	                  <tr>
