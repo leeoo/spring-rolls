@@ -49,6 +49,10 @@ public class ExamineeService {
 		}
 	}
 	
+	public Examinee get(String code){
+		return (Examinee)ormDao.getGenericJdbcDao().queryUniqueByArray("SELECT * FROM t_examinee WHERE code=?",Examinee.class,code);
+	}
+	
 	public Examinee get(int id){
 		return ormDao.select(id);
 	}

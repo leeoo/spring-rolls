@@ -17,7 +17,7 @@
 	<script>
 		var loginName = '<%=request.getAttribute("loginName")%>';
 		if(loginName!=''&&loginName!='null'){
-			$.messager.show({title:'提示',msg:'尊敬的管理员: '+loginName+' 你好! \n 欢迎登录本系统',timeout:3000,showType:'slide'});
+			$.messager.show({title:'提示',msg:'尊敬的考生: '+loginName+' 你好! \n 欢迎登录本系统',timeout:3000,showType:'slide'});
 		}
 	</script>
 </body>
