@@ -16,6 +16,7 @@ import org.paramecium.security.UserDetails;
 import com.exam.entity.exam.Examinee;
 import com.exam.entity.system.User;
 import com.exam.service.exam.ExamineeService;
+import com.exam.service.system.RoleService;
 import com.exam.service.system.UserService;
 
 @Controller("/")
@@ -24,6 +25,8 @@ public class LoginController extends BaseController{
 	private final static Log logger = LoggerFactory.getLogger();
 	@AutoInject
 	private UserService userService;
+	@AutoInject
+	private RoleService roleService;
 	@AutoInject
 	private ExamineeService examineeService;
 	
@@ -42,6 +45,8 @@ public class LoginController extends BaseController{
 		if(examinee!=null&&password.equals(examinee.getPassword())){
 			userDetails.setEnable(true);
 			userDetails.setOtherInfo(examinee);
+			userDetails.setName(examinee.getUsername());
+			userDetails.setResources(roleService.getRoleAuth("EXAMINEE"));
 			SecurityUitls.login(userDetails,mv.getRequest());
 			return mv.redirect(getRedirect("/exam/index"));
 		}else if(examinee==null){

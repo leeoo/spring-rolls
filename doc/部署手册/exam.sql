@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50525
 File Encoding         : 65001
 
-Date: 2012-09-25 17:09:42
+Date: 2012-09-25 17:52:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -46,7 +46,7 @@ CREATE TABLE `t_config` (
 -- ----------------------------
 INSERT INTO `t_config` VALUES ('1', 'title', '国家职业资格在线考评系统');
 INSERT INTO `t_config` VALUES ('2', 'examineeDays', '15');
-INSERT INTO `t_config` VALUES ('3', 'themeName', 'default');
+INSERT INTO `t_config` VALUES ('3', 'themeName', 'gray');
 
 -- ----------------------------
 -- Table structure for `t_exam`
@@ -190,6 +190,54 @@ CREATE TABLE `t_role_auth` (
 -- ----------------------------
 -- Records of t_role_auth
 -- ----------------------------
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/question_c#data');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/message#send');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/question#list');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/user#save');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#qdata');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/user#enabled');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/config/ip#save');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/question#delete');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/user#list');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/themes#change');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/question_c#delete');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/config/ip#remove');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/question#input');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/question#save');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/online#list');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/question_c#input');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#save');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/user#data');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/online#kill');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/config/ip#list');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/config#save');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/message#receive');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/question_c#list');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/online#killAll');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#list');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system#index');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/user#disabled');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/examinee#data');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/examinee#input');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#input');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/user#input');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/question_c#save');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/examinee#input_imp');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/examinee#imp');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#data');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/config/ip#add');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/question#data');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/examinee#save');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/user#delete');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/file#upload');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#qcdata');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/examinee#delete');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/online#data');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/examinee#list');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#delete');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/config#index');
+INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/exam#index');
+INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/system/message#receive');
 
 -- ----------------------------
 -- Table structure for `t_score`
@@ -222,11 +270,13 @@ CREATE TABLE `t_security_role` (
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `rolename` (`rolename`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_security_role
 -- ----------------------------
+INSERT INTO `t_security_role` VALUES ('1', 'SYSADMIN', '后台管理员');
+INSERT INTO `t_security_role` VALUES ('2', 'EXAMINEE', '考生');
 
 -- ----------------------------
 -- Table structure for `t_security_user`
@@ -240,11 +290,12 @@ CREATE TABLE `t_security_user` (
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_security_user
 -- ----------------------------
+INSERT INTO `t_security_user` VALUES ('1', 'admin', 'admin', '', '系统管理员');
 
 -- ----------------------------
 -- Table structure for `t_sequence`
@@ -272,3 +323,4 @@ CREATE TABLE `t_user_role` (
 -- ----------------------------
 -- Records of t_user_role
 -- ----------------------------
+INSERT INTO `t_user_role` VALUES ('admin', 'SYSADMIN');

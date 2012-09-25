@@ -3,15 +3,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <%@ include file="../global/head.jsp"%>
-<title>${title}——登录成功</title>
+<title>${title}——考生 <%=request.getAttribute("loginName")%> 登录成功</title>
 </head>
 <body class="easyui-layout">
 	<%@ include file="../global/title.jsp"%>
-	<%@ include file="../global/menu.jsp"%>
-	<div region="center" title="欢迎登录${title}">
-		<!-- <div style="background:url('${base}/commons/images/exam.gif') no-repeat;width: 100%;height: 100%;">
-			&nbsp;
-		</div> -->
+	<div region="center" title="欢迎登录到${title}">
+		
 	</div>
 	
 	<script>

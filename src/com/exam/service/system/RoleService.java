@@ -7,6 +7,7 @@ import java.util.Map;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.orm.GenericOrmDao;
+import org.paramecium.security.Resource;
 import org.paramecium.transaction.annotation.Transactional;
 
 import com.exam.entity.system.Role;
@@ -51,6 +52,17 @@ public class RoleService {
 			ormDao.getGenericJdbcDao().executeDMLByArray("DELETE FROM t_role_auth WHERE rolename IN(SELECT sr.rolename FROM t_security_role sr WHERE sr.id=?)",Integer.parseInt(id));
 			ormDao.delete(Integer.parseInt(id));
 		}
+	}
+	
+	@Transactional(readOnly=true)
+	public Collection<Resource> getRoleAuth(String rolename){
+		Collection<Map<String, Object>> maps = ormDao.getGenericJdbcDao().queryByArray("SELECT ra.auth auth FROM t_role_auth ra WHERE ra.rolename =?", rolename);
+		Collection<Resource> resources = new HashSet<Resource>();
+		for(Map<String,Object> map : maps){
+			Resource resource = new Resource((String)map.get("auth"));
+			resources.add(resource);
+		}
+		return resources;
 	}
 	
 	@Transactional(readOnly=true)
