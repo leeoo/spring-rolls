@@ -1,3 +1,4 @@
+<%@page import="com.exam.entity.exam.Examinee"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,7 +19,7 @@
 				<table>
 					<tr>
 						<td nowrap="nowrap">考号:</td>
-						<td><input name="examinee.code" class="easyui-validatebox" required="true" validType="length[3,15]" style="width: 300px;" value="${examinee.code}"/></td>
+						<td><input name="examinee.code" class="easyui-validatebox" required="true" validType="length[5,20]" style="width: 300px;" value="${examinee.code}"/></td>
 					</tr>
 					<tr>
 						<td>姓名:</td>
@@ -31,7 +32,7 @@
 					<tr>
 						<td>有效天数:</td>
 						<td>
-							<input name="examinee.canDays" class="easyui-numberbox" value="${examinee.canDays==null?0:examinee.canDays}"/>(0为永久有效)
+							<input name="examinee.canDays" class="easyui-numberbox" value="<%=request.getAttribute("examinee")==null?ConfigInfo.examineeDays:((Examinee)request.getAttribute("examinee")).getCanDays() %>"/>(0为永久有效)
 						</td>
 					</tr>
 					<tr>

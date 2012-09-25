@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.paramecium.commons.SecurityUitls;
 import org.paramecium.ioc.annotation.AutoInject;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
@@ -19,6 +21,7 @@ import com.exam.service.system.UserService;
 @Controller("/")
 public class LoginController extends BaseController{
 
+	private final static Log logger = LoggerFactory.getLogger();
 	@AutoInject
 	private UserService userService;
 	@AutoInject
@@ -63,7 +66,30 @@ public class LoginController extends BaseController{
 	
 	@MappingMethod
 	public void reg(ModelAndView mv){
-		
+		String result = "yes";
+		Examinee examinee = mv.getBean(Examinee.class);
+		if(examinee!=null&&examinee.getCode()!=null&&examinee.getUsername()!=null&&examinee.getPassword()!=null){
+			Examinee examineeOld = null;
+			try {
+				examineeOld = examineeService.get(examinee.getCode());
+			}catch (Exception e) {
+				logger.warn(examinee.getCode()+"没有注册过！");
+			}
+			if(examineeOld==null){
+				try {
+					examineeService.save(examinee);
+					logger.debug("[考号:"+examinee.getCode()+",姓名:"+examinee.getUsername()+"]注册成功!");
+				} catch (Exception e) {
+					logger.error(e);
+					result = e.getMessage();
+				}
+			}else{
+				result = "no2";
+			}
+		}else{
+			result = "no1";
+		}
+		mv.printJSON(result);
 	}
 	
 	@MappingMethod

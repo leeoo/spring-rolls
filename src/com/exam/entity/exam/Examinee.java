@@ -28,7 +28,7 @@ public class Examinee implements Serializable {
 
 	@Column(isDynamicWhere=true)
 	@NotNull
-	@Length(min=3,max=15)
+	@Length(min=5,max=20)
 	@ShowLabel("考号")
 	private String code;
 	
@@ -50,7 +50,7 @@ public class Examinee implements Serializable {
 	private Date regDate = DateUtils.getCurrentDateTime();
 	
 	@Column
-	private int canDays = 0;//账户有效期多少天 0为永远有效
+	private int canDays = ConfigInfo.examineeDays;//账户有效期多少天 0为永远有效
 
 	public String getCode() {
 		return code;
