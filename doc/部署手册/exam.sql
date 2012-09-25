@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50525
 File Encoding         : 65001
 
-Date: 2012-09-24 17:13:08
+Date: 2012-09-25 17:09:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,8 +44,8 @@ CREATE TABLE `t_config` (
 -- ----------------------------
 -- Records of t_config
 -- ----------------------------
-INSERT INTO `t_config` VALUES ('1', 'title', '速录师在线考试平台');
-INSERT INTO `t_config` VALUES ('2', 'examineeDays', '0');
+INSERT INTO `t_config` VALUES ('1', 'title', '国家职业资格在线考评系统');
+INSERT INTO `t_config` VALUES ('2', 'examineeDays', '15');
 INSERT INTO `t_config` VALUES ('3', 'themeName', 'default');
 
 -- ----------------------------
@@ -99,14 +99,14 @@ CREATE TABLE `t_examinee` (
   `can_days` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_examinee_code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_examinee
 -- ----------------------------
 INSERT INTO `t_examinee` VALUES ('2', '0011', '李逵', '123', null, null, '2012-09-19 09:12:35', '0');
-INSERT INTO `t_examinee` VALUES ('4', '0022', '张飞', '123', null, null, '2012-09-19 09:23:16', '5');
 INSERT INTO `t_examinee` VALUES ('5', '0003', '沙悟净', '123', null, null, '2012-09-19 09:25:06', '8');
+INSERT INTO `t_examinee` VALUES ('6', '00434', '张晓琳', '123123', null, null, '2012-09-25 11:18:00', '15');
 
 -- ----------------------------
 -- Table structure for `t_log`
