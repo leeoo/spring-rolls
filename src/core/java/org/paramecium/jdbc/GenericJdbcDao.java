@@ -3,6 +3,7 @@ package org.paramecium.jdbc;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.paramecium.jdbc.datasource.MultiDataSourceFactory;
 import org.paramecium.jdbc.dialect.Page;
@@ -65,6 +66,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.query(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -82,6 +85,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.query(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -99,6 +104,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, arrayParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -117,6 +124,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, arrayParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -134,6 +143,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, mapParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -152,6 +163,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, mapParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -170,6 +183,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryByBean(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, beanParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -186,6 +201,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUnique(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -202,6 +219,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUnique(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -218,6 +237,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, arrayParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -236,6 +257,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, arrayParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -254,6 +277,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueByBean(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, clazz, beanParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -270,6 +295,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, mapParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -286,6 +313,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueColumnValue(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -302,6 +331,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueColumnValueByArray(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, arrayParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -318,6 +349,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueColumnValueByMap(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, mapParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
@@ -334,6 +367,8 @@ public class GenericJdbcDao {
 		try{
 			logger.debug(sql);
 			return this.jdbcTemplate.queryUniqueColumnValueByBean(TransactionManager.getCurrentTransaction(this.dataSourceName).getCurrentConnection(),sql, beanParams);
+		}catch (NoSuchElementException e) {
+			logger.warn("返回结果为空");
 		}catch (Exception e) {
 			logger.error(e);
 		}
