@@ -1,5 +1,7 @@
 package com.exam.service.exam;
 
+import java.util.Collection;
+
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
@@ -35,6 +37,11 @@ public class QuestionChoiceService {
 		for(String id : ids){
 			ormDao.delete(Integer.parseInt(id));
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<QuestionChoice> getAllByQuestionId(int questionId){
+		return (Collection<QuestionChoice>) ormDao.getGenericJdbcDao().queryByArray("SELECT * FROM t_question_choice WHERE question_id=?", QuestionChoice.class, questionId);
 	}
 	
 	public QuestionChoice get(int id){

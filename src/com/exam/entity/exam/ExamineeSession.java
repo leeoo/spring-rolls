@@ -1,5 +1,10 @@
 package com.exam.entity.exam;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.paramecium.commons.EncodeUtils;
+
 public class ExamineeSession {
 	
 	private Integer id;
@@ -10,11 +15,26 @@ public class ExamineeSession {
 	
 	private String tempContent;// 临时内容
 	
-	private int longTime;//经过多少时间
+	private Map<Integer,String> choices = new HashMap<Integer, String>();
+	
+	private int longTime;//经过多少时间(秒),防止断网
+	
+	private int examDate = (int)EncodeUtils.millisTime()/1000;//当前秒数
 	
 	private boolean choice;
 	
 	private boolean lrLayout;// 是否左右布局
+	
+	/**
+	 * 释放资源
+	 */
+	public void release(){
+		choices.clear();
+	}
+	
+	public void addChoices(int id,String answer){
+		choices.put(id, answer);
+	}
 
 	public Integer getId() {
 		return id;
@@ -70,6 +90,18 @@ public class ExamineeSession {
 
 	public void setChoice(boolean choice) {
 		this.choice = choice;
+	}
+
+	public int getExamDate() {
+		return examDate;
+	}
+
+	public void setExamDate(int examDate) {
+		this.examDate = examDate;
+	}
+
+	public Map<Integer, String> getChoices() {
+		return choices;
 	}
 
 }

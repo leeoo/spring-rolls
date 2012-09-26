@@ -1,5 +1,8 @@
 package com.exam.service.exam;
 
+import java.util.Date;
+
+import org.paramecium.commons.DateUtils;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
@@ -31,10 +34,11 @@ public class ExamineeService {
 	}
 	
 	public void delete() throws Exception{
-		String sqlA = "DELETE FROM t_score WHERE examinee_id IN(SELECT id FROM t_examinee WHERE can_days!=0 AND can_days<DATEDIFF(NOW(),reg_date))";
-		String sqlB = "DELETE FROM t_examinee WHERE can_days!=0 AND can_days<DATEDIFF(NOW(),reg_date)";
-		ormDao.getGenericJdbcDao().executeDML(sqlA);
-		ormDao.getGenericJdbcDao().executeDML(sqlB);
+		Date date = DateUtils.getCurrentDateTime();
+		String sqlA = "DELETE FROM t_score WHERE examinee_id IN(SELECT id FROM t_examinee WHERE can_days!=0 AND can_days<DATEDIFF(?,reg_date))";
+		String sqlB = "DELETE FROM t_examinee WHERE can_days!=0 AND can_days<DATEDIFF(?,reg_date)";
+		ormDao.getGenericJdbcDao().executeDMLByArray(sqlA,date);
+		ormDao.getGenericJdbcDao().executeDMLByArray(sqlB,date);
 	}
 	
 	public void delete(int id) throws Exception{

@@ -35,6 +35,8 @@
         {
             width:200px;
             position:relative;
+            top:0px;
+            left:0px;
         }
         
         #sec
@@ -66,14 +68,26 @@
 <body class="easyui-layout">
 	<%@ include file="../global/title.jsp"%>
 	<div region="center" title="欢迎登录到${title}">
-		<div align="right" style="width: 100%;">
-			<div id="clockHolder">
-			    <div class="rotatingWrapper"><img id="hour" src="${base}/commons/images/clock/hour.gif" width="200" height="200"/></div>
-		        <div class="rotatingWrapper"><img id="min" src="${base}/commons/images/clock/minute.gif" width="200" height="200"/></div>
-			    <div class="rotatingWrapper"><img id="sec" src="${base}/commons/images/clock/second.gif" width="200" height="200"/></div>
-			    <img id="clock" src="${base}/commons/images/clock/clock.gif" width="200" height="200"/>
-		    </div>
-		</div>
+		<table style="width: 97%;height: 100%;" border="1">
+			<tr>
+				<td rowspan="3" style="width: 450px;">考场列表</td>
+				<td>系统介绍</td>
+				<td style="width: 200px;height: 200px;">
+					<div id="clockHolder">
+					    <div class="rotatingWrapper"><img id="hour" src="${base}/commons/images/clock/hour.gif" width="200" height="200"/></div>
+				        <div class="rotatingWrapper"><img id="min" src="${base}/commons/images/clock/minute.gif" width="200" height="200"/></div>
+					    <div class="rotatingWrapper"><img id="sec" src="${base}/commons/images/clock/second.gif" width="200" height="200"/></div>
+					    <img id="clock" src="${base}/commons/images/clock/clock.gif" width="200" height="200"/>
+				    </div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">成绩查询</td>
+			</tr>
+			<tr>
+				<td colspan="2">演武场</td>
+			</tr>
+		</table>
 	</div>
 	<script>
 		var loginName = '<%=request.getAttribute("loginName")%>';

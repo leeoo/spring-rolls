@@ -19,6 +19,8 @@ public class ExamSession {
 	
 	private boolean audio;//是否是音频
 	
+	private int score;
+	
 	private int cnProportion = 1;// 中文权重
 	
 	private int enProportion = 1;// 英文权重
@@ -41,6 +43,31 @@ public class ExamSession {
 	
 	private Map<Integer,ExamineeSession> examinees = new HashMap<Integer, ExamineeSession>();
 	
+	/**
+	 * 释放资源
+	 */
+	public void release(){
+		if(examinees!=null && !examinees.isEmpty()){
+			for(ExamineeSession examineeSession : examinees.values()){
+				examineeSession.release();
+			}
+		}
+		questionChoices.clear();
+		examinees.clear();
+		textContent = null;
+	}
+	
+	/**
+	 * 如果考完，提交后，就会清理该考生缓存
+	 */
+	public void removeExamineeSession(Integer examineeId){
+		if(examineeId!=null){
+			ExamineeSession examineeSession = examinees.get(id);
+			examineeSession.release();
+			examinees.remove(id);
+		}
+	}
+	
 	public void addQuestionChoice(QuestionChoice questionChoice){
 		questionChoices.add(questionChoice);
 	}
@@ -55,6 +82,10 @@ public class ExamSession {
 	
 	public ExamineeSession getExaminee(Integer id){
 		return examinees.get(id);
+	}
+	
+	public Collection<ExamineeSession> getExamineeSessions(){
+		return examinees.values();
 	}
 	
 	public ExamineeSession getExaminee(){
@@ -172,6 +203,14 @@ public class ExamSession {
 
 	public void setTextContent(String textContent) {
 		this.textContent = textContent;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 	
 }

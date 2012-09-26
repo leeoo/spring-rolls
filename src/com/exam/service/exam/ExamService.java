@@ -1,5 +1,6 @@
 package com.exam.service.exam;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.paramecium.commons.DateUtils;
@@ -38,8 +39,17 @@ public class ExamService {
 		ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_exam SET status=1 WHERE id=?",id);
 	}
 	
+	public void updateWillExam(int id) throws Exception{
+		ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_exam SET status=0 WHERE id=?",id);
+	}
+	
 	public void updateExamed(int id) throws Exception{
 		ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_exam SET status=-1 WHERE id=?",id);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Exam> getExamings(){
+		return (Collection<Exam>) ormDao.getGenericJdbcDao().query("SELECT * FROM t_exam WHERE status!=-1",Exam.class);
 	}
 	
 	public void delete(String... ids) throws Exception{
