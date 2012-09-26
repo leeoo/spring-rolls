@@ -107,11 +107,6 @@
 								$('#list').datagrid('clearSelections');
 								return false;
 							}
-							if(rows[0].status==1){
-								$.messager.alert('提示','该考试正在进行中，不能修改该信息!','warning');
-								$('#list').datagrid('clearSelections');
-								return false;
-							}
 							location.href ='${base}/exam/exam/input${ext}?id='+rows[0].id;
 							return false;
 						}

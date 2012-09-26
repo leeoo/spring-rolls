@@ -11,13 +11,13 @@ import org.paramecium.ioc.annotation.Service;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
-import com.exam.entity.exam.ChoiceTypeQuestion;
 import com.exam.entity.exam.Exam;
 import com.exam.entity.exam.ExamSession;
 import com.exam.entity.exam.ExamineeSession;
 import com.exam.entity.exam.ExamingCache;
 import com.exam.entity.exam.Question;
 import com.exam.entity.exam.QuestionChoice;
+import com.exam.entity.exam.Score;
 
 /**
  * 系统中的线程进入准备状态
@@ -46,6 +46,7 @@ public class InitThreadService {
 			initCount++;
 			clearUploadTempFile();
 			clearExaminee();
+			updateExamStatus();
 		}else{
 			logger.warn("该实例已经执行了"+initCount+"次初始化,不能再次执行初始化任务!");
 		}
@@ -131,76 +132,18 @@ public class InitThreadService {
 	 * 同时当状态为已结束时，将该考试对应的缓存清理（如果该考试缓存中存有考生的缓存，自动为该学生提交成绩，然后清除缓存）
 	 */
 	private void updateExamStatus(){
-		
+		Thread thread = new Thread(new UpdateExamStatusThread());
+		thread.start();
 	}
 	
 	private class UpdateExamStatusThread implements Runnable{
+		
 		public void run() {
 			logger.debug("<考试监控线程>已经启动...");
 			while(true){
 				try{
-					Collection<ExamSession> examSessions = ExamingCache.getExamSessions();
-					Date date = DateUtils.getCurrentDateTime();
-					if(examSessions!=null && !examSessions.isEmpty()){
-						for(ExamSession examSession:examSessions){
-							if(examSession.getEndDate().before(date)){//如果该考试已经过期
-								Collection<ExamineeSession> examineeSessions = examSession.getExamineeSessions();//获取没有提交的用户
-								if(examineeSessions!=null && !examineeSessions.isEmpty()){//如果让然有考生没有提交，视为自动提交
-									for(ExamineeSession examineeSession : examineeSessions){
-										//提交判分,待开发。。。。。
-									}
-								}
-								examSession.release();
-								examService.updateExamed(examSession.getId());//修改考试的状态
-							}
-						}
-					}
-					Collection<Exam> examings = examService.getExamings();
-					if(examings!=null && !examings.isEmpty()){
-						for(Exam examing : examings){
-							if(!ExamingCache.isExist(examing.getId())){//如果没有进入缓存...
-								if(date.after(examing.getStartDate()) && date.before(examing.getEndDate())&&examing.getStatus()!=1){//如果已经考试
-									if(examing.getChoice()!=null){//判断是否是选择题，如果null，无效，不管，否则构建缓存，更新状态为1
-										ExamSession examSession = new ExamSession();
-										examSession.setId(examing.getId());
-										examSession.setTitle(examing.getTitle());
-										examSession.setChoice(examing.getChoice());
-										examSession.setScore(examing.getScore());
-										examSession.setCnProportion(examing.getCnProportion());
-										examSession.setEnProportion(examing.getEnProportion());
-										examSession.setPunProportion(examing.getPunProportion());
-										examSession.setNumProportion(examing.getNumProportion());
-										examSession.setStartDate(examing.getStartDate());
-										examSession.setEndDate(examing.getEndDate());
-										examSession.setLongTime(examing.getLongTime());
-										if(examing.getChoice()){
-											Collection<QuestionChoice> choices = questionChoiceService.getAllByQuestionId(examing.getQuestionId());
-											if(choices!=null && !choices.isEmpty()){
-												for(QuestionChoice choice : choices){
-													examSession.addQuestionChoice(choice);
-												}
-											}
-										}else{
-											Question question = questionService.get(examing.getQuestionId());
-											if(question.getAudioPath()!=null && !question.getAudioPath().trim().isEmpty()){
-												examSession.setAudio(true);
-												examSession.setAudioPath(question.getAudioPath());
-											}else{
-												examSession.setAudio(false);
-											}
-											examSession.setTextContent(question.getTextContent());
-										}
-										ExamingCache.addExamSession(examSession);//放入缓存
-										examService.updateExaming(examing.getId());//修改它的状态为1
-									}
-								}else if(date.after(examing.getEndDate())){//如果有没有在缓存，而且还没有过期处理的
-									examService.updateExamed(examing.getId());//修改考试的状态为-1过期
-								}else if(examing.getStatus()!=0){//最后判断一下,除此时间段之外之外，未开始的考试，状态不是0的，全部置为0
-									examService.updateWillExam(examing.getId());//修改考试的状态为0
-								}
-							}
-						}
-					}
+					updateCache();
+					updateDB();
 					logger.debug("<考试监控线程>已经执行完毕，100秒钟之后再次运行!");
 					Thread.sleep(1000*100);
 				}catch (Exception e) {
@@ -208,6 +151,124 @@ public class InitThreadService {
 				}
 			}
 		}
+		
+		/**
+		 * 先更新考试缓存中的正在进行的考试信息
+		 */
+		private void updateCache(){
+			Collection<ExamSession> examSessions = ExamingCache.getExamSessions();
+			if(examSessions!=null && !examSessions.isEmpty()){
+				Date date = DateUtils.getCurrentDateTime();
+				for(ExamSession examSession:examSessions){
+					if(examSession.getEndDate().before(date)){//如果该考试已经过期
+						Collection<ExamineeSession> examineeSessions = examSession.getExamineeSessions();//获取没有提交的用户
+						if(examineeSessions!=null && !examineeSessions.isEmpty()){//如果让然有考生没有提交，视为自动提交
+							if(!examSession.isChoice()){//如果是速录考试
+								ScoreEvaluate scoreEvaluate = new ScoreEvaluate(
+										examSession.getTextContent(), examSession.getScore(), 
+										examSession.getCnProportion(), examSession.getEnProportion(),
+										examSession.getPunProportion(), examSession.getNumProportion());
+								for(ExamineeSession examineeSession : examineeSessions){
+									Score score = new Score();
+									score.setContext(examineeSession.getTempContent());
+									score.setExamId(examSession.getId());
+									score.setExamineeId(examineeSession.getId());
+									score.setLongTime(examineeSession.getLongTime());
+									score.setStartDate(new Date(examineeSession.getExamDate()*1000));//进入考试的时间
+									int finalScore = scoreEvaluate.getScore(examineeSession.getTempContent());//通过算法获得分数
+									score.setScore(finalScore);
+									try {
+										scoreService.save(score);
+									} catch (Exception e) {
+										logger.error(e);
+									}
+								}
+							}else{//如果是选择题
+								//待开发....................................
+							}
+						}
+						examSession.release();//释放资源
+						ExamingCache.removeExamSession(examSession.getId());//移除缓存
+						try {
+							examService.updateExamed(examSession.getId());//修改考试的状态
+						} catch (Exception e) {
+							logger.error(e);
+						}
+					}
+				}
+			}
+		}
+		
+		/**
+		 * 在更新数据库中已经可以考试的信息，并入缓存
+		 */
+		private void updateDB(){
+			Collection<Exam> examings = examService.getExamings();
+			if(examings!=null && !examings.isEmpty()){
+				Date date = DateUtils.getCurrentDateTime();
+				for(Exam examing : examings){
+					if(!ExamingCache.isExist(examing.getId())){//如果没有进入缓存...
+						if(date.after(examing.getStartDate()) && date.before(examing.getEndDate())){//如果已经考试
+							if(examing.getChoice()!=null){//判断是否是选择题，如果null，无效，不管，否则构建缓存，更新状态为1
+								ExamSession examSession = buildExamSession(examing);//构建考试会话
+								ExamingCache.addExamSession(examSession);//放入缓存
+								try {
+									examService.updateExaming(examing.getId());//修改它的状态为1
+								} catch (Exception e) {
+									logger.error(e);
+								}
+							}
+						}else if(date.after(examing.getEndDate())&&examing.getStatus()!=-1){//如果有没有在缓存，而且还没有过期处理的
+							try {
+								examService.updateExamed(examing.getId());//修改考试的状态为-1过期
+							} catch (Exception e) {
+								logger.error(e);
+							}
+						}else if(date.before(examing.getStartDate())&&examing.getStatus()!=0){//最后判断一下,除此时间段之外之外，未开始的考试，状态不是0的，全部置为0
+							try {
+								examService.updateWillExam(examing.getId());//修改考试的状态为0
+							} catch (Exception e) {
+								logger.error(e);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		private ExamSession buildExamSession(Exam examing){
+			ExamSession examSession = new ExamSession();
+			examSession.setId(examing.getId());
+			examSession.setTitle(examing.getTitle());
+			examSession.setChoice(examing.getChoice());
+			examSession.setScore(examing.getScore());
+			examSession.setCnProportion(examing.getCnProportion());
+			examSession.setEnProportion(examing.getEnProportion());
+			examSession.setPunProportion(examing.getPunProportion());
+			examSession.setNumProportion(examing.getNumProportion());
+			examSession.setStartDate(examing.getStartDate());
+			examSession.setEndDate(examing.getEndDate());
+			examSession.setLongTime(examing.getLongTime());
+			if(examing.getChoice()){
+				Collection<QuestionChoice> choices = questionChoiceService.getAllByQuestionId(examing.getQuestionId());
+				if(choices!=null && !choices.isEmpty()){
+					for(QuestionChoice choice : choices){
+						examSession.addQuestionChoice(choice);
+					}
+				}
+			}else{
+				Question question = questionService.get(examing.getQuestionId());
+				if(question.getAudioPath()!=null && !question.getAudioPath().trim().isEmpty()){
+					examSession.setAudio(true);
+					examSession.setAudioPath(question.getAudioPath());
+				}else{
+					examSession.setAudio(false);
+				}
+				examSession.setTextContent(question.getTextContent());
+			}
+			return examSession;
+		}
+		
 	}
 	
 	/**

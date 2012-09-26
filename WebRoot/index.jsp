@@ -120,7 +120,7 @@
 			                          </tr>
 			                          <tr>
 			                            <td height="35" >&nbsp;</td>
-			                            <td width="10%" height="35" ><button type="submit" class="easyui-linkbutton" iconCls="icon-key">登 录</button></td>
+			                            <td width="15%" height="35" ><button type="submit" class="easyui-linkbutton" iconCls="icon-key">登 录</button></td>
 			                            <td width="67%" class="top_hui_text" align="left"><button type="button" class="easyui-linkbutton" iconCls="icon-user" onclick="regOpen();">注 册</button></td>
 			                          </tr>
 			                        </table>

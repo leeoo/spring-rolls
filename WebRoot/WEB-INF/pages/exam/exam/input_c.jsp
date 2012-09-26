@@ -69,7 +69,7 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
+						<td align="right"><c:if test="${exam==null||exam.status==0}"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></c:if></td>
 					</tr>
 				</table>
 			</div>
