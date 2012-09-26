@@ -4,13 +4,77 @@
 <head>
 <%@ include file="../global/head.jsp"%>
 <title>${title}——考生 <%=request.getAttribute("loginName")%> 登录成功</title>
+<script type="text/javascript" src="${base}/commons/js/clock/jqueryRotate.js"></script>
+<script type="text/javascript">
+    var angleSec = 0;
+    var angleMin = 0;
+    var angleHour = 0;
+
+    $(document).ready(function () {
+        $("#sec").rotate(angleSec);
+        $("#min").rotate(angleMin);
+        $("#hour").rotate(angleHour);
+    });
+
+    setInterval(function () {
+        var d = new Date();
+
+        angleSec = (d.getSeconds() * 6);
+        $("#sec").rotate(angleSec);
+
+        angleMin = (d.getMinutes() * 6);
+        $("#min").rotate(angleMin);
+
+        angleHour = ((d.getHours() * 5 + d.getMinutes() / 12) * 6);
+        $("#hour").rotate(angleHour);
+
+    }, 1000);
+</script>
+<style type="text/css">
+        #clockHolder
+        {
+            width:200px;
+            position:relative;
+        }
+        
+        #sec
+        {
+            display:block;
+            position:absolute;
+        }
+        #min
+        {
+            display:block;
+            position:absolute;
+        }
+        #hour
+        {
+            display:block;
+            position:absolute;
+        }
+        
+        .rotatingWrapper
+        {
+            position:absolute;
+            width:200px;
+            height:200px;
+            top:0px;
+            left:0px;
+        }
+    </style>
 </head>
 <body class="easyui-layout">
 	<%@ include file="../global/title.jsp"%>
 	<div region="center" title="欢迎登录到${title}">
-		
+		<div align="right" style="width: 100%;">
+			<div id="clockHolder">
+			    <div class="rotatingWrapper"><img id="hour" src="${base}/commons/images/clock/hour.gif" width="200" height="200"/></div>
+		        <div class="rotatingWrapper"><img id="min" src="${base}/commons/images/clock/minute.gif" width="200" height="200"/></div>
+			    <div class="rotatingWrapper"><img id="sec" src="${base}/commons/images/clock/second.gif" width="200" height="200"/></div>
+			    <img id="clock" src="${base}/commons/images/clock/clock.gif" width="200" height="200"/>
+		    </div>
+		</div>
 	</div>
-	
 	<script>
 		var loginName = '<%=request.getAttribute("loginName")%>';
 		if(loginName!=''&&loginName!='null'){
