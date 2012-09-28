@@ -22,7 +22,7 @@ public class ExamingCache {
 			ExamSession examSession = examingCache.get(id);
 			if(examSession!=null){
 				examingCache.remove(id);
-				logger.info("考试为：<"+examSession.getTitle()+">已经移除缓存！");
+				logger.info("考试为：<"+examSession.getId()+":"+examSession.getTitle()+">已经移除缓存！");
 			}
 		}
 	}
@@ -33,7 +33,7 @@ public class ExamingCache {
 		}
 		if(!isExist(examSession.getId())){
 			examingCache.put(examSession.getId(), examSession);
-			logger.info("考试为：<"+examSession.getTitle()+">已经加入缓存！");
+			logger.info("考试为：<"+examSession.getId()+":"+examSession.getTitle()+">已经加入缓存！");
 		}
 	}
 	
