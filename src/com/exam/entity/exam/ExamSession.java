@@ -7,9 +7,13 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.paramecium.commons.SecurityUitls;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.UserDetails;
 
 public class ExamSession {
+	
+	private final static Log logger = LoggerFactory.getLogger();
 	
 	private Integer id;
 	
@@ -65,6 +69,7 @@ public class ExamSession {
 			ExamineeSession examineeSession = examinees.get(id);
 			examineeSession.release();
 			examinees.remove(id);
+			logger.info("考生:<"+examineeSession.getCode()+":"+examineeSession.getUsername()+">成功完成考试<"+this.getTitle()+">");
 		}
 	}
 	
@@ -78,8 +83,9 @@ public class ExamSession {
 	
 	public void addExaminee(ExamineeSession examineeSession){
 		examinees.put(examineeSession.getId(), examineeSession);
+		logger.info("考生:<"+examineeSession.getCode()+":"+examineeSession.getUsername()+">成功加入考试<"+this.getTitle()+">");
 	}
-	
+
 	public ExamineeSession getExaminee(Integer id){
 		return examinees.get(id);
 	}
