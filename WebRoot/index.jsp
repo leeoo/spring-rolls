@@ -86,9 +86,9 @@
 	    <td valign="top">
 	    <table width="100%" height="532" border="0" cellpadding="0" cellspacing="0" class="login_bg">
 	      <tr>
-	        <td width="49%" align="right">
+	        <td width="49%" align="right" valign="bottom" style="padding-bottom: 60px;">
 		        <div style="width: 600px;height: 350px;background-image: url('${base}/commons/images/exam-mini.gif');background-repeat: no-repeat;" align="right">
-		        	<div style="width: 330px;height: 250px;padding-top: 40px;" align="left">
+		        	<div style="width: 330px;height: 250px;padding-top: 20px;" align="left">
 		        		<div><img src="${base}/commons/images/jian.gif" alt="推荐" /><a href="#" style="color:#030Fd3; font-family: 微软雅黑;font-size: 13px;">下载安装谷歌浏览器，使用起来更流畅、更稳定！</a></div>
 		        		<div><img src="${base}/commons/css/jquery/icons/user.png" alt="注册" /><a href="#" onclick="regOpen();" style="color:#030Fd3;font-family: 微软雅黑;font-size: 13px;">温馨提示：如果您是第一次登录，请先注册考号。</a></div>
 		        		<div><img src="${base}/commons/css/jquery/icons/idea.png" alt="小窍门" /><a href="#" style="color:#030Fd3;font-family: 微软雅黑;font-size: 13px;">小 窍 门：当您第一次使用本系统，可以使用向导。</a></div>
