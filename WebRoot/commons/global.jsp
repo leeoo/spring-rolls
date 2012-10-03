@@ -13,3 +13,4 @@
 <c:set var="ext" value="<%=BaseController.EXT %>"/>
 <c:set var="theme" value="<%=ConfigInfo.themeName %>"/>
 <c:set var="title" value="<%=ConfigInfo.title %>"/>
+<c:set var="baseHeight" value="73"/>

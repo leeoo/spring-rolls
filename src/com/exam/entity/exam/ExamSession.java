@@ -21,7 +21,7 @@ public class ExamSession {
 	
 	private boolean choice;
 	
-	private boolean audio;//是否是音频
+	private Boolean audio;//是否是音频
 	
 	private int score;
 	
@@ -131,14 +131,6 @@ public class ExamSession {
 		this.choice = choice;
 	}
 
-	public boolean isAudio() {
-		return audio;
-	}
-
-	public void setAudio(boolean audio) {
-		this.audio = audio;
-	}
-
 	public int getCnProportion() {
 		return cnProportion;
 	}
@@ -217,6 +209,14 @@ public class ExamSession {
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	public Boolean getAudio() {
+		return audio;
+	}
+
+	public void setAudio(Boolean audio) {
+		this.audio = audio;
 	}
 	
 }

@@ -1,4 +1,3 @@
-<c:set var="baseHeight" value="73"/>
 <%@ page contentType="text/html;charset=UTF-8"%>
 	<div region="north" border="false" style="height:45px;background-image: url('${base}/commons/images/head.gif');overflow-y:hidden;">
 		<div align="left" style="float: left;">

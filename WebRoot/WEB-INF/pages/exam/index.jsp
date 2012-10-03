@@ -29,6 +29,63 @@
         $("#hour").rotate(angleHour);
 
     }, 1000);
+    
+    function reload() {  
+        $.ajax({  
+        	url:'${base}/exam/examing-data.json',
+            cache: false,
+            dataType: "json",
+            type: "post",
+            timeout: 2000,  
+            success: function (msg) {
+            	$('#examing').datagrid('reload');
+            }
+        })
+    }
+	window.onload=function(){
+		window.setInterval(reload,25000);
+	};
+    
+    $(function(){
+		$('#examing').datagrid({
+			height:200,
+			nowrap: true,
+			striped: true,
+			url:'${base}/exam/examing-data.json',
+			columns:[[
+						{field:'title',title:'考试描述',width:400},
+						{field:'choice',title:'类型',width:50,
+							formatter:function(value,rec){
+								if(value=='0'||value=='false'||value=='FALSE'){
+									return '速录';
+								}else{
+									return '理论';
+								}
+						}},
+						{field:'audio',title:'方式',width:50,
+							formatter:function(value,rec){
+								if(value=='0'||value=='false'||value=='FALSE'){
+									return '看打';
+								}else if(value=='1'||value=='true'||value=='TRUE'){
+									return '听打';
+								}else{
+									return '理论';
+								}
+						}},
+						{field:'startDate',title:'开始时间',width:150},
+						{field:'endDate',title:'结束时间',width:150},
+						{field:'longTime',title:'考试时长',width:100,
+						formatter:function(value,rec){
+							return value+'分钟';
+						}},
+						{field:'id',title:'参加考试',width:100,
+							formatter:function(value,rec){
+								return '<a href="#" class="easyui-linkbutton" iconCls="icon-cl">进入</a>';
+							}}
+					]]
+		});
+	});
+    
 </script>
 <style type="text/css">
         #clockHolder
@@ -70,8 +127,9 @@
 	<div region="center" title="欢迎登录到${title}">
 		<table style="width: 97%;height: 100%;" border="1">
 			<tr>
-				<td rowspan="3" style="width: 450px;">考场列表</td>
-				<td>系统介绍</td>
+				<td valign="top">
+					<table id="examing"></table>
+				</td>
 				<td style="width: 200px;height: 200px;">
 					<div id="clockHolder">
 					    <div class="rotatingWrapper"><img id="hour" src="${base}/commons/images/clock/hour.gif" width="200" height="200"/></div>
@@ -82,10 +140,13 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2">成绩查询</td>
-			</tr>
-			<tr>
-				<td colspan="2">演武场</td>
+				<td colspan="2">
+					<table style="width: 100%;height: 100%;" border="1">
+					<tr>
+						<td style="width: 50%;">sd</td><td style="width: 50%;">sd</td>
+					</tr>
+					</table>
+				</td>
 			</tr>
 		</table>
 	</div>
