@@ -19,7 +19,7 @@ public class ExamineeSession {
 	
 	private int longTime;//经过多少时间(秒),防止断网
 	
-	private int examDate = (int)EncodeUtils.millisTime()/1000;//当前秒数
+	private long examDate = EncodeUtils.millisTime()/1000;//当前秒数
 	
 	private boolean choice;
 	
@@ -92,16 +92,16 @@ public class ExamineeSession {
 		this.choice = choice;
 	}
 
-	public int getExamDate() {
+	public Map<Integer, String> getChoices() {
+		return choices;
+	}
+
+	public long getExamDate() {
 		return examDate;
 	}
 
-	public void setExamDate(int examDate) {
+	public void setExamDate(long examDate) {
 		this.examDate = examDate;
-	}
-
-	public Map<Integer, String> getChoices() {
-		return choices;
 	}
 
 }

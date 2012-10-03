@@ -1,6 +1,7 @@
 package com.exam.web.exam;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.paramecium.commons.DateUtils;
 import org.paramecium.commons.JsonUitls;
@@ -73,6 +74,12 @@ public class IndexController extends BaseController{
 			examSession.addExaminee(examineeSession);
 		}
 		mv.addValue("examineeSession", examineeSession);
+		int longTime = examSession.getLongTime();//这是分钟
+		longTime = longTime * 60;//变成秒
+		long startTime = examineeSession.getExamDate();//开始考试时间,这是秒
+		long examingEndTime = (startTime + longTime)*1000;//变成毫秒
+		String examingEndTimeStr = DateUtils.parse(DateUtils.DATE_TIME_FORMAT, new Date(examingEndTime));//变成计时器能够读懂的str
+		mv.addValue("examingEndTime", examingEndTimeStr);//考试结束时间
 		if(examSession.isChoice()){
 			return mv.forward(getExamPage("/examing/choice.jsp"));
 		}else{
@@ -102,6 +109,12 @@ public class IndexController extends BaseController{
 		examineeSession.setLrLayout(!examineeSession.isLrLayout());
 		examSession.addExaminee(examineeSession);
 		mv.addValue("examineeSession", examineeSession);
+		int longTime = examSession.getLongTime();//这是分钟
+		longTime = longTime * 60;//变成秒
+		long startTime = examineeSession.getExamDate();//开始考试时间,这是秒
+		long examingEndTime = (startTime + longTime)*1000;//变成毫秒
+		String examingEndTimeStr = DateUtils.parse(DateUtils.DATE_TIME_FORMAT, new Date(examingEndTime));//变成计时器能够读懂的str
+		mv.addValue("examingEndTime", examingEndTimeStr);//考试结束时间
 		if(examSession.isChoice()){
 			return mv.forward(getExamPage("/examing/choice.jsp"));
 		}else{
