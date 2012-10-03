@@ -43,9 +43,8 @@
         })
     }
 	window.onload=function(){
-		window.setInterval(reload,25000);
+		window.setInterval(reload,60000);
 	};
-    
     $(function(){
 		$('#examing').datagrid({
 			height:200,
@@ -80,7 +79,7 @@
 						}},
 						{field:'id',title:'参加考试',width:100,
 							formatter:function(value,rec){
-								return '<a href="#" class="easyui-linkbutton" iconCls="icon-cl">进入</a>';
+								return '<a href="${base}/exam/examing${ext}?id='+value+'">进入</a>';
 							}}
 					]]
 		});

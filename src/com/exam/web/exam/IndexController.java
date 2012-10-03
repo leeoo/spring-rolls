@@ -4,15 +4,19 @@ import java.util.Collection;
 
 import org.paramecium.commons.DateUtils;
 import org.paramecium.commons.JsonUitls;
+import org.paramecium.commons.SecurityUitls;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.SecurityThread;
+import org.paramecium.security.UserDetails;
 import org.paramecium.security.annotation.Security;
 
 import com.exam.entity.exam.ExamSession;
+import com.exam.entity.exam.Examinee;
+import com.exam.entity.exam.ExamineeSession;
 import com.exam.entity.exam.ExamingCache;
 import com.exam.web.BaseController;
 
@@ -40,6 +44,75 @@ public class IndexController extends BaseController{
 		String json = JsonUitls.getBeansJson(examSessions,false,DateUtils.DATE_TIME_FORMAT);
 		json = ("{\"total\":\""+count+"\",\"rows\":["+json+"]}");
 		mv.printJSON(json);
+	}
+	
+	@ShowLabel("开始考试")
+	@MappingMethod
+	public ModelAndView examing(ModelAndView mv){
+		Integer id = mv.getValue("id", Integer.class);
+		if(id==null){
+			return index(mv);
+		}
+		ExamSession examSession = ExamingCache.getExamSession(id);
+		mv.addValue("examSession", examSession);
+		ExamineeSession examineeSession = examSession.getExaminee();
+		if(examineeSession==null){
+			examineeSession = new ExamineeSession();
+			examineeSession.setChoice(examSession.isChoice());
+			@SuppressWarnings("unchecked")
+			org.paramecium.security.UserDetails<Examinee> user = (UserDetails<Examinee>) SecurityUitls.getLoginUser();
+			if(user==null){
+				return index(mv);
+			}
+			Examinee examinee = user.getOtherInfo();
+			examineeSession.setCode(examinee.getCode());
+			examineeSession.setUsername(examinee.getUsername());
+			examineeSession.setId(examinee.getId());
+			examineeSession.setLongTime(0);
+			examineeSession.setLrLayout(true);
+			examSession.addExaminee(examineeSession);
+		}
+		mv.addValue("examineeSession", examineeSession);
+		if(examSession.isChoice()){
+			return mv.forward(getExamPage("/examing/choice.jsp"));
+		}else{
+			if(examSession.getAudio()!=null&&examSession.getAudio()){
+				return mv.forward(getExamPage("/examing/listen.jsp"));
+			}else if(examineeSession.isLrLayout()){
+				return mv.forward(getExamPage("/examing/look-l.jsp"));
+			}else{
+				return mv.forward(getExamPage("/examing/look-v.jsp"));
+			}
+		}
+	}
+	
+	@ShowLabel("改变布局")
+	@MappingMethod("/change-layout")
+	public ModelAndView changeLayout(ModelAndView mv){
+		Integer id = mv.getValue("id", Integer.class);
+		if(id==null){
+			return index(mv);
+		}
+		ExamSession examSession = ExamingCache.getExamSession(id);
+		mv.addValue("examSession", examSession);
+		ExamineeSession examineeSession = examSession.getExaminee();
+		if(examineeSession==null){
+			return index(mv);
+		}
+		examineeSession.setLrLayout(!examineeSession.isLrLayout());
+		examSession.addExaminee(examineeSession);
+		mv.addValue("examineeSession", examineeSession);
+		if(examSession.isChoice()){
+			return mv.forward(getExamPage("/examing/choice.jsp"));
+		}else{
+			if(examSession.getAudio()!=null&&examSession.getAudio()){
+				return mv.forward(getExamPage("/examing/listen.jsp"));
+			}else if(examineeSession.isLrLayout()){
+				return mv.forward(getExamPage("/examing/look-l.jsp"));
+			}else{
+				return mv.forward(getExamPage("/examing/look-v.jsp"));
+			}
+		}
 	}
 	
 }
