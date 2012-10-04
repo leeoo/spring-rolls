@@ -4,7 +4,6 @@
 <head>
 <%@ include file="../../global/head.jsp"%>
 <title>${title}——开始考试</title>
-<script type="text/javascript" src="${base}/commons/js/jcountdown/jquery-1.6.1.js"></script>
 <script type="text/javascript" src="${base}/commons/js/jcountdown/jquery.jcountdown1.3.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -38,12 +37,12 @@ $(document).ready(function() {
 			</select>
 		</td></tr>
 		<tr>
-			<td valign="top" align="left" style="width: 50%;height: 95%">
-				<div id="sourceConent" onmousemove="moveScroll();" style="background-color: #EFEFBA;width: 100%;height: 100%;font-size: 24px;OVERFLOW-y:auto;">${examSession.textContent}</div>
+			<td valign="top" align="left" style="width: 50%;height: 93%">
+				<div id="sourceConent" onmousemove="moveScroll();" style="background-color: #EFEFBA;width: 100%;height: 100%;font-size: 20px;OVERFLOW-y:auto;">${examSession.textContent}</div>
 			</td>
-			<td valign="top" align="left" style="width: 50%;height: 95%">
+			<td valign="top" align="left" style="width: 50%;height: 93%">
 				<form method="post" action="${base}/exam/save${ext}">
-					<textarea onpaste="return false;" ondragstart="return false;" rows="24" cols="10" style="font-size: 24px;width:98%;height: 98%">${examineeSession.tempContent}</textarea>
+					<textarea onpaste="return false;" ondragstart="return false;" rows="24" cols="10" style="font-size: 20px;width:93%;height: 98%">${examineeSession.tempContent}</textarea>
 				</form>
 			</td>
 		</tr>

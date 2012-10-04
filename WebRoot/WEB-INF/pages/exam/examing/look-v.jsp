@@ -4,7 +4,6 @@
 <head>
 <%@ include file="../../global/head.jsp"%>
 <title>${title}——开始考试</title>
-<script type="text/javascript" src="${base}/commons/js/jcountdown/jquery-1.6.1.js"></script>
 <script type="text/javascript" src="${base}/commons/js/jcountdown/jquery.jcountdown1.3.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -25,7 +24,7 @@ $(document).ready(function() {
 </head>
 <body style="margin:0;padding:0;z-index:0;width: 100%;height: 100%;position:absolute;" oncontextmenu="return false;" onselectstart="return false;">
 	<table style="width: 100%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
-		<tr style="background-color: #EFEFEF"><td colspan="2" height="5%" align="right">
+		<tr style="background-color: #EFEFEF"><td height="5%" align="right">
 			<span id="time"></span>
 			<a href="${base}/exam/change-layout${ext}?id=${examSession.id}" class="easyui-linkbutton">切换水平布局</a>
 			<a href="#" class="easyui-linkbutton" onclick="isAutoScroll();">自动滚动原文</a>
@@ -39,13 +38,13 @@ $(document).ready(function() {
 		</td></tr>
 		<tr>
 			<td valign="top" align="left" style="width: 100%;height: 43%">
-				<div id="sourceConent" onmousemove="moveScroll();" style="background-color: #EFEFBA;width: 100%;height: 100%;font-size: 24px;OVERFLOW-y:auto;">${examSession.textContent}</div>
+				<div id="sourceConent" onmousemove="moveScroll();" style="background-color: #EFEFBA;width: 100%;height: 100%;font-size: 20px;OVERFLOW-y:auto;">${examSession.textContent}</div>
 			</td>
 		</tr>
 		<tr>
 			<td valign="top" align="left" style="width: 100%;height: 50%">
 				<form method="post" action="${base}/exam/save${ext}">
-					<textarea onpaste="return false;" ondragstart="return false;" rows="10" cols="10" style="font-size: 24px;width:98%;height: 98%">${examineeSession.tempContent}</textarea>
+					<textarea onpaste="return false;" ondragstart="return false;" rows="10" cols="10" style="font-size: 20px;width:98%;height: 98%">${examineeSession.tempContent}</textarea>
 				</form>
 			</td>
 		</tr>
