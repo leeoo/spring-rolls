@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="${base}/commons/js/jquery/locale/easyui-lang-zh_CN.js"></script>
 	<script>
-		function getMessage() {  
+		function getMessage() {
 	        $.ajax({  
 	            url: "${base}/system/message/receive.json",
 	            cache: false,
@@ -26,7 +26,7 @@
 	        })
 	    }
 		window.onload=function(){
-			window.setInterval(getMessage,10000);
+			window.setInterval(getMessage,30000);
 		};
 		function isExit(){
 			$.messager.confirm('提示','是否确认退出本系统?',function(d){

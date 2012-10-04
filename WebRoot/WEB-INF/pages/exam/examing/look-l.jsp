@@ -19,6 +19,25 @@ $(document).ready(function() {
 		direction: "down"
 	});
 });
+function tempSave() {
+    $.ajax({  
+        url: "${base}/exam/temp-save.json",
+        cache: false,
+        dataType: "json",
+        type: "post",
+        data: {
+	    	   'examSessionId': $.trim($("#examSessionId").val()),
+	    	   'tempContent': $.trim($("#tempContent").val())
+	    	   },
+        timeout: 2000,  
+        success: function (msg) {
+        	if(msg!=null){
+        		$.messager.alert('严重警告！',msg.message,'error');
+        	}
+        },
+    })
+}
+setInterval(tempSave,10000);
 </script>
 
 </head>
@@ -42,7 +61,8 @@ $(document).ready(function() {
 			</td>
 			<td valign="top" align="left" style="width: 50%;height: 93%">
 				<form method="post" action="${base}/exam/save${ext}">
-					<textarea onpaste="return false;" ondragstart="return false;" rows="24" cols="10" style="font-size: 20px;width:93%;height: 98%">${examineeSession.tempContent}</textarea>
+					<input type="hidden" id="examSessionId" name="examSessionId" value="${examSession.id}"></input>
+					<textarea id="tempContent" name="tempContent" onpaste="return false;" ondragstart="return false;" rows="24" cols="10" style="font-size: 20px;width:93%;height: 98%">${examineeSession.tempContent}</textarea>
 				</form>
 			</td>
 		</tr>
@@ -63,7 +83,7 @@ function isAutoScroll(){
 	i = e.scrollTop;
 	y = !y;
 	if(y){
-		s=setInterval("sc()",speed);
+		s=setInterval(sc,speed);
 	}else{
 		window.clearInterval(s);
 	}
@@ -77,7 +97,7 @@ function changeSpeed(){
 	if(y){
 		window.clearInterval(s);
 		speed=document.getElementById("speed").value;
-		s=setInterval("sc()",speed);
+		s=setInterval(sc,speed);
 	}
 }
 </script>

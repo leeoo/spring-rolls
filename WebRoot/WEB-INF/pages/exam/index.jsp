@@ -42,9 +42,7 @@
             }
         })
     }
-	window.onload=function(){
-		window.setInterval(reload,60000);
-	};
+    setInterval(reload,60000);
     $(function(){
 		$('#examing').datagrid({
 			height:200,
