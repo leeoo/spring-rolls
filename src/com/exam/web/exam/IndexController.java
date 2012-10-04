@@ -1,5 +1,6 @@
 package com.exam.web.exam;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 
@@ -78,7 +79,7 @@ public class IndexController extends BaseController{
 		longTime = longTime * 60;//变成秒
 		long startTime = examineeSession.getExamDate();//开始考试时间,这是秒
 		long examingEndTime = (startTime + longTime)*1000;//变成毫秒
-		String examingEndTimeStr = DateUtils.parse(DateUtils.DATE_TIME_FORMAT, new Date(examingEndTime));//变成计时器能够读懂的str
+		String examingEndTimeStr = DateUtils.parse(new SimpleDateFormat("MMM dd, yyyy HH:mm:ss",java.util.Locale.UK), new Date(examingEndTime));//变成计时器能够读懂的str
 		mv.addValue("examingEndTime", examingEndTimeStr);//考试结束时间
 		if(examSession.isChoice()){
 			return mv.forward(getExamPage("/examing/choice.jsp"));
@@ -113,7 +114,7 @@ public class IndexController extends BaseController{
 		longTime = longTime * 60;//变成秒
 		long startTime = examineeSession.getExamDate();//开始考试时间,这是秒
 		long examingEndTime = (startTime + longTime)*1000;//变成毫秒
-		String examingEndTimeStr = DateUtils.parse(DateUtils.DATE_TIME_FORMAT, new Date(examingEndTime));//变成计时器能够读懂的str
+		String examingEndTimeStr = DateUtils.parse(new SimpleDateFormat("MMM dd, yyyy HH:mm:ss",java.util.Locale.UK), new Date(examingEndTime));//变成计时器能够读懂的str
 		mv.addValue("examingEndTime", examingEndTimeStr);//考试结束时间
 		if(examSession.isChoice()){
 			return mv.forward(getExamPage("/examing/choice.jsp"));

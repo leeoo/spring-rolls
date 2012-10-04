@@ -53,7 +53,7 @@
 			url:'${base}/exam/examing-data.json',
 			columns:[[
 						{field:'title',title:'考试描述',width:400},
-						{field:'choice',title:'类型',width:50,
+						{field:'choice',title:'类型',width:70,
 							formatter:function(value,rec){
 								if(value=='0'||value=='false'||value=='FALSE'){
 									return '速录';
@@ -61,7 +61,7 @@
 									return '理论';
 								}
 						}},
-						{field:'audio',title:'方式',width:50,
+						{field:'audio',title:'方式',width:70,
 							formatter:function(value,rec){
 								if(value=='0'||value=='false'||value=='FALSE'){
 									return '看打';
@@ -124,9 +124,9 @@
 <body class="easyui-layout">
 	<%@ include file="../global/title.jsp"%>
 	<div region="center" title="欢迎登录到${title}">
-		<table style="width: 97%;height: 100%;" border="1">
+		<table style="width: 100%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 			<tr>
-				<td valign="top">
+				<td valign="top" style="height: 200px;">
 					<table id="examing"></table>
 				</td>
 				<td style="width: 200px;height: 200px;">
@@ -140,9 +140,9 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<table style="width: 100%;height: 100%;" border="1">
+					<table style="width: 100%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 					<tr>
-						<td style="width: 50%;">sd</td><td style="width: 50%;">sd</td>
+						<td style="width: 65%;height: 100%;">sd</td><td style="width: 35%;">调试区</td>
 					</tr>
 					</table>
 				</td>
