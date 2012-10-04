@@ -19,6 +19,9 @@
 	            	if(msg!=null){
 	            		$.messager.alert('来自于&nbsp;'+msg.auth+'&nbsp;的站内消息',msg.content,'info');
 	            	}
+	            },
+	            error: function (msg) {
+	            	alert('严重警告:您与服务器断开连接,请您暂停所有操作,以免造成不必要的损失!');
 	            }
 	        })
 	    }
