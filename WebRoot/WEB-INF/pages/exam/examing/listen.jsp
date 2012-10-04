@@ -16,10 +16,13 @@ $(document).ready(function(){
 			$(this).jPlayer("setMedia", {
 				mp3:'${base}/upload/audio/'+audioPath
 			});
+			<c:if test="${examineeSession.longTime>0}">
+				$(this).jPlayer("play",${examineeSession.longTime});
+			</c:if>
 		},
 		swfPath: "${base}/commons/js/jplayer/Jplayer.swf",
 		supplied: "mp3",
-		wmode: "window"
+		wmode: "window",
 	});
 });
 //]]>
