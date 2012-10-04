@@ -41,6 +41,10 @@ public class ScoreService {
 		}
 	}
 	
+	public Score get(int examId,int examineeId){
+		return (Score) ormDao.getGenericJdbcDao().queryUniqueByArray("SELECT * FROM t_score WHERE exam_id=? AND examinee_id=?", Score.class, examId,examineeId);
+	}
+	
 	public Score get(int id){
 		return ormDao.select(id);
 	}

@@ -7,6 +7,7 @@ import java.util.Date;
 import org.paramecium.commons.DateUtils;
 import org.paramecium.commons.JsonUitls;
 import org.paramecium.commons.SecurityUitls;
+import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.mvc.ModelAndView;
@@ -20,12 +21,17 @@ import com.exam.entity.exam.ExamSession;
 import com.exam.entity.exam.Examinee;
 import com.exam.entity.exam.ExamineeSession;
 import com.exam.entity.exam.ExamingCache;
+import com.exam.entity.exam.Score;
+import com.exam.service.exam.ScoreService;
 import com.exam.web.BaseController;
 
 @Security
 @ShowLabel("考生首页")
 @Controller("/exam")
 public class IndexController extends BaseController{
+	
+	@AutoInject
+	private ScoreService scoreService;
 
 	@ShowLabel("登录成功后友好界面")
 	@MappingMethod
@@ -59,17 +65,22 @@ public class IndexController extends BaseController{
 		mv.addValue("examSession", examSession);
 		ExamineeSession examineeSession = examSession.getExaminee();
 		if(examineeSession==null){
-			examineeSession = new ExamineeSession();
-			examineeSession.setChoice(examSession.isChoice());
 			@SuppressWarnings("unchecked")
 			org.paramecium.security.UserDetails<Examinee> user = (UserDetails<Examinee>) SecurityUitls.getLoginUser();
 			if(user==null){
 				return index(mv);
 			}
 			Examinee examinee = user.getOtherInfo();
+			Score score = scoreService.get(id, examinee.getId());
+			if(score!=null){
+				mv.setErrorMessage("您已经参加过这次考试，并且已经提交！");
+				return index(mv);
+			}
+			examineeSession = new ExamineeSession();
+			examineeSession.setId(examinee.getId());
+			examineeSession.setChoice(examSession.isChoice());
 			examineeSession.setCode(examinee.getCode());
 			examineeSession.setUsername(examinee.getUsername());
-			examineeSession.setId(examinee.getId());
 			examineeSession.setLongTime(0);
 			examineeSession.setLrLayout(true);
 			examSession.addExaminee(examineeSession);
@@ -92,6 +103,34 @@ public class IndexController extends BaseController{
 				return mv.forward(getExamPage("/examing/look-v.jsp"));
 			}
 		}
+	}
+	
+	@ShowLabel("临时保存")
+	@MappingMethod("/temp-save")
+	public ModelAndView tempSave(ModelAndView mv){
+		@SuppressWarnings("unchecked")
+		org.paramecium.security.UserDetails<Examinee> user = (UserDetails<Examinee>) SecurityUitls.getLoginUser();
+		if(user==null){
+			return mv.printJSON("{\"message\":\"由于连接超时或重复登录,您目前已经与友好断开!\"}");
+		}
+		Examinee examinee = user.getOtherInfo();
+		if(examinee==null){
+			return mv.printJSON("{\"message\":\"由于连接超时或重复登录,您目前已经与友好断开!\"}");
+		}
+		Integer id = mv.getValue("examSessionId", Integer.class);
+		if(id==null){
+			return mv.printJSON("{\"message\":\"由于您的考试信息缺失,请您暂停考试!\"}");
+		}
+		ExamSession examSession = ExamingCache.getExamSession(id);
+		ExamineeSession examineeSession = examSession.getExaminee(examinee.getId());
+		if(examineeSession==null){
+			return mv.printJSON("{\"message\":\"您已经超过考试时间,系统已经为您保存了考试信息!\"}");
+		}
+		String tempContent = mv.getValue("tempContent", String.class);
+		examineeSession.setTempContent(tempContent);
+		examineeSession.setLongTime(examineeSession.getLongTime()+10);
+		examSession.addExaminee(examineeSession);
+		return mv.printJSON("");
 	}
 	
 	@ShowLabel("改变布局")
