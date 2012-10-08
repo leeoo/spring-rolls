@@ -40,7 +40,7 @@
             success: function (msg) {
             	$('#examing').datagrid('reload');
             }
-        })
+        });
     }
     setInterval(reload,60000);
     $(function(){
@@ -80,6 +80,33 @@
 								return '<a href="${base}/exam/examing${ext}?id='+value+'">进入</a>';
 							}}
 					]]
+		});
+		$('#score').datagrid({
+			height:310,
+			nowrap: true,
+			striped: true,
+			collapsible:true,
+			rownumbers: true,
+			remoteSort: false,
+			pageList:[10],
+			url:'${base}/exam/score-data.json',
+			idField:'id',
+			columns:[[
+						{field:'startDate',title:'参考时间',width:130},
+						{field:'longTime',title:'耗时',width:100,
+						formatter:function(value,rec){
+							return value+'秒';
+						}},
+						{field:'score',title:'成绩',width:100,
+							formatter:function(value,rec){
+								return value+'分';
+						}},
+						{field:'examId',title:'详情',width:100,
+							formatter:function(value,rec){
+								return '<a href="${base}/exam/score${ext}?examId='+value+'">查看</a>';
+						}},
+					]],
+			pagination:true
 		});
 	});
     
@@ -122,7 +149,7 @@
 <body class="easyui-layout">
 	<%@ include file="../global/title.jsp"%>
 	<div region="center" title="欢迎登录到${title}">
-		<table style="width: 100%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
+		<table style="width: 97%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 			<tr>
 				<td valign="top" style="height: 200px;">
 					<table id="examing"></table>
@@ -137,10 +164,15 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2">
+				<td colspan="2" valign="top">
 					<table style="width: 100%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 					<tr>
-						<td style="width: 65%;height: 100%;">sd</td><td style="width: 35%;">调试区</td>
+						<td style="width: 65%;height: 100%;">
+							<table id="score"></table>
+						</td>
+						<td style="width: 35%;">
+							调试区
+						</td>
 					</tr>
 					</table>
 				</td>
@@ -151,6 +183,14 @@
 		var loginName = '<%=request.getAttribute("loginName")%>';
 		if(loginName!=''&&loginName!='null'){
 			$.messager.show({title:'提示',msg:'尊敬的考生: '+loginName+' 你好! \n 欢迎登录本系统',timeout:3000,showType:'slide'});
+		}
+		var s_message = '<paramecium:successMessage/>';
+		var e_message = '<paramecium:errorMessage/>';
+		if(s_message!=''&&s_message!='null'){
+			 $.messager.alert('成功提示',s_message,'info');
+		}
+		if(e_message!=''&&e_message!='null'){
+			 $.messager.alert('失败提示',e_message,'error');
 		}
 	</script>
 </body>

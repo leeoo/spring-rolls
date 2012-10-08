@@ -13,7 +13,8 @@ $(document).ready(function() {
 		onChange: function( event, timer ){
 		},
 		onComplete: function( event ){
-			alert('考试结束！');
+			$.messager.alert('考试结束','系统已经为您自动交卷！','info');
+			$('#examing').submit();
 		},
 		leadingZero: true,
 		direction: "down"
@@ -38,6 +39,14 @@ function tempSave() {
     })
 }
 setInterval(tempSave,10000);
+
+function finish(){
+	$.messager.confirm('提示','您确认交卷吗?',function(d){
+        if(d){
+			$('#examing').submit();
+        }
+    });
+}
 </script>
 
 </head>
@@ -54,13 +63,14 @@ setInterval(tempSave,10000);
 				<option value="400">快速</option>
 				<option value="200">超快速</option>
 			</select>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="return finish();">交 卷</a>
 		</td></tr>
 		<tr>
 			<td valign="top" align="left" style="width: 50%;height: 93%">
 				<div id="sourceConent" onmousemove="moveScroll();" style="background-color: #EFEFBA;width: 100%;height: 100%;font-size: 20px;OVERFLOW-y:auto;">${examSession.textContent}</div>
 			</td>
 			<td valign="top" align="left" style="width: 50%;height: 93%">
-				<form method="post" action="${base}/exam/save${ext}">
+				<form id="examing" method="post" action="${base}/exam/save${ext}">
 					<input type="hidden" id="examSessionId" name="examSessionId" value="${examSession.id}"></input>
 					<textarea id="tempContent" name="tempContent" onpaste="return false;" ondragstart="return false;" rows="24" cols="10" style="font-size: 20px;width:93%;height: 98%">${examineeSession.tempContent}</textarea>
 				</form>

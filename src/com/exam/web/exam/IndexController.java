@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.paramecium.commons.DateUtils;
+import org.paramecium.commons.EncodeUtils;
 import org.paramecium.commons.JsonUitls;
 import org.paramecium.commons.SecurityUitls;
 import org.paramecium.ioc.annotation.AutoInject;
@@ -22,6 +23,7 @@ import com.exam.entity.exam.Examinee;
 import com.exam.entity.exam.ExamineeSession;
 import com.exam.entity.exam.ExamingCache;
 import com.exam.entity.exam.Score;
+import com.exam.service.exam.ScoreEvaluate;
 import com.exam.service.exam.ScoreService;
 import com.exam.web.BaseController;
 
@@ -54,12 +56,24 @@ public class IndexController extends BaseController{
 		mv.printJSON(json);
 	}
 	
+	@ShowLabel("获取考生成绩")
+	@MappingMethod("/score-data")
+	public void scoreData(ModelAndView mv){
+		int pageNo = mv.getValue("page", int.class);
+		Page page = new Page();
+		page.setPageNo(pageNo);
+		page.setPageSize(10);
+		page = scoreService.getAllByCurrentExaminee(page);
+		String json = getJsonPageData(page);
+		mv.printJSON(json);
+	}
+	
 	@ShowLabel("开始考试")
 	@MappingMethod
 	public ModelAndView examing(ModelAndView mv){
 		Integer id = mv.getValue("id", Integer.class);
 		if(id==null){
-			return index(mv);
+			return mv.redirect(getRedirect("/exam/index"));
 		}
 		ExamSession examSession = ExamingCache.getExamSession(id);
 		ExamineeSession examineeSession = examSession.getExaminee();
@@ -67,13 +81,13 @@ public class IndexController extends BaseController{
 			@SuppressWarnings("unchecked")
 			org.paramecium.security.UserDetails<Examinee> user = (UserDetails<Examinee>) SecurityUitls.getLoginUser();
 			if(user==null){
-				return index(mv);
+				return mv.redirect(getRedirect("/exam/index"));
 			}
 			Examinee examinee = user.getOtherInfo();
 			Score score = scoreService.get(id, examinee.getId());
 			if(score!=null){
 				mv.setErrorMessage("您已经参加过这次考试，并且已经提交！");
-				return index(mv);
+				return mv.redirect(getRedirect("/exam/index"));
 			}
 			examineeSession = new ExamineeSession();
 			examineeSession.setId(examinee.getId());
@@ -104,6 +118,56 @@ public class IndexController extends BaseController{
 			}
 		}
 	}
+	
+	@ShowLabel("保存成绩")
+	@MappingMethod
+	public ModelAndView save(ModelAndView mv){
+		@SuppressWarnings("unchecked")
+		org.paramecium.security.UserDetails<Examinee> user = (UserDetails<Examinee>) SecurityUitls.getLoginUser();
+		if(user==null){
+			mv.setErrorMessage("由于连接超时或重复登录,您目前已经与友好断开!");
+			return examing(mv);
+		}
+		Examinee examinee = user.getOtherInfo();
+		if(examinee==null){
+			mv.setErrorMessage("由于连接超时或重复登录,您目前已经与友好断开!");
+			return examing(mv);
+		}
+		Integer id = mv.getValue("examSessionId", Integer.class);
+		if(id==null){
+			mv.setErrorMessage("由于您的考试信息缺失,请您暂停考试!");
+			return examing(mv);
+		}
+		ExamSession examSession = ExamingCache.getExamSession(id);
+		ExamineeSession examineeSession = examSession.getExaminee(examinee.getId());
+		if(examineeSession==null){
+			mv.setErrorMessage("您已经超过考试时间,系统已经为您保存了考试信息!");
+			return examing(mv);
+		}
+		String tempContent = mv.getValue("tempContent", String.class);
+		ScoreEvaluate scoreEvaluate = new ScoreEvaluate(
+				examSession.getTextContent(), examSession.getScore(), 
+				examSession.getCnProportion(), examSession.getEnProportion(),
+				examSession.getPunProportion(), examSession.getNumProportion());
+		Score score = new Score();
+		score.setContext(tempContent);
+		score.setExamId(examSession.getId());
+		score.setExamineeId(examineeSession.getId());
+		score.setLongTime((int)(EncodeUtils.millisTime()/1000-examineeSession.getExamDate()));
+		score.setStartDate(new Date(examineeSession.getExamDate()*1000));//进入考试的时间
+		int finalScore = scoreEvaluate.getScore(tempContent);//通过算法获得分数
+		score.setScore(finalScore);
+		try {
+			scoreService.save(score);
+			examSession.removeExamineeSession(examinee.getId());
+			mv.setSuccessMessage("您的考试已经结束，系统正在为您评分，请耐心等待！");
+		} catch (Exception e) {
+			e.printStackTrace();
+			mv.setErrorMessage("您的考试保存时出现错误，如果您等待一段时间让然没有相关成绩，请联系相关人员!");
+		}
+		return mv.redirect(getRedirect("/exam/index"));
+	}
+	
 	
 	@ShowLabel("临时保存")
 	@MappingMethod("/temp-save")
@@ -138,12 +202,12 @@ public class IndexController extends BaseController{
 	public ModelAndView changeLayout(ModelAndView mv){
 		Integer id = mv.getValue("id", Integer.class);
 		if(id==null){
-			return index(mv);
+			return mv.redirect(getRedirect("/exam/index"));
 		}
 		ExamSession examSession = ExamingCache.getExamSession(id);
 		ExamineeSession examineeSession = examSession.getExaminee();
 		if(examineeSession==null){
-			return index(mv);
+			return mv.redirect(getRedirect("/exam/index"));
 		}
 		examineeSession.setLrLayout(!examineeSession.isLrLayout());
 		examSession.addExaminee(examineeSession);

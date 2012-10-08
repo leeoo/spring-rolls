@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.paramecium.commons.DateUtils;
+import org.paramecium.commons.EncodeUtils;
 import org.paramecium.commons.PathUtils;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.Service;
@@ -47,6 +48,7 @@ public class InitThreadService {
 			clearUploadTempFile();
 			clearExaminee();
 			updateExamStatus();
+			manageExam();
 		}else{
 			logger.warn("该实例已经执行了"+initCount+"次初始化,不能再次执行初始化任务!");
 		}
@@ -128,7 +130,7 @@ public class InitThreadService {
 	}
 	
 	/**
-	 * 定时修改考试状态,每60秒执行一次即可，并且为考试状态为正在进行中的，开辟对应的缓存，如果该缓存存在则不做处理。
+	 * 定时修改考试状态,每100秒执行一次即可，并且为考试状态为正在进行中的，开辟对应的缓存，如果该缓存存在则不做处理。
 	 * 同时当状态为已结束时，将该考试对应的缓存清理（如果该考试缓存中存有考生的缓存，自动为该学生提交成绩，然后清除缓存）
 	 */
 	private void updateExamStatus(){
@@ -275,15 +277,63 @@ public class InitThreadService {
 	 * 定时管理考试情况，每10秒执行一次,如某考生考试时长，超过时长自动交卷，交卷后将该考生从考试缓存删除，然后提交到成绩表（该线程属于补漏，如果前台脚本失效，可以有处理）
 	 */
 	private void manageExam(){
-		
+		Thread thread = new Thread(new ManageExamThread());
+		thread.start();
 	}
 	
-	/**
-	 * 定时针对在线考试的考生，每10秒执行一次，监考老师可以看到打字情况或选择的情况
-	 */
-	private void examMonitor(){
+	private class ManageExamThread implements Runnable{
+		
+		public void run() {
+			logger.debug("<考生状态监控线程>已经启动...");
+			while(true){
+				try{
+					updateCache();
+					logger.debug("<考生状态监控线程>已经执行完毕，10秒钟之后再次运行!");
+					Thread.sleep(1000*10);
+				}catch (Exception e) {
+					logger.error(e);
+				}
+			}
+		}
+		
+		private void updateCache(){
+			Collection<ExamSession> examSessions = ExamingCache.getExamSessions();
+			if(examSessions!=null && !examSessions.isEmpty()){
+				for(ExamSession examSession:examSessions){
+					Collection<ExamineeSession> examineeSessions = examSession.getExamineeSessions();//获取没有提交的用户
+					if(examineeSessions!=null && !examineeSessions.isEmpty()){//如果让然有考生没有提交，视为自动提交
+						for(ExamineeSession examineeSession : examineeSessions){
+							int examineeLongtime = (int)(EncodeUtils.millisTime()/1000-examineeSession.getExamDate());//当前累计秒-考试开始秒=该生实际时长
+							if(examSession.getLongTime()*60<examineeLongtime){//判断是否超过规定的考试时长
+								if(!examSession.isChoice()){//如果是速录考试
+									ScoreEvaluate scoreEvaluate = new ScoreEvaluate(
+											examSession.getTextContent(), examSession.getScore(), 
+											examSession.getCnProportion(), examSession.getEnProportion(),
+											examSession.getPunProportion(), examSession.getNumProportion());
+										Score score = new Score();
+										score.setContext(examineeSession.getTempContent());
+										score.setExamId(examSession.getId());
+										score.setExamineeId(examineeSession.getId());
+										score.setLongTime(examineeLongtime);
+										score.setStartDate(new Date(examineeSession.getExamDate()*1000));//进入考试的时间
+										int finalScore = scoreEvaluate.getScore(examineeSession.getTempContent());//通过算法获得分数
+										score.setScore(finalScore);
+										try {
+											scoreService.save(score);
+											examSession.removeExamineeSession(examineeSession.getId());
+										} catch (Exception e) {
+											logger.error(e);
+										}
+								}else{//如果是选择题
+									//待开发....................................
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		
 	}
-	
 	
 }

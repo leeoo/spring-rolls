@@ -50,7 +50,7 @@ public class ExamSession {
 	/**
 	 * 释放资源
 	 */
-	public void release(){
+	public synchronized void release(){
 		if(examinees!=null && !examinees.isEmpty()){
 			for(ExamineeSession examineeSession : examinees.values()){
 				examineeSession.release();
@@ -64,16 +64,16 @@ public class ExamSession {
 	/**
 	 * 如果考完，提交后，就会清理该考生缓存
 	 */
-	public void removeExamineeSession(Integer examineeId){
+	public synchronized void removeExamineeSession(Integer examineeId){
 		if(examineeId!=null){
-			ExamineeSession examineeSession = examinees.get(id);
+			ExamineeSession examineeSession = examinees.get(examineeId);
 			examineeSession.release();
-			examinees.remove(id);
+			examinees.remove(examineeId);
 			logger.info("考生:<"+examineeSession.getCode()+":"+examineeSession.getUsername()+">成功完成考试<"+this.getTitle()+">");
 		}
 	}
 	
-	public void addQuestionChoice(QuestionChoice questionChoice){
+	public synchronized void addQuestionChoice(QuestionChoice questionChoice){
 		questionChoices.add(questionChoice);
 	}
 	
@@ -81,13 +81,13 @@ public class ExamSession {
 		return questionChoices;
 	}
 	
-	public void addExaminee(ExamineeSession examineeSession){
+	public synchronized void addExaminee(ExamineeSession examineeSession){
 		examinees.put(examineeSession.getId(), examineeSession);
 		logger.info("考生:<"+examineeSession.getCode()+":"+examineeSession.getUsername()+">成功加入考试<"+this.getTitle()+">");
 	}
 
-	public ExamineeSession getExaminee(Integer id){
-		return examinees.get(id);
+	public ExamineeSession getExaminee(Integer examineeId){
+		return examinees.get(examineeId);
 	}
 	
 	public Collection<ExamineeSession> getExamineeSessions(){

@@ -1,11 +1,14 @@
 package com.exam.service.exam;
 
+import org.paramecium.commons.SecurityUitls;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.orm.GenericOrmDao;
+import org.paramecium.security.UserDetails;
 import org.paramecium.transaction.annotation.Transactional;
 
+import com.exam.entity.exam.Examinee;
 import com.exam.entity.exam.Score;
 
 @ShowLabel("分数业务类")
@@ -20,7 +23,12 @@ public class ScoreService {
 	}
 	
 	public void save(Score score) throws Exception{
-		ormDao.insert(score);
+		Score validation = get(score.getExamId(),score.getExamineeId());
+		if(validation==null){
+			ormDao.insert(score);
+			return;
+		}
+		throw new RuntimeException("您已经参加过相同的考试，不能再次提交!");
 	}
 	
 	public void update(Score score) throws Exception{
@@ -47,6 +55,19 @@ public class ScoreService {
 	
 	public Score get(int id){
 		return ormDao.select(id);
+	}
+	
+	public Page getAllByCurrentExaminee(Page page){
+		@SuppressWarnings("unchecked")
+		org.paramecium.security.UserDetails<Examinee> user = (UserDetails<Examinee>) SecurityUitls.getLoginUser();
+		if(user==null){
+			return page;
+		}
+		Examinee examinee = user.getOtherInfo();
+		if(examinee==null){
+			return page;
+		}
+		return ormDao.getGenericJdbcDao().queryPageBeansByArray("SELECT id,start_date,long_time,score,examinee_id,exam_id FROM t_score WHERE examinee_id=? ORDER BY start_date DESC", Score.class, page, examinee.getId());
 	}
 	
 	public Page getAll(Page page){

@@ -14,7 +14,7 @@ import org.paramecium.orm.annotation.PrimaryKey;
  * @author caoyang
  *
  */
-@Entity(tableName = "t_score", orderBy = "id DESC")
+@Entity(tableName = "t_score", orderBy = "start_date DESC")
 public class Score implements Serializable{
 
 	private static final long serialVersionUID = 5646052367350264820L;

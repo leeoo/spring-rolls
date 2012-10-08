@@ -28,12 +28,12 @@ public class ExamineeSession {
 	/**
 	 * 释放资源
 	 */
-	public void release(){
+	public synchronized void release(){
 		choices.clear();
 	}
 	
-	public void addChoices(int id,String answer){
-		choices.put(id, answer);
+	public synchronized void addChoices(int choiceId,String answer){
+		choices.put(choiceId, answer);
 	}
 
 	public Integer getId() {
