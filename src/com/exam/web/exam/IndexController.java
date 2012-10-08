@@ -11,6 +11,8 @@ import org.paramecium.commons.SecurityUitls;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 import org.paramecium.mvc.ModelAndView;
 import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
@@ -31,7 +33,7 @@ import com.exam.web.BaseController;
 @ShowLabel("考生首页")
 @Controller("/exam")
 public class IndexController extends BaseController{
-	
+	private final static Log logger = LoggerFactory.getLogger();
 	@AutoInject
 	private ScoreService scoreService;
 
@@ -162,6 +164,8 @@ public class IndexController extends BaseController{
 			examSession.removeExamineeSession(examinee.getId());
 			mv.setSuccessMessage("您的考试已经结束，系统正在为您评分，请耐心等待！");
 		} catch (Exception e) {
+			logger.error(e);
+			logger.error("<考试异常暂存日志>考号:"+examinee.getCode()+" 耗时:"+score.getLongTime()+"秒 得分:"+score.getScore()+"内容:"+score.getContext());
 			mv.setErrorMessage("您的考试保存时出现错误，如果您等待一段时间让然没有相关成绩，请联系相关人员!");
 		}
 		return mv.redirect(getRedirect("/exam/index"));
