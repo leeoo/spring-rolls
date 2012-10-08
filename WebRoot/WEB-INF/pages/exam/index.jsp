@@ -4,8 +4,24 @@
 <head>
 <%@ include file="../global/head.jsp"%>
 <title>${title}——考生 <%=request.getAttribute("loginName")%> 登录成功</title>
+<link rel="stylesheet" type="text/css" href="${base}/commons/css/jplayer/blue.monday/jplayer.blue.monday.css">
 <script type="text/javascript" src="${base}/commons/js/clock/jqueryRotate.js"></script>
+<script type="text/javascript" src="${base}/commons/js/jplayer/jquery.jplayer.min.js"></script>
 <script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$("#jquery_jplayer_1").jPlayer({
+		ready: function () {
+			$(this).jPlayer("setMedia", {
+				mp3:'${base}/upload/audio/test.mp3'
+			});
+		},
+		swfPath: "${base}/commons/js/jplayer/Jplayer.swf",
+		supplied: "mp3",
+		wmode: "window",
+	});
+});
+//]]>
     var angleSec = 0;
     var angleMin = 0;
     var angleHour = 0;
@@ -71,6 +87,10 @@
 						}},
 						{field:'startDate',title:'开始时间',width:150},
 						{field:'endDate',title:'结束时间',width:150},
+						{field:'score',title:'满分',width:70,
+							formatter:function(value,rec){
+								return value+'分';
+						}},
 						{field:'longTime',title:'考试时长',width:100,
 						formatter:function(value,rec){
 							return value+'分钟';
@@ -93,7 +113,7 @@
 			idField:'id',
 			columns:[[
 						{field:'startDate',title:'参考时间',width:130},
-						{field:'longTime',title:'耗时',width:100,
+						{field:'longTime',title:'考试用时',width:100,
 						formatter:function(value,rec){
 							return value+'秒';
 						}},
@@ -152,6 +172,7 @@
 		<table style="width: 97%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 			<tr>
 				<td valign="top" style="height: 200px;">
+					<div style="font-size: 15px;font-style: italic;"><b>正在进行的考试</b></div>
 					<table id="examing"></table>
 				</td>
 				<td style="width: 200px;height: 200px;">
@@ -167,11 +188,41 @@
 				<td colspan="2" valign="top">
 					<table style="width: 100%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 					<tr>
-						<td style="width: 65%;height: 100%;">
+						<td style="width: 40%;height: 100%;" valign="top">
+							<div style="font-size: 15px;font-style: italic;"><b>我的考试成绩</b></div>
 							<table id="score"></table>
 						</td>
-						<td style="width: 35%;">
-							调试区
+						<td style="width: 60%;" valign="top">
+							<div style="font-size: 15px;font-style: italic;"><b>设备调试</b></div>
+							<div id="jquery_jplayer_1" class="jp-jplayer">
+							</div>
+							<div id="jp_container_1" class="jp-audio">
+								<div class="jp-type-single">
+									<div class="jp-gui jp-interface">
+										<ul class="jp-controls">
+											<li><a href="javascript:;" class="jp-play" tabindex="1" title="播放">播放</a></li>
+											<li><a href="javascript:;" class="jp-pause" tabindex="1" title="暂停">暂停</a></li>
+											<li><a href="javascript:;" class="jp-stop" tabindex="1" title="停止">停止</a></li>
+											<li><a href="javascript:;" class="jp-mute" tabindex="1" title="小声">小声</a></li>
+											<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="静音">静音</a></li>
+											<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="大声">大声</a></li>
+										</ul>
+										<div class="jp-progress">
+											<div class="jp-seek-bar">
+												<div class="jp-play-bar"></div>
+											</div>
+										</div>
+										<div class="jp-volume-bar">
+											<div class="jp-volume-bar-value"></div>
+										</div>
+										<div class="jp-time-holder">
+											<div class="jp-current-time"></div>
+											<div class="jp-duration"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<textarea rows="10" cols="10" style="font-size: 20px;width:98%;height: 90%">点击播放按钮,调试耳麦.在这里输入,测试录入设备.</textarea>
 						</td>
 					</tr>
 					</table>
