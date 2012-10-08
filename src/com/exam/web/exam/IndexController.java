@@ -162,7 +162,6 @@ public class IndexController extends BaseController{
 			examSession.removeExamineeSession(examinee.getId());
 			mv.setSuccessMessage("您的考试已经结束，系统正在为您评分，请耐心等待！");
 		} catch (Exception e) {
-			e.printStackTrace();
 			mv.setErrorMessage("您的考试保存时出现错误，如果您等待一段时间让然没有相关成绩，请联系相关人员!");
 		}
 		return mv.redirect(getRedirect("/exam/index"));
