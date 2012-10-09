@@ -20,11 +20,17 @@ import org.paramecium.security.SecurityThread;
 import org.paramecium.security.UserDetails;
 import org.paramecium.security.annotation.Security;
 
+import com.exam.entity.exam.Exam;
 import com.exam.entity.exam.ExamSession;
 import com.exam.entity.exam.Examinee;
 import com.exam.entity.exam.ExamineeSession;
 import com.exam.entity.exam.ExamingCache;
+import com.exam.entity.exam.Question;
+import com.exam.entity.exam.QuestionChoice;
 import com.exam.entity.exam.Score;
+import com.exam.service.exam.ExamService;
+import com.exam.service.exam.QuestionChoiceService;
+import com.exam.service.exam.QuestionService;
 import com.exam.service.exam.ScoreEvaluate;
 import com.exam.service.exam.ScoreService;
 import com.exam.web.BaseController;
@@ -36,6 +42,12 @@ public class IndexController extends BaseController{
 	private final static Log logger = LoggerFactory.getLogger();
 	@AutoInject
 	private ScoreService scoreService;
+	@AutoInject
+	private ExamService examService;
+	@AutoInject
+	private QuestionService questionService;
+	@AutoInject
+	private QuestionChoiceService questionChoiceService;
 
 	@ShowLabel("登录成功后友好界面")
 	@MappingMethod
@@ -232,6 +244,48 @@ public class IndexController extends BaseController{
 			}else{
 				return mv.forward(getExamPage("/examing/look-v.jsp"));
 			}
+		}
+	}
+	
+	@ShowLabel("查看成绩")
+	@MappingMethod
+	public ModelAndView score(ModelAndView mv){
+		@SuppressWarnings("unchecked")
+		org.paramecium.security.UserDetails<Examinee> user = (UserDetails<Examinee>) SecurityUitls.getLoginUser();
+		if(user==null){
+			mv.setErrorMessage("由于连接超时或重复登录,您目前已经与友好断开!");
+			return mv.redirect(getRedirect("/exam/index"));
+		}
+		Examinee examinee = user.getOtherInfo();
+		if(examinee==null){
+			mv.setErrorMessage("由于连接超时或重复登录,您目前已经与友好断开!");
+			return mv.redirect(getRedirect("/exam/index"));
+		}
+		Integer examId = mv.getValue("examId", Integer.class);
+		if(examId==null){
+			mv.setErrorMessage("考试信息不存在！");
+			return mv.redirect(getRedirect("/exam/index"));
+		}
+		Exam exam = examService.get(examId);
+		if(exam==null){
+			mv.setErrorMessage("考试信息不存在！");
+			return mv.redirect(getRedirect("/exam/index"));
+		}
+		Score score = scoreService.get(examId, examinee.getId());
+		if(score==null){
+			mv.setErrorMessage("成绩信息不存在！");
+			return mv.redirect(getRedirect("/exam/index"));
+		}
+		mv.addValue("exam", exam);
+		mv.addValue("score", score);
+		if(exam.getChoice()!=null&&exam.getChoice()){
+			Collection<QuestionChoice> questionChoices = questionChoiceService.getAllByQuestionId(exam.getQuestionId());
+			mv.addValue("questionChoices", questionChoices);
+			return mv.forward(getExamPage("/score/detail_c.jsp"));
+		}else{
+			Question question = questionService.get(exam.getQuestionId());
+			mv.addValue("question", question);
+			return mv.forward(getExamPage("/score/detail_q.jsp"));
 		}
 	}
 	

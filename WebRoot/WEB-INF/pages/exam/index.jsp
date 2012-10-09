@@ -123,13 +123,15 @@ $(document).ready(function(){
 						}},
 						{field:'examId',title:'详情',width:100,
 							formatter:function(value,rec){
-								return '<a href="${base}/exam/score${ext}?examId='+value+'">查看</a>';
+								return '<a href="#" onClick="dialogScore('+value+')">查看</a>';
 						}},
 					]],
 			pagination:true
 		});
 	});
-    
+    function dialogScore(examId){
+    	window.showModalDialog("${base}/exam/score${ext}?examId="+examId,null,"dialogWidth=800px;dialogHeight=600px");
+    }
 </script>
 <style type="text/css">
         #clockHolder
@@ -171,7 +173,7 @@ $(document).ready(function(){
 	<div region="center" title="考生：${loginExaminee.username}您好！您的考号为：${loginExaminee.code}">
 		<table style="width: 97%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 			<tr>
-				<td valign="top" style="height: 200px;">
+				<td valign="top" style="height: 200px;width:860px;">
 					<div style="font-size: 15px;font-style: italic;"><b>正在进行的考试</b></div>
 					<table id="examing"></table>
 				</td>
@@ -188,11 +190,11 @@ $(document).ready(function(){
 				<td colspan="2" valign="top">
 					<table style="width: 100%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 					<tr>
-						<td style="width: 40%;height: 100%;" valign="top">
+						<td style="width: 465px;height: 100%;" valign="top">
 							<div style="font-size: 15px;font-style: italic;"><b>我的考试成绩</b></div>
 							<table id="score"></table>
 						</td>
-						<td style="width: 60%;" valign="top">
+						<td style="valign="top">
 							<div style="font-size: 15px;font-style: italic;"><b>设备调试</b></div>
 							<div id="jquery_jplayer_1" class="jp-jplayer">
 							</div>
