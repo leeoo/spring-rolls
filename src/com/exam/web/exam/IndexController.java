@@ -40,7 +40,7 @@ public class IndexController extends BaseController{
 	@ShowLabel("登录成功后友好界面")
 	@MappingMethod
 	public ModelAndView index(ModelAndView mv){
-		mv.addValue("loginName", SecurityThread.get().getName());
+		mv.addValue("loginExaminee", SecurityThread.get().getOtherInfo());
 		return mv.forward(getExamPage("/index.jsp"));
 	}
 	
