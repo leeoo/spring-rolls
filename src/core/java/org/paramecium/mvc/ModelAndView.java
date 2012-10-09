@@ -163,6 +163,23 @@ public class ModelAndView implements Serializable,Cloneable{
 	public <T> T getValue(String name,Class<T> clazz){
 		String value = request.getParameter(name);
 		if(value==null){
+			if(clazz==int.class){
+				return (T) Integer.valueOf(0);
+			}else if(clazz==long.class){
+				return (T) Long.valueOf(0);
+			}else if(clazz==double.class){
+				return (T) Double.valueOf(0);
+			}else if(clazz==float.class){
+				return (T) Float.valueOf(0);
+			}else if(clazz==boolean.class){
+				return (T) Boolean.valueOf(false);
+			}else if(clazz==short.class){
+				return (T) Short.valueOf((short)0);
+			}else if(clazz==char.class){
+				return (T) Character.valueOf((char)0);
+			}else if(clazz==byte.class){
+				return (T) Byte.valueOf((byte)0);
+			}
 			return null;
 		}
 		return (T)BeanUtils.getValueByClass(value, clazz);
