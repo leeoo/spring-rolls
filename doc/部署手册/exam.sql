@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50525
 File Encoding         : 65001
 
-Date: 2012-09-25 17:52:47
+Date: 2012-10-09 15:32:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,7 +44,7 @@ CREATE TABLE `t_config` (
 -- ----------------------------
 -- Records of t_config
 -- ----------------------------
-INSERT INTO `t_config` VALUES ('1', 'title', '国家职业资格在线考评系统');
+INSERT INTO `t_config` VALUES ('1', 'title', '测试DEMO');
 INSERT INTO `t_config` VALUES ('2', 'examineeDays', '15');
 INSERT INTO `t_config` VALUES ('3', 'themeName', 'gray');
 
@@ -68,21 +68,23 @@ CREATE TABLE `t_exam` (
   `choice` bit(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_exam_question_id` (`question_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_exam
 -- ----------------------------
 INSERT INTO `t_exam` VALUES ('1', '一次历史性的考试，我很理解你', '100', '2', '3', '2', '1', '1', '2012-09-18 00:00:00', '2012-12-12 00:00:00', '1024', '1', '');
-INSERT INTO `t_exam` VALUES ('2', '倒萨发生的发生地方的萨芬', '100', '2', '1', '1', '1', '1', '2012-09-20 00:00:00', '2012-09-27 00:00:00', '60', '6', '');
+INSERT INTO `t_exam` VALUES ('2', '倒萨发生的发生地方的萨芬', '100', '2', '1', '1', '1', '-1', '2012-09-20 00:00:00', '2012-09-27 00:00:00', '60', '6', '');
 INSERT INTO `t_exam` VALUES ('3', '的司法斯蒂芬温柔圣达菲', '100', '1', '1', '1', '1', '-1', '2012-09-18 12:28:02', '2012-09-19 12:28:05', '60', '6', '');
-INSERT INTO `t_exam` VALUES ('4', '第三方撒地方水电费的司法斯蒂芬', '100', '1', '1', '1', '1', '1', '2012-09-19 12:28:38', '2012-09-28 12:28:56', '60', '1', '');
-INSERT INTO `t_exam` VALUES ('5', '001撒打发的色温，才是当然。caecdew的萨芬', '100', '2', '2', '1', '1', '0', '2012-09-28 12:29:55', '2012-09-28 12:29:59', '120', '1', '');
-INSERT INTO `t_exam` VALUES ('6', '002倒萨发生的发生地方额阿什顿发生地', '100', '2', '1', '1', '1', '0', '2012-09-21 12:34:38', '2012-09-29 12:34:44', '120', '1', '');
-INSERT INTO `t_exam` VALUES ('7', 'asdfasdfasdfsadf', '100', '1', '1', '1', '1', '1', '2012-09-19 13:33:35', '2012-09-28 13:33:39', '60', '6', '');
-INSERT INTO `t_exam` VALUES ('8', '点撒爱上的人撒地方玩儿撒地方', '100', '1', '1', '1', '1', '0', '2012-09-21 13:37:21', '2012-09-22 13:37:17', '90', '5', '');
-INSERT INTO `t_exam` VALUES ('9', 'asdfasdfasdfasdfaaaa', '100', '1', '1', '1', '1', '0', '2012-09-21 13:45:43', '2012-09-28 13:45:46', '60', '3', '');
-INSERT INTO `t_exam` VALUES ('10', 'asdfasdfadsfasdfasdfasdf', '100', '1', '1', '1', '1', '0', '2012-09-21 13:46:05', '2012-09-28 13:46:08', '60', '6', '');
+INSERT INTO `t_exam` VALUES ('4', '第三方撒地方水电费的司法斯蒂芬', '100', '1', '1', '1', '1', '-1', '2012-09-19 12:28:38', '2012-09-28 12:28:56', '60', '1', '');
+INSERT INTO `t_exam` VALUES ('5', '001撒打发的色温，才是当然。caecdew的萨芬', '100', '2', '2', '1', '1', '-1', '2012-09-28 12:29:55', '2012-09-28 12:29:59', '120', '1', '');
+INSERT INTO `t_exam` VALUES ('6', '002倒萨发生的发生地方额阿什顿发生地', '100', '2', '1', '1', '1', '-1', '2012-09-21 12:34:38', '2012-09-29 12:34:44', '120', '1', '');
+INSERT INTO `t_exam` VALUES ('7', 'asdfasdfasdfsadf', '100', '1', '1', '1', '1', '-1', '2012-09-19 13:33:35', '2012-09-28 13:33:39', '60', '6', '');
+INSERT INTO `t_exam` VALUES ('8', '点撒爱上的人撒地方玩儿撒地方', '100', '1', '1', '1', '1', '-1', '2012-09-21 13:37:21', '2012-09-22 13:37:17', '90', '5', '');
+INSERT INTO `t_exam` VALUES ('9', 'asdfasdfasdfasdfaaaa', '100', '1', '1', '1', '1', '-1', '2012-09-21 13:45:43', '2012-09-28 13:45:46', '60', '3', '');
+INSERT INTO `t_exam` VALUES ('10', 'asdfasdfadsfasdfasdfasdf', '100', '1', '1', '1', '1', '-1', '2012-09-21 13:46:05', '2012-09-28 13:46:08', '60', '6', '');
+INSERT INTO `t_exam` VALUES ('11', '来吧来吧来吧来吧来吧来吧来吧来吧来吧来吧', '100', '1', '1', '1', '1', '1', '2012-10-08 15:42:07', '2012-10-09 15:42:10', '1', '9', '');
+INSERT INTO `t_exam` VALUES ('12', '测试打字测试打字测试打字测试打字', '100', '1', '1', '1', '1', '1', '2012-10-08 17:24:40', '2012-10-11 17:24:42', '1', '11', '');
 
 -- ----------------------------
 -- Table structure for `t_examinee`
@@ -99,14 +101,14 @@ CREATE TABLE `t_examinee` (
   `can_days` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_examinee_code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_examinee
 -- ----------------------------
 INSERT INTO `t_examinee` VALUES ('2', '0011', '李逵', '123', null, null, '2012-09-19 09:12:35', '0');
-INSERT INTO `t_examinee` VALUES ('5', '0003', '沙悟净', '123', null, null, '2012-09-19 09:25:06', '8');
 INSERT INTO `t_examinee` VALUES ('6', '00434', '张晓琳', '123123', null, null, '2012-09-25 11:18:00', '15');
+INSERT INTO `t_examinee` VALUES ('7', '00001', '狗篮子', '123', null, null, '2012-09-28 11:29:20', '15');
 
 -- ----------------------------
 -- Table structure for `t_log`
@@ -135,7 +137,7 @@ CREATE TABLE `t_question` (
   `audio_path` varchar(255) DEFAULT NULL,
   `text_content` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_question
@@ -149,6 +151,7 @@ INSERT INTO `t_question` VALUES ('7', '啊啊啊啊啊啊啊啊水电费111', ''
 INSERT INTO `t_question` VALUES ('8', '啊啊啊啊啊啊啊啊水电费2222', '', '1348189290999.mp3', '啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222啊啊啊啊啊啊啊啊水电费2222');
 INSERT INTO `t_question` VALUES ('9', '挺好吧，333阿什顿发生地发生的发生1111', '', '1348191714812.mp3', '挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111');
 INSERT INTO `t_question` VALUES ('10', '333333453啊啊啊啊啊水电费111', '', null, '挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111挺好吧，333阿什顿发生地发生的发生1111');
+INSERT INTO `t_question` VALUES ('11', '测试打字测试打字测试打字测试打字测试打字', '', null, '外交部发言人洪磊在10月8日的例行记者会上，对委内瑞拉总统大选平稳、顺利举行，以及查韦斯总统再次当选表示祝贺，并祝愿委内瑞拉在查韦斯总统的领导下，在国家建设道路上不断取得新成就。\r\n当地时间10月7日晚，在统计超过90％的选票后，委内瑞拉全国选举委员会宣布，初步结果显示现任总统查韦斯将赢得本届总统选举。现年58岁的查韦斯已经执政近14年，并将开始新的6年总统任期。');
 
 -- ----------------------------
 -- Table structure for `t_question_choice`
@@ -236,8 +239,15 @@ INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/online#data');
 INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/examinee#list');
 INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#delete');
 INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/config#index');
+INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/exam#/temp-save');
+INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/exam#/change-layout');
+INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/exam#examing');
 INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/exam#index');
+INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/exam#score');
 INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/system/message#receive');
+INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/exam#/score-data');
+INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/exam#/examing-data');
+INSERT INTO `t_role_auth` VALUES ('EXAMINEE', '/exam#save');
 
 -- ----------------------------
 -- Table structure for `t_score`
@@ -254,11 +264,13 @@ CREATE TABLE `t_score` (
   PRIMARY KEY (`id`),
   KEY `Index_score_examinee_id` (`examinee_id`),
   KEY `Index_score_exam_id` (`exam_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_score
 -- ----------------------------
+INSERT INTO `t_score` VALUES ('1', '2012-10-08 17:26:21', '60', '外交部发言人洪磊在10月8日的例行记者会上，对胃内如拉总统大选平稳、顺利举行，以及查韦斯总统再次当选标示祝贺，并祝愿胃内瑞罗拉', '31', '6', '12');
+INSERT INTO `t_score` VALUES ('2', '2012-10-08 17:29:08', '64', '333，阿斯顿，1111', '4', '6', '11');
 
 -- ----------------------------
 -- Table structure for `t_security_role`
