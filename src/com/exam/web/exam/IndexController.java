@@ -114,7 +114,7 @@ public class IndexController extends BaseController{
 		}
 		int longTime = examSession.getLongTime();//这是分钟
 		longTime = longTime * 60;//变成秒
-		longTime = longTime - examineeSession.getLongTime();
+		longTime = longTime - (int)(EncodeUtils.millisTime()/1000-examineeSession.getExamDate());
 		long startTime = mv.getValue("dateTime", long.class);
 		if(startTime==0){
 			startTime = examineeSession.getExamDate();//开始考试时间,这是秒
@@ -137,6 +137,23 @@ public class IndexController extends BaseController{
 				return mv.forward(getExamPage("/examing/look-v.jsp"));
 			}
 		}
+	}
+	
+	@ShowLabel("改变布局")
+	@MappingMethod("/change-layout")
+	public ModelAndView changeLayout(ModelAndView mv){
+		Integer id = mv.getValue("id", Integer.class);
+		if(id==null){
+			return mv.redirect(getRedirect("/exam/index"));
+		}
+		ExamSession examSession = ExamingCache.getExamSession(id);
+		ExamineeSession examineeSession = examSession.getExaminee();
+		if(examineeSession==null){
+			return mv.redirect(getRedirect("/exam/index"));
+		}
+		examineeSession.setLrLayout(!examineeSession.isLrLayout());
+		examSession.addExaminee(examineeSession);
+		return examing(mv);
 	}
 	
 	@ShowLabel("保存成绩")
@@ -216,46 +233,6 @@ public class IndexController extends BaseController{
 		examineeSession.setLongTime(examineeSession.getLongTime()+10);
 		examSession.addExaminee(examineeSession);
 		return mv.printJSON("");
-	}
-	
-	@ShowLabel("改变布局")
-	@MappingMethod("/change-layout")
-	public ModelAndView changeLayout(ModelAndView mv){
-		Integer id = mv.getValue("id", Integer.class);
-		if(id==null){
-			return mv.redirect(getRedirect("/exam/index"));
-		}
-		ExamSession examSession = ExamingCache.getExamSession(id);
-		ExamineeSession examineeSession = examSession.getExaminee();
-		if(examineeSession==null){
-			return mv.redirect(getRedirect("/exam/index"));
-		}
-		examineeSession.setLrLayout(!examineeSession.isLrLayout());
-		examSession.addExaminee(examineeSession);
-		int longTime = examSession.getLongTime();//这是分钟
-		longTime = longTime * 60;//变成秒
-		long startTime = mv.getValue("dateTime", long.class);
-		if(startTime==0){
-			startTime = examineeSession.getExamDate();//开始考试时间,这是秒
-		}else{
-			startTime = startTime/1000;
-		}
-		long examingEndTime = (startTime + longTime)*1000;//变成毫秒
-		String examingEndTimeStr = DateUtils.parse(new SimpleDateFormat("MMM dd, yyyy HH:mm:ss",java.util.Locale.UK), new Date(examingEndTime));//变成计时器能够读懂的str
-		mv.addValue("examSession", examSession);
-		mv.addValue("examineeSession", examineeSession);
-		mv.addValue("examingEndTime", examingEndTimeStr);//考试结束时间
-		if(examSession.isChoice()){
-			return mv.forward(getExamPage("/examing/choice.jsp"));
-		}else{
-			if(examSession.getAudio()!=null&&examSession.getAudio()){
-				return mv.forward(getExamPage("/examing/listen.jsp"));
-			}else if(examineeSession.isLrLayout()){
-				return mv.forward(getExamPage("/examing/look-l.jsp"));
-			}else{
-				return mv.forward(getExamPage("/examing/look-v.jsp"));
-			}
-		}
 	}
 	
 	@ShowLabel("查看成绩")
