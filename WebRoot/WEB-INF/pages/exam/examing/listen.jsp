@@ -52,7 +52,7 @@ function tempSave() {
 	    	   },
         timeout: 2000,  
         success: function (msg) {
-        	if(msg!=null){
+        	 if(msg!=null&&msg!=''){
         		$.messager.alert('严重警告！',msg,'error');
         	}
         }

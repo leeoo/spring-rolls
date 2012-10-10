@@ -102,7 +102,7 @@
 										   url: "${base}/exam/question/delete${ext}",
 										   data: "ids="+ids.join(','),
 										   success: function(msg){
-											    if(msg!=null){
+											   if(msg!=null&&msg!=''){
 									        		$.messager.alert('删除失败！',msg,'error');
 									        	}else{
 									        		 $.messager.show({

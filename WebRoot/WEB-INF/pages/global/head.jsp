@@ -16,7 +16,7 @@
 	            type: "post",
 	            timeout: 2000,  
 	            success: function (msg) {
-	            	if(msg!=null){
+	            	 if(msg!=null&&msg!=''){
 	            		$.messager.alert('来自于&nbsp;'+msg.auth+'&nbsp;的站内消息',msg.content,'info');
 	            	}
 	            },
