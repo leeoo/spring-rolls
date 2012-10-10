@@ -26,6 +26,12 @@ public abstract class ContentUtils {
 	 * @return
 	 */
 	public static float getErrorScore(String oriStr, String newStr, float hanzi,float zimu, float fuhao, float shuzi) {
+		if(newStr==null){
+			newStr = "";
+		}
+		if(oriStr==null){
+			oriStr = "";
+		}
 		List<RecordVO> compareList = new ArrayList<RecordVO>();
 		RecordVO recordVO = new RecordVO();
 		recordVO.setMap(englishMap);
@@ -104,6 +110,9 @@ public abstract class ContentUtils {
 	 * @return
 	 */
 	public static float getTotalSoc(String content, float hanzi, float zimu,float fuhao, float shuzi) {
+		if(content==null){
+			content = "";
+		}
 		float result = 0.0F;
 		List<RecordVO> list = new ArrayList<RecordVO>();
 		RecordVO recordVO = new RecordVO();
