@@ -190,7 +190,11 @@ public class IndexController extends BaseController{
 		score.setContext(tempContent);
 		score.setExamId(examSession.getId());
 		score.setExamineeId(examineeSession.getId());
-		score.setLongTime((int)(EncodeUtils.millisTime()/1000-examineeSession.getExamDate()));
+		int longTime = (int)(EncodeUtils.millisTime()/1000-examineeSession.getExamDate());
+		if(examSession.getLongTime()*60<longTime){
+			longTime = examSession.getLongTime()*60;
+		}
+		score.setLongTime(longTime);
 		score.setStartDate(new Date(examineeSession.getExamDate()*1000));//进入考试的时间
 		int finalScore = scoreEvaluate.getScore(tempContent);//通过算法获得分数
 		score.setScore(finalScore);
@@ -213,20 +217,20 @@ public class IndexController extends BaseController{
 		@SuppressWarnings("unchecked")
 		org.paramecium.security.UserDetails<Examinee> user = (UserDetails<Examinee>) SecurityUitls.getLoginUser();
 		if(user==null){
-			return mv.printJSON("{\"message\":\"由于连接超时或重复登录,您目前已经与友好断开!\"}");
+			return mv.printJSON("由于连接超时或重复登录,您目前已经与友好断开!");
 		}
 		Examinee examinee = user.getOtherInfo();
 		if(examinee==null){
-			return mv.printJSON("{\"message\":\"由于连接超时或重复登录,您目前已经与友好断开!\"}");
+			return mv.printJSON("由于连接超时或重复登录,您目前已经与友好断开!");
 		}
 		Integer id = mv.getValue("examSessionId", Integer.class);
 		if(id==null){
-			return mv.printJSON("{\"message\":\"由于您的考试信息缺失,请您暂停考试!\"}");
+			return mv.printJSON("由于您的考试信息缺失,请您暂停考试!");
 		}
 		ExamSession examSession = ExamingCache.getExamSession(id);
 		ExamineeSession examineeSession = examSession.getExaminee(examinee.getId());
 		if(examineeSession==null){
-			return mv.printJSON("{\"message\":\"您已经超过考试时间,系统已经为您保存了考试信息!\"}");
+			return mv.printJSON("您已经超过考试时间,系统已经为您保存了考试信息!");
 		}
 		String tempContent = mv.getValue("tempContent", String.class);
 		examineeSession.setTempContent(tempContent);

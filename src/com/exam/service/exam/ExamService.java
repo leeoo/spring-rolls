@@ -39,6 +39,17 @@ public class ExamService {
 		ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_exam SET status=1 WHERE id=?",id);
 	}
 	
+	public boolean isQuestionExist(int questionId){
+		Object obj = ormDao.getGenericJdbcDao().queryUniqueColumnValueByArray("SELECT COUNT(1) FROM t_exam WHERE question_id=?", questionId);
+		if(obj!=null){
+			int count = Integer.parseInt(obj.toString());
+			if(count>0){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void updateWillExam(int id) throws Exception{
 		ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_exam SET status=0 WHERE id=?",id);
 	}

@@ -314,7 +314,7 @@ public class InitThreadService {
 										score.setContext(examineeSession.getTempContent());
 										score.setExamId(examSession.getId());
 										score.setExamineeId(examineeSession.getId());
-										score.setLongTime(examineeLongtime);
+										score.setLongTime(examSession.getLongTime()*60);
 										score.setStartDate(new Date(examineeSession.getExamDate()*1000));//进入考试的时间
 										int finalScore = scoreEvaluate.getScore(examineeSession.getTempContent());//通过算法获得分数
 										score.setScore(finalScore);
@@ -322,6 +322,8 @@ public class InitThreadService {
 											scoreService.save(score);
 											examSession.removeExamineeSession(examineeSession.getId());
 										} catch (Exception e) {
+											logger.error(e);
+											logger.error("<考试异常暂存日志>考号:"+examineeSession.getCode()+" 耗时:"+score.getLongTime()+"秒 得分:"+score.getScore()+"内容:"+score.getContext());
 											logger.error(e);
 										}
 								}else{//如果是选择题

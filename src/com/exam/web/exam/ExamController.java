@@ -133,6 +133,7 @@ public class ExamController extends BaseController{
 				examService.delete(ids);
 			}
 		} catch (Exception e) {
+			mv.printJSON(e.getMessage());
 		}
 	}
 

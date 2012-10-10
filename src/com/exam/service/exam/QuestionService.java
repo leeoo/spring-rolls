@@ -1,5 +1,6 @@
 package com.exam.service.exam;
 
+import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.jdbc.dialect.Page;
@@ -14,6 +15,8 @@ import com.exam.entity.exam.Question;
 public class QuestionService {
 	
 	private GenericOrmDao<Question, Integer> ormDao = new GenericOrmDao<Question, Integer>(Question.class);
+	@AutoInject
+	private ExamService examService;
 	
 	public QuestionService(){
 		ormDao.setValidation(true);
@@ -29,6 +32,9 @@ public class QuestionService {
 	
 	public void delete(String... ids) throws Exception{
 		for(String id : ids){
+			if(examService.isQuestionExist(Integer.parseInt(id))){
+				throw new RuntimeException("该题库存在于某考试中，不能删除！");
+			}
 			ormDao.delete(Integer.parseInt(id));
 		}
 	}

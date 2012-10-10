@@ -116,6 +116,7 @@ public class QuestionController extends BaseController{
 				questionService.delete(ids);
 			}
 		} catch (Exception e) {
+			mv.printJSON(e.getMessage());
 		}
 	}
 	

@@ -84,6 +84,7 @@ public class ChoiceTypeQuestionController extends BaseController {
 				choiceTypeQuestionService.delete(ids);
 			}
 		} catch (Exception e) {
+			mv.printJSON(e.getMessage());
 		}
 	}
 	

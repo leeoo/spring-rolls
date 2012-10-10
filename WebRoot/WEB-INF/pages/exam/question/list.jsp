@@ -102,12 +102,16 @@
 										   url: "${base}/exam/question/delete${ext}",
 										   data: "ids="+ids.join(','),
 										   success: function(msg){
-											   $.messager.show({
-													title:'提示',
-													msg:'删除成功！',
-													timeout:3000,
-													showType:'slide'
-												});
+											    if(msg!=null){
+									        		$.messager.alert('删除失败！',msg,'error');
+									        	}else{
+									        		 $.messager.show({
+															title:'提示',
+															msg:'删除成功！',
+															timeout:3000,
+															showType:'slide'
+													 });
+									        	}
 										   }
 									});
 									$('#list').datagrid('reload');
