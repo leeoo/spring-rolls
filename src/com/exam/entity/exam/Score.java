@@ -31,7 +31,7 @@ public class Score implements Serializable{
 	private int longTime;// 所耗费时长，秒,最小一分钟
 	
 	@Column
-	private String context;//答题正文,如果是选择题，直接录问题和所答答案
+	private String context = "";//答题正文,如果是选择题，直接录问题和所答答案
 	
 	@Column
 	private int score;//分数

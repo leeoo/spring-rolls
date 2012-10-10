@@ -114,7 +114,13 @@ public class IndexController extends BaseController{
 		}
 		int longTime = examSession.getLongTime();//这是分钟
 		longTime = longTime * 60;//变成秒
-		long startTime = examineeSession.getExamDate();//开始考试时间,这是秒
+		longTime = longTime - examineeSession.getLongTime();
+		long startTime = mv.getValue("dateTime", long.class);
+		if(startTime==0){
+			startTime = examineeSession.getExamDate();//开始考试时间,这是秒
+		}else{
+			startTime = startTime/1000;
+		}
 		long examingEndTime = (startTime + longTime)*1000;//变成毫秒
 		String examingEndTimeStr = DateUtils.parse(new SimpleDateFormat("MMM dd, yyyy HH:mm:ss",java.util.Locale.UK), new Date(examingEndTime));//变成计时器能够读懂的str
 		mv.addValue("examSession", examSession);
@@ -228,7 +234,12 @@ public class IndexController extends BaseController{
 		examSession.addExaminee(examineeSession);
 		int longTime = examSession.getLongTime();//这是分钟
 		longTime = longTime * 60;//变成秒
-		long startTime = examineeSession.getExamDate();//开始考试时间,这是秒
+		long startTime = mv.getValue("dateTime", long.class);
+		if(startTime==0){
+			startTime = examineeSession.getExamDate();//开始考试时间,这是秒
+		}else{
+			startTime = startTime/1000;
+		}
 		long examingEndTime = (startTime + longTime)*1000;//变成毫秒
 		String examingEndTimeStr = DateUtils.parse(new SimpleDateFormat("MMM dd, yyyy HH:mm:ss",java.util.Locale.UK), new Date(examingEndTime));//变成计时器能够读懂的str
 		mv.addValue("examSession", examSession);

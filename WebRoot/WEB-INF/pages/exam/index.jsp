@@ -8,6 +8,9 @@
 <script type="text/javascript" src="${base}/commons/js/clock/jqueryRotate.js"></script>
 <script type="text/javascript" src="${base}/commons/js/jplayer/jquery.jplayer.min.js"></script>
 <script type="text/javascript">
+function getDateTime(value){
+	window.location.href='${base}/exam/examing${ext}?id='+value+'&dateTime='+new Date().getTime();
+}
 //<![CDATA[
 $(document).ready(function(){
 	$("#jquery_jplayer_1").jPlayer({
@@ -98,7 +101,7 @@ $(document).ready(function(){
 						}},
 						{field:'id',title:'参加考试',width:100,
 							formatter:function(value,rec){
-								return '<a href="${base}/exam/examing${ext}?id='+value+'">进入</a>';
+								return '<a href="#" onClick="getDateTime('+value+')">进入</a>';
 							}}
 					]]
 		});

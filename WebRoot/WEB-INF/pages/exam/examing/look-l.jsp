@@ -47,6 +47,10 @@ function finish(){
         }
     });
 }
+
+function getDateTime(value){
+	window.location.href='${base}/exam/change-layout${ext}?id='+value+'&dateTime='+new Date().getTime();
+}
 </script>
 
 </head>
@@ -54,7 +58,7 @@ function finish(){
 	<table style="width: 100%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 		<tr style="background-color: #EFEFEF"><td colspan="2" height="5%" align="right">
 			<span id="time"></span>
-			<a href="${base}/exam/change-layout${ext}?id=${examSession.id}" class="easyui-linkbutton">切换垂直布局</a>
+			<a href="#" onclick="getDateTime(${examSession.id})" class="easyui-linkbutton">切换垂直布局</a>
 			<a href="#" class="easyui-linkbutton" onclick="isAutoScroll();">自动滚动原文</a>
 			<select id='speed' onchange="changeSpeed();">
 				<option value="3000">慢速</option>
