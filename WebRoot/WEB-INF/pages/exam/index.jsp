@@ -134,7 +134,7 @@ $(document).ready(function(){
 		});
 	});
     function dialogScore(examId){
-    	window.showModalDialog("${base}/exam/score${ext}?examId="+examId,null,"dialogWidth=800px;dialogHeight=600px");
+    	window.showModalDialog("${base}/exam/score${ext}?examId="+examId+"&temp="+new Date().getTime(),null,"dialogWidth=800px;dialogHeight=600px");
     }
 </script>
 <style type="text/css">
