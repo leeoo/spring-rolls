@@ -174,15 +174,15 @@ $(document).ready(function(){
 </head>
 <body class="easyui-layout">
 	<%@ include file="../global/title.jsp"%>
-	<div region="center" title="考生：${loginExaminee.username}您好！您的考号为：${loginExaminee.code}">
-		<table style="width: 97%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
+	<div region="center" title="考生：${loginExaminee.username}您好！您的考号为：${loginExaminee.code}" style="overflow-x:hidden;">
+		<table style="padding-left:15px;padding-right:15px;padding-top:15px;width: 95%;height: 100%;border-color: #EFEFEF;" border="0" cellpadding="0" cellspacing="0">
 			<tr>
-				<td valign="top" style="height: 200px;width:90%;">
+				<td valign="top" style="height: 200px;width:70%;">
 					<div style="font-size: 15px;font-style: italic;"><b>正在进行的考试</b></div>
 					<table id="examing"></table>
 				</td>
-				<td style="width: 200px;height: 200px;">
-					<div id="clockHolder">
+				<td style="width: 30%;height: 200px;padding-right: 20px;">
+					<div id="clockHolder" style="padding-right: 20px;">
 					    <div class="rotatingWrapper"><img id="hour" src="${base}/commons/images/clock/hour.gif" width="200" height="200"/></div>
 				        <div class="rotatingWrapper"><img id="min" src="${base}/commons/images/clock/minute.gif" width="200" height="200"/></div>
 					    <div class="rotatingWrapper"><img id="sec" src="${base}/commons/images/clock/second.gif" width="200" height="200"/></div>
@@ -191,44 +191,51 @@ $(document).ready(function(){
 				</td>
 			</tr>
 			<tr>
+				<td colspan="2" style="height: 20px;">
+				<div>&nbsp;</div>
+				</td>
+			</tr>
+			<tr>
 				<td colspan="2" valign="top">
-					<table style="width: 100%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
+					<table style="width: 95%;height: 100%;border-color: #EFEFEF;" border="0" cellpadding="0" cellspacing="0">
 					<tr>
 						<td style="width: 465px;height: 100%;" valign="top">
 							<div style="font-size: 15px;font-style: italic;"><b>我的考试成绩</b></div>
 							<table id="score"></table>
 						</td>
-						<td style="valign="top">
-							<div style="font-size: 15px;font-style: italic;"><b>设备调试</b></div>
-							<div id="jquery_jplayer_1" class="jp-jplayer">
-							</div>
-							<div id="jp_container_1" class="jp-audio">
-								<div class="jp-type-single">
-									<div class="jp-gui jp-interface">
-										<ul class="jp-controls">
-											<li><a href="javascript:;" class="jp-play" tabindex="1" title="播放">播放</a></li>
-											<li><a href="javascript:;" class="jp-pause" tabindex="1" title="暂停">暂停</a></li>
-											<li><a href="javascript:;" class="jp-stop" tabindex="1" title="停止">停止</a></li>
-											<li><a href="javascript:;" class="jp-mute" tabindex="1" title="小声">小声</a></li>
-											<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="静音">静音</a></li>
-											<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="大声">大声</a></li>
-										</ul>
-										<div class="jp-progress">
-											<div class="jp-seek-bar">
-												<div class="jp-play-bar"></div>
+						<td valign="top">
+							<div style="padding-left: 30px;">
+								<div style="font-size: 15px;font-style: italic;"><b>设备调试</b></div>
+									<div id="jquery_jplayer_1" class="jp-jplayer">
+									</div>
+									<div id="jp_container_1" class="jp-audio">
+										<div class="jp-type-single">
+											<div class="jp-gui jp-interface">
+												<ul class="jp-controls">
+													<li><a href="javascript:;" class="jp-play" tabindex="1" title="播放">播放</a></li>
+													<li><a href="javascript:;" class="jp-pause" tabindex="1" title="暂停">暂停</a></li>
+													<li><a href="javascript:;" class="jp-stop" tabindex="1" title="停止">停止</a></li>
+													<li><a href="javascript:;" class="jp-mute" tabindex="1" title="小声">小声</a></li>
+													<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="静音">静音</a></li>
+													<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="大声">大声</a></li>
+												</ul>
+												<div class="jp-progress">
+													<div class="jp-seek-bar">
+														<div class="jp-play-bar"></div>
+													</div>
+												</div>
+												<div class="jp-volume-bar">
+													<div class="jp-volume-bar-value"></div>
+												</div>
+												<div class="jp-time-holder">
+													<div class="jp-current-time"></div>
+													<div class="jp-duration"></div>
+												</div>
 											</div>
 										</div>
-										<div class="jp-volume-bar">
-											<div class="jp-volume-bar-value"></div>
-										</div>
-										<div class="jp-time-holder">
-											<div class="jp-current-time"></div>
-											<div class="jp-duration"></div>
-										</div>
 									</div>
-								</div>
+									<textarea rows="10" cols="10" style="font-size: 20px;width:98%;height: 90%">点击播放按钮,调试耳麦.在这里输入,测试录入设备.</textarea>
 							</div>
-							<textarea rows="10" cols="10" style="font-size: 20px;width:98%;height: 90%">点击播放按钮,调试耳麦.在这里输入,测试录入设备.</textarea>
 						</td>
 					</tr>
 					</table>

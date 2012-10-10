@@ -17,13 +17,13 @@
 		<tr>
 			<td valign="top" align="left" style="width: 100%;height: 45%">
 				<div style="font-size: 15px;font-style: italic;"><b>原文</b></div>
-				<div style="background-color: #EFEFBA;width: 100%;height: 100%;font-size: 20px;OVERFLOW-y:auto;">${question.textContent}</div>
+				<div style="background-color: #EFEFBA;width: 100%;height: 94%;font-size: 20px;OVERFLOW-y:auto;">${question.textContent}</div>
 			</td>
 		</tr>
 		<tr>
 			<td valign="top" align="left" style="width: 100%;height: 45%">
-				<div style="font-size: 15px;font-style: italic;"><b>答案</b></div>
-				<div style="background-color: #ABEFFF;width: 100%;height: 100%;font-size: 20px;OVERFLOW-y:auto;">${score.context}</div>
+				<div style="font-size: 15px;font-style: italic;background-color: #FFF;"><b>答案</b></div>
+				<div style="background-color: #ABEFFF;width: 100%;height: 94%;font-size: 20px;OVERFLOW-y:auto;">${score.context}</div>
 			</td>
 		</tr>
 	</table>
