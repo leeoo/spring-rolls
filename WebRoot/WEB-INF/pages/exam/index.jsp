@@ -18,7 +18,7 @@ $(document).ready(function(){
 		},
 		swfPath: "${base}/commons/js/jplayer/Jplayer.swf",
 		supplied: "mp3",
-		wmode: "window",
+		wmode: "window"
 	});
 });
 //]]>
@@ -173,7 +173,7 @@ $(document).ready(function(){
 	<div region="center" title="考生：${loginExaminee.username}您好！您的考号为：${loginExaminee.code}">
 		<table style="width: 97%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 			<tr>
-				<td valign="top" style="height: 200px;width:860px;">
+				<td valign="top" style="height: 200px;width:1000px;">
 					<div style="font-size: 15px;font-style: italic;"><b>正在进行的考试</b></div>
 					<table id="examing"></table>
 				</td>

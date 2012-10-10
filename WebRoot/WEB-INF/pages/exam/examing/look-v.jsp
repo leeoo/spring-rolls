@@ -35,7 +35,7 @@ function tempSave() {
         	if(msg!=null){
         		$.messager.alert('严重警告！',msg.message,'error');
         	}
-        },
+        }
     })
 }
 setInterval(tempSave,10000);

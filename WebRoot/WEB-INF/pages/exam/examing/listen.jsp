@@ -22,7 +22,7 @@ $(document).ready(function(){
 		},
 		swfPath: "${base}/commons/js/jplayer/Jplayer.swf",
 		supplied: "mp3",
-		wmode: "window",
+		wmode: "window"
 	});
 });
 //]]>
@@ -55,7 +55,7 @@ function tempSave() {
         	if(msg!=null){
         		$.messager.alert('严重警告！',msg.message,'error');
         	}
-        },
+        }
     })
 }
 setInterval(tempSave,10000);
