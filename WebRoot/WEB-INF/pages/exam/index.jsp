@@ -174,7 +174,7 @@ $(document).ready(function(){
 </head>
 <body class="easyui-layout">
 	<%@ include file="../global/title.jsp"%>
-	<div region="center" title="考生：${loginExaminee.username}您好！您的考号为：${loginExaminee.code}" style="overflow-x:hidden;">
+	<div region="center" title="考生：${loginExaminee.username}您好！您的考号为：${loginExaminee.code}">
 		<table style="padding-left:15px;padding-right:15px;padding-top:15px;width: 95%;height: 100%;border-color: #EFEFEF;" border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td valign="top" style="height: 200px;width:70%;">
