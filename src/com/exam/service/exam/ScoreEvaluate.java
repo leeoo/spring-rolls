@@ -48,6 +48,9 @@ public class ScoreEvaluate {
 	}
 	
 	public int getScore(String target){
+		if(target==null||target.trim().isEmpty()){
+			return 0;
+		}
 		float totalSoc = ContentUtils.getTotalSoc(source, cn, en, pun, num);
 		float errorSoc = ContentUtils.getErrorScore(source, target, cn, en, pun, num);
 		float socore;
