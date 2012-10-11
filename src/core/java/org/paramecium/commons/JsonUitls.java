@@ -137,10 +137,10 @@ public abstract class JsonUitls {
 	 * @return
 	 */
 	public static String getMapsJson(Collection<Map<String,Object>> maps,boolean startAndEndMaker,DateFormat format){
-		if(maps==null||maps.isEmpty()){
-			return null;
-		}
 		StringBuffer sb = new StringBuffer();
+		if(maps==null||maps.isEmpty()){
+			return sb.toString();
+		}
 		if(startAndEndMaker){
 			sb.append('{');
 		}
