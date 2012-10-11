@@ -68,10 +68,9 @@ public class ExamineeController extends BaseController{
 		page.setPageNo(pageNo);
 		page.setPageSize(10);
 		Integer id = mv.getValue("id", Integer.class);
-		if(id==null){
-			return mv.printJSON("");
+		if(id!=null){
+			page = scoreService.getMapScoreByExamineeId(page, id);
 		}
-		page = scoreService.getMapScoreByExamineeId(page, id);
 		String json = getJsonPageMapData(page);
 		return mv.printJSON(json);
 	}
