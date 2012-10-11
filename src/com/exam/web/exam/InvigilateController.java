@@ -64,6 +64,9 @@ public class InvigilateController extends BaseController{
 					mv.addValue("width", 800+30*(examineeSessions.size()-20));
 				}
 				mv.addValue("data", buffer.toString());
+			}else{
+				mv.addValue("width", 800);
+				mv.addValue("data", "['没有考生参加',0]");
 			}
 			return mv.forward(getExamPage("/invigilate/report_q.jsp"));
 		}else{
