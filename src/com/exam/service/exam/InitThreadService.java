@@ -253,6 +253,7 @@ public class InitThreadService {
 			examSession.setLongTime(examing.getLongTime());
 			if(examing.getChoice()){
 				Collection<QuestionChoice> choices = questionChoiceService.getAllByQuestionId(examing.getQuestionId());
+				//---------------------待开发-------------
 				if(choices!=null && !choices.isEmpty()){
 					for(QuestionChoice choice : choices){
 						examSession.addQuestionChoice(choice);

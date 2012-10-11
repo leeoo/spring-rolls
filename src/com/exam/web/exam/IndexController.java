@@ -127,6 +127,7 @@ public class IndexController extends BaseController{
 		mv.addValue("examineeSession", examineeSession);
 		mv.addValue("examingEndTime", examingEndTimeStr);//考试结束时间
 		if(examSession.isChoice()){
+			//-------------------待开发--------------
 			return mv.forward(getExamPage("/examing/choice.jsp"));
 		}else{
 			if(examSession.getAudio()!=null&&examSession.getAudio()){
@@ -278,6 +279,7 @@ public class IndexController extends BaseController{
 		mv.addValue("exam", exam);
 		mv.addValue("score", score);
 		if(exam.getChoice()!=null&&exam.getChoice()){
+			//--------------------------待开发-------------------------------
 			Collection<QuestionChoice> questionChoices = questionChoiceService.getAllByQuestionId(exam.getQuestionId());
 			mv.addValue("questionChoices", questionChoices);
 			return mv.forward(getExamPage("/score/detail_c.jsp"));

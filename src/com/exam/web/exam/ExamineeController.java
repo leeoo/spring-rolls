@@ -96,6 +96,7 @@ public class ExamineeController extends BaseController{
 		mv.addValue("exam", exam);
 		mv.addValue("score", score);
 		if(exam.getChoice()!=null&&exam.getChoice()){
+			//----------------待开发-------------
 			Collection<QuestionChoice> questionChoices = questionChoiceService.getAllByQuestionId(exam.getQuestionId());
 			mv.addValue("questionChoices", questionChoices);
 			return mv.forward(getExamPage("/score/detail_c.jsp"));

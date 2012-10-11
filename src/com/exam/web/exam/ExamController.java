@@ -97,6 +97,7 @@ public class ExamController extends BaseController{
 		mv.addValue("exam", exam);
 		mv.addValue("score", score);
 		if(exam.getChoice()!=null&&exam.getChoice()){
+			//待开发------------------------------
 			Collection<QuestionChoice> questionChoices = questionChoiceService.getAllByQuestionId(exam.getQuestionId());
 			mv.addValue("questionChoices", questionChoices);
 			return mv.forward(getExamPage("/score/detail_c.jsp"));
@@ -161,6 +162,7 @@ public class ExamController extends BaseController{
 			return mv.forward(getExamPage("/exam/input_c.jsp"));
 		}
 		if(choice!=null&&choice){
+			//待开发-----------------------------------
 			return mv.forward(getExamPage("/exam/input_c.jsp"));
 		}
 		return mv.forward(getExamPage("/exam/input.jsp"));
