@@ -63,6 +63,10 @@
 							}else{
 								return value+'天';
 							}
+						}},
+						{field:'null',title:'成绩',width:70,
+							formatter:function(value,rec){
+								return '<a href="#" onClick="dialogScore('+rec.id+')">查看</a>';
 						}}
 					]],
 					toolbar: [{
@@ -136,6 +140,9 @@
 			pagination:true
 		});
 	});
+	function dialogScore(examId){
+    	window.showModalDialog("${base}/exam/examinee/score${ext}?id="+examId+"&temp="+new Date().getTime(),null,"dialogWidth=900px;dialogHeight=600px");
+    }
 	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';
 	if(message!=''&&message!='null'){
 		$.messager.show({title:'提示',msg:message,timeout:3000,showType:'slide'});

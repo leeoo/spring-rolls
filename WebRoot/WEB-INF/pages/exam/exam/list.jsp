@@ -80,7 +80,13 @@
 						{field:'longTime',title:'考试时长',width:100,
 						formatter:function(value,rec){
 							return value+'分钟';
-						}}
+						}},
+						{field:'null',title:'成绩',width:70,
+							formatter:function(value,rec){
+								if(rec.status!='0'){
+									return '<a href="#" onClick="dialogScore('+rec.id+')">查看</a>';
+								}
+							}}
 					]],
 					toolbar: [{
 			            text: '新增速录考试',
@@ -162,6 +168,9 @@
 			pagination:true
 		});
 	});
+	function dialogScore(examId){
+    	window.showModalDialog("${base}/exam/exam/score${ext}?id="+examId+"&temp="+new Date().getTime(),null,"dialogWidth=900px;dialogHeight=600px");
+    }
 	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';
 	if(message!=''&&message!='null'){
 		$.messager.show({title:'提示',msg:message,timeout:3000,showType:'slide'});

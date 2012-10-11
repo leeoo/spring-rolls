@@ -1,5 +1,6 @@
 package com.exam.web.exam;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.paramecium.commons.DateUtils;
@@ -12,9 +13,14 @@ import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.annotation.Security;
 
 import com.exam.entity.exam.Exam;
+import com.exam.entity.exam.Question;
+import com.exam.entity.exam.QuestionChoice;
+import com.exam.entity.exam.Score;
 import com.exam.service.exam.ChoiceTypeQuestionService;
 import com.exam.service.exam.ExamService;
+import com.exam.service.exam.QuestionChoiceService;
 import com.exam.service.exam.QuestionService;
+import com.exam.service.exam.ScoreService;
 import com.exam.web.BaseController;
 
 @Security
@@ -31,10 +37,75 @@ public class ExamController extends BaseController{
 	@AutoInject
 	private	ChoiceTypeQuestionService choiceTypeQuestionService;
 	
+	@AutoInject
+	private QuestionChoiceService questionChoiceService;
+	
+	@AutoInject
+	private ScoreService scoreService;
+	
 	@ShowLabel("首页界面")
 	@MappingMethod
 	public void list(ModelAndView mv){
 		mv.forward(getExamPage("/exam/list.jsp"));
+	}
+	
+	@ShowLabel("考生成绩界面")
+	@MappingMethod
+	public ModelAndView score(ModelAndView mv){
+		Integer id = mv.getValue("id", Integer.class);
+		if(id==null){
+			mv.setErrorMessage("该考试不存在！");
+			return mv.redirect(getRedirect("/exam/exam/list"));
+		}
+		mv.addValue("id", id);
+		return mv.forward(getExamPage("/exam/score.jsp"));
+	}
+	
+	@ShowLabel("获取成绩数据")
+	@MappingMethod("score_data")
+	public ModelAndView scoreData(ModelAndView mv){
+		int pageNo = mv.getValue("page", int.class);
+		Page page = new Page();
+		page.setPageNo(pageNo);
+		page.setPageSize(10);
+		Integer id = mv.getValue("id", Integer.class);
+		if(id==null){
+			return mv.printJSON("");
+		}
+		page = scoreService.getMapScoreByExamId(page,id);
+		String json = getJsonPageMapData(page);
+		return mv.printJSON(json);
+	}
+	
+	@ShowLabel("获取成绩详情")
+	@MappingMethod("score_detail")
+	public ModelAndView scoreDetail(ModelAndView mv){
+		Integer id = mv.getValue("id", Integer.class);
+		if(id==null){
+			mv.setErrorMessage("该考试不存在！");
+			return mv.redirect(getRedirect("/exam/exam/list"));
+		}
+		Score score = scoreService.get(id);
+		if(score==null){
+			mv.setErrorMessage("该考试不存在！");
+			return mv.redirect(getRedirect("/exam/exam/list"));
+		}
+		Exam exam = examService.get(score.getExamId());
+		if(exam==null){
+			mv.setErrorMessage("该考试不存在！");
+			return mv.redirect(getRedirect("/exam/exam/list"));
+		}
+		mv.addValue("exam", exam);
+		mv.addValue("score", score);
+		if(exam.getChoice()!=null&&exam.getChoice()){
+			Collection<QuestionChoice> questionChoices = questionChoiceService.getAllByQuestionId(exam.getQuestionId());
+			mv.addValue("questionChoices", questionChoices);
+			return mv.forward(getExamPage("/score/detail_c.jsp"));
+		}else{
+			Question question = questionService.get(exam.getQuestionId());
+			mv.addValue("question", question);
+			return mv.forward(getExamPage("/score/detail_q.jsp"));
+		}
 	}
 	
 	@ShowLabel("获取列表数据")

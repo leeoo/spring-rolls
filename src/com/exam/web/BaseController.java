@@ -1,6 +1,8 @@
 package com.exam.web;
 
 import java.text.DateFormat;
+import java.util.Collection;
+import java.util.Map;
 
 import org.paramecium.commons.JsonUitls;
 import org.paramecium.jdbc.dialect.Page;
@@ -41,6 +43,14 @@ public abstract class BaseController {
 		}else{
 			json = JsonUitls.getBeansJson(page.getResult(),false,format);
 		}
+		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
+		return json;
+	}
+	
+	@Security(false)
+	public String getJsonPageMapData(Page page){
+		@SuppressWarnings("unchecked")
+		String json = JsonUitls.getMapsJson((Collection<Map<String, Object>>) page.getResult(),false);
 		json = ("{\"total\":\""+page.getTotalCount()+"\",\"rows\":["+json+"]}");
 		return json;
 	}

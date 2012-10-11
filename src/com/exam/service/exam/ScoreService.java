@@ -70,6 +70,33 @@ public class ScoreService {
 		return ormDao.getGenericJdbcDao().queryPageBeansByArray("SELECT id,start_date,long_time,score,examinee_id,exam_id FROM t_score WHERE examinee_id=? ORDER BY start_date DESC", Score.class, page, examinee.getId());
 	}
 	
+	public Page getMapScoreByExamineeId(Page page,int examineeId){
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("e.title title,");
+		sql.append("e.score full_score,");
+		sql.append("e.long_time exam_long_time,");
+		sql.append("s.start_date start_date,");
+		sql.append("s.long_time long_time,");
+		sql.append("s.score score,");
+		sql.append("s.id id");
+		sql.append(" FROM t_score s LEFT JOIN t_exam e ON s.exam_id = e.id WHERE s.examinee_id = ?");
+		return ormDao.getGenericJdbcDao().queryPageMapsByArray(sql.toString(), page, examineeId);
+	}
+	
+	public Page getMapScoreByExamId(Page page,int examId){
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("e.code code,");
+		sql.append("e.username username,");
+		sql.append("s.start_date start_date,");
+		sql.append("s.long_time long_time,");
+		sql.append("s.score score,");
+		sql.append("s.id id");
+		sql.append(" FROM t_score s LEFT JOIN t_examinee e ON s.examinee_id = e.id WHERE s.exam_id = ?");
+		return ormDao.getGenericJdbcDao().queryPageMapsByArray(sql.toString(), page,examId);
+	}
+	
 	public Page getAll(Page page){
 		return ormDao.select(page);
 	}
