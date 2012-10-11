@@ -6,9 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -572,7 +572,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDMLByBeans(final Connection connection,final String sql,Collection<?> beanParamsList) throws SQLException {
-		Collection<Map<String, Object>> mapParamsList = new ArrayList<Map<String,Object>>();
+		Collection<Map<String, Object>> mapParamsList = new LinkedList<Map<String,Object>>();
 		for(Object bean : beanParamsList){
 			mapParamsList.add(BeanUtils.bean2Map(bean));
 		}
@@ -638,7 +638,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 			callableStatement.registerOutParameter((i++), outParam);
 		}
 		callableStatement.execute();
-		Collection<Object> collection = new ArrayList<Object>();
+		Collection<Object> collection = new LinkedList<Object>();
 		for(int j=1;j<=outParams.length;j++){
 			collection.add(callableStatement.getObject((j++)));
 		}
