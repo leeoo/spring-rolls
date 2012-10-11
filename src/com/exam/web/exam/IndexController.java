@@ -176,6 +176,10 @@ public class IndexController extends BaseController{
 			return examing(mv);
 		}
 		ExamSession examSession = ExamingCache.getExamSession(id);
+		if(examSession==null){
+			mv.setErrorMessage("考试已经结束，请联系管理员!");
+			return examing(mv);
+		}
 		ExamineeSession examineeSession = examSession.getExaminee(examinee.getId());
 		if(examineeSession==null){
 			mv.setErrorMessage("您已经超过考试时间,系统已经为您保存了考试信息!");
@@ -228,6 +232,9 @@ public class IndexController extends BaseController{
 			return mv.printJSON("由于您的考试信息缺失,请您暂停考试!");
 		}
 		ExamSession examSession = ExamingCache.getExamSession(id);
+		if(examSession==null){
+			return mv.printJSON("考试已经结束，请联系管理员!");
+		}
 		ExamineeSession examineeSession = examSession.getExaminee(examinee.getId());
 		if(examineeSession==null){
 			return mv.printJSON("您已经超过考试时间,系统已经为您保存了考试信息!");
