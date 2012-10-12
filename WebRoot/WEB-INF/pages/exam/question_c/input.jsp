@@ -22,8 +22,19 @@
 						<td><input name="question.title" class="easyui-validatebox" required="true" validType="length[3,500]" style="width: 500px;" value="${question.title}"/></td>
 					</tr>
 					<tr>
-						<td colspan="2" align="center">选择题列表
-						<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-add">添加</a>
+						<td colspan="2" align="center" style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
+							<table>
+								<tr><td width="100">问题内容:</td><td><textarea class="easyui-validatebox" required="true" rows="3" cols="60" name="choice.title"></textarea></td><td>权重:<input name="choice.proportion" required="true" class="easyui-numberbox" style="width: 30px;" required="true" value="1"/></td></tr>
+								<tr><td width="100">选项A:</td><td><input name="choice.aOption" class="easyui-validatebox" required="true" style="width: 500px;"></input></td><td>正确答案:<input type="checkbox" id="answer_a" value="A"/></td></tr>
+								<tr><td width="100">选项B:</td><td><input name="choice.bOption" class="easyui-validatebox" required="true" style="width: 500px;"></input></td><td>正确答案:<input type="checkbox" id="answer_b" value="B"/></td></tr>
+								<tr><td width="100">选项C:</td><td><input name="choice.cOption" style="width: 500px;"></input></td><td>正确答案:<input type="checkbox" id="answer_c" value="C"/></td></tr>
+								<tr><td width="100">选项D:</td><td><input name="choice.dOption" style="width: 500px;"></input></td><td>正确答案:<input type="checkbox" id="answer_d" value="D"/></td></tr>
+								<tr><td width="100">选项E:</td><td><input name="choice.eOption" style="width: 500px;"></input></td><td>正确答案:<input type="checkbox" id="answer_e" value="E"/></td></tr>
+								<tr><td width="100">选项F:</td><td><input name="choice.fOption" style="width: 500px;"></input></td><td>正确答案:<input type="checkbox" id="answer_f" value="F"/></td></tr>
+								<tr><td width="100">选项G:</td><td><input name="choice.gOption" style="width: 500px;"></input></td><td>正确答案:<input type="checkbox" id="answer_g" value="G"/></td></tr>
+								<tr><td width="100">选项H:</td><td><input name="choice.hOption" style="width: 500px;"></input></td><td>正确答案:<input type="checkbox" id="answer_h" value="H"/></td></tr>
+								<tr><td colspan="3" align="right"><a href="#" class="easyui-linkbutton"  iconCls="icon-add">添加</a></td></tr>
+							</table>
 						</td>
 					</tr>
 					<tr>
