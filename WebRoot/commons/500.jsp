@@ -10,7 +10,12 @@
 	<script type="text/javascript" src="${base}/commons/js/jquery/jquery-1.4.4.min.js"></script>
 	<style type="text/css">
 		<!-- 
-			html,body{height:100%; margin:0px;} 
+			html,body{
+			height:100%;
+			margin:0px;
+			background-image:url("${base}/commons/images/exam.gif");
+			background-repeat: no-repeat;
+			} 
 		--> 
 		#errorDiv{
 			text-align:left;
@@ -28,9 +33,9 @@
 	</style>
 </head>
 <body>
-	<div style="text-align: center;width: 100%;height: 100%;background-image: url('${base}/commons/images/bodybg.png');">
-		<div style="color: #FFF;font-size: 280px;font-weight: bolder;">500</div>
-		<div style="color: #FFF;font-size: 50px;font-weight: bolder;">您访问的页面出现错误</div>
+	<div style="text-align: center;width: 100%;height: 100%;">
+		<div style="color: BLUE;font-size: 280px;font-weight: bolder;">500</div>
+		<div style="color: BLUE;font-size: 50px;font-weight: bolder;">您访问的页面出现错误</div>
 		<div id="errorDiv">
 			<span id='errorMove'>详细信息</span>
 			<pre id='errorRequest'>
