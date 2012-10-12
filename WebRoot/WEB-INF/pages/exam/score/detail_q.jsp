@@ -4,8 +4,27 @@
 <head>
 <%@ include file="../../global/head.jsp"%>
 <title>${title}——成绩查看</title>
+<paramecium:resourceAuthorize ifAnyGranted="/system/themes#change">
+<script type="text/javascript" src="${base}/commons/js/clipboard/jquery.clipboard.min.js"></script>
+<script>
+    jQuery(function($){  
+        jQuery.clipboardReady(function() {  
+            jQuery("#copyA").click(function () {  
+            	jQuery.clipboard($("#q_content").text());
+                $.messager.alert('提示','原文复制成功！','info'); 
+                return false;  
+            });  
+            jQuery("#copyB").click(function () {  
+            	jQuery.clipboard($("#s_content").text());
+                $.messager.alert('提示','答案复制成功！','info');
+                return false;  
+            });
+        }, { swfpath: "${base}/commons/js/clipboard/jquery.clipboard.swf", debug: true });  
+    });
+</script>
+</paramecium:resourceAuthorize>
 </head>
-<body style="margin:0;padding:0;z-index:0;width: 100%;height: 100%;position:absolute;overflow-x:hidden;overflow-y:hidden;" oncontextmenu="return false;" onselectstart="return false;">
+<body style="margin:0;padding:0;z-index:0;width: 100%;height: 100%;position:absolute;" <paramecium:resourceAuthorize ifNotGranted="/system/themes#change"> oncontextmenu="return false;" onselectstart="return false;" </paramecium:resourceAuthorize> >
 	<table style="width: 100%;height: 100%;border-color: #EFEFEF;" border="1" cellpadding="0" cellspacing="0">
 		<tr style="background-color: #EFEFEF">
 			<td height="5%" align="right" style="padding-right: 20px;">
@@ -16,14 +35,14 @@
 		</tr>
 		<tr>
 			<td valign="top" align="left" style="width: 100%;height: 45%">
-				<div style="font-size: 15px;font-style: italic;"><b>原文</b></div>
-				<div style="background-color: #EFEFBA;width: 100%;height: 94%;font-size: 20px;OVERFLOW-y:auto;">${question.textContent}</div>
+				<div><b style="font-size: 15px;font-style: italic;">原文</b><paramecium:resourceAuthorize ifAnyGranted="/system/themes#change"><span style="padding-left: 20px;"><a href="#" class="easyui-linkbutton" iconCls="icon-doc" id="copyA">复制</a></span></paramecium:resourceAuthorize></div>
+				<div id="q_content" style="background-color: #EFEFBA;width: 100%;height: 94%;font-size: 20px;OVERFLOW-y:auto;">${question.textContent}</div>
 			</td>
 		</tr>
 		<tr>
 			<td valign="top" align="left" style="width: 100%;height: 45%">
-				<div style="font-size: 15px;font-style: italic;background-color: #FFF;"><b>答案</b></div>
-				<div style="background-color: #ABEFFF;width: 100%;height: 94%;font-size: 20px;OVERFLOW-y:auto;">${score.context}</div>
+				<div><b  style="font-size: 15px;font-style: italic;background-color: #FFF;">答案</b><paramecium:resourceAuthorize ifAnyGranted="/system/themes#change"><span style="padding-left: 20px;"><a href="#" class="easyui-linkbutton" iconCls="icon-doc" id="copyB">复制</a></span></paramecium:resourceAuthorize></div>
+				<div id="s_content" style="background-color: #ABEFFF;width: 100%;height: 94%;font-size: 20px;OVERFLOW-y:auto;">${score.context}</div>
 			</td>
 		</tr>
 	</table>
