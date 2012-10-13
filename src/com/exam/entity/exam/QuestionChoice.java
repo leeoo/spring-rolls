@@ -25,8 +25,8 @@ public class QuestionChoice implements Serializable {
 	
 	@Column
 	@NotNull
-	@Length(min=10,max=1000)
-	@ShowLabel("题目")
+	@Length(min=5,max=1000)
+	@ShowLabel("问题内容")
 	private String title;// 问题题目
 	
 	@Column

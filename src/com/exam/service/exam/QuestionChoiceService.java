@@ -25,6 +25,9 @@ public class QuestionChoiceService {
 	}
 	
 	public void save(QuestionChoice question) throws Exception{
+		if(question.getAnswer()!=null&&question.getAnswer().trim().length()>1){
+			question.setMulti(true);
+		}
 		ormDao.insert(question);
 	}
 	

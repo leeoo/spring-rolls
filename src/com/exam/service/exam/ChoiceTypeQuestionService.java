@@ -1,5 +1,7 @@
 package com.exam.service.exam;
 
+import java.util.Collection;
+
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
@@ -8,6 +10,7 @@ import org.paramecium.orm.GenericOrmDao;
 import org.paramecium.transaction.annotation.Transactional;
 
 import com.exam.entity.exam.ChoiceTypeQuestion;
+import com.exam.entity.exam.QuestionChoice;
 
 @ShowLabel("基础考试题库业务类")
 @Service
@@ -23,12 +26,30 @@ public class ChoiceTypeQuestionService {
 		ormDao.setValidation(true);
 	}
 	
-	public void save(ChoiceTypeQuestion question) throws Exception{
-		ormDao.insert(question);
+	public void save(ChoiceTypeQuestion question,Collection<QuestionChoice> choices) throws Exception{
+		question.setChoice(true);
+		Integer id = ormDao.insert(question).intValue();
+		if(id==null){
+			throw new RuntimeException("理论题库保存后无法获得自增主键ID值！");
+		}
+		if(choices!=null&&!choices.isEmpty()){
+			for(QuestionChoice choice : choices){
+				choice.setQuestionId(id);
+				questionChoiceService.save(choice);
+			}
+		}
 	}
 	
-	public void update(ChoiceTypeQuestion question) throws Exception{
+	public void update(ChoiceTypeQuestion question,Collection<QuestionChoice> choices) throws Exception{
+		question.setChoice(true);
 		ormDao.update(question);
+		questionChoiceService.deleteByQuestionId(question.getId());
+		if(choices!=null&&!choices.isEmpty()){
+			for(QuestionChoice choice : choices){
+				choice.setQuestionId(question.getId());
+				questionChoiceService.save(choice);
+			}
+		}
 	}
 	
 	public void delete(String... ids) throws Exception{
