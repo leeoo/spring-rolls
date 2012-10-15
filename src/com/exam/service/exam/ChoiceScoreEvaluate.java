@@ -1,9 +1,11 @@
-package com.exam.entity.exam;
+package com.exam.service.exam;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import com.exam.entity.exam.QuestionChoice;
 
 public class ChoiceScoreEvaluate {
 	
