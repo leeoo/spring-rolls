@@ -49,10 +49,10 @@ public class ChoiceScoreEvaluate {
 	 * @return
 	 */
 	public static Map<Integer,String[]> buildChoiceMap(String choiceContext){
-		if(choiceContext==null||choiceContext.trim().isEmpty()){
-			return null;
-		}
 		Map<Integer,String[]> map = new HashMap<Integer, String[]>();
+		if(choiceContext==null||choiceContext.trim().isEmpty()){
+			return map;
+		}
 		for(String portion : choiceContext.split(";")){//获得每道题
 			int m = portion.indexOf(':');//取得id和答案的划分点
 			if(m>0){

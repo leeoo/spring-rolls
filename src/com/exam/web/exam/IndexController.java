@@ -28,6 +28,7 @@ import com.exam.entity.exam.ExamingCache;
 import com.exam.entity.exam.Question;
 import com.exam.entity.exam.QuestionChoice;
 import com.exam.entity.exam.Score;
+import com.exam.service.exam.ChoiceScoreEvaluate;
 import com.exam.service.exam.ExamService;
 import com.exam.service.exam.QuestionChoiceService;
 import com.exam.service.exam.QuestionService;
@@ -127,7 +128,9 @@ public class IndexController extends BaseController{
 		mv.addValue("examineeSession", examineeSession);
 		mv.addValue("examingEndTime", examingEndTimeStr);//考试结束时间
 		if(examSession.isChoice()){
-			//-------------------待开发--------------
+			/*mv.addValue("questionChoices", examSession.getQuestionChoices());
+			mv.addValue("answerChoice", examineeSession.getChoices());*/
+			//看实际情况是否需要放入，再放开注释，待开发。。。
 			return mv.forward(getExamPage("/examing/choice.jsp"));
 		}else{
 			if(examSession.getAudio()!=null&&examSession.getAudio()){
@@ -240,8 +243,16 @@ public class IndexController extends BaseController{
 		if(examineeSession==null){
 			return mv.printJSON("您已经超过考试时间,系统已经为您保存了考试信息!");
 		}
-		String tempContent = mv.getValue("tempContent", String.class);
-		examineeSession.setTempContent(tempContent);
+		if(examSession.isChoice()){
+			String answer = mv.getValue("answer");
+			Integer choiceId = mv.getValue("choiceId", Integer.class);
+			if(choiceId!=null){
+				examineeSession.addChoices(choiceId, answer);
+			}
+		}else{
+			String tempContent = mv.getValue("tempContent", String.class);
+			examineeSession.setTempContent(tempContent);
+		}
 		examineeSession.setLongTime(examineeSession.getLongTime()+10);
 		examSession.addExaminee(examineeSession);
 		return mv.printJSON("");
@@ -279,9 +290,9 @@ public class IndexController extends BaseController{
 		mv.addValue("exam", exam);
 		mv.addValue("score", score);
 		if(exam.getChoice()!=null&&exam.getChoice()){
-			//--------------------------待开发-------------------------------
 			Collection<QuestionChoice> questionChoices = questionChoiceService.getAllByQuestionId(exam.getQuestionId());
 			mv.addValue("questionChoices", questionChoices);
+			mv.addValue("anwserChoices", ChoiceScoreEvaluate.buildChoiceMap(score.getContext()));//构建正确答案
 			return mv.forward(getExamPage("/score/detail_c.jsp"));
 		}else{
 			Question question = questionService.get(exam.getQuestionId());
