@@ -9,13 +9,21 @@
 <script>
     jQuery(function($){  
         jQuery.clipboardReady(function() {  
-            jQuery("#copyA").click(function () {  
-            	jQuery.clipboard($("#q_content").text());
+            jQuery("#copyA").click(function () {
+            	var content = $("#q_content").val();
+            	if(content==null||content==''){
+            		content = $("#q_content").text();
+            	}
+            	jQuery.clipboard(content);
                 $.messager.alert('提示','原文复制成功！','info'); 
                 return false;  
             });  
-            jQuery("#copyB").click(function () {  
-            	jQuery.clipboard($("#s_content").text());
+            jQuery("#copyB").click(function () {
+            	var content = $("#s_content").val();
+            	if(content==null||content==''){
+            		content = $("#s_content").text();
+            	}
+            	jQuery.clipboard(content);
                 $.messager.alert('提示','答案复制成功！','info');
                 return false;  
             });
