@@ -32,14 +32,15 @@ public class ChoiceScoreEvaluate {
 	
 	public static void main(String[] args) {
 		Map<Integer,String[]> map = buildChoiceMap("1:b,c;1:A;2:t;3:c;6:a;7:,d,f;8:a,b,");
-		for(int id : map.keySet()){
+		System.out.println(buildChoiceContext(map));
+		/*for(int id : map.keySet()){
 			System.out.println("id:"+id+" value:");
 			for(String value:map.get(id)){
 				System.out.print(value);
 			}
 			System.out.println();
 			System.out.println("=============================");
-		}
+		}*/
 	}
 	
 	/**
@@ -47,12 +48,12 @@ public class ChoiceScoreEvaluate {
 	 * @param choiceContent
 	 * @return
 	 */
-	public static Map<Integer,String[]> buildChoiceMap(String choiceContent){
-		if(choiceContent==null||choiceContent.trim().isEmpty()){
+	public static Map<Integer,String[]> buildChoiceMap(String choiceContext){
+		if(choiceContext==null||choiceContext.trim().isEmpty()){
 			return null;
 		}
 		Map<Integer,String[]> map = new HashMap<Integer, String[]>();
-		for(String portion : choiceContent.split(";")){//获得每道题
+		for(String portion : choiceContext.split(";")){//获得每道题
 			int m = portion.indexOf(':');//取得id和答案的划分点
 			if(m>0){
 				String key = portion.substring(0,m);
@@ -78,6 +79,27 @@ public class ChoiceScoreEvaluate {
 			}
 		}
 		return map;
+	}
+	
+	/**
+	 * 将选择题原型变为文本格式
+	 * @param map
+	 * @return
+	 */
+	public static String buildChoiceContext(Map<Integer,String[]> map){
+		if(map==null||map.isEmpty()){
+			return "";
+		}
+		StringBuffer buffer = new StringBuffer(",");
+		for(int id : map.keySet()){
+			buffer.append(id).append(':');
+			for(String answer : map.get(id)){
+				buffer.append(answer.toUpperCase()).append(',');
+			}
+			buffer.replace(buffer.length()-1, buffer.length(), ";");
+		}
+		buffer.delete(0, 1);
+		return buffer.toString();
 	}
 	
 	public int getScore(Map<Integer,String[]> choiceMap){

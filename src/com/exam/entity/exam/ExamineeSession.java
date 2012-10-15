@@ -13,7 +13,7 @@ public class ExamineeSession {
 	
 	private String username;
 	
-	private String tempContent;// 临时内容
+	private String tempContent = "";// 临时内容
 	
 	private Map<Integer,String[]> choices = new HashMap<Integer, String[]>();
 	

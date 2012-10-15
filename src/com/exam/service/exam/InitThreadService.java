@@ -186,7 +186,23 @@ public class InitThreadService {
 									}
 								}
 							}else{//如果是选择题
-								//待开发....................................
+								ChoiceScoreEvaluate choiceScoreEvaluate = new ChoiceScoreEvaluate(examSession.getQuestionChoices(), examSession.getScore());
+								for(ExamineeSession examineeSession : examineeSessions){
+									Score score = new Score();
+									String context = ChoiceScoreEvaluate.buildChoiceContext(examineeSession.getChoices());//将选择题变成文本
+									score.setContext(context);
+									score.setExamId(examSession.getId());
+									score.setExamineeId(examineeSession.getId());
+									score.setLongTime(examineeSession.getLongTime());
+									score.setStartDate(new Date(examineeSession.getExamDate()*1000));//进入考试的时间
+									int finalScore = choiceScoreEvaluate.getScore(examineeSession.getChoices());//通过算法获得分数
+									score.setScore(finalScore);
+									try {
+										scoreService.save(score);
+									} catch (Exception e) {
+										logger.error(e);
+									}
+								}
 							}
 						}
 						examSession.release();//释放资源
@@ -253,7 +269,6 @@ public class InitThreadService {
 			examSession.setLongTime(examing.getLongTime());
 			if(examing.getChoice()){
 				Collection<QuestionChoice> choices = questionChoiceService.getAllByQuestionId(examing.getQuestionId());
-				//---------------------待开发-------------
 				if(choices!=null && !choices.isEmpty()){
 					for(QuestionChoice choice : choices){
 						examSession.addQuestionChoice(choice);
@@ -311,24 +326,41 @@ public class InitThreadService {
 											examSession.getTextContent(), examSession.getScore(), 
 											examSession.getCnProportion(), examSession.getEnProportion(),
 											examSession.getPunProportion(), examSession.getNumProportion());
-										Score score = new Score();
-										score.setContext(examineeSession.getTempContent());
-										score.setExamId(examSession.getId());
-										score.setExamineeId(examineeSession.getId());
-										score.setLongTime(examSession.getLongTime()*60);
-										score.setStartDate(new Date(examineeSession.getExamDate()*1000));//进入考试的时间
-										int finalScore = scoreEvaluate.getScore(examineeSession.getTempContent());//通过算法获得分数
-										score.setScore(finalScore);
-										try {
-											scoreService.save(score);
-											examSession.removeExamineeSession(examineeSession.getId());
-										} catch (Exception e) {
-											logger.error(e);
-											logger.error("<考试异常暂存日志>考号:"+examineeSession.getCode()+" 耗时:"+score.getLongTime()+"秒 得分:"+score.getScore()+"内容:"+score.getContext());
-											logger.error(e);
-										}
+									Score score = new Score();
+									score.setContext(examineeSession.getTempContent());
+									score.setExamId(examSession.getId());
+									score.setExamineeId(examineeSession.getId());
+									score.setLongTime(examSession.getLongTime()*60);
+									score.setStartDate(new Date(examineeSession.getExamDate()*1000));//进入考试的时间
+									int finalScore = scoreEvaluate.getScore(examineeSession.getTempContent());//通过算法获得分数
+									score.setScore(finalScore);
+									try {
+										scoreService.save(score);
+										examSession.removeExamineeSession(examineeSession.getId());
+									} catch (Exception e) {
+										logger.error(e);
+										logger.error("<考试异常暂存日志>考号:"+examineeSession.getCode()+" 耗时:"+score.getLongTime()+"秒 得分:"+score.getScore()+"内容:"+score.getContext());
+										logger.error(e);
+									}
 								}else{//如果是选择题
-									//待开发....................................
+									ChoiceScoreEvaluate choiceScoreEvaluate = new ChoiceScoreEvaluate(examSession.getQuestionChoices(), examSession.getScore());
+									Score score = new Score();
+									String context = ChoiceScoreEvaluate.buildChoiceContext(examineeSession.getChoices());//将选择题变成文本
+									score.setContext(context);
+									score.setExamId(examSession.getId());
+									score.setExamineeId(examineeSession.getId());
+									score.setLongTime(examSession.getLongTime()*60);
+									score.setStartDate(new Date(examineeSession.getExamDate()*1000));//进入考试的时间
+									int finalScore = choiceScoreEvaluate.getScore(examineeSession.getChoices());//通过算法获得分数
+									score.setScore(finalScore);
+									try {
+										scoreService.save(score);
+										examSession.removeExamineeSession(examineeSession.getId());
+									} catch (Exception e) {
+										logger.error(e);
+										logger.error("<考试异常暂存日志>考号:"+examineeSession.getCode()+" 耗时:"+score.getLongTime()+"秒 得分:"+score.getScore()+"内容:"+score.getContext());
+										logger.error(e);
+									}
 								}
 							}
 						}

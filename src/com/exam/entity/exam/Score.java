@@ -65,7 +65,9 @@ public class Score implements Serializable{
 	}
 
 	public void setContext(String context) {
-		this.context = context;
+		if(context!=null){
+			this.context = context;
+		}
 	}
 
 	public int getScore() {
