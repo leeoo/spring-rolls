@@ -155,6 +155,15 @@ public class ModelAndView implements Serializable,Cloneable{
 	}
 	
 	/**
+	 * 获得返回值为字符串的请求值
+	 * @param name
+	 * @return
+	 */
+	public String getValue(String name){
+		return request.getParameter(name);
+	}
+	
+	/**
 	 * 获得单值
 	 * @param name
 	 * @return
