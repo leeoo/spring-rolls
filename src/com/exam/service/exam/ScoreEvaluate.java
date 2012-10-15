@@ -53,13 +53,13 @@ public class ScoreEvaluate {
 		}
 		float totalSoc = ContentUtils.getTotalSoc(source, cn, en, pun, num);
 		float errorSoc = ContentUtils.getErrorScore(source, target, cn, en, pun, num);
-		float socore;
+		float score;
 		if (errorSoc >= totalSoc){
-			socore = 0.0f;
+			score = 0.0f;
 		}else{
-			socore = (totalSoc - errorSoc) * fullScore / totalSoc;
+			score = (totalSoc - errorSoc) / totalSoc * fullScore;
 		}
-		return new BigDecimal(socore).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+		return new BigDecimal(score).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
 	}
 	
 	

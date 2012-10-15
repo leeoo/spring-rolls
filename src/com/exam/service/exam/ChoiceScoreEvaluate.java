@@ -1,12 +1,17 @@
 package com.exam.service.exam;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
 import com.exam.entity.exam.QuestionChoice;
-
+/**
+ * 选择题判分算法
+ * @author temp
+ *
+ */
 public class ChoiceScoreEvaluate {
 	
 	private Collection<QuestionChoice> questionChoices;
@@ -76,8 +81,28 @@ public class ChoiceScoreEvaluate {
 	}
 	
 	public int getScore(Map<Integer,String[]> choiceMap){
-		
-		return 0;
+		if(choiceMap==null||choiceMap.isEmpty()){
+			return 0;
+		}
+		int errorProportion = 0;
+		for(QuestionChoice choice : questionChoices){
+			int id = choice.getId();
+			String[] answers = choiceMap.get(id);
+			if(answers==null||answers.length<1){//如果答案为空，说明没有答题，直接扣分并开始下一题评分
+				errorProportion += choice.getProportion();
+				continue;
+			}else{
+				for(String answer : answers){
+					if(choice.getAnswer().indexOf(answer)<0){//如果有一个答案与正确答案不同，错误，直接扣分
+						errorProportion += choice.getProportion();
+						continue;
+					}
+				}
+				continue;
+			}
+		}
+		float score = ((float)fullProportion - (float)errorProportion) / (float)fullProportion * fullScore;
+		return new BigDecimal(score).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
 	}
 	
 }
