@@ -15,7 +15,7 @@ public class ExamineeSession {
 	
 	private String tempContent;// 临时内容
 	
-	private Map<Integer,String> choices = new HashMap<Integer, String>();
+	private Map<Integer,String[]> choices = new HashMap<Integer, String[]>();
 	
 	private int longTime;//经过多少时间(秒),防止断网
 	
@@ -32,7 +32,7 @@ public class ExamineeSession {
 		choices.clear();
 	}
 	
-	public synchronized void addChoices(int choiceId,String answer){
+	public synchronized void addChoices(int choiceId,String... answer){
 		choices.put(choiceId, answer);
 	}
 
@@ -92,7 +92,7 @@ public class ExamineeSession {
 		this.choice = choice;
 	}
 
-	public Map<Integer, String> getChoices() {
+	public Map<Integer, String[]> getChoices() {
 		return choices;
 	}
 
