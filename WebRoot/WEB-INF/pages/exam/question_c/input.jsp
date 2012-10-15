@@ -23,6 +23,7 @@
 								<input type="hidden" id="question.id" name="question.id" value="${question.id}"/>
 							</c:if>
 							<button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button>
+							<a href="${base}/exam/question_c/list${ext}" class="easyui-linkbutton" iconCls="icon-redo">返回</a>
 						</form>
 					</td>
 				</tr>
@@ -60,7 +61,7 @@
 							<c:forEach items="${choices}" var="choice" varStatus="status">
 								<tr>
 									<td>
-										<b>${status.index+1}.${choice.title}&nbsp;&nbsp;(权重：${choice.proportion})</b><b style="color: RED">&nbsp;&nbsp;正确答案[ ${choice.answer} ]</b>
+										<b>${status.index+1}.${choice.title}&nbsp;&nbsp;(权重：${choice.proportion})</b><b style="color: RED">&nbsp;&nbsp;正确答案[ ${choice.answer} ]</b><span style="padding-left: 20px;"><a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="return removeChoice(${choice.id});">删除该题</a></span>
 									</td>
 								</tr>
 								<tr>
@@ -300,6 +301,17 @@
 			$.messager.alert('严重警告！','您没有设置正确答案！','error');
 			return false;
 		}
+	}
+	
+	function removeChoice(id){
+		$.messager.confirm('提示','确认删除该题吗?',function(d){
+            if(d){
+            	var choiceForm = document.getElementById('choiceForm');
+            	choiceForm.method = "POST";
+            	choiceForm.action = '${base}/exam/question_c/choice_delete${ext}?id='+id;
+            	choiceForm.submit();
+            }
+        });
 	}
 	
 </script>

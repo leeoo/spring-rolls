@@ -123,15 +123,20 @@ public class ChoiceTypeQuestionController extends BaseController {
 	
 	@ShowLabel("选项删除")
 	@MappingMethod("/choice_delete")
-	public void deleteChoice(ModelAndView mv){
+	public ModelAndView deleteChoice(ModelAndView mv){
 		Integer id = mv.getValue("id",Integer.class);
 		try {
 			if(id!=null){
 				cache.remove(id);
 			}
+			ChoiceTypeQuestion question = mv.getBean("question",ChoiceTypeQuestion.class);
+			mv.addValue("question", question);
+			mv.addValue("choices", cache.getValues());
+			mv.setSuccessMessage("删除成功!");
 		} catch (Exception e) {
-			mv.printJSON(e.getMessage());
+			mv.setErrorMessage(e.getMessage());
 		}
+		return mv.forward(getExamPage("/question_c/input.jsp"));
 	}
 	
 	@ShowLabel("删除")
