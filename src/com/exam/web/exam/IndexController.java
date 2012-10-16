@@ -96,7 +96,7 @@ public class IndexController extends BaseController{
 			return mv.redirect(getRedirect("/exam/index"));
 		}
 		ExamineeSession examineeSession = examSession.getExaminee();
-		if(examineeSession==null){
+		if(examineeSession==null){//如果是第一次进入，开始初始化
 			@SuppressWarnings("unchecked")
 			org.paramecium.security.UserDetails<Examinee> user = (UserDetails<Examinee>) SecurityUitls.getLoginUser();
 			if(user==null){
@@ -146,7 +146,7 @@ public class IndexController extends BaseController{
 				Collection<QuestionChoice> choices = examSession.getQuestionChoices();
 				choiceId = choices.iterator().next().getId();//如果是第一次进入获得第一题
 			}
-			mv.addValue("choiceMenu", examineeSession.getChoiceMenu(choiceId));//放入当前菜单
+			mv.addValue("currentChoiceMenu", examineeSession.getChoiceMenu(choiceId));//放入当前菜单
 			mv.addValue("choice", examSession.getQuestionChoice(choiceId));//放入当前选择题
 			mv.addValue("choiceMenus", examineeSession.getChoiceMenus());//放入整个菜单列表
 			return mv.forward(getExamPage("/examing/choice.jsp"));
@@ -274,7 +274,11 @@ public class IndexController extends BaseController{
 			int status = mv.getValue("status",int.class);
 			Integer choiceId = mv.getValue("choiceId", Integer.class);
 			if(choiceId!=null){
-				examineeSession.addChoices(choiceId,status, answer);
+				if(answer==null||answer.trim().isEmpty()){
+					status = 0;//如果答案为空，即为仍没有回答
+				}else{
+					examineeSession.addChoices(choiceId,status, answer);
+				}
 				examineeSession.setTempContent(String.valueOf(choiceId));//当前写到某题记录
 			}
 		}else{
@@ -317,10 +321,23 @@ public class IndexController extends BaseController{
 		}
 		Integer choiceId = mv.getValue("choiceId", Integer.class);
 		if(choiceId!=null){
-			mv.addValue("choiceMenu", examineeSession.getChoiceMenu(choiceId));//放入当前菜单
+			mv.addValue("currentChoiceMenu", examineeSession.getChoiceMenu(choiceId));//放入当前菜单
 			mv.addValue("choice", examSession.getQuestionChoice(choiceId));//放入当前选择题
 		}
+		int longTime = examSession.getLongTime();//这是分钟
+		longTime = longTime * 60;//变成秒
+		longTime = longTime - (int)(EncodeUtils.millisTime()/1000-examineeSession.getExamDate());
+		long startTime = mv.getValue("dateTime", long.class);
+		if(startTime==0){
+			startTime = examineeSession.getExamDate();//开始考试时间,这是秒
+		}else{
+			startTime = startTime/1000;
+		}
+		long examingEndTime = (startTime + longTime)*1000;//变成毫秒
+		String examingEndTimeStr = DateUtils.parse(new SimpleDateFormat("MMM dd, yyyy HH:mm:ss",java.util.Locale.UK), new Date(examingEndTime));//变成计时器能够读懂的str
+		mv.addValue("examingEndTime", examingEndTimeStr);//考试结束时间
 		mv.addValue("choiceMenus", examineeSession.getChoiceMenus());//放入菜单
+		mv.addValue("examSession", examSession);
 		return mv.forward(getExamPage("/examing/choice.jsp"));
 	}
 	

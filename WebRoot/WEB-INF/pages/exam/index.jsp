@@ -9,7 +9,11 @@
 <script type="text/javascript" src="${base}/commons/js/jplayer/jquery.jplayer.min.js"></script>
 <script type="text/javascript">
 function getDateTime(value){
-	window.location.href='${base}/exam/examing${ext}?id='+value+'&dateTime='+new Date().getTime();
+	$.messager.confirm('提示','您是否做好准备参加这次考试？',function(d){
+        if(d){
+        	window.location.href='${base}/exam/examing${ext}?id='+value+'&dateTime='+new Date().getTime();
+        }
+    });
 }
 //<![CDATA[
 $(document).ready(function(){
