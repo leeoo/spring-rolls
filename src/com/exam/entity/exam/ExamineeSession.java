@@ -1,6 +1,8 @@
 package com.exam.entity.exam;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.paramecium.commons.EncodeUtils;
@@ -13,9 +15,11 @@ public class ExamineeSession {
 	
 	private String username;
 	
-	private String tempContent = "";// 临时内容
+	private String tempContent = "";// 临时内容，如果是选择题，则记录已经达到某题
 	
 	private Map<Integer,String[]> choices = new HashMap<Integer, String[]>();
+	
+	private Map<Integer,ChoiceMenu> choiceMenus = new LinkedHashMap<Integer, ChoiceMenu>();
 	
 	private int longTime;//经过多少时间(秒),防止断网
 	
@@ -30,10 +34,51 @@ public class ExamineeSession {
 	 */
 	public synchronized void release(){
 		choices.clear();
+		choiceMenus.clear();
 	}
 	
-	public synchronized void addChoices(int choiceId,String... answer){
-		choices.put(choiceId, answer);
+	public synchronized void addChoices(Integer choiceId,int status,String... answer){
+		if(choiceId!=null){
+			choices.put(choiceId, answer);
+			ChoiceMenu menu = choiceMenus.get(choiceId);
+			if(status==0||status==1||status==-1){//必须符合三种中的状态
+				menu.setStatus(status);//修改状态
+			}
+			choiceMenus.put(choiceId, menu);
+		}
+	}
+	
+	public ChoiceMenu getChoiceMenu(Integer choiceId){
+		if(choiceId!=null){
+			return choiceMenus.get(choiceId);
+		}
+		return null;
+	}
+	
+	/**
+	 * 初始化选择题菜单
+	 * @param questionChoices
+	 */
+	public synchronized void initMenu(Collection<QuestionChoice> questionChoices){
+		if(questionChoices!=null&&!questionChoices.isEmpty()&&choiceMenus.isEmpty()){
+			QuestionChoice[] choices = questionChoices.toArray(new QuestionChoice[questionChoices.size()]);
+			for(int i = 0;i<choices.length;i++){
+				QuestionChoice choice =choices[i];
+				ChoiceMenu choiceMenu = new ChoiceMenu();
+				choiceMenu.setId(choice.getId());
+				if(0==choices.length-1){//如果只有一道题，无需上下题
+					//不用管
+				}else if(i==0){//如果是第一题，不要上一题
+					choiceMenu.setNextId(choices[i+1].getId());//其实就是0+1
+				}else if(i==choices.length-1){//如果是最后一题，不要下一题
+					choiceMenu.setPreviousId(choices[i-1].getId());
+				}else{//前后都有题
+					choiceMenu.setNextId(choices[i+1].getId());
+					choiceMenu.setPreviousId(choices[i-1].getId());
+				}
+				choiceMenus.put(choice.getId(), choiceMenu);
+			}
+		}
 	}
 
 	public Integer getId() {
@@ -102,6 +147,10 @@ public class ExamineeSession {
 
 	public void setExamDate(long examDate) {
 		this.examDate = examDate;
+	}
+
+	public Map<Integer, ChoiceMenu> getChoiceMenus() {
+		return choiceMenus;
 	}
 
 }

@@ -3,7 +3,7 @@ package com.exam.entity.exam;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.paramecium.commons.SecurityUitls;
@@ -43,7 +43,7 @@ public class ExamSession {
 	
 	private String textContent;
 	
-	private Collection<QuestionChoice> questionChoices = new LinkedHashSet<QuestionChoice>();
+	private Map<Integer,QuestionChoice> questionChoices = new LinkedHashMap<Integer,QuestionChoice>();
 	
 	private Map<Integer,ExamineeSession> examinees = new HashMap<Integer, ExamineeSession>();
 	
@@ -74,11 +74,18 @@ public class ExamSession {
 	}
 	
 	public synchronized void addQuestionChoice(QuestionChoice questionChoice){
-		questionChoices.add(questionChoice);
+		questionChoices.put(questionChoice.getId(),questionChoice);
 	}
 	
 	public Collection<QuestionChoice> getQuestionChoices(){
-		return questionChoices;
+		return questionChoices.values();
+	}
+	
+	public QuestionChoice getQuestionChoice(Integer id){
+		if(id!=null){
+			return questionChoices.get(id);
+		}
+		return null;
 	}
 	
 	public synchronized void addExaminee(ExamineeSession examineeSession){

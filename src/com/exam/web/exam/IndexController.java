@@ -91,6 +91,10 @@ public class IndexController extends BaseController{
 			return mv.redirect(getRedirect("/exam/index"));
 		}
 		ExamSession examSession = ExamingCache.getExamSession(id);
+		if(examSession==null){
+			mv.setErrorMessage("该考试已经结束！");
+			return mv.redirect(getRedirect("/exam/index"));
+		}
 		ExamineeSession examineeSession = examSession.getExaminee();
 		if(examineeSession==null){
 			@SuppressWarnings("unchecked")
@@ -111,6 +115,12 @@ public class IndexController extends BaseController{
 			examineeSession.setUsername(examinee.getUsername());
 			examineeSession.setLongTime(0);
 			examineeSession.setLrLayout(true);
+			if(examSession.isChoice()){//如果是选择题
+				Collection<QuestionChoice> choices = examSession.getQuestionChoices();
+				int choiceId = choices.iterator().next().getId();//如果是第一次进入获得第一题
+				examineeSession.setTempContent(String.valueOf(choiceId));//获得第一题
+				examineeSession.initMenu(choices);//初始化菜单
+			}
 			examSession.addExaminee(examineeSession);
 		}
 		int longTime = examSession.getLongTime();//这是分钟
@@ -128,9 +138,17 @@ public class IndexController extends BaseController{
 		mv.addValue("examineeSession", examineeSession);
 		mv.addValue("examingEndTime", examingEndTimeStr);//考试结束时间
 		if(examSession.isChoice()){
-			/*mv.addValue("questionChoices", examSession.getQuestionChoices());
-			mv.addValue("answerChoice", examineeSession.getChoices());*/
-			//看实际情况是否需要放入，再放开注释，待开发。。。
+			String choiceIdStr = examineeSession.getTempContent();
+			int choiceId = 0 ;
+			try{
+				choiceId = Integer.parseInt(choiceIdStr);
+			}catch (Exception e) {//如果转型失败，放入默认第一题
+				Collection<QuestionChoice> choices = examSession.getQuestionChoices();
+				choiceId = choices.iterator().next().getId();//如果是第一次进入获得第一题
+			}
+			mv.addValue("choiceMenu", examineeSession.getChoiceMenu(choiceId));//放入当前菜单
+			mv.addValue("choice", examSession.getQuestionChoice(choiceId));//放入当前选择题
+			mv.addValue("choiceMenus", examineeSession.getChoiceMenus());//放入整个菜单列表
 			return mv.forward(getExamPage("/examing/choice.jsp"));
 		}else{
 			if(examSession.getAudio()!=null&&examSession.getAudio()){
@@ -189,13 +207,11 @@ public class IndexController extends BaseController{
 			mv.setErrorMessage("您已经超过考试时间,系统已经为您保存了考试信息!");
 			return examing(mv);
 		}
-		String tempContent = mv.getValue("tempContent", String.class);
 		ScoreEvaluate scoreEvaluate = new ScoreEvaluate(
 				examSession.getTextContent(), examSession.getScore(), 
 				examSession.getCnProportion(), examSession.getEnProportion(),
 				examSession.getPunProportion(), examSession.getNumProportion());
 		Score score = new Score();
-		score.setContext(tempContent);
 		score.setExamId(examSession.getId());
 		score.setExamineeId(examineeSession.getId());
 		int longTime = (int)(EncodeUtils.millisTime()/1000-examineeSession.getExamDate());
@@ -204,9 +220,19 @@ public class IndexController extends BaseController{
 		}
 		score.setLongTime(longTime);
 		score.setStartDate(new Date(examineeSession.getExamDate()*1000));//进入考试的时间
-		int finalScore = scoreEvaluate.getScore(tempContent);//通过算法获得分数
-		score.setScore(finalScore);
 		try {
+			if(examSession.isChoice()){//如果是选择题
+				String tempContent = ChoiceScoreEvaluate.buildChoiceContext(examineeSession.getChoices());//将选项原型变为文本
+				score.setContext(tempContent);
+				ChoiceScoreEvaluate choiceScoreEvaluate = new ChoiceScoreEvaluate(examSession.getQuestionChoices(), examSession.getScore());
+				int finalScore = choiceScoreEvaluate.getScore(examineeSession.getChoices());//通过算法获得分数
+				score.setScore(finalScore);
+			}else{
+				String tempContent = mv.getValue("tempContent", String.class);
+				score.setContext(tempContent);
+				int finalScore = scoreEvaluate.getScore(tempContent);//通过算法获得分数
+				score.setScore(finalScore);
+			}
 			scoreService.save(score);
 			examSession.removeExamineeSession(examinee.getId());
 			mv.setSuccessMessage("您的考试已经结束，系统正在为您评分，请耐心等待！");
@@ -245,9 +271,11 @@ public class IndexController extends BaseController{
 		}
 		if(examSession.isChoice()){
 			String answer = mv.getValue("answer");
+			int status = mv.getValue("status",int.class);
 			Integer choiceId = mv.getValue("choiceId", Integer.class);
 			if(choiceId!=null){
-				examineeSession.addChoices(choiceId, answer);
+				examineeSession.addChoices(choiceId,status, answer);
+				examineeSession.setTempContent(String.valueOf(choiceId));//当前写到某题记录
 			}
 		}else{
 			String tempContent = mv.getValue("tempContent", String.class);
@@ -257,6 +285,45 @@ public class IndexController extends BaseController{
 		examSession.addExaminee(examineeSession);
 		return mv.printJSON("");
 	}
+	
+	@ShowLabel("跳转选择题")
+	@MappingMethod("/choice")
+	public ModelAndView choice(ModelAndView mv){
+		@SuppressWarnings("unchecked")
+		org.paramecium.security.UserDetails<Examinee> user = (UserDetails<Examinee>) SecurityUitls.getLoginUser();
+		if(user==null){
+			mv.setErrorMessage("由于连接超时或重复登录,您目前已经与友好断开!");
+			return examing(mv);
+		}
+		Examinee examinee = user.getOtherInfo();
+		if(examinee==null){
+			mv.setErrorMessage("由于连接超时或重复登录,您目前已经与友好断开!");
+			return examing(mv);
+		}
+		Integer id = mv.getValue("examSessionId", Integer.class);
+		if(id==null){
+			mv.setErrorMessage("由于您的考试信息缺失,请您暂停考试!");
+			return examing(mv);
+		}
+		ExamSession examSession = ExamingCache.getExamSession(id);
+		if(examSession==null){
+			mv.setErrorMessage("考试已经结束，请联系管理员!");
+			return examing(mv);
+		}
+		ExamineeSession examineeSession = examSession.getExaminee(examinee.getId());
+		if(examineeSession==null){
+			mv.setErrorMessage("您已经超过考试时间,系统已经为您保存了考试信息!");
+			return examing(mv);
+		}
+		Integer choiceId = mv.getValue("choiceId", Integer.class);
+		if(choiceId!=null){
+			mv.addValue("choiceMenu", examineeSession.getChoiceMenu(choiceId));//放入当前菜单
+			mv.addValue("choice", examSession.getQuestionChoice(choiceId));//放入当前选择题
+		}
+		mv.addValue("choiceMenus", examineeSession.getChoiceMenus());//放入菜单
+		return mv.forward(getExamPage("/examing/choice.jsp"));
+	}
+	
 	
 	@ShowLabel("查看成绩")
 	@MappingMethod
