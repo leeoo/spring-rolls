@@ -48,6 +48,20 @@ public class ExamineeSession {
 		}
 	}
 	
+	public String getAnswerChoices(Integer choiceId){
+		if(choiceId!=null){
+			String[] answers = choices.get(choiceId);
+			if(answers!=null){
+				StringBuffer buffer = new StringBuffer();
+				for(String answer:answers){
+					buffer.append(answer);
+				}
+				return buffer.toString();
+			}
+		}
+		return null;
+	}
+	
 	public ChoiceMenu getChoiceMenu(Integer choiceId){
 		if(choiceId!=null){
 			return choiceMenus.get(choiceId);

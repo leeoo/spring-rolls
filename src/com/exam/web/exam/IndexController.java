@@ -148,6 +148,7 @@ public class IndexController extends BaseController{
 			}
 			mv.addValue("currentChoiceMenu", examineeSession.getChoiceMenu(choiceId));//放入当前菜单
 			mv.addValue("choice", examSession.getQuestionChoice(choiceId));//放入当前选择题
+			mv.addValue("anwserChoice", examineeSession.getAnswerChoices(choiceId));//放入当前选择题
 			mv.addValue("choiceMenus", examineeSession.getChoiceMenus());//放入整个菜单列表
 			return mv.forward(getExamPage("/examing/choice.jsp"));
 		}else{
@@ -274,11 +275,7 @@ public class IndexController extends BaseController{
 			int status = mv.getValue("status",int.class);
 			Integer choiceId = mv.getValue("choiceId", Integer.class);
 			if(choiceId!=null){
-				if(answer==null||answer.trim().isEmpty()){
-					status = 0;//如果答案为空，即为仍没有回答
-				}else{
-					examineeSession.addChoices(choiceId,status, answer);
-				}
+				examineeSession.addChoices(choiceId,status, answer);
 				examineeSession.setTempContent(String.valueOf(choiceId));//当前写到某题记录
 			}
 		}else{
@@ -323,6 +320,7 @@ public class IndexController extends BaseController{
 		if(choiceId!=null){
 			mv.addValue("currentChoiceMenu", examineeSession.getChoiceMenu(choiceId));//放入当前菜单
 			mv.addValue("choice", examSession.getQuestionChoice(choiceId));//放入当前选择题
+			mv.addValue("anwserChoice", examineeSession.getAnswerChoices(choiceId));//如果答完则读出
 		}
 		int longTime = examSession.getLongTime();//这是分钟
 		longTime = longTime * 60;//变成秒
