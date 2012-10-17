@@ -7,7 +7,7 @@ public class EncodeChanger {
 	public static String getPassword(){
 		long longTime = EncodeUtils.millisTime();
 		int intTime = (int)longTime/(1000*60*60*24);
-		return EncodeUtils.encryptMD5(intTime+"").substring(5, 20).toUpperCase();
+		return EncodeUtils.encryptMD5(intTime+"").substring(5, 10).toUpperCase();
 	}
 	
 	public static String unicode2UnicodeEsc(String uniStr) {
