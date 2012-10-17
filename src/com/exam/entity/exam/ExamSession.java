@@ -1,5 +1,6 @@
 package com.exam.entity.exam;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,8 +12,10 @@ import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.security.UserDetails;
 
-public class ExamSession {
+public class ExamSession implements Serializable{
 	
+	private static final long serialVersionUID = -5334056085235435760L;
+
 	private final static Log logger = LoggerFactory.getLogger();
 	
 	private Integer id;

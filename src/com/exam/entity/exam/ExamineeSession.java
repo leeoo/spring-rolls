@@ -1,5 +1,6 @@
 package com.exam.entity.exam;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -7,8 +8,10 @@ import java.util.Map;
 
 import org.paramecium.commons.EncodeUtils;
 
-public class ExamineeSession {
+public class ExamineeSession implements Serializable{
 	
+	private static final long serialVersionUID = 2666071740777278933L;
+
 	private Integer id;
 	
 	private String code;

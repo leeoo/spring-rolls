@@ -27,6 +27,7 @@ import com.exam.entity.exam.ExamineeSession;
 import com.exam.entity.exam.ExamingCache;
 import com.exam.entity.exam.Question;
 import com.exam.entity.exam.QuestionChoice;
+import com.exam.entity.exam.QuestionChoiceExaminee;
 import com.exam.entity.exam.Score;
 import com.exam.service.exam.ChoiceScoreEvaluate;
 import com.exam.service.exam.ExamService;
@@ -372,9 +373,9 @@ public class IndexController extends BaseController{
 		mv.addValue("exam", exam);
 		mv.addValue("score", score);
 		if(exam.getChoice()!=null&&exam.getChoice()){
-			Collection<QuestionChoice> questionChoices = questionChoiceService.getAllByQuestionId(exam.getQuestionId());
+			Collection<QuestionChoice> choices = questionChoiceService.getAllByQuestionId(exam.getQuestionId());
+			Collection<QuestionChoiceExaminee> questionChoices = ChoiceScoreEvaluate.getQuestionChoiceExaminee(choices, score.getContext());
 			mv.addValue("questionChoices", questionChoices);
-			mv.addValue("anwserChoices", ChoiceScoreEvaluate.buildChoiceMap(score.getContext()));//构建正确答案
 			return mv.forward(getExamPage("/score/detail_c.jsp"));
 		}else{
 			Question question = questionService.get(exam.getQuestionId());

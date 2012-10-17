@@ -14,7 +14,9 @@ import com.exam.entity.exam.Exam;
 import com.exam.entity.exam.Examinee;
 import com.exam.entity.exam.Question;
 import com.exam.entity.exam.QuestionChoice;
+import com.exam.entity.exam.QuestionChoiceExaminee;
 import com.exam.entity.exam.Score;
+import com.exam.service.exam.ChoiceScoreEvaluate;
 import com.exam.service.exam.ExamService;
 import com.exam.service.exam.ExamineeService;
 import com.exam.service.exam.QuestionChoiceService;
@@ -96,8 +98,8 @@ public class ExamineeController extends BaseController{
 		mv.addValue("exam", exam);
 		mv.addValue("score", score);
 		if(exam.getChoice()!=null&&exam.getChoice()){
-			//----------------待开发-------------
-			Collection<QuestionChoice> questionChoices = questionChoiceService.getAllByQuestionId(exam.getQuestionId());
+			Collection<QuestionChoice> choices = questionChoiceService.getAllByQuestionId(exam.getQuestionId());
+			Collection<QuestionChoiceExaminee> questionChoices = ChoiceScoreEvaluate.getQuestionChoiceExaminee(choices, score.getContext());
 			mv.addValue("questionChoices", questionChoices);
 			return mv.forward(getExamPage("/score/detail_c.jsp"));
 		}else{
