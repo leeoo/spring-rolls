@@ -32,7 +32,7 @@ $(document).ready(function(){
     var angleSec = 0;
     var angleMin = 0;
     var angleHour = 0;
-
+	var longTime = ${longTime};
     $(document).ready(function () {
         $("#sec").rotate(angleSec);
         $("#min").rotate(angleMin);
@@ -41,6 +41,8 @@ $(document).ready(function(){
 
     setInterval(function () {
         var d = new Date();
+        longTime = longTime+1000;
+        d.setTime(longTime);
 
         angleSec = (d.getSeconds() * 6);
         $("#sec").rotate(angleSec);

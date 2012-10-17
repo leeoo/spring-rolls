@@ -55,6 +55,7 @@ public class IndexController extends BaseController{
 	@MappingMethod
 	public ModelAndView index(ModelAndView mv){
 		mv.addValue("loginExaminee", SecurityThread.get().getOtherInfo());
+		mv.addValue("longTime", EncodeUtils.millisTime());
 		return mv.forward(getExamPage("/index.jsp"));
 	}
 	
