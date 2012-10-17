@@ -70,7 +70,24 @@ public class InvigilateController extends BaseController{
 			}
 			return mv.forward(getExamPage("/invigilate/report_q.jsp"));
 		}else{
-			//------------------------待开发----------------
+			if(examineeSessions!=null && !examineeSessions.isEmpty()){
+				StringBuffer buffer = new StringBuffer();
+				for(ExamineeSession examineeSession : examineeSessions){
+					buffer.append(",['").append(examineeSession.getUsername()).append("',").append(examineeSession.getChoices().size()).append("]");
+				}
+				if(buffer.length()>0){
+					buffer.delete(0, 1);
+				}
+				if(examineeSessions.size()<=20){
+					mv.addValue("width", 800);
+				}else{
+					mv.addValue("width", 800+30*(examineeSessions.size()-20));
+				}
+				mv.addValue("data", buffer.toString());
+			}else{
+				mv.addValue("width", 800);
+				mv.addValue("data", "['没有考生参加',0]");
+			}
 			return mv.forward(getExamPage("/invigilate/report_c.jsp"));
 		}
 	}
