@@ -11,8 +11,7 @@
 	<div id="graph">目前没有考生参加考试</div>
 	<div>提示：</div>
 	<div style="padding-left: 20px;">1.如果：长时间没有变化的考生，可能已经掉线，且没有手动提交考卷，系统在考试规定时长自动提交。</div>
-	<div style="padding-left: 20px;">2.如果：某考生在短时间内大幅度增加录入速度，可能才有作弊手段，请留意。</div>
-	<div style="padding-left: 20px;">3.如果：某考生突然消失在报表中，说明该考生考试完毕，已经交卷。</div>
+	<div style="padding-left: 20px;">2.如果：某考生突然消失在报表中，说明该考生考试完毕，已经交卷。</div>
 <script type="text/javascript">
 	var myData = new Array(${data});
 	var myChart = new JSChart('graph', 'bar');
