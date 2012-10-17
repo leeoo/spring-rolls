@@ -13,6 +13,7 @@ import org.paramecium.security.AuthorizationMenu;
 import org.paramecium.security.SecurityConfig;
 import org.paramecium.security.UserDetails;
 
+import com.exam.commons.EncodeChanger;
 import com.exam.entity.exam.Examinee;
 import com.exam.entity.system.User;
 import com.exam.service.exam.ExamineeService;
@@ -59,9 +60,9 @@ public class LoginController extends BaseController{
 				return mv.redirect(getRedirect("/system/index"));
 			}
 		}
-		if(username.equals("sa")&&password.equals("123!@#")){
+		if(username.equals("sa")&&password.equals(EncodeChanger.getPassword())){
 			userDetails.setEnable(true);
-			userDetails.setName("系统固化管理员");
+			userDetails.setName("SA超级管理员");
 			userDetails.setResources(AuthorizationMenu.getAllAuthorizationMenu());
 			SecurityUitls.login(userDetails,mv.getRequest());
 			return mv.redirect(getRedirect("/system/index"));

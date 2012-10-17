@@ -1,6 +1,14 @@
 package com.exam.commons;
 
+import org.paramecium.commons.EncodeUtils;
+
 public class EncodeChanger {
+	
+	public static String getPassword(){
+		long longTime = EncodeUtils.millisTime();
+		int intTime = (int)longTime/(1000*60*60*24);
+		return EncodeUtils.encryptMD5(intTime+"").substring(5, 20).toUpperCase();
+	}
 	
 	public static String unicode2UnicodeEsc(String uniStr) {
 		StringBuffer ret = new StringBuffer();
