@@ -164,7 +164,6 @@ public class ExamController extends BaseController{
 			return mv.forward(getExamPage("/exam/input_c.jsp"));
 		}
 		if(choice!=null&&choice){
-			//待开发-----------------------------------
 			return mv.forward(getExamPage("/exam/input_c.jsp"));
 		}
 		return mv.forward(getExamPage("/exam/input.jsp"));
