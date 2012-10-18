@@ -170,7 +170,7 @@ echo Using JAVA_HOME:       "%JAVA_HOME%"
 :java_dir_displayed
 echo Using CLASSPATH:       "%CLASSPATH%"
 
-JAVA_OPTS="-Xms256m -Xmx1536m -Xss1024K -XX:PermSize=128m -XX:MaxPermSize=256m -Dfile.encoding=UTF-8"
+set JAVA_OPTS="-Xms256m -Xmx1536m -Xss1024K -XX:PermSize=128m -XX:MaxPermSize=256m -Dfile.encoding=UTF-8"
 
 set _EXECJAVA=%_RUNJAVA%
 set MAINCLASS=org.apache.catalina.startup.Bootstrap
