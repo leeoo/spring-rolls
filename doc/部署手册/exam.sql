@@ -1,35 +1,19 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : mysql_local
-Source Server Version : 50525
+Source Server         : localhost
+Source Server Version : 50527
 Source Host           : localhost:3306
 Source Database       : exam
 
 Target Server Type    : MYSQL
-Target Server Version : 50525
+Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2012-10-18 17:50:59
+Date: 2012-10-18 20:54:39
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for `performance_test`
--- ----------------------------
-DROP TABLE IF EXISTS `performance_test`;
-CREATE TABLE `performance_test` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(500) NOT NULL,
-  `date` date NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of performance_test
--- ----------------------------
-
 -- ----------------------------
 -- Table structure for `t_config`
 -- ----------------------------
@@ -44,7 +28,7 @@ CREATE TABLE `t_config` (
 -- ----------------------------
 -- Records of t_config
 -- ----------------------------
-INSERT INTO `t_config` VALUES ('1', 'title', '测试DEMO');
+INSERT INTO `t_config` VALUES ('1', 'title', '国家职业资格在线考评系统');
 INSERT INTO `t_config` VALUES ('2', 'examineeDays', '15');
 INSERT INTO `t_config` VALUES ('3', 'themeName', 'gray');
 
@@ -68,12 +52,11 @@ CREATE TABLE `t_exam` (
   `choice` bit(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_exam_question_id` (`question_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_exam
 -- ----------------------------
-INSERT INTO `t_exam` VALUES ('1', '阿斯顿是', '100', '1', '1', '1', '1', '-1', '2012-10-18 17:06:54', '2012-10-18 17:15:08', '10', '1', '');
 
 -- ----------------------------
 -- Table structure for `t_examinee`
@@ -90,14 +73,11 @@ CREATE TABLE `t_examinee` (
   `can_days` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_examinee_code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_examinee
 -- ----------------------------
-INSERT INTO `t_examinee` VALUES ('1', '00001', '小强', '123123', null, null, '2012-10-18 17:08:48', '15');
-INSERT INTO `t_examinee` VALUES ('2', '00002', '小美眉', '123123', null, null, '2012-10-18 17:10:49', '15');
-INSERT INTO `t_examinee` VALUES ('3', '00003', '大伟哥', '123123', null, null, '2012-10-18 17:14:10', '15');
 
 -- ----------------------------
 -- Table structure for `t_log`
@@ -126,12 +106,11 @@ CREATE TABLE `t_question` (
   `audio_path` varchar(255) DEFAULT NULL,
   `text_content` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_question
 -- ----------------------------
-INSERT INTO `t_question` VALUES ('1', '真的很不错啊啊啊啊啊啊', '', null, '该题库为理论考试,不能作为速录考试使用！');
 
 -- ----------------------------
 -- Table structure for `t_question_choice`
@@ -154,15 +133,11 @@ CREATE TABLE `t_question_choice` (
   `question_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Index_question_choice_qid` (`question_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_question_choice
 -- ----------------------------
-INSERT INTO `t_question_choice` VALUES ('1', '啊啊啊啊啊啊啊啊', '1', '阿斯顿飞', '阿斯顿发大水', '撒地方', '阿斯顿发送到', null, null, null, null, 'C', '', '1');
-INSERT INTO `t_question_choice` VALUES ('2', '鲍威尔撒的发生的阿斯顿飞', '1', '2温柔撒旦', '萨达', '为二位阿斯顿', '萨芬', null, null, null, null, 'A', '', '1');
-INSERT INTO `t_question_choice` VALUES ('3', '把惹我发的噶阿斯顿飞我阿斯顿飞想', '1', '瓦下次v', '额外地方', '阿斯顿飞俺是', '萨菲手动发送', null, null, null, null, 'D', '', '1');
-INSERT INTO `t_question_choice` VALUES ('4', '巴萨的稳定发生地', '1', '而撒地方', '阿斯顿飞往', '阿道夫', '三大发生地', null, null, null, null, 'D', '', '1');
 
 -- ----------------------------
 -- Table structure for `t_role_auth`
@@ -241,6 +216,7 @@ INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/system/user#delete');
 INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/file#upload');
 INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#qcdata');
 INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#score_data');
+INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/report#export');
 INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/examinee#list');
 INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/config#index');
 INSERT INTO `t_role_auth` VALUES ('SYSADMIN', '/exam/exam#delete');
@@ -262,14 +238,11 @@ CREATE TABLE `t_score` (
   PRIMARY KEY (`id`),
   KEY `Index_score_examinee_id` (`examinee_id`),
   KEY `Index_score_exam_id` (`exam_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_score
 -- ----------------------------
-INSERT INTO `t_score` VALUES ('1', '2012-10-18 17:09:16', '32', '1:B;2:D;3:B;4:B;', '0', '1', '1');
-INSERT INTO `t_score` VALUES ('2', '2012-10-18 17:11:08', '33', '1:A;2:C;3:B;4:B;', '0', '2', '1');
-INSERT INTO `t_score` VALUES ('3', '2012-10-18 17:14:17', '14', '1:B;2:D;3:D;4:D;', '50', '3', '1');
 
 -- ----------------------------
 -- Table structure for `t_security_role`
