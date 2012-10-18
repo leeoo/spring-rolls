@@ -124,13 +124,6 @@
 					        });
 						}
 			        }, '-', {
-			        	text: '批量导入',
-			            iconCls: 'icon-add',
-			            handler:function(){
-							location.href ='${base}/exam/examinee/input_imp${ext}';
-							return false;
-						}
-			        }, '-', {
 			            text: '查询',
 			            iconCls: 'icon-search',
 			            handler:function(){

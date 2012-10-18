@@ -171,16 +171,4 @@ public class ExamineeController extends BaseController{
 		mv.forward(getExamPage("/examinee/input_imp.jsp"));
 	}
 	
-	@ShowLabel("批量导入")
-	@MappingMethod
-	public ModelAndView imp(ModelAndView mv){
-		try {
-			mv.setSuccessMessage("操作成功!");
-		} catch (Exception e) {
-			mv.setErrorMessage(e.getMessage());
-			return mv.forward(getExamPage("/examinee/input_imp.jsp"));
-		}
-		return mv.redirect(getRedirect("/exam/examinee/list"));
-	}
-	
 }
