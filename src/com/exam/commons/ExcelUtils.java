@@ -7,15 +7,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.paramecium.commons.BeanUtils;
-import org.paramecium.commons.DateUtils;
-import org.paramecium.log.Log;
-import org.paramecium.log.LoggerFactory;
-
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+
+import org.paramecium.commons.BeanUtils;
+import org.paramecium.commons.DateUtils;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
 
 /**
  * 功能描述：<br>
@@ -61,6 +61,26 @@ public class ExcelUtils{
 		return fileNames;
 	}
 	
+	public static String[] writeExcelMap(Map<String,String> titles,List<Map<String,Object>> values,String savePath,boolean isSequence,int maxResults,String[] mergeFields){
+		int count=values.size();//集合总数
+		int multiples=count/maxResults;//拆分倍数，默认加入余数部分
+		if(multiples*maxResults!=count){//拆分倍数是否没有余数
+			 multiples=count/maxResults+1;//去掉倍数中的余数部分
+		}
+		String[] fileNames=new String[multiples];
+		String fileName=DateUtils.getCurrentDateTimeStr().replace(" ",",").replace(":","'");
+		for(int i=0;i<multiples;i++){
+			fileNames[i]=getFileName(savePath,fileName,(i+1));
+			int startNum=i*maxResults;//list的拆分起始数
+			int endNum=(i+1)*maxResults;//list的拆分结束数
+			if(i==(multiples-1)){//判断是否是最后一次
+				endNum=count;
+			}
+			creatExcelMap(titles, values.subList(startNum,endNum), fileNames[i], isSequence,mergeFields);
+		}
+		return fileNames;
+	}
+	
 	/**
 	 * 功能描述：获得
 	 * <br>@param savePath
@@ -96,6 +116,45 @@ public class ExcelUtils{
 	        for(Iterator<Object> it=values.iterator();it.hasNext();){
 	        	object=it.next();
 	        	addContext(wsheet, titles.keySet(), object, ++i,isSequence,mergeFields);//设置内容
+	        }
+	        if(coordinate!=null&&!coordinate.isEmpty()){
+	        	for(int[] cdi:coordinate.values()){
+	        		wsheet.mergeCells(cdi[0], cdi[1], cdi[2], cdi[3]);
+	        	}
+	        }
+	        logger.debug("Create Excel SUCCESS:"+fileName);
+		}catch (Exception e) {
+			logger.error("Create Excel ERROR:"+e.getMessage());
+		}
+		try{
+			coordinate=null;//清空
+			wbook.write(); // 写入文件
+		}catch (Exception e) {
+			logger.error("Write Excel ERROR:"+e.getMessage());
+		}
+		try{
+			wbook.close(); // 关闭文件
+		}catch (Exception e) {
+			logger.error("Close Excel ERROR:"+e.getMessage());
+		}
+	}
+	
+	private synchronized static void creatExcelMap(Map<String,String> titles,List<Map<String,Object>> values ,String fileName,boolean isSequence,String[] mergeFields){
+		WritableWorkbook wbook =null;
+        WritableSheet wsheet = null;
+		try{
+			File file=new File(fileName);
+			wbook=Workbook.createWorkbook(file); // 建立excel文件
+			wsheet=wbook.createSheet("报表", 0); // sheet名称
+	        int i=0;
+	        addTitles(wsheet,titles.values(),isSequence);//设置标题行
+	        Map<String,Object> map=null;
+	        if(mergeFields!=null&&mergeFields.length>0){
+	        	coordinate=new LinkedHashMap<String,int[]>();
+	        }
+	        for(Iterator<Map<String,Object>> it=values.iterator();it.hasNext();){
+	        	map=it.next();
+	        	addContextMap(wsheet, titles.keySet(), map, ++i,isSequence,mergeFields);//设置内容
 	        }
 	        if(coordinate!=null&&!coordinate.isEmpty()){
 	        	for(int[] cdi:coordinate.values()){
@@ -164,6 +223,42 @@ public class ExcelUtils{
         }
 	}
 	
+	private synchronized static void addContextMap(WritableSheet wsheet,Collection<String> keys,Map<String,Object> Map,int count,boolean isSequence,String[] mergeFields)throws Exception{
+		int i=0;
+		Label label=null;
+		if(isSequence){//如果为true，设置第一列为序号
+			label=new Label(i++, count, ""+count);
+			wsheet.addCell(label);
+		}
+		Object obj=null;
+		for(String fieldName:keys){//循环创建标题
+			obj=Map.get(fieldName);
+			String value="";
+			if(obj!=null){
+				value=obj.toString();
+			}
+			int temp=i++;
+			if(mergeFields!=null&&contains(fieldName,mergeFields)){//判断是否需要合并单元格，并判断当前单元格是否在给定的范围中。
+				String sign=fieldName+value;//设置字段+值的唯一标识
+				int[] ci=new int[4];
+				ci[2]=temp;
+				ci[3]=count;
+				if(coordinate.get(sign)==null){//判断该字段的重复值是否第一次使用
+					ci[0]=temp;
+					ci[1]=count;
+					coordinate.put(sign,ci);
+				}else{
+					int[] tempCi=coordinate.get(sign);
+					ci[0]=tempCi[0];
+					ci[1]=tempCi[1];
+					coordinate.put(sign,ci);
+				}
+			}
+			label=new Label(temp, count, value);
+        	wsheet.addCell(label);
+        }
+	}
+	
 	private static boolean contains(String fieldName,String[] mergeFields){
 		for(String temp:mergeFields){
 			if(fieldName.equals(temp)){
@@ -184,7 +279,7 @@ public class ExcelUtils{
 		int i=0;
 		Label label=null;
 		if(isSequence){//如果为true，设置第一列为序号标题
-			label=new Label(i++, 0, "序号");
+			label=new Label(i++, 0, "名次");
 			wsheet.addCell(label);
 		}
 		for(String titleNames:values){//循环创建标题
@@ -229,5 +324,17 @@ public class ExcelUtils{
 	 */
 	public static String writeExcel(Map<String,String> titles,List<Object> values,String savePath){
 		return writeExcel(titles,values,savePath,false,6000,null)[0];
+	}
+	
+	public static String[] writeExcelMap(Map<String,String> titles,List<Map<String,Object>> values,String savePath,int maxResults){
+		return writeExcelMap(titles,values,savePath,false,maxResults,null);
+	}
+	
+	public static String writeExcelMap(Map<String,String> titles,List<Map<String,Object>> values,String savePath,boolean isSequence){
+		return writeExcelMap(titles,values,savePath,isSequence,6000,null)[0];
+	}
+	
+	public static String writeExcelMap(Map<String,String> titles,List<Map<String,Object>> values,String savePath){
+		return writeExcelMap(titles,values,savePath,false,6000,null)[0];
 	}
 }
