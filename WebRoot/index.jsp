@@ -50,6 +50,7 @@
 						   success: function(msg){
 							   if(msg=='yes'){
 								   $.messager.alert('注册成功','请使用考号"'+$("#code").val()+'"登录！','info');
+								   $('#logincode').val($("#code").val());
 							   }else if(msg=='no1'){
 								   $.messager.alert('注册失败','请将注册信息填写全后再注册！','error');
 							   }else if(msg=='no2'){
@@ -111,7 +112,7 @@
 			                        <table cellSpacing="0" cellPadding="0" width="100%" border="0" height="143" id="table212">
 			                          <tr>
 			                            <td width="5%" nowrap="nowrap" height="38" class="top_hui_text"><span class="login_txt_bt" style="font-size: 13px;font-weight: bold">登录名：</span></td>
-			                            <td height="38" colspan="2" class="top_hui_text" align="left"><input name="login.username" class="editbox4" style="width: 150px;"></td>
+			                            <td height="38" colspan="2" class="top_hui_text" align="left"><input id='logincode' name="login.username" class="editbox4" style="width: 150px;"></td>
 			                          </tr>
 			                          <tr>
 			                            <td width="5%" nowrap="nowrap" height="35" class="top_hui_text"><span class="login_txt_bt" style="font-size: 13px;font-weight: bold">密&nbsp;&nbsp;码：</span></td>

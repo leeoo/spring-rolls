@@ -1,5 +1,8 @@
 package com.exam.service.exam;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.paramecium.commons.SecurityUitls;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
@@ -95,6 +98,19 @@ public class ScoreService {
 		sql.append("s.id id");
 		sql.append(" FROM t_score s LEFT JOIN t_examinee e ON s.examinee_id = e.id WHERE s.exam_id = ? ORDER BY s.score DESC,s.long_time ASC");
 		return ormDao.getGenericJdbcDao().queryPageMapsByArray(sql.toString(), page,examId);
+	}
+	
+	public Collection<Map<String,Object>> getMapScoreByExamId(int examId){
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("e.code code,");
+		sql.append("e.username username,");
+		sql.append("s.start_date start_date,");
+		sql.append("s.long_time long_time,");
+		sql.append("s.score score,");
+		sql.append("s.id id");
+		sql.append(" FROM t_score s LEFT JOIN t_examinee e ON s.examinee_id = e.id WHERE s.exam_id = ? ORDER BY s.score DESC,s.long_time ASC");
+		return ormDao.getGenericJdbcDao().queryByArray(sql.toString(), examId);
 	}
 	
 	public Page getAll(Page page){

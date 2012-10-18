@@ -27,7 +27,7 @@ public class Question implements Serializable {
 	
 	@Column(isDynamicWhere = true,comparison = DYNAMIC_WHERE_COMPARISON.LIKE)
 	@NotNull
-	@Length(min=3,max=500)
+	@Length(min=2,max=500)
 	@ShowLabel("题库描述")
 	private String title;// 考试描述
 	

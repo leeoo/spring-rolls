@@ -26,7 +26,7 @@ public class Exam implements Serializable {
 	
 	@Column(isDynamicWhere=true)
 	@NotNull
-	@Length(min=10,max=500)
+	@Length(min=2,max=500)
 	@ShowLabel("考试描述")
 	private String title;// 考试描述
 	

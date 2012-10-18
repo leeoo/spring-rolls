@@ -105,6 +105,10 @@ public class ExamService {
 		return ormDao.select(id);
 	}
 	
+	public Page getAllExamedByStatus(Page page,int status){
+		return ormDao.getGenericJdbcDao().queryPageBeansByArray("SELECT * FROM t_exam WHERE status=? ORDER BY end_date DESC", Exam.class, page, status);
+	}
+	
 	public Page getAll(Page page,Exam exam){
 		return ormDao.select(page,exam);
 	}
