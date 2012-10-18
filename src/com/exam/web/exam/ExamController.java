@@ -209,5 +209,19 @@ public class ExamController extends BaseController{
 			mv.printJSON(e.getMessage());
 		}
 	}
+	
+	@ShowLabel("暂停考试")
+	@MappingMethod
+	public void stop(ModelAndView mv){
+		String idstr = mv.getValue("ids",String.class);
+		try {
+			if(idstr!=null){
+				String[] ids = idstr.split(",");
+				examService.stop(ids);
+			}
+		} catch (Exception e) {
+			mv.printJSON(e.getMessage());
+		}
+	}
 
 }

@@ -159,6 +159,48 @@
 					        });
 						}
 			        }, '-', {
+			            text: '强制结束考试',
+			            iconCls: 'icon-stop',
+			            handler:function(){
+				        	var ids = [];
+							var rows = $('#list').datagrid('getSelections');
+							if(rows.length<1){
+								$.messager.alert('提示','至少选择一行!','warning');
+								return false;
+							}
+							for(var i=0;i<rows.length;i++){
+								if(rows[i].status==0){
+									$.messager.alert('提示','您选择的考试中含有未开始的考试，所以不能强制结束!','warning');
+									$('#list').datagrid('clearSelections');
+									return false;
+								}
+								ids.push(rows[i].id);
+							}
+							$.messager.confirm('提示','确认强制结束考试吗?',function(d){
+					            if(d){
+					            	$.ajax({
+										   type: "get",
+										   url: "${base}/exam/exam/stop${ext}",
+										   data: "ids="+ids.join(','),
+										   success: function(msg){
+											   if(msg!=null&&msg!=''){
+									        		$.messager.alert('强制结束考试失败！',msg,'error');
+									        	}else{
+									        		 $.messager.show({
+															title:'提示',
+															msg:'成功强制结束考试！',
+															timeout:3000,
+															showType:'slide'
+													 });
+									        	}
+										   }
+									});
+									$('#list').datagrid('reload');
+									$('#list').datagrid('clearSelections');
+					            }
+					        });
+						}
+			        }, '-', {
 			            text: '查询',
 			            iconCls: 'icon-search',
 			            handler:function(){

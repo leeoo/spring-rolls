@@ -12,6 +12,8 @@ import org.paramecium.orm.GenericOrmDao;
 import org.paramecium.transaction.annotation.Transactional;
 
 import com.exam.entity.exam.Exam;
+import com.exam.entity.exam.ExamSession;
+import com.exam.entity.exam.ExamingCache;
 
 @ShowLabel("考试业务类")
 @Service
@@ -56,6 +58,29 @@ public class ExamService {
 	
 	public void updateExamed(int id) throws Exception{
 		ormDao.getGenericJdbcDao().executeDMLByArray("UPDATE t_exam SET status=-1 WHERE id=?",id);
+	}
+	
+	/**
+	 * 强制结束考试
+	 * @param ids
+	 * @throws Exception
+	 */
+	public void stop(String... ids) throws Exception{
+		Date date = DateUtils.getCurrentDateTime();
+		Exam exam = null;
+		for(String id : ids){
+			ExamSession session = ExamingCache.getExamSession(Integer.parseInt(id));
+			if(session!=null){
+				session.setEndDate(date);
+				ExamingCache.addExamSession(session);//将缓存会话修改
+				exam = get(Integer.parseInt(id));
+				if(exam!=null){
+					exam.setEndDate(date);
+					exam.setStatus(-1);
+					update(exam);
+				}
+			}
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
