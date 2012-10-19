@@ -27,6 +27,9 @@ $(document).ready(function(){
 		supplied: "mp3",
 		wmode: "window"
 	});
+	$("#jquery_jplayer_1").jPlayer("onSoundComplete", function() {
+		this.element.jPlayer("play"); // 循环播放
+	});
 });
 //]]>
     var angleSec = 0;
