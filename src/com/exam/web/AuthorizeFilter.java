@@ -2,12 +2,12 @@ package com.exam.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -69,7 +69,7 @@ public class AuthorizeFilter implements Filter{
 	
 	private void error(HttpServletResponse response) throws IOException, ServletException {
 		response.setCharacterEncoding("UTF-8");
-		ServletOutputStream out = response.getOutputStream();
+		PrintWriter out = response.getWriter();
 		out.print("<html><meta content='text/html; charset=UTF-8' http-equiv='content-type'><head><title>请输入授权SN码!</title></head>");
 		out.print("<body>");
 		out.print("<font size='10' color='red'><b>请输入授权SN码!</b></font>");
@@ -81,17 +81,19 @@ public class AuthorizeFilter implements Filter{
 		out.print("</body>");
 		out.print("</html>");
 		out.flush();
+		out.close();
 	}
 	
 	private void success(HttpServletResponse response) throws IOException, ServletException {
 		response.setCharacterEncoding("UTF-8");
-		ServletOutputStream out = response.getOutputStream();
+		PrintWriter out = response.getWriter();
 		out.print("<html><head><meta content='text/html; charset=UTF-8' http-equiv='content-type'><title>授权正确!</title></head>");
 		out.print("<body>");
 		out.print("<font size='10' color='red'><b>授权正确!</b></font>");
 		out.print("</body>");
 		out.print("</html>");
 		out.flush();
+		out.close();
 	}
 
 	public void init(FilterConfig config) throws ServletException {
