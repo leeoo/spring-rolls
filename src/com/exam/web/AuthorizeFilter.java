@@ -104,11 +104,6 @@ public class AuthorizeFilter implements Filter{
 		}
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(getCPUID());
-		System.out.println(getSN(getCPUID()));
-	}
-	
 	/**
 	 * 获得CPUID
 	 * @return
