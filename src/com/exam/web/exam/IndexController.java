@@ -65,7 +65,10 @@ public class IndexController extends BaseController{
 		Page page = new Page();
 		page.setPageNo(1);
 		Collection<ExamSession> examSessions = ExamingCache.getExamSessions();
-		int count = examSessions.size();
+		int count = 0;
+		if(examSessions!=null){
+			count = examSessions.size();
+		}
 		page.setPageSize(count);
 		page.setTotalCount(count);
 		String json = JsonUitls.getBeansJson(examSessions,false,DateUtils.DATE_TIME_FORMAT);

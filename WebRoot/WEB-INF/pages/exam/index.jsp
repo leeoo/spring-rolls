@@ -23,12 +23,12 @@ $(document).ready(function(){
 				mp3:'${base}/upload/audio/test.mp3'
 			});
 		},
+		ended: function() {
+		    $(this).jPlayer("play");
+		},
 		swfPath: "${base}/commons/js/jplayer/Jplayer.swf",
 		supplied: "mp3",
 		wmode: "window"
-	});
-	$("#jquery_jplayer_1").jPlayer("onSoundComplete", function() {
-		this.element.jPlayer("play"); // 循环播放
 	});
 });
 //]]>
