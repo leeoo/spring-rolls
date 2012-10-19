@@ -32,19 +32,6 @@ public class ChoiceScoreEvaluate {
 		}
 	}
 	
-	public static void main(String[] args) {
-		Map<Integer,String[]> map = buildChoiceMap("1:b,c;1:A;2:t;3:c;6:a;7:,d,f;8:a,b,");
-		System.out.println(buildChoiceContext(map));
-		/*for(int id : map.keySet()){
-			System.out.println("id:"+id+" value:");
-			for(String value:map.get(id)){
-				System.out.print(value);
-			}
-			System.out.println();
-			System.out.println("=============================");
-		}*/
-	}
-	
 	/**
 	 * 根据答案文本内容重新获得选择题原型
 	 * @param choiceContent
