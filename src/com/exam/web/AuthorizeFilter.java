@@ -112,6 +112,9 @@ public class AuthorizeFilter implements Filter{
 		if(cpuId==null){
 			cpuId = CommandUtils.getRunResult("wmic cpu get processorid");
 			cpuId = new StringBuffer(cpuId).delete(0, 11).toString().trim().toUpperCase();
+			if(cpuId.length()>16){
+				cpuId = new StringBuffer(cpuId).delete(16, cpuId.length()).toString().trim();
+			}
 		}
 		return cpuId;
 	}
