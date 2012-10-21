@@ -2,9 +2,10 @@ package com.exam.entity.exam;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.paramecium.commons.EncodeUtils;
 
@@ -20,9 +21,9 @@ public class ExamineeSession implements Serializable{
 	
 	private String tempContent = "";// 临时内容，如果是选择题，则记录已经达到某题
 	
-	private Map<Integer,String[]> choices = new HashMap<Integer, String[]>();
+	private ConcurrentMap<Integer,String[]> choices = new ConcurrentHashMap<Integer, String[]>();
 	
-	private Map<Integer,ChoiceMenu> choiceMenus = new LinkedHashMap<Integer, ChoiceMenu>();
+	private ConcurrentMap<Integer,ChoiceMenu> choiceMenus = new ConcurrentSkipListMap<Integer, ChoiceMenu>();
 	
 	private int longTime;//经过多少时间(秒),防止断网
 	

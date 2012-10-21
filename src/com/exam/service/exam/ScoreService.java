@@ -108,6 +108,7 @@ public class ScoreService {
 		sql.append("s.start_date start_date,");
 		sql.append("s.long_time long_time,");
 		sql.append("s.score score,");
+		sql.append("s.context context,");
 		sql.append("s.id id");
 		sql.append(" FROM t_score s LEFT JOIN t_examinee e ON s.examinee_id = e.id WHERE s.exam_id = ? ORDER BY s.score DESC,s.long_time ASC");
 		return ormDao.getGenericJdbcDao().queryByArray(sql.toString(), examId);

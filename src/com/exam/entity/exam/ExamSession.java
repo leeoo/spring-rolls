@@ -3,9 +3,8 @@ package com.exam.entity.exam;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.paramecium.commons.SecurityUitls;
 import org.paramecium.log.Log;
@@ -46,9 +45,9 @@ public class ExamSession implements Serializable{
 	
 	private String textContent;
 	
-	private Map<Integer,QuestionChoice> questionChoices = new LinkedHashMap<Integer,QuestionChoice>();
+	private ConcurrentMap<Integer,QuestionChoice> questionChoices = new ConcurrentHashMap<Integer,QuestionChoice>();
 	
-	private Map<Integer,ExamineeSession> examinees = new HashMap<Integer, ExamineeSession>();
+	private ConcurrentMap<Integer,ExamineeSession> examinees = new ConcurrentHashMap<Integer, ExamineeSession>();
 	
 	/**
 	 * 释放资源
