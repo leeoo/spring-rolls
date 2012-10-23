@@ -14,7 +14,7 @@ import org.paramecium.log.LoggerFactory;
 public class ExamingCache {
 	private final static Log logger = LoggerFactory.getLogger();
 	@SuppressWarnings("unchecked")
-	private static Cache<Integer, ExamSession> examingCache = (Cache<Integer, ExamSession>) CacheManager.getDefaultCache("EXAMING", 100);
+	private static Cache<Integer, ExamSession> examingCache = (Cache<Integer, ExamSession>) CacheManager.getCacheByType("EXAMING", 100);
 	
 	
 	public static void removeExamSession(Integer id){
