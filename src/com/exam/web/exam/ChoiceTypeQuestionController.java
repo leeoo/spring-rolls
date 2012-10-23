@@ -31,7 +31,7 @@ public class ChoiceTypeQuestionController extends BaseController {
 	private QuestionChoiceService questionChoiceService;
 	
 	@SuppressWarnings("unchecked")
-	private Cache<Integer, QuestionChoice> cache = (Cache<Integer, QuestionChoice>) CacheManager.getDefaultCache("QUESTION_CHOICE", 100);
+	private Cache<Integer, QuestionChoice> cache = (Cache<Integer, QuestionChoice>) CacheManager.getCacheByType("QUESTION_CHOICE", 200);
 	
 	@ShowLabel("首页界面")
 	@MappingMethod
