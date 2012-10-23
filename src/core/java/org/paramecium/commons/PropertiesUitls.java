@@ -2,6 +2,8 @@ package org.paramecium.commons;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -52,6 +54,7 @@ public abstract class PropertiesUitls {
 				e.printStackTrace();
 			}
 		}
+		properties.clear();
 		return map;
 	}
 	
@@ -82,7 +85,104 @@ public abstract class PropertiesUitls {
 				e.printStackTrace();
 			}
 		}
+		properties.clear();
 		return map;
+	}
+	
+	/**
+	 * 为properties设置值
+	 * @param propertiesName
+	 * @param key
+	 * @param value
+	 */
+	public static void set(String propertiesName,String key,String value){
+		Properties properties = new Properties();
+		InputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream(new File(PathUtils.getClassFile(propertiesName)));
+			properties.load(inputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		properties.setProperty(key, value);
+		if(inputStream!=null){
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(PathUtils.getClassFile(propertiesName));
+			properties.store(outputStream,"PARAMECIUM_PROPERTIES");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(outputStream!=null){
+			try {
+				outputStream.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				outputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		properties.clear();
+	}
+	
+	/**
+	 * 为properties设置值
+	 * @param propertiesName
+	 * @param values
+	 */
+	public static void set(String propertiesName,Map<String,String> values){
+		Properties properties = new Properties();
+		InputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream(new File(PathUtils.getClassFile(propertiesName)));
+			properties.load(inputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		for(String key : values.keySet()){
+			String value = values.get(key);
+			properties.setProperty(key, value);
+		}
+		if(inputStream!=null){
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(PathUtils.getClassFile(propertiesName));
+			properties.store(outputStream,"PARAMECIUM_PROPERTIES");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(outputStream!=null){
+			try {
+				outputStream.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				outputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		properties.clear();
 	}
 	
 }

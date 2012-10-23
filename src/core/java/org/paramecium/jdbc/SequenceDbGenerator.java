@@ -20,9 +20,9 @@ import org.paramecium.log.LoggerFactory;
  * 		seq_value，数值整形，长度自行控制，符合系统要求，如果数据量比较当，应该使用该库的长整型。<br>
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2012-1-6下午02:06:08
- * <br>项 目 信 息:paramecium:org.paramecium.jdbc.SequenceGenerator.java
+ * <br>项 目 信 息:paramecium:org.paramecium.jdbc.SequenceDbGenerator.java
  */
-public class SequenceGenerator {
+public class SequenceDbGenerator {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	private static ConcurrentMap<String,Long> seqMap = new ConcurrentHashMap<String,Long>();
@@ -36,11 +36,11 @@ public class SequenceGenerator {
 	 */
 	public static long getNextId(String dsName,String tableName){
 		validationidName(tableName);
-		Long currentSeq = seqMap.get(tableName);
-		Long maxSeq = maxValueMap.get(tableName);
+		Long currentSeq = seqMap.get(dsName.concat(".").concat(tableName));
+		Long maxSeq = maxValueMap.get(dsName.concat(".").concat(tableName));
 		if(currentSeq==null||maxSeq==null||currentSeq.longValue()>=maxSeq.longValue()){
 			logger.debug(tableName+"表名称的自增序列值达到饱和或刚刚构建，正在重新取新值.");
-			new SequenceGenerator().init(dsName,tableName);
+			new SequenceDbGenerator().init(dsName,tableName);
 			currentSeq = seqMap.get(tableName);
 		}
 		currentSeq = Long.valueOf(currentSeq.longValue() + 1);
