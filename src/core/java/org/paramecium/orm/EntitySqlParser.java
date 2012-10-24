@@ -88,7 +88,6 @@ public class EntitySqlParser {
 							columns.add(BeanUtils.getDbFieldName(field.getName()));
 						}
 						propertys.add(mark.concat(field.getName()));
-						generateMode = 0;
 					}
 				} catch (Throwable e) {
 					logger.error(e);
