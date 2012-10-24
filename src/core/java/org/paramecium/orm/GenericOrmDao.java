@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.paramecium.jdbc.GenericJdbcDao;
+import org.paramecium.jdbc.SequenceGenerator;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.orm.annotation.Entity;
 import org.paramecium.validation.Validator;
@@ -63,6 +64,11 @@ public class GenericOrmDao<T , PK extends Serializable> implements BaseOrmDao<T 
 			return genericJdbcDao.insertGetGeneratedKeyByBean(sql.substring(1, sql.length()), bean);
 		}else if(isAuto.equals("M")){
 			genericJdbcDao.executeDMLByBean(sql.substring(1, sql.length()), bean);
+		}else if(isAuto.equals("P")){
+			Long longId = SequenceGenerator.nextSequence(bean.getClass().getName());
+			sql = sql.replaceAll("#PARAMECIUM_SEQUENCE#", longId.toString());
+			genericJdbcDao.executeDMLByBean(sql.substring(1, sql.length()), bean);
+			return longId;
 		}
 		return null;
 	}

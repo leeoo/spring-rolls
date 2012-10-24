@@ -40,6 +40,7 @@ public class SequenceGenerator {
 		}
 		Map<String,String> values = PropertiesUitls.get(sequenceFileName);
 		for(String key : values.keySet()){
+			key = key.toLowerCase();
 			String value = values.get(key);
 			long longValue = 0;
 			if(value!=null){
@@ -78,6 +79,7 @@ public class SequenceGenerator {
 	public static long currentSequence(String tableName){
 		lock.lock();
 		try{
+			tableName = tableName.toLowerCase();
 			Long value = sequencePool.get(tableName);
 			return value==null?0l:value;
 		} finally {
@@ -108,6 +110,7 @@ public class SequenceGenerator {
 	public static long nextSequence(String tableName){
 		lock.lock();
 		try{
+			tableName = tableName.toLowerCase();
 			Long value = sequencePool.get(tableName);
 			if(value==null){//该表第一次使用序列
 				value = 0l;
@@ -136,6 +139,7 @@ public class SequenceGenerator {
 	private static void reset(String tableName){
 		lock.lock();
 		try{
+			tableName = tableName.toLowerCase();
 			Long value = sequencePool.get(tableName);
 			value += sequenceCacheMax;
 			PropertiesUitls.set(sequenceFileName, tableName, value.toString());

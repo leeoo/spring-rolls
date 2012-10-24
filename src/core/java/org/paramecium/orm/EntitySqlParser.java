@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.paramecium.commons.BeanUtils;
-import org.paramecium.jdbc.SequenceGenerator;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.orm.annotation.Column;
@@ -16,9 +15,9 @@ import org.paramecium.orm.annotation.Entity;
 import org.paramecium.orm.annotation.Lazy;
 import org.paramecium.orm.annotation.NotUpdate;
 import org.paramecium.orm.annotation.PrimaryKey;
+import org.paramecium.orm.annotation.PrimaryKey.AUTO_GENERATE_MODE;
 import org.paramecium.orm.annotation.ReferenceColumn;
 import org.paramecium.orm.annotation.VirtualColumn;
-import org.paramecium.orm.annotation.PrimaryKey.AUTO_GENERATE_MODE;
 /**
  * 功能描述(Description):<br><b>
  * Sql语句分析器
@@ -47,7 +46,7 @@ public class EntitySqlParser {
 		Collection<String> propertys = new ArrayList<String>();
 		Class<?> clazz = bean.getClass();
 		String mark = ":";
-		boolean isAuto = true;
+		int generateMode = 0;
 		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			Field[] fields = superClass.getDeclaredFields();
 			for(Field field : fields){
@@ -65,7 +64,7 @@ public class EntitySqlParser {
 							columns.add(BeanUtils.getDbFieldName(field.getName()));
 						}
 						propertys.add(mark.concat(field.getName()));
-						isAuto = false;
+						generateMode = 1;
 					}else if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.NATIVE_SEQUENCE){
 						if(column!=null&&!column.value().isEmpty()){
 							columns.add(column.value());
@@ -73,15 +72,15 @@ public class EntitySqlParser {
 							columns.add(BeanUtils.getDbFieldName(field.getName()));
 						}
 						propertys.add(primaryKey.sequenceName());
-						isAuto = false;
+						generateMode = 1;
 					}else if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.PARAMECIUM_SEQUENCE){
 						if(column!=null&&!column.value().isEmpty()){
 							columns.add(column.value());
 						}else{
 							columns.add(BeanUtils.getDbFieldName(field.getName()));
 						}
-						propertys.add(String.valueOf(SequenceGenerator.nextSequence(tableName)));
-						isAuto = false;
+						propertys.add("#PARAMECIUM_SEQUENCE#");
+						generateMode = 3;
 					}else if(primaryKey==null){
 						if(column!=null&&!column.value().isEmpty()){
 							columns.add(column.value());
@@ -89,16 +88,19 @@ public class EntitySqlParser {
 							columns.add(BeanUtils.getDbFieldName(field.getName()));
 						}
 						propertys.add(mark.concat(field.getName()));
+						generateMode = 0;
 					}
 				} catch (Throwable e) {
 					logger.error(e);
 				}
 			}
 		}
-		if(isAuto){//判断是否为自增
+		if(generateMode==0){//判断是否为自增
 			sb.append("A");
-		}else{
+		}else if(generateMode==1){
 			sb.append("M");
+		}else if(generateMode==3){
+			sb.append("P");
 		}
 		sb.append("INSERT INTO ").append(tableName).append("(");
 		for(String column : columns){
