@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.paramecium.commons.BeanUtils;
 import org.paramecium.commons.EncodeUtils;
+import org.paramecium.jdbc.SequenceGenerator;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -82,6 +83,8 @@ public class MongoDBOrmDao <T , PK extends Serializable> implements BaseOrmDao<T
 					if(primaryKey!=null){
 						if(primaryKey.autoGenerateMode() == AUTO_GENERATE_MODE.NATIVE){
 							id = EncodeUtils.millisTime();
+						}else if(primaryKey.autoGenerateMode() == AUTO_GENERATE_MODE.PARAMECIUM_SEQUENCE){
+							id = SequenceGenerator.nextSequence(tableName);
 						}else{
 							id = (Long)BeanUtils.getFieldValue(bean, superClass, field.getName());
 						}
