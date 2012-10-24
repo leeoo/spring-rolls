@@ -29,6 +29,10 @@ public @interface PrimaryKey {
 		 */
 		NATIVE_SEQUENCE,
 		/**
+		 * 系统内置序列生成策略。
+		 */
+		PARAMECIUM_SEQUENCE,
+		/**
 		 * 手动赋值,如果@PrimaryKey被两个以上属性声明,所有使用@PrimaryKey的属性都被视为AUTO_GENERATE_MODE.NATIVE
 		 */
 		MANUAL;

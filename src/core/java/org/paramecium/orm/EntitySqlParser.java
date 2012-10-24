@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.paramecium.commons.BeanUtils;
+import org.paramecium.jdbc.SequenceGenerator;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.orm.annotation.Column;
@@ -60,29 +61,34 @@ public class EntitySqlParser {
 					if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.MANUAL){
 						if(column!=null&&!column.value().isEmpty()){
 							columns.add(column.value());
-							propertys.add(mark.concat(field.getName()));
 						}else{
 							columns.add(BeanUtils.getDbFieldName(field.getName()));
-							propertys.add(mark.concat(field.getName()));
 						}
+						propertys.add(mark.concat(field.getName()));
 						isAuto = false;
 					}else if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.NATIVE_SEQUENCE){
 						if(column!=null&&!column.value().isEmpty()){
 							columns.add(column.value());
-							propertys.add(primaryKey.sequenceName());
 						}else{
 							columns.add(BeanUtils.getDbFieldName(field.getName()));
-							propertys.add(primaryKey.sequenceName());
 						}
+						propertys.add(primaryKey.sequenceName());
+						isAuto = false;
+					}else if(primaryKey!=null&&primaryKey.autoGenerateMode()==AUTO_GENERATE_MODE.PARAMECIUM_SEQUENCE){
+						if(column!=null&&!column.value().isEmpty()){
+							columns.add(column.value());
+						}else{
+							columns.add(BeanUtils.getDbFieldName(field.getName()));
+						}
+						propertys.add(String.valueOf(SequenceGenerator.nextSequence(tableName)));
 						isAuto = false;
 					}else if(primaryKey==null){
 						if(column!=null&&!column.value().isEmpty()){
 							columns.add(column.value());
-							propertys.add(mark.concat(field.getName()));
 						}else if(column!=null&&column.value().isEmpty()){
 							columns.add(BeanUtils.getDbFieldName(field.getName()));
-							propertys.add(mark.concat(field.getName()));
 						}
+						propertys.add(mark.concat(field.getName()));
 					}
 				} catch (Throwable e) {
 					logger.error(e);

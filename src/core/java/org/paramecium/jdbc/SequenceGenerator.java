@@ -18,7 +18,7 @@ import org.paramecium.log.LoggerFactory;
  * @author caoyang
  *
  */
-public class SequenceFileGenerator {
+public class SequenceGenerator {
 	
 	private final static Log logger = LoggerFactory.getLogger();
 	public static int sequenceCacheMax = 255;
