@@ -1,8 +1,20 @@
-<c:set var="baseHeight" value="73"/>
 <%@ page contentType="text/html;charset=UTF-8"%>
 	<div region="north" border="false" style="height:45px;background-image: url('${base}/commons/images/head.gif');background-color: #EEF9FB;">
 		<div align="left" style="float: left;">
 			<div style="font-size: 38px;color: #FFF;padding-left: 10px;font-weight: bold;">Paramecium</div>
+		</div>
+		<div align="right" style="padding-right: 40px;padding-top: 10px;float: right ;">
+			<form id="themeId" action="${base}/system/themes/change${ext}" method="post">
+				<select name="themeName" onchange="javascript:document.forms[0].submit();">
+					<option value="default" <c:if test="${theme!=null && theme=='default'}">selected='selected'</c:if>>浅蓝</option>
+					<option value="gray" <c:if test="${theme!=null && theme=='gray'}">selected='selected'</c:if>>银灰</option>
+					<option value="cupertino" <c:if test="${theme!=null && theme=='cupertino'}">selected='selected'</c:if>>柔兰</option>
+					<option value="dark-hive" <c:if test="${theme!=null && theme=='dark-hive'}">selected='selected'</c:if>>暗室</option>
+					<option value="metro" <c:if test="${theme!=null && theme=='metro'}">selected='selected'</c:if>>都市</option>
+					<option value="pepper-grinder" <c:if test="${theme!=null && theme=='pepper-grinder'}">selected='selected'</c:if>>理石</option>
+					<option value="sunny" <c:if test="${theme!=null && theme=='sunny'}">selected='selected'</c:if>>晴朗</option>
+				</select><span style="color: #FFF;">切换主题</span>
+			</form>
 		</div>
 		<div align="right" style="padding-right: 50px;padding-top: 5px;">
 			<a href="javascript:void(0)" id="$security" class="easyui-splitbutton" style="color: #FFF" menu="#security" iconCls="icon-security">系统管理</a>

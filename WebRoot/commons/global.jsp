@@ -10,3 +10,5 @@
 <c:set var="base" value="${pageContext.request.scheme}://${pageContext.request.serverName }:${pageContext.request.serverPort}${path}"/>
 <%@page import="com.demo.web.BaseController"%>
 <c:set var="ext" value="<%=BaseController.EXT %>"/>
+<c:set var="theme" value="<%=BaseController.THEME %>"/>
+<c:set var="baseHeight" value="73"/>
