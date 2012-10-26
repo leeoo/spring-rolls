@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta http-equiv="refresh" content="5">
 <title>Paramecium开发平台演示——服务器硬件情况</title>
 <%@ include file="../../global/head.jsp"%>
 </head>
@@ -14,7 +15,7 @@
 			<div style="width:140px;height: 72px;background-image: url('${base}/commons/images/cpu.gif');">
 			</div>
 			<div>
-				<div id="cpu" class="easyui-progressbar" style="width:140px;background-color: #FFF;" align="left"></div>
+				<div id="cpu" class="easyui-progressbar" style="width:140px;" align="left"></div>
 				<div style="width:144px;">${cpu.name}</div>
 				<script>
 					$(document).ready(function(){
@@ -30,7 +31,7 @@
 					<div align="center" style="padding-top: 3px;width:188px;height: 48px;font-size: 20px;"><b>${memory.total}GB</b></div>
 			</div>
 			<div>
-				<div id="memory" class="easyui-progressbar" style="width:190px;background-color: #FFF;" align="left"></div>
+				<div id="memory" class="easyui-progressbar" style="width:190px;" align="left"></div>
 				${memory.use}GB已占用&nbsp;/&nbsp;${memory.free}GB可用
 				<script>
 					$(document).ready(function(){
@@ -47,7 +48,7 @@
 				<div align="center" style="padding-top: 4px;width:136px;height: 80px;font-size: 25px;"><b>${disk.key}</b></div>
 			</div>
 			<div>
-				<div id="p${status.index}" class="easyui-progressbar" style="width:140px;background-color: #FFF;" align="left"></div>
+				<div id="p${status.index}" class="easyui-progressbar" style="width:140px;" align="left"></div>
 				${disk.value[2]}GB可用&nbsp;/&nbsp;共${disk.value[0]}GB
 				<script>
 					$(document).ready(function(){
