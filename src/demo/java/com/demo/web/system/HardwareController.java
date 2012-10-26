@@ -43,7 +43,7 @@ public class HardwareController extends BaseController{
 		}
 		cpu = cpu.substring(s1).trim();
 		s1 = cpu.indexOf("  ");
-		String name = cpu.substring(0,s1).trim();
+		String name = cpu.substring(0,s1).trim().concat(" ");
 		cpu = cpu.substring(s1).trim();
 		s1 = cpu.indexOf(" ");
 		name += cpu.substring(0,s1).trim()+"核 ";
