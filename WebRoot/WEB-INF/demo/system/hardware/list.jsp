@@ -10,17 +10,25 @@
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="服务器硬件情况">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
+		<img src="${base}/commons/images/cpu.gif" alt="" />
 		${cpu.name}
 		${cpu.load}
 	</div>
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
+		<img src="${base}/commons/images/memory.gif" alt="" />
 		${memory.total}
 		${memory.use}
 		${memory.free}
 	</div>
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
 		<c:forEach items="${disks}" var="disk">
-			${disk.key}${disk.value[0]}${disk.value[1]}${disk.value[2]}
+		<span>
+			<img src="${base}/commons/images/disk.gif" alt="" />
+			${disk.key}
+			${disk.value[0]}
+			${disk.value[1]}
+			${disk.value[2]}
+		</span>
 		</c:forEach>
 	</div>
 </div>
