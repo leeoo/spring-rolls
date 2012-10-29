@@ -303,13 +303,24 @@ public class ModelAndView implements Serializable,Cloneable{
 		fileName = fileName!=null?fileName:ServletConstant.FILENAME;
 		response.setContentType(ServletConstant.APPLICATION.concat(encoding));
 		response.setHeader(ServletConstant.CONTENT, ServletConstant.ATTACH.concat(fileName));
+		OutputStream outStream = null;
 		try{
-			OutputStream outStream = response.getOutputStream();
+			outStream = response.getOutputStream();
 			outStream.write(file);
-			outStream.flush();
-			outStream.close();
 		}catch (Throwable e) {
 			logger.error(e);
+		}
+		if(outStream!=null){
+			try{
+				outStream.flush();
+			}catch (Throwable e) {
+				logger.error(e);
+			}
+			try{
+				outStream.close();
+			}catch (Throwable e) {
+				logger.error(e);
+			}
 		}
 		return this.clone();
 	}
@@ -330,13 +341,24 @@ public class ModelAndView implements Serializable,Cloneable{
 	public ModelAndView printXML(String xml,String encoding){
 		encoding = encoding!=null?encoding:SpecialFilter.getEncoding();
 		response.setContentType(ServletConstant.TEXT_XML.concat(encoding));
+		PrintWriter writer = null;
 		try{
-			PrintWriter writer = response.getWriter();
+			writer = response.getWriter();
 			writer.write(xml);
-			writer.flush();
-			writer.close();
 		}catch (Throwable e) {
 			logger.error(e);
+		}
+		if(writer!=null){
+			try{
+				writer.flush();
+			}catch (Throwable e) {
+				logger.error(e);
+			}
+			try{
+				writer.close();
+			}catch (Throwable e) {
+				logger.error(e);
+			}
 		}
 		return this.clone();
 	}
@@ -357,13 +379,24 @@ public class ModelAndView implements Serializable,Cloneable{
 	public ModelAndView printJSON(String json,String encoding){
 		encoding = encoding!=null?encoding:SpecialFilter.getEncoding();
 		response.setContentType(ServletConstant.TEXT_HTML.concat(encoding));
+		PrintWriter writer = null;
 		try{
-			PrintWriter writer = response.getWriter();
+			writer = response.getWriter();
 			writer.write(json);
-			writer.flush();
-			writer.close();
 		}catch (Throwable e) {
 			logger.error(e);
+		}
+		if(writer!=null){
+			try{
+				writer.flush();
+			}catch (Throwable e) {
+				logger.error(e);
+			}
+			try{
+				writer.close();
+			}catch (Throwable e) {
+				logger.error(e);
+			}
 		}
 		return this.clone();
 	}

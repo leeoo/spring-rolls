@@ -32,7 +32,7 @@ public abstract class ZipUtils {
 	 * @param zipFilePath 压缩后，zip的存放路径和名称
 	 * @param filePath 文件目录名
 	 */
-	public static void zip(String zipFilePath, String filePath) {
+	public static void zipDir(String zipFilePath, String filePath) {
 		File path = new File(filePath.concat("\\"));
 		File[] files = path.listFiles();
 		zip(zipFilePath, files);
