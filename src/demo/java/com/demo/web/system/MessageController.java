@@ -18,7 +18,7 @@ import com.demo.web.BaseController;
 public class MessageController extends BaseController{
 	
 	@SuppressWarnings("unchecked")
-	private final static Cache<String,Message> messages = (Cache<String, Message>) CacheManager.getCacheByType("MESSAGE",1000);
+	private final static Cache<String,Message> messages = (Cache<String, Message>) CacheManager.getCacheByType("MESSAGE",100);
 	
 	@ShowLabel("发送消息")
 	@MappingMethod
