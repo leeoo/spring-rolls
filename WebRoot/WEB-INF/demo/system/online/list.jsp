@@ -4,14 +4,40 @@
 <head>
 <title>Paramecium开发平台演示——在线用户列表</title>
 <%@ include file="../../global/head.jsp"%>
+<link rel="stylesheet" type="text/css" href="${base}/commons/css/uploadify/uploadify.css">
+<script type="text/javascript" src="${base}/commons/js/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" src="${base}/commons/js/uploadify/jquery.uploadify.min.js"></script>
+<script>
+	$(function() {
+		$("#file_upload").uploadify({
+			buttonText:'上传附件',
+			fileTypeExts:'*.*',
+			fileObjName:'file',
+			fileTypeDesc:'请上传Paramecium消息附件',
+			swf:'${base}/commons/js/uploadify/uploadify.swf',
+			uploader:'${base}/file/upload${ext}',
+			height:20,
+			width:70,
+			onUploadSuccess:function(file, data, response) {
+				if($.trim($("#title").val())!=null&&$.trim($("#title").val())!=''){
+					$('#title').val($.trim($("#title").val())+'|'+data);
+				}else{
+					$('#title').val(data);
+				}
+				return false;
+	        }
+		});
+	});
+</script>
 </head>
 <body class="easyui-layout">
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="在线用户列表">
 	<table id="list"></table>
-	<div id="win" class="easyui-dialog" close="true" iconCls="icon-msg" title="发送消息">  
-	   <textarea id="content" rows="10" cols="50"></textarea>
+	<div id="win" class="easyui-dialog" close="true" iconCls="icon-msg" title="发送消息">
+	   <p><textarea id="content" rows="10" cols="50"></textarea></p>
+	   <p><input id="title" readonly="readonly" name="title" class="easyui-validatebox" style="width: 150px;"/><input type="file" name="file" id="file_upload"/></p>
 	</div>
 </div>
 <script>
@@ -31,9 +57,13 @@
 						ids.push(rows[i].sessionId);
 					}
 					$.ajax({
-						   type: "get",
+						   type: "post",
 						   url: "${base}/system/message/send${ext}",
-						   data: "ids="+ids.join(',')+"&content="+encodeURI($('#content').val()),
+						   data: {
+					    	   'ids': ids.join(','),
+					    	   'content': $.trim($('#content').val()),
+					    	   'title': $.trim($("#title").val())
+					    	   },
 						   success: function(msg){
 							   $.messager.show({
 									title:'提示',
@@ -44,6 +74,7 @@
 						   }
 					});
 					$('#content').val('');
+					$('#title').val('');
 					$('#list').datagrid('reload');
 					$('#win').dialog('close');
 				}

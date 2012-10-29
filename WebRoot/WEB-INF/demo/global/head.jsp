@@ -17,7 +17,11 @@
 	            timeout: 2000,  
 	            success: function (msg) {
 	            	if(msg!=null){
-	            		$.messager.alert('来自于&nbsp;'+msg.auth+'&nbsp;的站内消息',msg.content,'info');
+	            		if(msg.title!=null&&msg.title!=''){
+	            			$.messager.alert(msg.date+'<br>来自于&nbsp;'+msg.auth,msg.content+'<br><a href="${base}/system/message/download${ext}?title='+msg.title+'">下载附件</a>','info');
+	            		}else{
+		            		$.messager.alert(msg.date+'<br>来自于&nbsp;'+msg.auth,msg.content,'info');
+	            		}
 	            	}
 	            }
 	        })
