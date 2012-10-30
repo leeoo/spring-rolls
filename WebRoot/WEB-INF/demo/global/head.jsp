@@ -23,6 +23,9 @@
 	            		}
 	            		$.messager.alert(msg.date+'<br>来自于&nbsp;'+msg.auth,msg.content+title,'info');
 	            	}
+	            },
+	            error: function (msg) {
+	            	alert('严重警告:您与服务器断开连接,请您暂停所有操作,以免造成不必要的损失!');
 	            }
 	        })
 	    }
