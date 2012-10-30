@@ -70,6 +70,7 @@ public class MessageController extends BaseController{
 				}
 			}
 		} catch (Exception e) {
+			logger.error(e);
 		}
 	}
 	
