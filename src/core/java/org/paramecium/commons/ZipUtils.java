@@ -33,7 +33,7 @@ public abstract class ZipUtils {
 	 * @param filePath 文件目录名
 	 */
 	public static void zipDir(String zipFilePath, String filePath) {
-		File path = new File(filePath.concat("\\"));
+		File path = new File(filePath.concat("//"));
 		File[] files = path.listFiles();
 		zip(zipFilePath, files);
 	}
@@ -61,7 +61,11 @@ public abstract class ZipUtils {
 	public static void zip(String zipFilePath, File... files) {
 		BufferedInputStream origin = null;
 		FileOutputStream dest = null;
-		File zipM = new File(zipFilePath.substring(0, zipFilePath.lastIndexOf('\\')));
+		int last = zipFilePath.lastIndexOf('/');
+		if(last<zipFilePath.lastIndexOf('\\')){
+			last = zipFilePath.lastIndexOf('\\');
+		}
+		File zipM = new File(zipFilePath.substring(0,last));
 		zipM.mkdirs();
 		try {
 			dest = new FileOutputStream(zipFilePath);
@@ -126,7 +130,7 @@ public abstract class ZipUtils {
 		while (emu.hasMoreElements()) {
 			ZipEntry entry = (ZipEntry) emu.nextElement();
 			// 会把目录作为一个file读出一次，所以只建立目录就可以，之下的文件还会被迭代到.
-			String unZipFile = unZipPath.concat("\\").concat(entry.getName());
+			String unZipFile = unZipPath.concat("//").concat(entry.getName());
 			if (entry.isDirectory()) {
 				new File(unZipFile).mkdirs();
 				continue;
