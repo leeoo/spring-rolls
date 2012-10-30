@@ -17,11 +17,11 @@
 	            timeout: 2000,  
 	            success: function (msg) {
 	            	if(msg!=null){
-	            		if(msg.title!=null&&msg.title!=''){
-	            			$.messager.alert(msg.date+'<br>来自于&nbsp;'+msg.auth,msg.content+'<br><a href="${base}/system/message/download${ext}?title='+msg.title+'">下载附件</a>','info');
-	            		}else{
-		            		$.messager.alert(msg.date+'<br>来自于&nbsp;'+msg.auth,msg.content,'info');
+	            		var title = '';
+	            		if(msg.title!=null&&msg.title!=''&&msg.title!='null'){
+	            			title='<br><a href="${base}/system/message/download${ext}?title='+msg.title+'">下载附件</a>';
 	            		}
+	            		$.messager.alert(msg.date+'<br>来自于&nbsp;'+msg.auth,msg.content+title,'info');
 	            	}
 	            }
 	        })
