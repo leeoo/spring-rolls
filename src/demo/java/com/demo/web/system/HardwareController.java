@@ -71,7 +71,7 @@ public class HardwareController extends BaseController{
 		float load = 0;
 		if(us!=null&&sy!=null){
 			load = Float.parseFloat(us) + Float.parseFloat(sy);
-			load = new BigDecimal(load).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+			load = new BigDecimal(load).setScale(0, BigDecimal.ROUND_HALF_UP).floatValue();
 		}
 		cpu = CommandUtils.getRunResult("cat /proc/cpuinfo");
 		s1 = cpu.indexOf("model name");
