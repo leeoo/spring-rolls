@@ -67,14 +67,11 @@ public class HardwareController extends BaseController{
 		int s2 = cpu.indexOf("%us,");
 		int s3 = cpu.indexOf("%sy,");
 		String us = cpu.substring(s1+7,s2).trim();
-		System.out.println("us:"+us);
 		String sy = cpu.substring(s2+4,s3).trim();
-		System.out.println("us:"+sy);
 		int load = 0;
 		if(us!=null&&sy!=null){
 			load = new BigDecimal(Float.parseFloat(us) + Float.parseFloat(sy)).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
 		}
-		System.out.println("load:"+load);
 		cpu = CommandUtils.getRunResult("cat /proc/cpuinfo");
 		s1 = cpu.indexOf("model name");
 		s2 = cpu.indexOf("stepping");
