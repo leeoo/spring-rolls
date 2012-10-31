@@ -62,16 +62,15 @@ public class HardwareController extends BaseController{
 	private Map<String,Object> getLinuxOSCPUInfo(){
 		Map<String,Object> info = new HashMap<String, Object>();
 		String cpu = CommandUtils.getRunResult("top -bn1");
-		cpu = cpu.substring(0,cpu.indexOf("Swap:"));
 		int s1 = cpu.indexOf("Cpu(s):");
+		cpu = cpu.substring(s1,cpu.indexOf("Swap:"));
 		int s2 = cpu.indexOf("%us,");
 		int s3 = cpu.indexOf("%sy,");
 		String us = cpu.substring(s1+7,s2).trim();
 		String sy = cpu.substring(s2+4,s3).trim();
-		float load = 0;
+		int load = 0;
 		if(us!=null&&sy!=null){
-			load = Float.parseFloat(us) + Float.parseFloat(sy);
-			load = new BigDecimal(load).setScale(0, BigDecimal.ROUND_HALF_UP).floatValue();
+			load = new BigDecimal(Float.parseFloat(us) + Float.parseFloat(sy)).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
 		}
 		cpu = CommandUtils.getRunResult("cat /proc/cpuinfo");
 		s1 = cpu.indexOf("model name");
