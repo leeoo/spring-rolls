@@ -26,8 +26,83 @@ public class HardwareController extends BaseController{
 			mv.addValue("cpu", getWinOSCPUInfo());
 			mv.addValue("memory", getWinOSMemoryInfo());
 			mv.addValue("disks", getWinOSDiskInfo());
+		}else{
+			mv.addValue("cpu", getLinuxOSCPUInfo());
+			mv.addValue("memory", getLinuxOSMemoryInfo());
 		}
 		return mv.forward(getPage("/hardware/list.jsp"));
+	}
+	
+	private Map<String,float[]> getLinuxOSDiskInfo(){
+		Map<String,float[]> info = new LinkedHashMap<String, float[]>();
+		String disk = CommandUtils.getRunResult("df -lh");
+		int s1 = disk.indexOf("/dev/");
+		disk = disk.substring(s1).trim();
+		for(String d : disk.split("\n")){
+			if(!d.trim().isEmpty()){
+				s1 = d.indexOf(' ');
+				String name = d.substring(0,s1).trim();
+				d = d.substring(s1).trim();
+				s1 = d.indexOf(' ');
+				String freeDisk = d.substring(0,s1).trim();
+				String totalDisk = d.substring(s1).trim();
+				float total =  Float.parseFloat(totalDisk)/(1024*1024*1024);
+				float free =  Float.parseFloat(freeDisk)/(1024*1024*1024);
+				float use = total - free;
+				total = new BigDecimal(total).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+				use = new BigDecimal(use).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+				free = new BigDecimal(free).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+				float[] values = {total,use,free};
+				info.put(name, values);
+			}
+		}
+		return info;
+	}
+	
+	private Map<String,Object> getLinuxOSCPUInfo(){
+		Map<String,Object> info = new HashMap<String, Object>();
+		String cpu = CommandUtils.getRunResult("top -bn1");
+		cpu = cpu.substring(0,cpu.indexOf("Swap:"));
+		int s1 = cpu.indexOf("Cpu(s):");
+		int s2 = cpu.indexOf("%us,");
+		int s3 = cpu.indexOf("%sy,");
+		String us = cpu.substring(s1,s2).trim();
+		String sy = cpu.substring(s2,s3).trim();
+		float load = 0;
+		if(us!=null&&sy!=null){
+			load = Float.parseFloat(us) + Float.parseFloat(sy);
+			load = new BigDecimal(load).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+		}
+		cpu = CommandUtils.getRunResult("cat /proc/cpuinfo");
+		s1 = cpu.indexOf("model name");
+		s2 = cpu.indexOf("stepping");
+		String name = cpu.substring(s1,s2).replace(':',' ').trim();
+		info.put("name", name);
+		info.put("load", load);
+		return info;
+	}
+	
+	private Map<String,Float> getLinuxOSMemoryInfo(){
+		Map<String,Float> info = new HashMap<String, Float>();
+		String mem = CommandUtils.getRunResult("top -bn1");
+		mem = mem.substring(0,mem.indexOf("Swap:"));
+		int s1 = mem.indexOf("Mem:");
+		int s2 = mem.indexOf("k total,");
+		int s3 = mem.indexOf("k used,");
+		int s4 = mem.indexOf("k free,");
+		String totalMem = mem.substring(s1,s2).trim();
+		String useMem = mem.substring(s2,s3).trim();
+		String freeMem = mem.substring(s3,s4).trim();
+		float total =  Float.parseFloat(totalMem)/1024;
+		float free =  Float.parseFloat(freeMem)/1024;
+		float use =  Float.parseFloat(useMem)/1024;
+		total = new BigDecimal(total).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+		use = new BigDecimal(use).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+		free = new BigDecimal(free).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+		info.put("total", total);
+		info.put("use", use);
+		info.put("free", free);
+		return info;
 	}
 	
 	private Map<String,Object> getWinOSCPUInfo(){
