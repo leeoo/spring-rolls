@@ -62,8 +62,8 @@ public class HardwareController extends BaseController{
 	private Map<String,Object> getLinuxOSCPUInfo(){
 		Map<String,Object> info = new HashMap<String, Object>();
 		String cpu = CommandUtils.getRunResult("top -bn1");
+		cpu = cpu.substring(cpu.indexOf("Cpu(s):"),cpu.indexOf("Swap:"));
 		int s1 = cpu.indexOf("Cpu(s):");
-		cpu = cpu.substring(s1,cpu.indexOf("Swap:"));
 		int s2 = cpu.indexOf("%us,");
 		int s3 = cpu.indexOf("%sy,");
 		String us = cpu.substring(s1+7,s2).trim();
@@ -84,7 +84,7 @@ public class HardwareController extends BaseController{
 	private Map<String,Float> getLinuxOSMemoryInfo(){
 		Map<String,Float> info = new HashMap<String, Float>();
 		String mem = CommandUtils.getRunResult("top -bn1");
-		mem = mem.substring(0,mem.indexOf("Swap:"));
+		mem = mem.substring(mem.indexOf("Mem:"),mem.indexOf("Swap:"));
 		int s1 = mem.indexOf("Mem:");
 		int s2 = mem.indexOf("k total,");
 		int s3 = mem.indexOf("k used,");
