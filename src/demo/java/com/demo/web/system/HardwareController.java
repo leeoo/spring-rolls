@@ -39,6 +39,7 @@ public class HardwareController extends BaseController{
 		String disk = CommandUtils.getRunResult("df -lh");
 		int s1 = disk.indexOf('\n');
 		disk = disk.substring(s1).trim();
+		int as = 1;
 		for(String d : disk.split("\n")){
 			if(!d.trim().isEmpty()){
 				s1 = d.indexOf(' ');
@@ -74,6 +75,9 @@ public class HardwareController extends BaseController{
 				use = new BigDecimal(use).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 				free = new BigDecimal(free).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 				float[] values = {total,use,free};
+				if(info.get(name)!=null){
+					name += ++as;
+				}
 				info.put(name, values);
 			}
 		}
@@ -167,6 +171,7 @@ public class HardwareController extends BaseController{
 		String disk = CommandUtils.getRunResult("wmic logicaldisk  get deviceID,size,FreeSpace");
 		int s1 = disk.indexOf('\n');
 		disk = disk.substring(s1).trim();
+		int as = 1;
 		for(String d : disk.split("\n")){
 			if(!d.trim().isEmpty()){
 				s1 = d.indexOf(' ');
@@ -182,6 +187,9 @@ public class HardwareController extends BaseController{
 				use = new BigDecimal(use).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 				free = new BigDecimal(free).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 				float[] values = {total,use,free};
+				if(info.get(name)!=null){
+					name += ++as;
+				}
 				info.put(name, values);
 			}
 		}
