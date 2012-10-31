@@ -29,6 +29,7 @@ public class HardwareController extends BaseController{
 		}else{
 			mv.addValue("cpu", getLinuxOSCPUInfo());
 			mv.addValue("memory", getLinuxOSMemoryInfo());
+			mv.addValue("disks", getLinuxOSDiskInfo());
 		}
 		return mv.forward(getPage("/hardware/list.jsp"));
 	}
@@ -36,19 +37,30 @@ public class HardwareController extends BaseController{
 	private Map<String,float[]> getLinuxOSDiskInfo(){
 		Map<String,float[]> info = new LinkedHashMap<String, float[]>();
 		String disk = CommandUtils.getRunResult("df -lh");
-		int s1 = disk.indexOf("/dev/");
+		int s1 = disk.indexOf('\n');
 		disk = disk.substring(s1).trim();
 		for(String d : disk.split("\n")){
 			if(!d.trim().isEmpty()){
 				s1 = d.indexOf(' ');
 				String name = d.substring(0,s1).trim();
+				
+				d = d.substring(s1).trim();
+				s1 = d.indexOf(' ');
+				String totalDisk = d.substring(0,s1).trim();
+				
+				d = d.substring(s1).trim();
+				s1 = d.indexOf(' ');
+				String useDisk = d.substring(0,s1).trim();
+				
 				d = d.substring(s1).trim();
 				s1 = d.indexOf(' ');
 				String freeDisk = d.substring(0,s1).trim();
-				String totalDisk = d.substring(s1).trim();
-				float total =  Float.parseFloat(totalDisk)/(1024*1024*1024);
-				float free =  Float.parseFloat(freeDisk)/(1024*1024*1024);
-				float use = total - free;
+				String t = totalDisk.substring(totalDisk.length()-1, totalDisk.length()).toUpperCase();
+				String f = freeDisk.substring(freeDisk.length()-1, freeDisk.length()).toUpperCase();
+				String u = useDisk.substring(useDisk.length()-1, useDisk.length()).toUpperCase();
+				float total =  Float.parseFloat(totalDisk)/getNum(t);
+				float free =  Float.parseFloat(freeDisk)/getNum(f);
+				float use = Float.parseFloat(useDisk)/getNum(u);
 				total = new BigDecimal(total).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 				use = new BigDecimal(use).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 				free = new BigDecimal(free).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
@@ -57,6 +69,20 @@ public class HardwareController extends BaseController{
 			}
 		}
 		return info;
+	}
+	
+	private int getNum(String value){
+		int base = 1;
+		if(value.equals("G")){
+			base = 1;
+		}else if(value.equals("M")){
+			base = 1024;
+		}else if(value.equals("K")){
+			base = 1024*1024;
+		}else{
+			base = 1024*1024*1024;
+		}
+		return base;
 	}
 	
 	private Map<String,Object> getLinuxOSCPUInfo(){
