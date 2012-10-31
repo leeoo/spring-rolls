@@ -58,6 +58,15 @@ public class HardwareController extends BaseController{
 				String t = totalDisk.substring(totalDisk.length()-1, totalDisk.length()).toUpperCase();
 				String f = freeDisk.substring(freeDisk.length()-1, freeDisk.length()).toUpperCase();
 				String u = useDisk.substring(useDisk.length()-1, useDisk.length()).toUpperCase();
+				if(t.equals("G")||t.equals("M")||t.equals("K")){
+					totalDisk = totalDisk.substring(0,totalDisk.length()-1);
+				}
+				if(f.equals("G")||f.equals("M")||f.equals("K")){
+					freeDisk = freeDisk.substring(0,freeDisk.length()-1);
+				}
+				if(u.equals("G")||u.equals("M")||u.equals("K")){
+					useDisk = useDisk.substring(0,useDisk.length()-1);
+				}
 				float total =  Float.parseFloat(totalDisk)/getNum(t);
 				float free =  Float.parseFloat(freeDisk)/getNum(f);
 				float use = Float.parseFloat(useDisk)/getNum(u);
