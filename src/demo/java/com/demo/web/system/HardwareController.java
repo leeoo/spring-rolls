@@ -66,8 +66,8 @@ public class HardwareController extends BaseController{
 		int s1 = cpu.indexOf("Cpu(s):");
 		int s2 = cpu.indexOf("%us,");
 		int s3 = cpu.indexOf("%sy,");
-		String us = cpu.substring(s1,s2).trim();
-		String sy = cpu.substring(s2,s3).trim();
+		String us = cpu.substring(s1+7,s2).trim();
+		String sy = cpu.substring(s2+4,s3).trim();
 		float load = 0;
 		if(us!=null&&sy!=null){
 			load = Float.parseFloat(us) + Float.parseFloat(sy);
@@ -76,7 +76,7 @@ public class HardwareController extends BaseController{
 		cpu = CommandUtils.getRunResult("cat /proc/cpuinfo");
 		s1 = cpu.indexOf("model name");
 		s2 = cpu.indexOf("stepping");
-		String name = cpu.substring(s1,s2).replace(':',' ').trim();
+		String name = cpu.substring(s1+10,s2).replace(':',' ').trim();
 		info.put("name", name);
 		info.put("load", load);
 		return info;
@@ -90,9 +90,9 @@ public class HardwareController extends BaseController{
 		int s2 = mem.indexOf("k total,");
 		int s3 = mem.indexOf("k used,");
 		int s4 = mem.indexOf("k free,");
-		String totalMem = mem.substring(s1,s2).trim();
-		String useMem = mem.substring(s2,s3).trim();
-		String freeMem = mem.substring(s3,s4).trim();
+		String totalMem = mem.substring(s1+4,s2).trim();
+		String useMem = mem.substring(s2+8,s3).trim();
+		String freeMem = mem.substring(s3+7,s4).trim();
 		float total =  Float.parseFloat(totalMem)/1024;
 		float free =  Float.parseFloat(freeMem)/1024;
 		float use =  Float.parseFloat(useMem)/1024;
