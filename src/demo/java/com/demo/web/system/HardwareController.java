@@ -93,9 +93,9 @@ public class HardwareController extends BaseController{
 		String totalMem = mem.substring(s1+4,s2).trim();
 		String useMem = mem.substring(s2+8,s3).trim();
 		String freeMem = mem.substring(s3+7,s4).trim();
-		float total =  Float.parseFloat(totalMem)/1024;
-		float free =  Float.parseFloat(freeMem)/1024;
-		float use =  Float.parseFloat(useMem)/1024;
+		float total =  Float.parseFloat(totalMem)/(1024*1024);
+		float free =  Float.parseFloat(freeMem)/(1024*1024);
+		float use =  Float.parseFloat(useMem)/(1024*1024);
 		total = new BigDecimal(total).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 		use = new BigDecimal(use).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 		free = new BigDecimal(free).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
