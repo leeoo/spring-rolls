@@ -1,5 +1,6 @@
 package com.demo.entity.system;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.paramecium.orm.annotation.Column;
@@ -7,7 +8,9 @@ import org.paramecium.orm.annotation.Entity;
 import org.paramecium.orm.annotation.PrimaryKey;
 
 @Entity(tableName="t_message",orderBy="publish_date DESC")
-public class Message {
+public class Message implements Serializable{
+	
+	private static final long serialVersionUID = -7349391614298157245L;
 
 	@PrimaryKey
 	@Column
