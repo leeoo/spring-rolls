@@ -15,14 +15,16 @@ public class DefaultCache extends BaseCache{
 	private static final long serialVersionUID = -8179064197236303233L;
 	
 	public DefaultCache(String name,int initSize) throws RemoteException{
-		this.maxSize = initSize;
-		this.name = name;
+		this(name, initSize, null);
 	}
 	
 	public DefaultCache(String name,int initSize,Long life) throws RemoteException{
 		this.maxSize = initSize;
 		this.name = name;
 		this.life = life;
+		if(this.life!=null){
+			new Thread(new CacheHandlerThread()).start();
+		}
 	}
 	
 	public synchronized void put(Object key, Object value) {

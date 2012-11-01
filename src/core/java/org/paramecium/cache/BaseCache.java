@@ -6,6 +6,10 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import org.paramecium.commons.EncodeUtils;
+import org.paramecium.log.Log;
+import org.paramecium.log.LoggerFactory;
+
 /**
  * 功 能 描 述:<br>
  * 缓存基本功能实现实现
@@ -14,12 +18,45 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * <br>项 目 信 息:paramecium:org.paramecium.cache.BaseCache.java
  */
 public abstract class BaseCache implements RemoteCache,Cloneable {
-
+	private final static Log logger = LoggerFactory.getLogger();
 	private static final long serialVersionUID = 8139192731446878665L;
 	private ConcurrentMap<Object,Element> map = new ConcurrentSkipListMap<Object,Element>();
 	protected int maxSize = 500;
 	protected String name;
 	protected Long life = null;
+	
+	protected class CacheHandlerThread implements Runnable {
+		private boolean run = true;
+		long lifeMs = life * 1000l;
+		
+		public CacheHandlerThread(){
+			logger.debug(name+":基本缓存周期监控处理线程已启动!");
+		}
+		
+		public void run() {
+			clearCache();
+		}
+		
+		private void clearCache(){
+			while (run) {
+				try {
+					Thread.sleep(60000);//定时执行
+					if(life!=null){
+						long time = EncodeUtils.millisTime();
+						for(Element element : map.values()){
+							if(lifeMs<time-element.getAccessTime()){
+								remove(element.getKey());
+							}
+						}
+					}else{
+						run = false;
+					}
+				} catch (Exception ex) {
+					logger.error(ex);
+				}
+			}
+		}
+	}
 	
 	public synchronized void clear() {
 		map.clear();
