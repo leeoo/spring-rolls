@@ -130,7 +130,7 @@ public class CacheManager {
 	 * @return
 	 */
 	public static synchronized Cache<?,?> getDefaultCache(String name,int maxSize){
-		return getDefaultCache(name, CacheConfig.defaultCacheSize,null);
+		return getDefaultCache(name, maxSize,null);
 	}
 	
 	/**

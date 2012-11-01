@@ -62,6 +62,7 @@ public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 						for(Element element : map.values()){
 							if(lifeMs<time-element.getAccessTime()){
 								remove(element.getKey());
+								logger.debug(name+":分布式缓存<"+element.getKey()+">超过了生命周期被监控线程移除!");
 							}
 						}
 					}else{

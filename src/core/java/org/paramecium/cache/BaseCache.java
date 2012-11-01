@@ -46,6 +46,7 @@ public abstract class BaseCache implements RemoteCache,Cloneable {
 						for(Element element : map.values()){
 							if(lifeMs<time-element.getAccessTime()){
 								remove(element.getKey());
+								logger.debug(name+":基本缓存<"+element.getKey()+">超过了生命周期被监控线程移除!");
 							}
 						}
 					}else{
