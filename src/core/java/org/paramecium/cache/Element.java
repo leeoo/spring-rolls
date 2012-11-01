@@ -1,6 +1,8 @@
 package org.paramecium.cache;
 
 import java.io.Serializable;
+
+import org.paramecium.commons.EncodeUtils;
 /**
  * 功 能 描 述:<br>
  * 缓存子元素
@@ -18,7 +20,7 @@ public class Element implements Serializable, Cloneable {
 	public Element(Object key,Object value){
 		this.key = key;
 		this.value = value;
-		this.accessTime = System.currentTimeMillis();
+		this.accessTime = EncodeUtils.millisTime();
 	}
 	
 	public boolean equals(Object object) {
@@ -37,12 +39,12 @@ public class Element implements Serializable, Cloneable {
     }
 
 	public Object getKey() {
-		this.accessTime = System.currentTimeMillis();
+		this.accessTime = EncodeUtils.millisTime();
 		return key;
 	}
 
 	public Object getValue() {
-		this.accessTime = System.currentTimeMillis();
+		this.accessTime = EncodeUtils.millisTime();
 		return value;
 	}
 

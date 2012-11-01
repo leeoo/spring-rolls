@@ -25,8 +25,10 @@
 			<a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-undo" style="color: #FFF" onclick="return isExit();">退出</a>
 		</div>
 		<div id="security" style="width:150px;">
+			<div iconCls="icon-cl" onclick="gotoUrl('${base}/system/hardware/list${ext}');">硬件情况</div>
 			<div iconCls="icon-db" onclick="gotoUrl('${base}/system/ds/list${ext}');">数据源配置</div>
 			<div iconCls="icon-tools" onclick="gotoUrl('${base}/system/config/security/list${ext}');">系统安全配置</div>
+			<div iconCls="icon-reload" onclick="gotoUrl('${base}/system/cache/list${ext}');">缓存监控</div>
 			<div iconCls="icon-ding" onclick="gotoUrl('${base}/system/config/ip/list${ext}')">IP地址限制</div>
 			<div class="menu-sep"></div>
 			<div iconCls="icon-key" onclick="gotoUrl('${base}/system/role/list${ext}')">角色设定</div>

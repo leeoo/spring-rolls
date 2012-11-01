@@ -59,6 +59,19 @@ public class CacheManager {
 	}
 	
 	/**
+	 * 获得缓存监控数据
+	 * @return
+	 */
+	public static Map<String,int[]> getCacheReport(){
+		Map<String,int[]> mapReport = new HashMap<String, int[]>();
+		for(String key : map.keySet()){
+			int[] values = new int[]{map.get(key).rated(),map.get(key).size()};
+			mapReport.put(key, values);
+		}
+		return mapReport;
+	}
+	
+	/**
 	 * 自动根据类型配置获取缓存实例
 	 * @param name
 	 * @return
