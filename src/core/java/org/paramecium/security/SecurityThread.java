@@ -23,11 +23,12 @@ public class SecurityThread {
 	
 	private final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();//session本地线程
 	private final static ThreadLocal<Security> securityThreadLocal = new ThreadLocal<Security>();//安全限制级别本地线程
-	private final static Cache<String,Boolean> kickUserCache = (Cache<String, Boolean>) CacheManager.getCacheByType("KICK_USER", 20);//判断重复登录用缓存
-	private final static Cache<String,Boolean> killUserCache = (Cache<String, Boolean>) CacheManager.getCacheByType("KILL_USER", 20);//判断被强制踢出缓存
+	private final static Cache<String,Boolean> userCache = (Cache<String, Boolean>) CacheManager.getCacheByType("KICK_KILL_USER", 50,200l);//判断重复登录和被踢出用缓存
+	private final static String KILL = "KILL";
+	private final static String KICK = "KICK";
 	
 	public static void putKillUserCache(String sessionId){
-		killUserCache.put(sessionId,true);
+		userCache.put(KILL.concat(sessionId),true);
 	}
 
 	/**
@@ -121,7 +122,7 @@ public class SecurityThread {
 			UserDetails<?> onlineUser = OnlineUserCache.getOnlineUserByUsername(userDetails.getUsername());
 			if(onlineUser!=null){//用户信息相同,Session不同,说明用户出现重复登录或盗用,前者的在线用户信息删除
 				OnlineUserCache.logout(onlineUser.getSessionId());
-				kickUserCache.put(onlineUser.getSessionId(), true);//先记录下该用户被踢掉的状态
+				userCache.put(KICK.concat(onlineUser.getSessionId()), true);//先记录下该用户被踢掉的状态
 			}else{//Session相同,用户信息不同，说明用户用相同浏览器重新登录,Session保存，之前在线用户信息删除
 				onlineUser = OnlineUserCache.getOnlineUserBySessionId(userDetails.getSessionId());
 				if(onlineUser!=null){
@@ -141,13 +142,13 @@ public class SecurityThread {
 		if(sessionId!=null){
 			UserDetails<?> userDetails = OnlineUserCache.getOnlineUserBySessionId(sessionId);
 			if(userDetails==null){//如果在线用户列表不存在该用户，而该用户线程仍有信息，被视为强制被踢出(一般管理员可用使用该权限)
-				if(kickUserCache.get(sessionId)!=null){
+				if(userCache.get(KICK.concat(sessionId))!=null){
 					putSecurity(SecurityThread.Security.UserKickException);
-					kickUserCache.remove(sessionId);
+					userCache.remove(KICK.concat(sessionId));
 					throw new UserKickException("该账号重复登录被踢掉!");
-				}else if(killUserCache.get(sessionId)!=null){
+				}else if(userCache.get(KILL.concat(sessionId))!=null){
 					putSecurity(SecurityThread.Security.UserKillException);
-					killUserCache.remove(sessionId);
+					userCache.remove(KILL.concat(sessionId));
 					throw new UserKillException("该账号被管理员强制退出!");
 				}else{
 					putSecurity(SecurityThread.Security.AnonymousException);
@@ -187,8 +188,8 @@ public class SecurityThread {
 	 */
 	public static void remove(String sessionId){
 		OnlineUserCache.logout(sessionId);
-		kickUserCache.remove(sessionId);
-		killUserCache.remove(sessionId);
+		userCache.remove(KICK.concat(sessionId));
+		userCache.remove(KILL.concat(sessionId));
 	}
 
 }
