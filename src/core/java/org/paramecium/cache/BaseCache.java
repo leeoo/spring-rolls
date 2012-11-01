@@ -1,5 +1,6 @@
 package org.paramecium.cache;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentMap;
@@ -18,6 +19,7 @@ public abstract class BaseCache implements RemoteCache,Cloneable {
 	private ConcurrentMap<Object,Element> map = new ConcurrentSkipListMap<Object,Element>();
 	protected int maxSize = 500;
 	protected String name;
+	protected Long life = null;
 	
 	public synchronized void clear() {
 		map.clear();
@@ -63,6 +65,14 @@ public abstract class BaseCache implements RemoteCache,Cloneable {
 	
 	public synchronized Object peek() {
 		return map.keySet().isEmpty()?null:map.keySet().iterator().next();
+	}
+	
+	public Long life() throws RemoteException {
+		return this.life;
+	}
+
+	public int rated() throws RemoteException {
+		return this.maxSize;
 	}
 
 }

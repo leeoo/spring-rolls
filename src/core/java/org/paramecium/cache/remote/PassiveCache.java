@@ -23,11 +23,19 @@ public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 	private ConcurrentMap<Object,Element> map = new ConcurrentSkipListMap<Object,Element>();
 	protected int maxSize = 500;
 	protected String name;
+	protected Long life = null;
 	
 	public PassiveCache(String name,int initSize) throws RemoteException{
 		this.maxSize = initSize;
 		this.name = name;
 	}
+	
+	public PassiveCache(String name,int initSize,Long life) throws RemoteException{
+		this.maxSize = initSize;
+		this.name = name;
+		this.life = life;
+	}
+	
 	public synchronized void clear() {
 		map.clear();
 	}
@@ -75,6 +83,14 @@ public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 	
 	public synchronized Object peek() {
 		return map.keySet().isEmpty()?null:map.keySet().iterator().next();
+	}
+
+	public Long life() throws RemoteException {
+		return this.life;
+	}
+
+	public int rated() throws RemoteException {
+		return this.maxSize;
 	}
 	
 }

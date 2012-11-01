@@ -19,6 +19,12 @@ public class DefaultCache extends BaseCache{
 		this.name = name;
 	}
 	
+	public DefaultCache(String name,int initSize,Long life) throws RemoteException{
+		this.maxSize = initSize;
+		this.name = name;
+		this.life = life;
+	}
+	
 	public synchronized void put(Object key, Object value) {
 		if(this.maxSize < size()){
 			remove(peek());

@@ -99,5 +99,23 @@ public class Cache<KEY extends Object,VALUE extends Object> {
 		}
 		return null;
 	}
+	
+	public Long life() {
+		try {
+			return cache.life();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
+	}
+	
+	public int rated() {
+		try {
+			return cache.rated();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return 0;
+	}
 
 }

@@ -86,6 +86,21 @@ public class CacheManager {
 	}
 	
 	/**
+	 * 自动根据类型配置获取缓存实例
+	 * @param name
+	 * @param maxSize
+	 * @param life
+	 * @return
+	 */
+	public static synchronized Cache<?,?> getCacheByType(String name,int maxSize,Long life){
+		if(CacheConfig.cacheType.equalsIgnoreCase("remote")){
+			return getRemoteCache(name,maxSize,life);
+		}else{
+			return getDefaultCache(name,maxSize,life);
+		}
+	}
+	
+	/**
 	 * 默认先进先出
 	 * @param name
 	 * @return
@@ -102,10 +117,21 @@ public class CacheManager {
 	 * @return
 	 */
 	public static synchronized Cache<?,?> getDefaultCache(String name,int maxSize){
+		return getDefaultCache(name, CacheConfig.defaultCacheSize,null);
+	}
+	
+	/**
+	 * 默认先进先出
+	 * @param name
+	 * @param maxSize
+	 * @param life
+	 * @return
+	 */
+	public static synchronized Cache<?,?> getDefaultCache(String name,int maxSize,Long life){
 		if(map.get(name)==null){
 			Cache<?,?> cache = null;
 			try {
-				cache = new Cache<Object, Object>(new DefaultCache(name, maxSize));
+				cache = new Cache<Object, Object>(new DefaultCache(name, maxSize,life));
 			} catch (RemoteException e) {
 				logger.error(e);
 			}
@@ -131,10 +157,21 @@ public class CacheManager {
 	 * @return
 	 */
 	public static synchronized Cache<?,?> getRemoteCache(String name,int maxSize){
+		return getRemoteCache(name, maxSize,null);
+	}
+	
+	/**
+	 * 远程同步缓存,在分布式环境下使用
+	 * @param name
+	 * @param maxSize
+	 * @param life
+	 * @return
+	 */
+	public static synchronized Cache<?,?> getRemoteCache(String name,int maxSize,Long life){
 		if(map.get(name)==null){
 			RemoteCache passiveCache = null;
 			try {
-				passiveCache = new PassiveCache(name, maxSize);
+				passiveCache = new PassiveCache(name, maxSize,life);
 			} catch (RemoteException e1) {
 				logger.error(e1);
 			}//被动接受缓存更新
