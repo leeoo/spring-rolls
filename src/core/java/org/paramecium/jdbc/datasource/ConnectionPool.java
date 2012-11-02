@@ -340,6 +340,11 @@ public class ConnectionPool {
 					}
 				} catch (Exception ex) {
 					logger.error(ex);
+					try {
+						Thread.sleep(100000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
