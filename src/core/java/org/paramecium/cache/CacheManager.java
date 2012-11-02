@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.paramecium.cache.remote.InitiativeCache;
 import org.paramecium.cache.remote.PassiveCache;
+import org.paramecium.commons.EncodeUtils;
 import org.paramecium.commons.PropertiesUitls;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -56,6 +57,54 @@ public class CacheManager {
 			}
 		}
 		properties.clear();
+		new Thread(new CacheHandlerThread()).start();
+	}
+	
+	static class CacheHandlerThread implements Runnable {
+		
+		public CacheHandlerThread(){
+			logger.debug("缓存生命周期监控处理线程已启动");
+		}
+		
+		public void run() {
+			clearCache();
+		}
+		
+		private void clearCache(){
+			while (true) {
+				try {
+					if(map==null||map.isEmpty()){
+						Thread.sleep(10*60000);//如果没有信息，睡1分钟
+						continue;
+					}
+					for(String name : map.keySet()){
+						@SuppressWarnings("unchecked")
+						Cache<Object,Object> cache = (Cache<Object, Object>) map.get(name);
+						if(cache==null||cache.life()==null){
+							continue;
+						}
+						long lifeMs = cache.life() * 1000l;
+						long time = EncodeUtils.millisTime();
+						if(!cache.isEmpty()){
+							for(Element element : cache.getElements()){
+								if(lifeMs<time-element.getAccessTime()){
+									cache.remove(element.getKey());
+									logger.debug(name+":缓存<"+element.getKey()+">生命周期监控处理线程已启动");
+								}
+							}
+						}
+					}
+					Thread.sleep(60000);//定时执行
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					try {
+						Thread.sleep(60000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}//定时执行
+				}
+			}
+		}
 	}
 	
 	/**

@@ -9,9 +9,6 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.paramecium.cache.Element;
 import org.paramecium.cache.RemoteCache;
-import org.paramecium.commons.EncodeUtils;
-import org.paramecium.log.Log;
-import org.paramecium.log.LoggerFactory;
 
 /**
  * 功 能 描 述:<br>
@@ -21,7 +18,6 @@ import org.paramecium.log.LoggerFactory;
  * <br>项 目 信 息:paramecium:org.paramecium.cache.remote.PassiveCache.java
  */
 public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
-	private final static Log logger = LoggerFactory.getLogger();
 	private static final long serialVersionUID = 6255867402368962167L;
 	private ConcurrentMap<Object,Element> map = new ConcurrentSkipListMap<Object,Element>();
 	protected int maxSize = 500;
@@ -36,43 +32,6 @@ public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 		this.maxSize = initSize;
 		this.name = name;
 		this.life = life;
-		if(this.life!=null){
-			new Thread(new CacheHandlerThread()).start();
-		}
-	}
-	
-	protected class CacheHandlerThread implements Runnable {
-		private boolean run = true;
-		long lifeMs = life * 1000l;
-		
-		public CacheHandlerThread(){
-			logger.debug(name+":分布式缓存周期监控处理线程已启动!");
-		}
-		
-		public void run() {
-			clearCache();
-		}
-		
-		private void clearCache(){
-			while (run) {
-				try {
-					Thread.sleep(60000);//定时执行
-					if(life!=null){
-						long time = EncodeUtils.millisTime();
-						for(Element element : map.values()){
-							if(lifeMs<time-element.getAccessTime()){
-								remove(element.getKey());
-								logger.debug(name+":分布式缓存<"+element.getKey()+">超过了生命周期被监控线程移除!");
-							}
-						}
-					}else{
-						run = false;
-					}
-				} catch (Exception ex) {
-					logger.error(ex);
-				}
-			}
-		}
 	}
 	
 	public synchronized void clear() {
@@ -98,6 +57,13 @@ public class PassiveCache extends UnicastRemoteObject implements RemoteCache {
 			values.add(element.getValue());
 		}
 		return values;
+	}
+	
+	public synchronized Collection<Element> getElements() {
+		if(map == null || map.isEmpty()){
+			return null;
+		}
+		return map.values();
 	}
 
 	public synchronized boolean isEmpty() {

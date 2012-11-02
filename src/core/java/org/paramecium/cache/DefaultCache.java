@@ -22,9 +22,6 @@ public class DefaultCache extends BaseCache{
 		this.maxSize = initSize;
 		this.name = name;
 		this.life = life;
-		if(this.life!=null){
-			new Thread(new CacheHandlerThread()).start();
-		}
 	}
 	
 	public synchronized void put(Object key, Object value) {

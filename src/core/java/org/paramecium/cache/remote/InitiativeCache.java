@@ -8,6 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
 import org.paramecium.cache.CacheConfig;
+import org.paramecium.cache.Element;
 import org.paramecium.cache.RemoteCache;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -128,6 +129,15 @@ public class InitiativeCache extends UnicastRemoteObject implements RemoteCache 
 	public synchronized Collection<Object> getValues() {
 		try {
 			return cache.getValues();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
+	}
+	
+	public synchronized Collection<Element> getElements() {
+		try {
+			return cache.getElements();
 		} catch (RemoteException e) {
 			logger.error(e);
 		}

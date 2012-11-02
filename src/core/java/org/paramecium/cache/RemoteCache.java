@@ -65,6 +65,13 @@ public interface RemoteCache extends Remote ,Serializable{
 	public Collection<Object> getValues() throws RemoteException;
 	
 	/**
+	 * 获得所有Element列表
+	 * @return
+	 * @throws RemoteException
+	 */
+	public Collection<Element> getElements() throws RemoteException;
+	
+	/**
 	 * 判断是否为空
 	 * @return
 	 * @throws RemoteException

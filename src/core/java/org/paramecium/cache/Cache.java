@@ -72,6 +72,15 @@ public class Cache<KEY extends Object,VALUE extends Object> {
 		}
 		return null;
 	}
+	
+	public synchronized Collection<Element> getElements() {
+		try {
+			return cache.getElements();
+		} catch (RemoteException e) {
+			logger.error(e);
+		}
+		return null;
+	}
 
 	public synchronized boolean isEmpty() {
 		try {
@@ -100,7 +109,7 @@ public class Cache<KEY extends Object,VALUE extends Object> {
 		return null;
 	}
 	
-	public Long life() {
+	public synchronized Long life() {
 		try {
 			return cache.life();
 		} catch (RemoteException e) {
@@ -109,7 +118,7 @@ public class Cache<KEY extends Object,VALUE extends Object> {
 		return null;
 	}
 	
-	public int rated() {
+	public synchronized int rated() {
 		try {
 			return cache.rated();
 		} catch (RemoteException e) {
