@@ -52,7 +52,12 @@
 				${disk.value[2]}GB可用&nbsp;/&nbsp;共${disk.value[0]}GB
 				<script>
 					$(document).ready(function(){
-						$('#p${status.index}').progressbar('setValue', <fmt:formatNumber type="number" value="${disk.value[1]/disk.value[0]*100}" maxFractionDigits="1"/>);  
+						var re = /^\d*\.{0,1}\d{0,1}$/;
+						var n = '<fmt:formatNumber type="number" value="${disk.value[1]/disk.value[0]*100}" maxFractionDigits="1"/>';
+						if(!re.test(n)){
+							n = 0;
+						}
+						$('#p${status.index}').progressbar('setValue',n);  
 					});
 				</script>
 			</div>

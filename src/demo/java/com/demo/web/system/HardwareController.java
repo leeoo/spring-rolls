@@ -162,11 +162,11 @@ public class HardwareController extends BaseController{
 			if(loadStr!=null){
 				load = Integer.parseInt(loadStr);
 			}
+			cpu = cpu.substring(s1).trim();
+			s1 = cpu.indexOf("  ");
 		}catch (StringIndexOutOfBoundsException e) {
 			//有时候没有负载，或显示为空
 		}
-		cpu = cpu.substring(s1).trim();
-		s1 = cpu.indexOf("  ");
 		String name = cpu.substring(0,s1).trim().concat(" ");
 		cpu = cpu.substring(s1).trim();
 		s1 = cpu.indexOf(" ");
