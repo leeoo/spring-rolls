@@ -154,12 +154,16 @@ public class HardwareController extends BaseController{
 		Map<String,Object> info = new HashMap<String, Object>();
 		String cpu = CommandUtils.getRunResult("wmic cpu get loadpercentage,numberOfCores,numberOflogicalprocessors,name");
 		int s1 = cpu.indexOf('\n');
-		cpu = cpu.substring(s1).trim();
-		s1 = cpu.indexOf(' ');
-		String loadStr = cpu.substring(0,s1).trim();
 		int load = 0;
-		if(loadStr!=null){
-			load = Integer.parseInt(loadStr);
+		try{
+			cpu = cpu.substring(s1).trim();
+			s1 = cpu.indexOf(' ');
+			String loadStr = cpu.substring(0,s1).trim();
+			if(loadStr!=null){
+				load = Integer.parseInt(loadStr);
+			}
+		}catch (StringIndexOutOfBoundsException e) {
+			//有时候没有负载，或显示为空
 		}
 		cpu = cpu.substring(s1).trim();
 		s1 = cpu.indexOf("  ");
