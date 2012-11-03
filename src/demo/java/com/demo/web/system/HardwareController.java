@@ -44,33 +44,40 @@ public class HardwareController extends BaseController{
 			if(!d.trim().isEmpty()){
 				s1 = d.indexOf(' ');
 				String name = d.substring(0,s1).trim();
-				
-				d = d.substring(s1).trim();
-				s1 = d.indexOf(' ');
-				String totalDisk = d.substring(0,s1).trim();
-				
-				d = d.substring(s1).trim();
-				s1 = d.indexOf(' ');
-				String useDisk = d.substring(0,s1).trim();
-				
-				d = d.substring(s1).trim();
-				s1 = d.indexOf(' ');
-				String freeDisk = d.substring(0,s1).trim();
-				String t = totalDisk.substring(totalDisk.length()-1, totalDisk.length()).toUpperCase();
-				String f = freeDisk.substring(freeDisk.length()-1, freeDisk.length()).toUpperCase();
-				String u = useDisk.substring(useDisk.length()-1, useDisk.length()).toUpperCase();
-				if(t.equals("G")||t.equals("M")||t.equals("K")){
-					totalDisk = totalDisk.substring(0,totalDisk.length()-1);
+				float total = 0l;
+				float free = 0l;
+				float use = 0l;
+				try{
+					d = d.substring(s1).trim();
+					s1 = d.indexOf(' ');
+					String totalDisk = d.substring(0,s1).trim();
+					
+					d = d.substring(s1).trim();
+					s1 = d.indexOf(' ');
+					String useDisk = d.substring(0,s1).trim();
+					
+					d = d.substring(s1).trim();
+					s1 = d.indexOf(' ');
+					String freeDisk = d.substring(0,s1).trim();
+					String t = totalDisk.substring(totalDisk.length()-1, totalDisk.length()).toUpperCase();
+					String f = freeDisk.substring(freeDisk.length()-1, freeDisk.length()).toUpperCase();
+					String u = useDisk.substring(useDisk.length()-1, useDisk.length()).toUpperCase();
+					if(t.equals("G")||t.equals("M")||t.equals("K")){
+						totalDisk = totalDisk.substring(0,totalDisk.length()-1);
+					}
+					if(f.equals("G")||f.equals("M")||f.equals("K")){
+						freeDisk = freeDisk.substring(0,freeDisk.length()-1);
+					}
+					if(u.equals("G")||u.equals("M")||u.equals("K")){
+						useDisk = useDisk.substring(0,useDisk.length()-1);
+					}
+					total =  Float.parseFloat(totalDisk)/getNum(t);
+					free =  Float.parseFloat(freeDisk)/getNum(f);
+					use = Float.parseFloat(useDisk)/getNum(u);
+				}catch (StringIndexOutOfBoundsException e) {
+					//如果有些读卡器空载入或光驱，只有盘符，没有容量，忽略不计
+					name += "(空设备)";
 				}
-				if(f.equals("G")||f.equals("M")||f.equals("K")){
-					freeDisk = freeDisk.substring(0,freeDisk.length()-1);
-				}
-				if(u.equals("G")||u.equals("M")||u.equals("K")){
-					useDisk = useDisk.substring(0,useDisk.length()-1);
-				}
-				float total =  Float.parseFloat(totalDisk)/getNum(t);
-				float free =  Float.parseFloat(freeDisk)/getNum(f);
-				float use = Float.parseFloat(useDisk)/getNum(u);
 				total = new BigDecimal(total).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 				use = new BigDecimal(use).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 				free = new BigDecimal(free).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
@@ -178,10 +185,17 @@ public class HardwareController extends BaseController{
 				String name = d.substring(0,s1).trim();
 				d = d.substring(s1).trim();
 				s1 = d.indexOf(' ');
-				String freeDisk = d.substring(0,s1).trim();
-				String totalDisk = d.substring(s1).trim();
-				float total =  Float.parseFloat(totalDisk)/(1024*1024*1024);
-				float free =  Float.parseFloat(freeDisk)/(1024*1024*1024);
+				float total = 0l;
+				float free = 0l;
+				try{
+					String freeDisk = d.substring(0,s1).trim();
+					String totalDisk = d.substring(s1).trim();
+					total =  Float.parseFloat(totalDisk)/(1024*1024*1024);
+					free =  Float.parseFloat(freeDisk)/(1024*1024*1024);
+				}catch (StringIndexOutOfBoundsException e) {
+					//如果有些读卡器空载入或光驱，只有盘符，没有容量，忽略不计
+					name += "(空设备)";
+				}
 				float use = total - free;
 				total = new BigDecimal(total).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 				use = new BigDecimal(use).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
