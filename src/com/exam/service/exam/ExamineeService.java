@@ -6,6 +6,7 @@ import org.paramecium.commons.DateUtils;
 import org.paramecium.ioc.annotation.AutoInject;
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.ioc.annotation.ShowLabel;
+import org.paramecium.jdbc.JdbcTemplateFactory;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.orm.GenericOrmDao;
 import org.paramecium.transaction.annotation.Transactional;
@@ -35,8 +36,13 @@ public class ExamineeService {
 	
 	public void delete() throws Exception{
 		Date date = DateUtils.getCurrentDateTime();
-		String sqlA = "DELETE FROM t_score WHERE examinee_id IN(SELECT id FROM t_examinee WHERE can_days!=0 AND can_days<DATEDIFF(?,reg_date))";
-		String sqlB = "DELETE FROM t_examinee WHERE can_days!=0 AND can_days<DATEDIFF(?,reg_date)";
+		String type = JdbcTemplateFactory.dbTypes.values().iterator().next();
+		String sqlFill = "DATEDIFF(?,reg_date)";
+		if(type.equalsIgnoreCase("h2")){
+			sqlFill = "DATEDIFF(d,reg_date,?)";
+		}
+		String sqlA = "DELETE FROM t_score WHERE examinee_id IN(SELECT id FROM t_examinee WHERE can_days!=0 AND can_days<"+sqlFill+")";
+		String sqlB = "DELETE FROM t_examinee WHERE can_days!=0 AND can_days<"+sqlFill;
 		ormDao.getGenericJdbcDao().executeDMLByArray(sqlA,date);
 		ormDao.getGenericJdbcDao().executeDMLByArray(sqlB,date);
 	}
