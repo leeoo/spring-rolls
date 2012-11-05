@@ -21,6 +21,13 @@ import org.paramecium.log.system.CollectorFactory;
 /**
  * 功能描述(Description):<br><b>
  * jdbc基础模板
+ * 参数 int type 
+ * 	ResultSet.TYPE_FORWORD_ONLY 结果集的游标只能向下滚动。 
+ * 	ResultSet.TYPE_SCROLL_INSENSITIVE 结果集的游标可以上下移动，当数据库变化时，当前结果集不变。 
+ * 	ResultSet.TYPE_SCROLL_SENSITIVE 返回可滚动的结果集，当数据库变化时，当前结果集同步改变。 
+ * 参数 int concurrency 
+ * 	ResultSet.CONCUR_READ_ONLY 不能用结果集更新数据库中的表。 
+ * 	ResultSet.CONCUR_UPDATETABLE 能用结果集更新数据库中的表。 
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-4-3下午09:33:42</b>
  * <br>项目名称(Project Name): <b>paramecium</b>
