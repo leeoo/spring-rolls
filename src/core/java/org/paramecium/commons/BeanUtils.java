@@ -280,7 +280,7 @@ public abstract class BeanUtils {
 			}
 			return method.invoke(bean);
 		} catch (Exception e) {
-			logger.warn(clazz.toString().concat("中没有匹配到").concat(getMethodName).concat("方法!"));
+			logger.warn(clazz.toString().concat("中没有匹配到与字段").concat(name).concat("匹配的getter方法!"));
 		}
 		return null;
 	}
@@ -376,14 +376,14 @@ public abstract class BeanUtils {
 			try {//获取普通数据库类型对应Entity每个属性的setter方法
 				method = clazz.getMethod(SET.concat(name),fieldClazz);
 			} catch (NoSuchMethodException e2) {
-				logger.warn(clazz.toString().concat("中没有匹配到").concat(setMethodName).concat("或").concat(SET.concat(name)).concat("方法!"));
+				logger.warn(clazz.toString().concat("中没有匹配到与字段").concat(name).concat("匹配的setter方法!"));
 			}
 		}
 		if(method != null){
 			try {
 				method.invoke(bean,value);
 			}catch (Exception e) {
-				logger.warn(clazz.toString().concat("中").concat(setMethodName).concat("或").concat(SET.concat(name)).concat("方法执行失败!"));
+				logger.warn(clazz.toString().concat("与字段").concat(name).concat("匹配的setter方法执行失败!"));
 			}
 		}
 		
