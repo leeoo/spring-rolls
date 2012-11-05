@@ -5,7 +5,7 @@ CREATE TABLE `t_config` (
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO `t_config` VALUES ('1', 'title', '国家职业资格在线考评系统');
+INSERT INTO `t_config` VALUES ('1', 'title', 'Paramecium演示DEMO——在线考试平台');
 INSERT INTO `t_config` VALUES ('2', 'examineeDays', '15');
 INSERT INTO `t_config` VALUES ('3', 'themeName', 'gray');
 
