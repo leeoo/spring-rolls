@@ -32,6 +32,10 @@ public class TableInitService {
 		}
 	}
 
+	/**
+	 * 用于演示使用，H2本地数据库
+	 * @throws Exception
+	 */
 	public static void initExamH2Demo() throws Exception {
 		Connection connection = MultiDataSourceFactory.getDataSource(
 				MultiDataSourceFactory.defaultDataSourceName).getConnection();
