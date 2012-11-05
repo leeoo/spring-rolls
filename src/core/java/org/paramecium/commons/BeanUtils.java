@@ -308,43 +308,43 @@ public abstract class BeanUtils {
 		} catch (Exception e) {
 			try {//获取特殊类型对应Entity每个属性，如果setter方法中的属性参数为基本类型如int、long等，需要将对应封装类型转为基本类型.
 				Class<?> fieldClazz = value.getClass();
-				if(Integer.class.equals(fieldClazz)) {
+				if(Integer.class.equals(fieldClazz)||value instanceof Integer) {
 					fieldClazz = int.class;
-				}else if (Long.class.equals(fieldClazz)) {
+				}else if (Long.class.equals(fieldClazz)||value instanceof Long) {
 					fieldClazz = long.class;
-				}else if (Boolean.class.equals(fieldClazz)) {
+				}else if (Boolean.class.equals(fieldClazz)||value instanceof Boolean) {
 					fieldClazz = boolean.class;
-				}else if (Byte.class.equals(fieldClazz)) {
+				}else if (Byte.class.equals(fieldClazz)||value instanceof Byte) {
 					fieldClazz = byte.class;
-				}else if (Short.class.equals(fieldClazz)) {
+				}else if (Short.class.equals(fieldClazz)||value instanceof Short) {
 					fieldClazz = short.class;
-				}else if (Float.class.equals(fieldClazz)) {
+				}else if (Float.class.equals(fieldClazz)||value instanceof Float) {
 					fieldClazz = float.class;
-				}else if (Double.class.equals(fieldClazz)) {
+				}else if (Double.class.equals(fieldClazz)||value instanceof Double) {
 					fieldClazz = double.class;
-				}else if (Character.class.equals(fieldClazz)) {
+				}else if (Character.class.equals(fieldClazz)||value instanceof Character) {
 					fieldClazz = char.class;
-				}else if (java.math.BigInteger.class.equals(fieldClazz)) {
+				}else if (java.math.BigInteger.class.equals(fieldClazz)||value instanceof java.math.BigInteger) {
 					fieldClazz = long.class;
-				}else if (java.math.BigDecimal.class.equals(fieldClazz)) {
+				}else if (java.math.BigDecimal.class.equals(fieldClazz)||value instanceof java.math.BigDecimal) {
 					fieldClazz = double.class;
-				}else if (java.sql.Clob.class.equals(fieldClazz)) {
+				}else if (java.sql.Clob.class.equals(fieldClazz)||value instanceof java.sql.Clob) {
 					fieldClazz = String.class;
-				}else if (java.sql.NClob.class.equals(fieldClazz)) {
+				}else if (java.sql.NClob.class.equals(fieldClazz)||value instanceof java.sql.NClob) {
 					fieldClazz = String.class;
-				}else if (java.sql.Blob.class.equals(fieldClazz)) {
+				}else if (java.sql.Blob.class.equals(fieldClazz)||value instanceof java.sql.Blob) {
 					fieldClazz = byte[].class;
-				}else if (java.sql.Ref.class.equals(fieldClazz)) {
+				}else if (java.sql.Ref.class.equals(fieldClazz)||value instanceof java.sql.Ref) {
 					fieldClazz = byte[].class;
-				}else if (java.sql.Array.class.equals(fieldClazz)) {
+				}else if (java.sql.Array.class.equals(fieldClazz)||value instanceof java.sql.Array) {
 					fieldClazz = Object[].class;
-				}else if (java.sql.Struct.class.equals(fieldClazz)) {
+				}else if (java.sql.Struct.class.equals(fieldClazz)||value instanceof java.sql.Struct) {
 					fieldClazz = Object[].class;
-				}else if (java.sql.Date.class.equals(fieldClazz)) {
+				}else if (java.sql.Date.class.equals(fieldClazz)||value instanceof java.sql.Date) {
 					fieldClazz = java.util.Date.class;
-				}else if (java.sql.Time.class.equals(fieldClazz)) {
+				}else if (java.sql.Time.class.equals(fieldClazz)||value instanceof java.sql.Time) {
 					fieldClazz = java.util.Date.class;
-				}else if (java.sql.Timestamp.class.equals(fieldClazz)) {
+				}else if (java.sql.Timestamp.class.equals(fieldClazz)||value instanceof java.sql.Timestamp) {
 					fieldClazz = java.util.Date.class;
 				}else{
 					fieldClazz = Object.class;
