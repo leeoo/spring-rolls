@@ -57,7 +57,9 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 	public Number insert(T bean) throws Exception {
 		Number value = genericOrmDao.insert(bean);
 		if(value != null){
-			BeanUtils.setFieldValue(bean, clazz, EntitySqlParser.getPkName(clazz), value);
+			String pkName = EntitySqlParser.getPkName(clazz);
+			Class<?> type = EntitySqlParser.getPkType(clazz);
+			BeanUtils.setFieldValue(bean, clazz, pkName, value, type);
 		}
 		SearchIndexCreator.createIndex(bean);
 		cache.clear();

@@ -161,7 +161,7 @@ public abstract class BeanUtils {
 						if(value == null){
 							value = map.get(getDbFieldName(field.getName()));
 						}
-						setFieldValue(bean, superClass, field.getName(), value);
+						setFieldValue(bean, superClass, field.getName(), value,field.getType());
 					} catch (Exception e) {
 						logger.warn(e);
 					}
@@ -290,78 +290,69 @@ public abstract class BeanUtils {
 	 * @param name
 	 * @param value
 	 */
-	public static void setFieldValue(Object bean,Class<?> clazz,String name,final Object value){
+	public static void setFieldValue(Object bean,Class<?> clazz,String name,Object value,Class<?> fieldType){
 		String setMethodName = null;
 		Method method = null;
-		try {//获取普通数据库类型对应Entity每个属性的setter方法
-			if(bean==null||name==null||name.isEmpty()||value==null||clazz==null){
-				return;
+		Class<?> fieldClazz = fieldType;
+		if(bean==null||name==null||name.isEmpty()||value==null||clazz==null||fieldClazz==null){
+			return;
+		}
+		setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+		if(fieldClazz!=value.getClass()){//如果值的类型与字段类型不同
+			if(value instanceof Integer) {
+				value = Integer.parseInt(value.toString());
+			}else if (value instanceof Long) {
+				value = Long.parseLong(value.toString());
+			}else if (value instanceof Boolean) {
+				value = Boolean.parseBoolean(value.toString());
+			}else if (value instanceof Byte) {
+				value = Byte.parseByte(value.toString());
+			}else if (value instanceof Short) {
+				value = Short.parseShort(value.toString());
+			}else if (value instanceof Float) {
+				value = Float.parseFloat(value.toString());
+			}else if (value instanceof Double) {
+				value = Double.parseDouble(value.toString());
+			}else if (value instanceof Character) {
+				value = value.toString().charAt(0);
+			}else if (value instanceof java.math.BigInteger) {
+				value = Long.parseLong(value.toString());
+			}else if (value instanceof java.math.BigDecimal) {
+				value = Double.parseDouble(value.toString());
+			}else if (value instanceof java.sql.Clob) {
+				value = value.toString();
+			}else if (value instanceof java.sql.NClob) {
+				value = value.toString();
+			}else if (value instanceof java.sql.Date) {
+				value = (java.util.Date)value;
+			}else if (value instanceof java.sql.Time) {
+				value = (java.util.Date)value;
+			}else if (value instanceof java.sql.Timestamp) {
+				value = (java.util.Date)value;
+			}else if (value instanceof java.sql.Blob) {
+				value = value.toString().getBytes();//待验证
+			}else if (value instanceof java.sql.Ref) {
+				value = value.toString().getBytes();//待验证
+			}else if (value instanceof java.sql.Array) {
+				value = value.toString().getBytes();//待验证
+			}else if (value instanceof java.sql.Struct) {
+				value = value.toString().getBytes();//待验证
 			}
-			Class<?> fieldClazz = value.getClass();
-			setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
-			try{
-				method = clazz.getMethod(setMethodName,fieldClazz);
-			} catch (NoSuchMethodException e) {//如果错误，有可能是出现了aName,bName等名称，eclipse等工具会将autoSetter变成setaName，以下为补漏.
-				setMethodName = SET.concat(name);
-				method = clazz.getMethod(setMethodName,fieldClazz);
-			}
-		} catch (Exception e) {
-			try {//获取特殊类型对应Entity每个属性，如果setter方法中的属性参数为基本类型如int、long等，需要将对应封装类型转为基本类型.
-				Class<?> fieldClazz = value.getClass();
-				if(Integer.class.equals(fieldClazz)||value instanceof Integer) {
-					fieldClazz = int.class;
-				}else if (Long.class.equals(fieldClazz)||value instanceof Long) {
-					fieldClazz = long.class;
-				}else if (Boolean.class.equals(fieldClazz)||value instanceof Boolean) {
-					fieldClazz = boolean.class;
-				}else if (Byte.class.equals(fieldClazz)||value instanceof Byte) {
-					fieldClazz = byte.class;
-				}else if (Short.class.equals(fieldClazz)||value instanceof Short) {
-					fieldClazz = short.class;
-				}else if (Float.class.equals(fieldClazz)||value instanceof Float) {
-					fieldClazz = float.class;
-				}else if (Double.class.equals(fieldClazz)||value instanceof Double) {
-					fieldClazz = double.class;
-				}else if (Character.class.equals(fieldClazz)||value instanceof Character) {
-					fieldClazz = char.class;
-				}else if (java.math.BigInteger.class.equals(fieldClazz)||value instanceof java.math.BigInteger) {
-					fieldClazz = long.class;
-				}else if (java.math.BigDecimal.class.equals(fieldClazz)||value instanceof java.math.BigDecimal) {
-					fieldClazz = double.class;
-				}else if (java.sql.Clob.class.equals(fieldClazz)||value instanceof java.sql.Clob) {
-					fieldClazz = String.class;
-				}else if (java.sql.NClob.class.equals(fieldClazz)||value instanceof java.sql.NClob) {
-					fieldClazz = String.class;
-				}else if (java.sql.Blob.class.equals(fieldClazz)||value instanceof java.sql.Blob) {
-					fieldClazz = byte[].class;
-				}else if (java.sql.Ref.class.equals(fieldClazz)||value instanceof java.sql.Ref) {
-					fieldClazz = byte[].class;
-				}else if (java.sql.Array.class.equals(fieldClazz)||value instanceof java.sql.Array) {
-					fieldClazz = Object[].class;
-				}else if (java.sql.Struct.class.equals(fieldClazz)||value instanceof java.sql.Struct) {
-					fieldClazz = Object[].class;
-				}else if (java.sql.Date.class.equals(fieldClazz)||value instanceof java.sql.Date) {
-					fieldClazz = java.util.Date.class;
-				}else if (java.sql.Time.class.equals(fieldClazz)||value instanceof java.sql.Time) {
-					fieldClazz = java.util.Date.class;
-				}else if (java.sql.Timestamp.class.equals(fieldClazz)||value instanceof java.sql.Timestamp) {
-					fieldClazz = java.util.Date.class;
-				}else{
-					fieldClazz = Object.class;
-				}
-				if(setMethodName != null){
-					setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
-				}
-				method = clazz.getMethod(setMethodName,fieldClazz);
-			}catch (Exception e2) {
-				logger.warn(clazz.toString().concat("中没有匹配到").concat(setMethodName).concat("方法!"));
+		}
+		try{
+			method = clazz.getMethod(setMethodName,fieldClazz);
+		} catch (NoSuchMethodException e) {//如果错误，有可能是出现了aName,bName等名称，eclipse等工具会将autoSetter变成setaName，以下为补漏.
+			try {//获取普通数据库类型对应Entity每个属性的setter方法
+				method = clazz.getMethod(SET.concat(name),fieldClazz);
+			} catch (NoSuchMethodException e2) {
+				logger.warn(clazz.toString().concat("中没有匹配到").concat(setMethodName).concat("或").concat(SET.concat(name)).concat("方法!"));
 			}
 		}
 		if(method != null){
 			try {
 				method.invoke(bean,value);
 			}catch (Exception e) {
-				logger.warn(clazz.toString().concat("中的").concat(setMethodName).concat("方法执行失败!"));
+				logger.warn(clazz.toString().concat("中").concat(setMethodName).concat("或").concat(SET.concat(name)).concat("方法执行失败!"));
 			}
 		}
 		
