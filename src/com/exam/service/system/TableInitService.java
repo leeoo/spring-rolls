@@ -1,5 +1,9 @@
 package com.exam.service.system;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.Statement;
 
@@ -10,27 +14,59 @@ import org.paramecium.log.LoggerFactory;
 
 /**
  * 功 能 描 述:<br>
- * 对于内存表的初始化
- * <br>代 码 作 者:曹阳(CaoYang)
- * <br>开 发 日 期:2012-3-20下午02:40:35
- * <br>项 目 信 息:paramecium:com.demo.service.system.TableInitService.java
+ * 对于内存表的初始化 <br>
+ * 代 码 作 者:曹阳(CaoYang) <br>
+ * 开 发 日 期:2012-3-20下午02:40:35 <br>
+ * 项 目 信 息:paramecium:com.demo.service.system.TableInitService.java
  */
 @Service
 public class TableInitService {
-	
+
 	private final static Log logger = LoggerFactory.getLogger();
-	
-	public void init(){
+
+	public void init() {
 		try {
-			createTablesByH2$MySql();
+			initExamH2Demo();
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
-	
-	public static void createTablesByH2$MySql() throws Exception{
-		Connection connection = MultiDataSourceFactory.getDataSource(MultiDataSourceFactory.defaultDataSourceName).getConnection();
-		Statement st=  connection.createStatement();
+
+	public static void initExamH2Demo() throws Exception {
+		Connection connection = MultiDataSourceFactory.getDataSource(
+				MultiDataSourceFactory.defaultDataSourceName).getConnection();
+		Statement st = connection.createStatement();
+		StringBuffer sb = new StringBuffer();
+		File file = new File("c://init.sql");
+		Reader reader = null;
+		try {
+			reader = new InputStreamReader(new FileInputStream(file));
+			int tempchar;
+			while ((tempchar = reader.read()) != -1) {
+				if (((char) tempchar) != '\n') {
+					sb.append((char) tempchar);
+				}
+			}
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for(String str:sb.toString().split(";")){
+			st.execute(str);
+		}
+		
+		st.close();
+		connection.commit();
+		MultiDataSourceFactory.getDataSource(
+				MultiDataSourceFactory.defaultDataSourceName).replace(
+				connection);
+	}
+
+	public static void createTablesByH2$MySql() throws Exception {
+		Connection connection = MultiDataSourceFactory.getDataSource(
+				MultiDataSourceFactory.defaultDataSourceName).getConnection();
+		Statement st = connection.createStatement();
 		st.execute("CREATE TABLE t_security_user(id INT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(50) NOT NULL UNIQUE, password VARCHAR(50) NOT NULL, enabled BIT, name VARCHAR(50))");
 		logger.debug("t_security_user创建成功!");
 		st.execute("CREATE TABLE t_user_role(username VARCHAR(50) NOT NULl,rolename VARCHAR(50) NOT NULL)");
@@ -46,13 +82,17 @@ public class TableInitService {
 		st.execute("CREATE TABLE t_sequence(table_name VARCHAR(50) PRIMARY KEY,seq_value INT NOT NULL)");
 		logger.debug("t_sequence创建成功!");
 		st.close();
-		MultiDataSourceFactory.getDataSource(MultiDataSourceFactory.defaultDataSourceName).replace(connection);
+		connection.commit();
+		MultiDataSourceFactory.getDataSource(
+				MultiDataSourceFactory.defaultDataSourceName).replace(
+				connection);
 		logger.debug("DEMO用H2或Mysql数据库内存表创建成功!");
 	}
-	
-	public static void createTablesByPostgreSQL() throws Exception{
-		Connection connection = MultiDataSourceFactory.getDataSource(MultiDataSourceFactory.defaultDataSourceName).getConnection();
-		Statement st=  connection.createStatement();
+
+	public static void createTablesByPostgreSQL() throws Exception {
+		Connection connection = MultiDataSourceFactory.getDataSource(
+				MultiDataSourceFactory.defaultDataSourceName).getConnection();
+		Statement st = connection.createStatement();
 		st.execute("CREATE TABLE t_security_user(id SERIAL PRIMARY KEY, username VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL, enabled BOOLEAN, name VARCHAR(50))");
 		logger.debug("t_security_user创建成功!");
 		st.execute("CREATE TABLE t_user_role(username VARCHAR(50) NOT NULl,rolename VARCHAR(50) NOT NULL)");
@@ -69,13 +109,16 @@ public class TableInitService {
 		logger.debug("t_sequence创建成功!");
 		st.close();
 		connection.commit();
-		MultiDataSourceFactory.getDataSource(MultiDataSourceFactory.defaultDataSourceName).replace(connection);
+		MultiDataSourceFactory.getDataSource(
+				MultiDataSourceFactory.defaultDataSourceName).replace(
+				connection);
 		logger.debug("DEMO用PostgreSQL数据库内存表创建成功!");
 	}
-	
-	public static void createTablesBySqlServer() throws Exception{
-		Connection connection = MultiDataSourceFactory.getDataSource(MultiDataSourceFactory.defaultDataSourceName).getConnection();
-		Statement st=  connection.createStatement();
+
+	public static void createTablesBySqlServer() throws Exception {
+		Connection connection = MultiDataSourceFactory.getDataSource(
+				MultiDataSourceFactory.defaultDataSourceName).getConnection();
+		Statement st = connection.createStatement();
 		st.execute("CREATE TABLE t_security_user(id INT PRIMARY KEY IDENTITY (1, 1), username VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL, enabled BIT, name VARCHAR(50))");
 		logger.debug("t_security_user创建成功!");
 		st.execute("CREATE TABLE t_user_role(username VARCHAR(50) NOT NULl,rolename VARCHAR(50) NOT NULL)");
@@ -91,10 +134,11 @@ public class TableInitService {
 		st.execute("CREATE TABLE t_sequence(table_name VARCHAR(50) PRIMARY KEY,seq_value INT NOT NULL)");
 		logger.debug("t_sequence创建成功!");
 		st.close();
-		connection.commit();//sqlserver2008必须有此
-		MultiDataSourceFactory.getDataSource(MultiDataSourceFactory.defaultDataSourceName).replace(connection);
+		connection.commit();// sqlserver2008必须有此
+		MultiDataSourceFactory.getDataSource(
+				MultiDataSourceFactory.defaultDataSourceName).replace(
+				connection);
 		logger.debug("DEMO用SqlServer数据库内存表创建成功!");
 	}
-
 
 }
