@@ -84,10 +84,11 @@ public class EntitySqlParser {
 					}else if(primaryKey==null){
 						if(column!=null&&!column.value().isEmpty()){
 							columns.add(column.value());
+							propertys.add(mark.concat(field.getName()));
 						}else if(column!=null&&column.value().isEmpty()){
 							columns.add(BeanUtils.getDbFieldName(field.getName()));
+							propertys.add(mark.concat(field.getName()));
 						}
-						propertys.add(mark.concat(field.getName()));
 					}
 				} catch (Throwable e) {
 					logger.error(e);
