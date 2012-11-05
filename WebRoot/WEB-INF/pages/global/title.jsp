@@ -30,8 +30,10 @@
 		<paramecium:resourceAuthorize ifAnyGranted="/system/themes#change">
 			<div id="security" style="width:150px;">
 				<paramecium:resourceAuthorize ifAnyGranted="/system/console#run">
+					<div iconCls="icon-cl" onclick="gotoUrl('${base}/system/hardware/list${ext}');">硬件情况</div>
 					<div iconCls="icon-db" onclick="gotoUrl('${base}/system/ds/list${ext}');">数据源配置</div>
 					<div iconCls="icon-tools" onclick="gotoUrl('${base}/system/config/security/list${ext}');">系统安全配置</div>
+					<div iconCls="icon-reload" onclick="gotoUrl('${base}/system/cache/list${ext}');">缓存监控</div>
 					<div iconCls="icon-talk" onclick="gotoUrl('${base}/system/console/index${ext}');">控制台</div>
 					<div iconCls="icon-help" onclick="gotoUrl('${base}/system/help/list${ext}');">开发帮助</div>
 				</paramecium:resourceAuthorize>
