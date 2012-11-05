@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -320,9 +321,19 @@ public abstract class BeanUtils {
 			}else if (value instanceof java.math.BigDecimal) {
 				value = Double.parseDouble(value.toString());
 			}else if (value instanceof java.sql.Clob) {
-				value = value.toString();
+				java.sql.Clob clob = (java.sql.Clob)value;
+				try {
+					value = clob.getSubString(1l, (int)clob.length());
+				} catch (SQLException e) {
+					logger.error(e);
+				}
 			}else if (value instanceof java.sql.NClob) {
-				value = value.toString();
+				java.sql.NClob clob = (java.sql.NClob)value;
+				try {
+					value = clob.getSubString(1l, (int)clob.length());
+				} catch (SQLException e) {
+					logger.error(e);
+				}
 			}else if (value instanceof java.sql.Date) {
 				value = (java.util.Date)value;
 			}else if (value instanceof java.sql.Time) {
@@ -330,13 +341,33 @@ public abstract class BeanUtils {
 			}else if (value instanceof java.sql.Timestamp) {
 				value = (java.util.Date)value;
 			}else if (value instanceof java.sql.Blob) {
-				value = value.toString().getBytes();//待验证
+				java.sql.Blob blob = (java.sql.Blob)value;
+				try {
+					value = blob.getBytes(1l,(int)blob.length());
+				} catch (SQLException e) {
+					logger.error(e);
+				}
 			}else if (value instanceof java.sql.Ref) {
-				value = value.toString().getBytes();//待验证
+				java.sql.Ref ref = (java.sql.Ref)value;
+				try {
+					value = ref.getObject();
+				} catch (SQLException e) {
+					logger.error(e);
+				}
 			}else if (value instanceof java.sql.Array) {
-				//待定
+				java.sql.Array array = (java.sql.Array)value;
+				try {
+					value = array.getArray();
+				} catch (SQLException e) {
+					logger.error(e);
+				}
 			}else if (value instanceof java.sql.Struct) {
-				//待定
+				java.sql.Struct struct = (java.sql.Struct)value;
+				try {
+					value = struct.getAttributes();
+				} catch (SQLException e) {
+					logger.error(e);
+				}
 			}
 		}
 		try{
