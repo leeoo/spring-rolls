@@ -334,9 +334,9 @@ public abstract class BeanUtils {
 			}else if (value instanceof java.sql.Ref) {
 				value = value.toString().getBytes();//待验证
 			}else if (value instanceof java.sql.Array) {
-				value = value.toString().getBytes();//待验证
+				//待定
 			}else if (value instanceof java.sql.Struct) {
-				value = value.toString().getBytes();//待验证
+				//待定
 			}
 		}
 		try{
