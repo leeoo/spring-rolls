@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.paramecium.cache.Cache;
+import org.paramecium.cache.CacheManager;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 import org.paramecium.orm.annotation.Column;
@@ -21,9 +23,15 @@ import org.paramecium.orm.annotation.Column;
 public abstract class BeanUtils {
 	
 	private final static Log logger = LoggerFactory.getLogger();
+	@SuppressWarnings("unchecked")
+	private final static Cache<String,String> cache = (Cache<String, String>) CacheManager.getDefaultCache("FIELD_METHOD_NAMES", 1024, 3600l);
 	private final static String GET = "get";
 	private final static String IS = "is";
 	private final static String SET = "set";
+	private final static String DB = "DB#";
+	private final static String BEAN = "BEAN#";
+	private final static String SETTER = "SETTER#";
+	private final static String GETTER = "GETTER#";
 	
 	/**
 	 * 设置字段值
@@ -180,6 +188,10 @@ public abstract class BeanUtils {
 	 * @return
 	 */
 	public static String getDbFieldName(String propertyName) {
+		String dbFieldName = cache.get(DB.concat(propertyName));
+		if(dbFieldName!=null){
+			return dbFieldName;
+		}
 		StringBuffer strb = new StringBuffer();
 		for (int i = 0; i < propertyName.length(); i++) {
 			char ch = propertyName.charAt(i);
@@ -190,6 +202,7 @@ public abstract class BeanUtils {
 				strb.append(ch);
 			}
 		}
+		cache.put(DB.concat(propertyName), strb.toString());
 		return strb.toString();
 	}
 
@@ -199,6 +212,10 @@ public abstract class BeanUtils {
 	 * @return
 	 */
 	public static String getBeanPropertyName(String fieldName) {
+		String beanPropertyName = cache.get(BEAN.concat(fieldName));
+		if(beanPropertyName!=null){
+			return beanPropertyName;
+		}
 		StringBuffer strb = new StringBuffer();
 		boolean isLine = false;
 		for (int i = 0; i < fieldName.length(); i++) {
@@ -212,6 +229,7 @@ public abstract class BeanUtils {
 				strb.append(ch);
 			}
 		}
+		cache.put(BEAN.concat(fieldName), strb.toString());
 		return strb.toString();
 	}
 	
@@ -253,19 +271,22 @@ public abstract class BeanUtils {
 	 * @return
 	 */
 	private static Object getFieldValue(Object bean,Class<?> clazz,String name,String getterName){
-		String getMethodName = null;
+		String getMethodName = cache.get(GETTER.concat(name));
 		try {
 			if(bean==null||name==null||name.isEmpty()||clazz==null){
 				return null;
 			}
-			if(getterName.equals(IS)){//判断是否是is方式的getter
-				if(name.substring(0, 2).equals(IS)){//如果属性name已经是is开头，则对应getter方法无需在加is
-					getMethodName = name;
-				}else{
-					getMethodName = IS.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+			if(getMethodName==null){
+				if(getterName.equals(IS)){//判断是否是is方式的getter
+					if(name.substring(0, 2).equals(IS)){//如果属性name已经是is开头，则对应getter方法无需在加is
+						getMethodName = name;
+					}else{
+						getMethodName = IS.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+					}
+				}else{//普通的getter方法
+					getMethodName = GET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
 				}
-			}else{//普通的getter方法
-				getMethodName = GET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+				cache.put(GETTER.concat(name),getMethodName);
 			}
 			Method method = null;
 			try{
@@ -277,6 +298,7 @@ public abstract class BeanUtils {
 					getMethodName = GET.concat(name);
 				}
 				method = clazz.getMethod(getMethodName);
+				cache.put(GETTER.concat(name),getMethodName);
 			}
 			return method.invoke(bean);
 		} catch (Exception e) {
@@ -292,13 +314,12 @@ public abstract class BeanUtils {
 	 * @param value
 	 */
 	public static void setFieldValue(Object bean,Class<?> clazz,String name,Object value,Class<?> fieldType){
-		String setMethodName = null;
+		String setMethodName = cache.get(SETTER.concat(name));
 		Method method = null;
 		Class<?> fieldClazz = fieldType;
 		if(bean==null||name==null||name.isEmpty()||value==null||clazz==null||fieldClazz==null){
 			return;
 		}
-		setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
 		if(fieldClazz!=value.getClass()){//如果值的类型与字段类型不同
 			if(value instanceof Integer) {
 				value = Integer.parseInt(value.toString());
@@ -371,10 +392,16 @@ public abstract class BeanUtils {
 			}
 		}
 		try{
+			if(setMethodName==null){
+				setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
+				cache.put(SETTER.concat(name),setMethodName);
+			}
 			method = clazz.getMethod(setMethodName,fieldClazz);
 		} catch (NoSuchMethodException e) {//如果错误，有可能是出现了aName,bName等名称，eclipse等工具会将autoSetter变成setaName，以下为补漏.
 			try {//获取普通数据库类型对应Entity每个属性的setter方法
-				method = clazz.getMethod(SET.concat(name),fieldClazz);
+				setMethodName = SET.concat(name);
+				method = clazz.getMethod(setMethodName,fieldClazz);
+				cache.put(SETTER.concat(name),setMethodName);
 			} catch (NoSuchMethodException e2) {
 				logger.warn(clazz.toString().concat("中没有匹配到与字段").concat(name).concat("匹配的setter方法!"));
 			}

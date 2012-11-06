@@ -31,7 +31,7 @@ public class MessageController extends BaseController{
 	private static final Log logger = LoggerFactory.getLogger();
 	
 	@SuppressWarnings("unchecked")
-	private final static Cache<String,Message> messages = (Cache<String, Message>) CacheManager.getCacheByType("MESSAGE",100,100l);
+	private final static Cache<String,Message> messages = (Cache<String, Message>) CacheManager.getCacheByType("MESSAGE",128,100l);
 	
 	@ShowLabel("发送消息")
 	@MappingMethod

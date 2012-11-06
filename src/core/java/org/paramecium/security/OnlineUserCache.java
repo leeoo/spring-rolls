@@ -17,8 +17,8 @@ import org.paramecium.log.LoggerFactory;
 @SuppressWarnings("unchecked")
 public class OnlineUserCache {
 	
-	private final static Cache<String,UserDetails<?>> onlineUsers = (Cache<String, UserDetails<?>>) CacheManager.getCacheByType("ONLINE_USERS",1000);
-	private final static Cache<String,String> sessionIdIndex = (Cache<String, String>) CacheManager.getCacheByType("SESSION_ID", 1000);
+	private final static Cache<String,UserDetails<?>> onlineUsers = (Cache<String, UserDetails<?>>) CacheManager.getCacheByType("ONLINE_USERS",1024);
+	private final static Cache<String,String> sessionIdIndex = (Cache<String, String>) CacheManager.getCacheByType("SESSION_ID", 1024);
 	private final static Log logger = LoggerFactory.getLogger();
 	
 	/**

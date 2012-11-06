@@ -21,7 +21,7 @@ public class IpAddressVoter{
 
 	private final static Log logger = LoggerFactory.getLogger();
 	
-	private static Cache<String,Boolean> ipAddressList = (Cache<String, Boolean>) CacheManager.getCacheByType("IP_LIST", 50);
+	private static Cache<String,Boolean> ipAddressList = (Cache<String, Boolean>) CacheManager.getCacheByType("IP_LIST", 64);
 	
 	private static boolean include = true;
 
