@@ -272,11 +272,12 @@ public abstract class BeanUtils {
 	 */
 	private static Object getFieldValue(Object bean,Class<?> clazz,String name,String getterName){
 		String getMethodName = cache.get(GETTER.concat(name));
+		boolean empty = getMethodName==null?true:false;
 		try {
 			if(bean==null||name==null||name.isEmpty()||clazz==null){
 				return null;
 			}
-			if(getMethodName==null){
+			if(empty){
 				if(getterName.equals(IS)){//判断是否是is方式的getter
 					if(name.substring(0, 2).equals(IS)){//如果属性name已经是is开头，则对应getter方法无需在加is
 						getMethodName = name;
@@ -286,7 +287,6 @@ public abstract class BeanUtils {
 				}else{//普通的getter方法
 					getMethodName = GET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
 				}
-				cache.put(GETTER.concat(name),getMethodName);
 			}
 			Method method = null;
 			try{
@@ -298,9 +298,12 @@ public abstract class BeanUtils {
 					getMethodName = GET.concat(name);
 				}
 				method = clazz.getMethod(getMethodName);
+			}
+			Object value = method.invoke(bean);
+			if(empty){
 				cache.put(GETTER.concat(name),getMethodName);
 			}
-			return method.invoke(bean);
+			return value;
 		} catch (Exception e) {
 			logger.warn(clazz.toString().concat("中没有匹配到与字段").concat(name).concat("匹配的getter方法!"));
 		}
@@ -315,6 +318,7 @@ public abstract class BeanUtils {
 	 */
 	public static void setFieldValue(Object bean,Class<?> clazz,String name,Object value,Class<?> fieldType){
 		String setMethodName = cache.get(SETTER.concat(name));
+		boolean empty = setMethodName==null?true:false;
 		Method method = null;
 		Class<?> fieldClazz = fieldType;
 		if(bean==null||name==null||name.isEmpty()||value==null||clazz==null||fieldClazz==null){
@@ -392,16 +396,14 @@ public abstract class BeanUtils {
 			}
 		}
 		try{
-			if(setMethodName==null){
+			if(empty){
 				setMethodName = SET.concat(name.substring(0, 1).toUpperCase()).concat(name.substring(1));
-				cache.put(SETTER.concat(name),setMethodName);
 			}
 			method = clazz.getMethod(setMethodName,fieldClazz);
 		} catch (NoSuchMethodException e) {//如果错误，有可能是出现了aName,bName等名称，eclipse等工具会将autoSetter变成setaName，以下为补漏.
 			try {//获取普通数据库类型对应Entity每个属性的setter方法
 				setMethodName = SET.concat(name);
 				method = clazz.getMethod(setMethodName,fieldClazz);
-				cache.put(SETTER.concat(name),setMethodName);
 			} catch (NoSuchMethodException e2) {
 				logger.warn(clazz.toString().concat("中没有匹配到与字段").concat(name).concat("匹配的setter方法!"));
 			}
@@ -409,6 +411,9 @@ public abstract class BeanUtils {
 		if(method != null){
 			try {
 				method.invoke(bean,value);
+				if(empty){
+					cache.put(SETTER.concat(name),setMethodName);
+				}
 			}catch (Exception e) {
 				logger.warn(clazz.toString().concat("与字段").concat(name).concat("匹配的setter方法执行失败!"));
 			}
