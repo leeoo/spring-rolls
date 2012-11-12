@@ -60,7 +60,7 @@ public class SearchIndexCreatorV4 {
 	
 	public static org.apache.lucene.analysis.Analyzer analyzer = null;
 	
-	private static Version version = Version.LUCENE_40;
+	private final static Version version = Version.LUCENE_40;
 
 	public static String getPath() {
 		if (INDEX_PATH == null) {
@@ -75,7 +75,7 @@ public class SearchIndexCreatorV4 {
 	
 	private static org.apache.lucene.analysis.Analyzer getAnalyzer(){
 		if(analyzer==null){
-			analyzer = new StandardAnalyzer(version);
+			analyzer = new IKAnalyzer(true);
 		}
 		return analyzer;
 	}
@@ -164,14 +164,14 @@ public class SearchIndexCreatorV4 {
 					field.setAccessible(true);
 					String propertyName = field.getName();
 					if(isKeyWord(superClass, propertyName)){
-						Object value = BeanUtils.getFieldValue(bean, field.getName(), field.getType());
+						Object value = BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
 						Field textField = new StringField(propertyName, value.toString(),Field.Store.YES);
 						doc.add(textField);
 					}else if(isTextWord(superClass, propertyName)){
-						String propertyValue = (String)BeanUtils.getFieldValue(bean, field.getName(), field.getType());
+						String propertyValue = (String)BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
 						}
@@ -181,7 +181,7 @@ public class SearchIndexCreatorV4 {
 						Field textField = new StringField(propertyName, propertyValue,Field.Store.NO);
 						doc.add(textField);
 					}else if(isSortWord(superClass, propertyName)){
-						Object value = BeanUtils.getFieldValue(bean, field.getName(), field.getType());
+						Object value = BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
@@ -233,14 +233,14 @@ public class SearchIndexCreatorV4 {
 					field.setAccessible(true);
 					String propertyName = field.getName();
 					if(isKeyWord(superClass, propertyName)||isSortWord(superClass, propertyName)){
-						Object value = BeanUtils.getFieldValue(bean, field.getName(), field.getType());
+						Object value = BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
 						Term term = new Term(propertyName, value.toString());
 						writer.deleteDocuments(term);
 					}else if(isTextWord(superClass, propertyName)){
-						String propertyValue = (String)BeanUtils.getFieldValue(bean, field.getName(), field.getType());
+						String propertyValue = (String)BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
 						}
@@ -368,7 +368,7 @@ public class SearchIndexCreatorV4 {
 	}
 
 	private static String getIndexName(Class<?> clazz) {
-		Index index = clazz.getAnnotation(Index.class);
+		org.paramecium.search.annotation.Index index = clazz.getAnnotation(org.paramecium.search.annotation.Index.class);
 		if (index == null) {
 			return clazz.getSimpleName();
 		}
@@ -380,7 +380,7 @@ public class SearchIndexCreatorV4 {
 	}
 
 	private static String getKeywordName(Class<?> clazz) {
-		Index index = clazz.getAnnotation(Index.class);
+		org.paramecium.search.annotation.Index index = clazz.getAnnotation(org.paramecium.search.annotation.Index.class);
 		if (index == null) {
 			return "id";
 		}
@@ -468,4 +468,5 @@ public class SearchIndexCreatorV4 {
 	public static String html2Text(String inputString) {
 		return inputString.replaceAll("\r\n", "").replaceAll("<[.[^<]]*>","").replaceAll("	", ""); 
 	}
+	
 }
