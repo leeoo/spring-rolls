@@ -28,8 +28,9 @@
 						<td>授权信息:</td>
 						<td>
 							<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
-							<c:forEach items="${resources}" var="resourceKey">
-								<b>${resourceKey.key.showLabel}</b><br>&nbsp;&nbsp;&nbsp;&nbsp;
+							<c:forEach items="${resources}" var="resourceKey" varStatus="status">
+								<label><input type="checkbox" id="C_${status.index}"></input><b>${resourceKey.key.showLabel}</b></label>&nbsp;&nbsp;&nbsp;&nbsp;
+								<div id="R_${status.index}" style="padding-left: 20px;border-bottom: 1px;border-bottom-style: dotted;">
 									<c:forEach items="${resourceKey.value}" var="resource">
 										<c:if test="${role==null || role.auth==null}">
 											<label><input type="checkbox" name="auth" value="${resource}">${resource.showLabel}</label>&nbsp;
@@ -47,7 +48,18 @@
 									 		</c:if>
 										</c:if>
 									</c:forEach>
-								<br>
+								</div>
+								<script>
+								$(document).ready(function(){
+									$("#C_${status.index}").change(function () {
+										if($("#C_${status.index}").attr('checked')=='checked'){
+											$('#R_${status.index} :checkbox').attr("checked","checked");
+										}else{
+											$('#R_${status.index} :checkbox').removeAttr("checked");
+										}
+							       	});
+								 });
+								</script>
 							</c:forEach>
 							</div>
 						</td>
@@ -66,6 +78,7 @@
 	if(message!=''&&message!='null'){
 		$.messager.show({title:'提示',msg:message,timeout:3000,showType:'slide'});
 	}
+	
 </script>
 </body>
 </html>
