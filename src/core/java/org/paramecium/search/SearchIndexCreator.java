@@ -8,14 +8,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.DoubleField;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FloatField;
+import org.apache.lucene.document.IntField;
+import org.apache.lucene.document.LongField;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.ConcurrentMergeScheduler;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -29,7 +36,6 @@ import org.paramecium.commons.BeanUtils;
 import org.paramecium.commons.PathUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
-import org.paramecium.search.annotation.Index;
 import org.paramecium.search.annotation.KeyWord;
 import org.paramecium.search.annotation.SortWord;
 import org.paramecium.search.annotation.TextWord;
@@ -49,15 +55,19 @@ public class SearchIndexCreator {
 
 	public static String INDEX_PATH = null;
 	
-	private static Version version = Version.LUCENE_36;
-	
 	public static org.apache.lucene.analysis.Analyzer analyzer = null;
+	
+	private final static Version version = Version.LUCENE_40;
 
 	public static String getPath() {
 		if (INDEX_PATH == null) {
 			INDEX_PATH = PathUtils.getClassRootPath().replaceFirst("classes","index");
 		}
 		return INDEX_PATH;
+	}
+	
+	public static void initAnalyzer(org.apache.lucene.analysis.Analyzer _analyzer){
+		analyzer = _analyzer;
 	}
 	
 	private static org.apache.lucene.analysis.Analyzer getAnalyzer(){
@@ -99,13 +109,6 @@ public class SearchIndexCreator {
 	}
 
 	private static void close(IndexReader reader,IndexSearcher searcher,Directory directory){
-		try {
-			if(searcher!=null){
-				searcher.close();
-			}
-		} catch (Throwable e) {
-			logger.error("查询器关闭错误!");
-		}
 		try {
 			if(reader!=null){
 				reader.close();
@@ -158,28 +161,40 @@ public class SearchIndexCreator {
 					field.setAccessible(true);
 					String propertyName = field.getName();
 					if(isKeyWord(superClass, propertyName)){
-						Object value = BeanUtils.getFieldValue(bean, superClass, field.getName(), field.getType());
+						Object value = BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
-						Field textField = new Field(propertyName, value.toString(),Field.Store.YES, Field.Index.NOT_ANALYZED);
+						Field textField = new StringField(propertyName, value.toString(),Field.Store.YES);
 						doc.add(textField);
 					}else if(isTextWord(superClass, propertyName)){
-						String propertyValue = (String)BeanUtils.getFieldValue(bean, superClass, field.getName(), field.getType());
+						String propertyValue = (String)BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
 						}
 						if (isFilterHtmlTags(superClass, propertyName)) {
 							propertyValue = html2Text(propertyValue);
 						}
-						Field textField = new Field(propertyName, propertyValue,Field.Store.NO, Field.Index.ANALYZED);
+						Field textField = new TextField(propertyName, propertyValue,Field.Store.NO);
 						doc.add(textField);
 					}else if(isSortWord(superClass, propertyName)){
-						Object value = BeanUtils.getFieldValue(bean, superClass, field.getName(), field.getType());
+						Object value = BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
-						Field textField = new Field(propertyName, value.toString(),Field.Store.NO, Field.Index.NOT_ANALYZED);
+						Field textField = null;
+						SortField.Type type = getSortFieldType(superClass, propertyName);
+						if(type.equals(SortField.Type.INT)){
+							textField = new IntField(propertyName, Integer.parseInt(value.toString()),Field.Store.NO);
+						}else if(type.equals(SortField.Type.LONG)){
+							textField = new LongField(propertyName, Long.parseLong(value.toString()),Field.Store.NO);
+						}else if(type.equals(SortField.Type.FLOAT)){
+							textField = new FloatField(propertyName, Float.parseFloat(value.toString()),Field.Store.NO);
+						}else if(type.equals(SortField.Type.DOUBLE)){
+							textField = new DoubleField(propertyName, Double.parseDouble(value.toString()),Field.Store.NO);
+						}else{
+							textField = new StringField(propertyName, value.toString(),Field.Store.NO);
+						}
 						doc.add(textField);
 					}
 				}
@@ -213,19 +228,26 @@ public class SearchIndexCreator {
 					field.setAccessible(true);
 					String propertyName = field.getName();
 					if(isKeyWord(superClass, propertyName)||isSortWord(superClass, propertyName)){
-						Object value = BeanUtils.getFieldValue(bean, superClass, field.getName(), field.getType());
+						Object value = BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
 						if (value == null || value.toString().trim().isEmpty()) {
 							continue;
 						}
 						Term term = new Term(propertyName, value.toString());
 						writer.deleteDocuments(term);
 					}else if(isTextWord(superClass, propertyName)){
-						String propertyValue = (String)BeanUtils.getFieldValue(bean, superClass, field.getName(), field.getType());
+						String propertyValue = (String)BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
 						if (propertyValue == null || propertyValue.trim().isEmpty()) {
 							continue;
 						}
 						if (isFilterHtmlTags(superClass, propertyName)) {
 							propertyValue = html2Text(propertyValue);
+						}
+						Term term = new Term(propertyName, propertyValue);
+						writer.deleteDocuments(term);
+					}else if(isSortWord(superClass, propertyName)){
+						String propertyValue = (String)BeanUtils.getFieldValue(bean,superClass, field.getName(), field.getType());
+						if (propertyValue == null || propertyValue.trim().isEmpty()) {
+							continue;
 						}
 						Term term = new Term(propertyName, propertyValue);
 						writer.deleteDocuments(term);
@@ -262,7 +284,7 @@ public class SearchIndexCreator {
 		Directory directory = null;
 		try {
 			directory = FSDirectory.open(new File(getPath()+ getIndexName(clazz) + "//"));
-			reader = IndexReader.open(directory);
+			reader = DirectoryReader.open(directory);
 			searcher = new IndexSearcher(reader);
 			QueryParser queryParser = new MultiFieldQueryParser(version, textPropertyNames, getAnalyzer());
 		    Query query = queryParser.parse(queryText);
@@ -348,7 +370,7 @@ public class SearchIndexCreator {
 	}
 
 	private static String getIndexName(Class<?> clazz) {
-		Index index = clazz.getAnnotation(Index.class);
+		org.paramecium.search.annotation.Index index = clazz.getAnnotation(org.paramecium.search.annotation.Index.class);
 		if (index == null) {
 			return clazz.getSimpleName();
 		}
@@ -360,7 +382,7 @@ public class SearchIndexCreator {
 	}
 
 	private static String getKeywordName(Class<?> clazz) {
-		Index index = clazz.getAnnotation(Index.class);
+		org.paramecium.search.annotation.Index index = clazz.getAnnotation(org.paramecium.search.annotation.Index.class);
 		if (index == null) {
 			return "id";
 		}
@@ -404,6 +426,19 @@ public class SearchIndexCreator {
 			return true;
 		}
 		return false;
+	}
+	
+	private static SortField.Type getSortFieldType(Class<?> clazz, String propertyName) {
+		SortWord sortWord = null;
+		try {
+			sortWord = clazz.getDeclaredField(propertyName).getAnnotation(SortWord.class);
+		} catch (Throwable e) {
+			logger.error(e);
+		}
+		if (sortWord != null) {
+			return sortWord.type();
+		}
+		return SortField.Type.INT;
 	}
 	
 	private static boolean isKeyWord(Class<?> clazz, String propertyName) {
