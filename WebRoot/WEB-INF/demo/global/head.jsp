@@ -30,7 +30,7 @@
 	        })
 	    }
 		window.onload=function(){
-			window.setInterval(getMessage,10000);
+			window.setInterval(getMessage,32000);
 		};
 		function isExit(){
 			$.messager.confirm('提示','是否确认退出本系统?',function(d){

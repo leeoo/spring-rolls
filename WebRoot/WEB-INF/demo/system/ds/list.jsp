@@ -57,7 +57,7 @@
 								<td></td>
 								<td align="right">
 								<button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button>
-								<a class="easyui-linkbutton" href="#" onclick="window.open('${baes}/system/ds/monitor${ext}?dsName=${dataSource.key}','监控','width=830,height=520,directories');">监控</a>
+								<a class="easyui-linkbutton" href="${baes}/system/ds/monitor${ext}?dsName=${dataSource.key}" iconCls="icon-report">监控</a>
 								</td>
 							</tr>
 						</table>

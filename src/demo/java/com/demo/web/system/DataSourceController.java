@@ -51,6 +51,7 @@ public class DataSourceController extends BaseController{
 	public ModelAndView monitor(ModelAndView mv){
 		String dsName = mv.getValue("dsName",String.class);
 		mv.addValue("dataSource", dataSourceService.getDataSource(dsName));
+		mv.addValue("dsName", dsName);
 		return mv.forward(getPage("/ds/monitor.jsp"));
 	}
 
