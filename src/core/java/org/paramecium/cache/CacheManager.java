@@ -11,6 +11,7 @@ import org.paramecium.cache.remote.InitiativeCache;
 import org.paramecium.cache.remote.PassiveCache;
 import org.paramecium.commons.EncodeUtils;
 import org.paramecium.commons.PropertiesUitls;
+import org.paramecium.commons.ThreadUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
@@ -57,7 +58,7 @@ public class CacheManager {
 			}
 		}
 		properties.clear();
-		new Thread(new CacheHandlerThread()).start();
+		ThreadUtils.add(new CacheHandlerThread(),"缓存监控线程");
 	}
 	
 	static class CacheHandlerThread implements Runnable {
@@ -89,7 +90,7 @@ public class CacheManager {
 							for(Element element : cache.getElements()){
 								if(lifeMs<time-element.getAccessTime()){
 									cache.remove(element.getKey());
-									logger.debug(name+":缓存<"+element.getKey()+">生命周期监控处理线程已启动");
+									logger.debug(name+":缓存<"+element.getKey()+">生命周期已达到销毁期限，已被销毁！");
 								}
 							}
 						}

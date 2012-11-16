@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.paramecium.commons.EncodeUtils;
+import org.paramecium.commons.ThreadUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
@@ -40,7 +41,7 @@ public class ConnectionPool {
 		this.connectLife = connectLife;
 		this.poolThreadTime = poolThreadTime;
 		this.busyConnectTimeOut = busyConnectTimeOut;
-		new Thread(new PoolHandlerThread()).start();
+		ThreadUtils.add(new PoolHandlerThread(),"连接池监控线程");
 	}
 	
 	/**
