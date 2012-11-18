@@ -271,7 +271,7 @@ public abstract class BeanUtils {
 	 * @return
 	 */
 	private static Object getFieldValue(Object bean,Class<?> clazz,String name,String getterName){
-		String getMethodName = cache.get(GETTER.concat(name));
+		String getMethodName = cache.get(clazz.getName().concat(GETTER).concat(name));
 		boolean empty = getMethodName==null?true:false;
 		try {
 			if(bean==null||name==null||name.isEmpty()||clazz==null){
@@ -301,7 +301,7 @@ public abstract class BeanUtils {
 			}
 			Object value = method.invoke(bean);
 			if(empty){
-				cache.put(GETTER.concat(name),getMethodName);
+				cache.put(clazz.getName().concat(GETTER).concat(name),getMethodName);
 			}
 			return value;
 		} catch (Exception e) {
@@ -317,7 +317,7 @@ public abstract class BeanUtils {
 	 * @param value
 	 */
 	public static void setFieldValue(Object bean,Class<?> clazz,String name,Object value,Class<?> fieldType){
-		String setMethodName = cache.get(SETTER.concat(name));
+		String setMethodName = cache.get(clazz.getName().concat(SETTER).concat(name));
 		boolean empty = setMethodName==null?true:false;
 		Method method = null;
 		Class<?> fieldClazz = fieldType;
@@ -412,7 +412,7 @@ public abstract class BeanUtils {
 			try {
 				method.invoke(bean,value);
 				if(empty){
-					cache.put(SETTER.concat(name),setMethodName);
+					cache.put(clazz.getName().concat(SETTER).concat(name),setMethodName);
 				}
 			}catch (Exception e) {
 				logger.warn(clazz.toString().concat("与字段").concat(name).concat("匹配的setter方法执行失败!"));
