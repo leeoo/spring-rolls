@@ -5,6 +5,9 @@
 	
 	<display-name>paramecium</display-name>
 	
+	<!-- 集群 -->
+	<distributable/>
+	
 	<filter>
 		<filter-name>specialFilter</filter-name>
 		<filter-class>org.paramecium.mvc.SpecialFilter</filter-class>
