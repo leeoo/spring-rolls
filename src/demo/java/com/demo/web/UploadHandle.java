@@ -31,10 +31,13 @@ public class UploadHandle {
 	public void upload(ModelAndView mv) {
 		try {
 			// 调用Decode方法，返回一个哈希表
-			Map<String, Object> hashtable = decode(mv.getRequest());
+			Map<String, Object> map = decode(mv.getRequest());
 			// 以字节数据的方式获得文件的内容
-			byte[] filecontent = (byte[]) hashtable.get("file");
-			String filename = (String) hashtable.get("filename");
+			byte[] filecontent = (byte[]) map.get("file");
+			String filename = (String) map.get("filename");
+			if(filename==null||filename.isEmpty()){
+				return;
+			}
 			String dName = PathUtils.getWebRootPath() + "//upload//temp";
 			String fName = EncodeUtils.millisTime() + filename.substring(filename.lastIndexOf('.'));
 
@@ -72,8 +75,7 @@ public class UploadHandle {
 		}
 	}
 
-	private Map<String, Object> decode(HttpServletRequest req)
-			throws java.io.IOException {
+	private static Map<String, Object> decode(HttpServletRequest req) throws java.io.IOException {
 		byte[] body = null;
 		int bodyLen = 0;
 		byte[] bound = null;
@@ -81,8 +83,7 @@ public class UploadHandle {
 		int index = 0;
 		bodyLen = req.getContentLength();
 		body = new byte[bodyLen];
-		BufferedInputStream dataIn = new BufferedInputStream(
-				req.getInputStream());
+		BufferedInputStream dataIn = new BufferedInputStream(req.getInputStream());
 		int readed = 0;
 		int cur_read = 0;
 		while (readed < bodyLen) {
@@ -94,13 +95,15 @@ public class UploadHandle {
 		}
 		int i = 0;
 		while (i <= bodyLen) {
-			if (body[i] == 13 && body[i + 1] == 10)
+			if (body[i] == 13 && body[i + 1] == 10){
 				break;
-			else
+			}else{
 				i++;
+			}
 		}
-		if (i > bodyLen)
+		if (i > bodyLen){
 			return null;
+		}
 		boundLen = i;
 		bound = new byte[boundLen];
 		for (int j = 0; j < boundLen; j++) {
@@ -114,22 +117,23 @@ public class UploadHandle {
 				i++;
 			} else {
 				int j = index;
-				while ((j < i)
-						&& (body[j] != 13 || body[j + 1] != 10
-								|| body[j + 2] != 13 || body[j + 3] != 10)) {
+				while ((j < i)&& (body[j] != 13 || body[j + 1] != 10|| body[j + 2] != 13 || body[j + 3] != 10)) {
 					j++;
 				}
-				if (j >= i)
+				if (j >= i){
 					break;
+				}
 				String paramHeader = new String(body, index, j - index + 2);
 				index = j;
 				int m = paramHeader.indexOf("name=\"");
-				if (m < 0)
+				if (m < 0){
 					break;
+				}
 				m = m + 6; // point to name value
 				int n = paramHeader.indexOf("\"", m);
-				if (n <= m)
+				if (n <= m){
 					break;
+				}
 				String name = paramHeader.substring(m, n); // get name
 				boolean isFile = false;
 				String filename = "";
@@ -139,19 +143,19 @@ public class UploadHandle {
 					isFile = true;
 					m = m + 10; // skip (filename=")
 					n = paramHeader.indexOf("\"", m);
-					if (n > m)
+					if (n > m){
 						filename = paramHeader.substring(m, n);
+					}
 					m = paramHeader.indexOf("Content-Type: ", n + 1);
 					if (m > n) {
 						m = m + 14;
 						n = m;
-						while ((n < paramHeader.length())
-								&& (paramHeader.charAt(n) != 13 || paramHeader
-										.charAt(n + 1) != 10)) {
+						while ((n < paramHeader.length())&& (paramHeader.charAt(n) != 13 || paramHeader.charAt(n + 1) != 10)) {
 							n++;
 						}
-						if (n <= paramHeader.length())
+						if (n <= paramHeader.length()){
 							filetype = paramHeader.substring(m, n);
+						}
 					}
 				}
 				j = j + 4;
@@ -173,22 +177,27 @@ public class UploadHandle {
 		return hashtable;
 	}
 
-	private boolean compareByteArray(byte[] a, byte[] b) {
-		if (a.length != b.length)
+	private static boolean compareByteArray(byte[] a, byte[] b) {
+		if (a.length != b.length){
 			return false;
-		for (int i = 0; i < a.length; i++)
-			if (a[i] != b[i])
+		}
+		for (int i = 0; i < a.length; i++){
+			if (a[i] != b[i]){
 				return false;
+			}
+		}
 		return true;
 	}
 
-	private byte[] copybyte(byte[] a, int from, int len) {
+	private static byte[] copybyte(byte[] a, int from, int len) {
 		int copylen = len;
-		if ((a.length - from) < copylen)
+		if ((a.length - from) < copylen){
 			copylen = a.length - from;
+		}
 		byte[] b = new byte[copylen];
-		for (int i = 0; i < copylen; i++)
+		for (int i = 0; i < copylen; i++){
 			b[i] = a[from + i];
+		}
 		return b;
 	}
 
