@@ -1,17 +1,17 @@
-package com.demo.service.system;
+package com.demo.service.showcase;
 
 import org.paramecium.ioc.annotation.Service;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.orm.MongoDBOrmDao;
 
-import com.demo.entity.system.Message;
+import com.demo.entity.showcase.Message;
 
 /**
  * 功 能 描 述:<br>
- * mongoDB的测试类
+ * mongoDB的演示
  * <br>代 码 作 者:曹阳(CaoYang)
  * <br>开 发 日 期:2012-3-20下午02:39:49
- * <br>项 目 信 息:paramecium:com.demo.service.system.MessageService.java
+ * <br>项 目 信 息:paramecium:com.demo.service.showcase.MessageService.java
  */
 @Service
 public class MessageService {

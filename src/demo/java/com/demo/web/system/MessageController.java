@@ -21,7 +21,7 @@ import org.paramecium.mvc.annotation.Controller;
 import org.paramecium.mvc.annotation.MappingMethod;
 import org.paramecium.security.annotation.Security;
 
-import com.demo.entity.system.Message;
+import com.demo.entity.system.Msg;
 import com.demo.web.BaseController;
 
 @Security
@@ -31,7 +31,7 @@ public class MessageController extends BaseController{
 	private static final Log logger = LoggerFactory.getLogger();
 	
 	@SuppressWarnings("unchecked")
-	private final static Cache<String,Message> messages = (Cache<String, Message>) CacheManager.getCacheByType("MESSAGE",128,100l);
+	private final static Cache<String,Msg> messages = (Cache<String, Msg>) CacheManager.getCacheByType("MESSAGE",128,100l);
 	
 	@ShowLabel("发送消息")
 	@MappingMethod
@@ -43,7 +43,7 @@ public class MessageController extends BaseController{
 			if(idstr!=null && content!=null){
 				String[] ids = idstr.split(",");
 				for(String sessionId : ids){
-					Message message = new Message();
+					Msg message = new Msg();
 					message.setAuth(SecurityUitls.getLoginUser().getName());
 					message.setContent(content);
 					if(title!=null&&!title.trim().isEmpty()){
@@ -63,7 +63,7 @@ public class MessageController extends BaseController{
 							ZipUtils.zip(zipFullFileName, tempPath + title);
 							new File(tempPath + title).delete();
 						}
-						message.setTitle(zipFileName);
+						message.setFile(zipFileName);
 					}
 					message.setPublishDate(DateUtils.getCurrentDateTime());
 					messages.put(sessionId, message);
@@ -81,12 +81,12 @@ public class MessageController extends BaseController{
 		if(sessionId==null){
 			return;
 		}
-		Message message = messages.get(sessionId);
+		Msg message = messages.get(sessionId);
 		if(message==null){
 			return;
 		}
 		messages.remove(sessionId);
-		mv.printJSON("{\"content\":\""+message.getContent()+"\",\"auth\":\""+message.getAuth()+"\",\"title\":\""+message.getTitle()+"\",\"date\":\""+DateUtils.parse(new SimpleDateFormat("MM月dd日HH时mm分ss秒",java.util.Locale.CHINA),message.getPublishDate())+"\"}");
+		mv.printJSON("{\"content\":\""+message.getContent()+"\",\"auth\":\""+message.getAuth()+"\",\"title\":\""+message.getFile()+"\",\"date\":\""+DateUtils.parse(new SimpleDateFormat("MM月dd日HH时mm分ss秒",java.util.Locale.CHINA),message.getPublishDate())+"\"}");
 	}
 	
 	@ShowLabel("下载附件")

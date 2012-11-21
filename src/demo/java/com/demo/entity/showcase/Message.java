@@ -1,4 +1,4 @@
-package com.demo.entity.system;
+package com.demo.entity.showcase;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,7 +6,11 @@ import java.util.Date;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
 import org.paramecium.orm.annotation.PrimaryKey;
-
+/**
+ * mongoDB数据库
+ * @author caoyang
+ *
+ */
 @Entity(tableName="t_message",orderBy="publish_date DESC")
 public class Message implements Serializable{
 	
