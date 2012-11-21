@@ -3,6 +3,7 @@ package com.demo.entity.showcase;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.lucene.search.SortField.Type;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
@@ -36,7 +37,7 @@ public class News implements Serializable{
 	@NotUpdate
 	private Date publishDate = new Date();
 	
-	@SortWord
+	@SortWord(type=Type.LONG)
 	private long longPublishDate;
 	
 	@NotNull(empty = true)
