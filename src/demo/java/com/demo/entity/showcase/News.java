@@ -16,7 +16,7 @@ import org.paramecium.search.annotation.TextWord;
 import org.paramecium.validation.annotation.base.Length;
 import org.paramecium.validation.annotation.base.NotNull;
 
-@Index("index_news")
+@Index("news")
 @Entity(tableName="t_showcase_news",orderBy="publish_date DESC")
 public class News implements Serializable{
 	
@@ -24,6 +24,7 @@ public class News implements Serializable{
 
 	@PrimaryKey
 	@KeyWord
+	@Column
 	private Integer id;
 	
 	@NotNull(empty = true)
