@@ -47,7 +47,7 @@
 			<div iconCls="icon-cl" onclick="javascript:void(0)">便捷查询(Search)</div>
 			<div iconCls="icon-ok" onclick="javascript:void(0)">验证标签(Validation)</div>
 			<div iconCls="icon-time" onclick="javascript:void(0)">任务调度(Thread)</div>
-			<div iconCls="icon-search" onclick="javascript:void(0)">搜索引擎(Lucene)</div>
+			<div iconCls="icon-search" onclick="gotoUrl('${base}/showcase/news/list${ext}')">搜索引擎(Lucene)</div>
 			<div iconCls="icon-doc" onclick="javascript:void(0)">NoSQL封装(MongoDB)</div>
 			<div iconCls="icon-report" onclick="javascript:void(0)">酷炫报表(FusionCharts)</div>
 		</div>

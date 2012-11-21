@@ -23,7 +23,7 @@
 				<div><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-cl">便利查询(Search)</a></div>
 				<div><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-ok">验证标签(Validation)</a></div>
 				<div><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-time">任务调度(Thread)</a></div>
-				<div><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search">搜索引擎(Lucene)</a></div>
+				<div><a href="${base}/showcase/news/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-search">搜索引擎(Lucene)</a></div>
 				<div><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-doc">NoSQL控(MongoDB)</a></div>
 				<div><a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-report">酷炫报表(F)</a></div>
 			</div>

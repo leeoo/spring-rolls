@@ -8,5 +8,5 @@ import org.paramecium.security.annotation.Security;
 @ShowLabel("搜索引擎")
 @Controller("/showcase/search")
 public class SearchController extends ShowCaseBaseController{
-
+	
 }

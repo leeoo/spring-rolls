@@ -40,7 +40,7 @@ public class News implements Serializable{
 	private long longPublishDate;
 	
 	@NotNull(empty = true)
-	@Length(min=2,max=99999)
+	@Length(min=2,max=999999)
 	@ShowLabel("内容")
 	@TextWord
 	@Column

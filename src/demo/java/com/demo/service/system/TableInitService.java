@@ -43,8 +43,8 @@ public class TableInitService {
 		logger.debug("performance_test创建成功!");
 		st.execute("CREATE TABLE t_log(id INT PRIMARY KEY AUTO_INCREMENT,log VARCHAR(5000) NOT NULL,date DATETIME NOT NULL,type INT)");
 		logger.debug("t_log创建成功!");
-		st.execute("CREATE TABLE t_sequence(table_name VARCHAR(50) PRIMARY KEY,seq_value INT NOT NULL)");
-		logger.debug("t_sequence创建成功!");
+		st.execute("CREATE TABLE t_showcase_news(id INT PRIMARY KEY AUTO_INCREMENT,title VARCHAR(100) NOT NULL,publish_date DATE NOT NULL,content TEXT NOT NULL,auth VARCHAR(20) NOT NULL)");
+		logger.debug("t_showcase_news创建成功!");
 		st.close();
 		MultiDataSourceFactory.getDataSource(MultiDataSourceFactory.defaultDataSourceName).replace(connection);
 		logger.debug("DEMO用H2或Mysql数据库内存表创建成功!");
