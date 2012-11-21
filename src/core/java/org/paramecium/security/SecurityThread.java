@@ -23,7 +23,7 @@ public class SecurityThread {
 	
 	private final static ThreadLocal<String> sessionThreadLocal = new ThreadLocal<String>();//session本地线程
 	private final static ThreadLocal<Security> securityThreadLocal = new ThreadLocal<Security>();//安全限制级别本地线程
-	private final static Cache<String,Boolean> userCache = (Cache<String, Boolean>) CacheManager.getCacheByType("KICK_KILL_USER", 64,600l);//判断重复登录和被踢出用缓存
+	private final static Cache<String,Boolean> userCache = (Cache<String, Boolean>) CacheManager.getCacheByType("KICK_KILL_USER", 64);//判断重复登录和被踢出用缓存
 	private final static String KILL = "KILL";
 	private final static String KICK = "KICK";
 	
