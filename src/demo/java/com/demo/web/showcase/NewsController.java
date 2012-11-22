@@ -12,7 +12,7 @@ import com.demo.entity.showcase.News;
 import com.demo.service.showcase.NewsService;
 
 @Security
-@ShowLabel("演示-新闻")
+@ShowLabel("演示-搜索新闻")
 @Controller("/showcase/news")
 public class NewsController extends ShowCaseBaseController {
 	

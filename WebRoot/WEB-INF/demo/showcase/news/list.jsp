@@ -89,7 +89,7 @@
 			            text: '搜索引擎体验',
 			            iconCls: 'icon-search',
 			            handler:function(){
-			        		
+			            	window.location.href='${base}/showcase/search/list${ext}';
 						}
 			        }],
 			pagination:true

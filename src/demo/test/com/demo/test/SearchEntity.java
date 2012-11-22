@@ -15,7 +15,7 @@ import org.paramecium.validation.annotation.base.Size;
  * <br>开 发 日 期:2011-11-23下午03:03:56
  * <br>项 目 信 息:paramecium:com.demo.test.SearchEntity.java
  */
-@Index("index_test")
+@Index("test")
 public class SearchEntity {
 	
 	@NotNull(empty = true)

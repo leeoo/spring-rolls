@@ -7,6 +7,7 @@ import org.apache.lucene.search.SortField.Type;
 import org.paramecium.ioc.annotation.ShowLabel;
 import org.paramecium.orm.annotation.Column;
 import org.paramecium.orm.annotation.Entity;
+import org.paramecium.orm.annotation.Lazy;
 import org.paramecium.orm.annotation.NotUpdate;
 import org.paramecium.orm.annotation.PrimaryKey;
 import org.paramecium.search.annotation.Index;
@@ -45,6 +46,7 @@ public class News implements Serializable{
 	@Length(min=2,max=999999)
 	@ShowLabel("内容")
 	@TextWord
+	@Lazy
 	@Column
 	private String content;
 	
