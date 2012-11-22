@@ -12,17 +12,26 @@
 	<div style="padding: 20px;">
 		<form id="search" action="${base}/showcase/search/list${ext}" method="post">
 			<input type="hidden" id="pageNo" name="pageNo" value="${page==null||page.pageNo==0?0:page.pageNo}"/>
-			<input id="text" name="text" class="easyui-searchbox" data-options="prompt:'请输入查询的内容',searcher:doSearch2" style="width:300px" value="${text}"></input>
+			<input id="text" name="text" class="easyui-searchbox" data-options="prompt:'请输入查询的内容...',menu:'#mm',searcher:doSearch2" style="width:500px" value="${text}"></input>
+			<a class="easyui-linkbutton" href="${baes}/showcase/news/list${ext}" iconCls="icon-back">返回</a>
 		</form>
+		<div id="mm" style="width:120px">
+			<div data-options="name:'text',iconCls:'icon-home'">所有分类</div>
+		</div>
 	</div>
 	<div>
-		<table>
-			<tr><th>标题</th><th>发布日期</th><th>作者</th></tr>
+		<table style="border: 1px;border-style: dotted;width: 90%;">
+			<tr style="background-color: #3c72b4;color: #FFF;height: 25px;"><th>标题</th><th>发布日期</th><th>作者</th></tr>
 			<c:forEach var="news" items="${page.result}">
 				<tr>
-					<td>${news.title}</td>
-					<td>${news.publishDate}</td>
-					<td>${news.auth}</td>
+					<td style="width: 70%;padding-left: 10px;" nowrap="nowrap">${news.title}</td>
+					<td style="width: 20%;padding-left: 10px;" nowrap="nowrap">${news.publishDate}</td>
+					<td style="width: 10%;padding-left: 10px;" nowrap="nowrap">${news.auth}</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<hr style="border-style: dotted;"/>
+					</td>
 				</tr>
 			</c:forEach>
 			<tr>
@@ -69,13 +78,16 @@
 			$('#search').submit();
 		}else{
 			$.messager.alert('提示','请填写查询信息!','warning');
-			$('#search').focus();
 		}
 	}
 	function doSearch2(text){
-		$('#pageNo').val('${page.pageNo}');
-		$('#text').val(text);
-		$('#search').submit();
+		if($.trim(text)==''){
+			$.messager.alert('提示','请填写查询信息!','warning');
+		}else{
+			$('#pageNo').val('${page.pageNo}');
+			$('#text').val(text);
+			$('#search').submit();
+		}
 	}
 	
 	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';
