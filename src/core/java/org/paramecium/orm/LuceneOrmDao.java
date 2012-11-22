@@ -8,7 +8,6 @@ import java.util.List;
 import org.paramecium.cache.Cache;
 import org.paramecium.cache.CacheManager;
 import org.paramecium.commons.BeanUtils;
-import org.paramecium.jdbc.dialect.BaseDialect;
 import org.paramecium.jdbc.dialect.Page;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
@@ -122,39 +121,34 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 		}
 		String sql = EntitySqlParser.getSelectSqlByPk(clazz,true);
 		int last = sql.lastIndexOf("=");
-		int where = sql.toLowerCase().lastIndexOf("where");
-		String countSql = BaseDialect.getCountSql(sql.substring(0, where));
-		sql = sql.substring(0, last).concat(" IN( ");
-		int count = 0;
-		if (page.isAutoCount()) {
-			Object obj = genericOrmDao.getGenericJdbcDao().queryUniqueColumnValueByArray(countSql);
-			if(obj!=null){
-				count = Integer.parseInt(obj.toString()) ;
-			}else{
-				count = 0;
-			}
-			page.setTotalCount(count);
-		}
-		List<PK> pks = getPKList(text,(int)count);
-		Object[] arrayParams = new Serializable[page.getPageSize()];
+		sql = sql.substring(0, last).concat(" IN( ");//把select id,name,title.. from table where id=?变成id in(?,?,?,?..);
+		List<PK> pks = getPKList(text);
 		if (pks!=null && !pks.isEmpty() && page.isFirstSetted() && page.isPageSizeSetted()) {
+			if (page.isAutoCount()) {
+				page.setTotalCount(pks.size());
+			}
+			int size = page.getPageSize();
+			if(page.getPageSize()>page.getTotalCount()){
+				size = page.getTotalCount();
+			}
+			Object[] arrayParams = new Serializable[size];
 			try{
-				for(int i = 0;i<page.getPageSize();i++){
+				for(int i = 0;i<size;i++){
 					sql = sql.concat("?,");
 					arrayParams[i] = pks.get(page.getFirst()+i);
 				}
+				sql = sql.substring(0, sql.length()-1).concat(" )");
+				Collection<?> list = genericOrmDao.getGenericJdbcDao().queryByArray(sql, clazz, arrayParams);
+				page.setResult(list);
+			}catch (java.lang.IndexOutOfBoundsException e) {
+				logger.warn(e.getMessage());
 			}catch (Throwable e) {
-				logger.warn(e);
+				logger.error(e);
 				page.setResult(null);
-				return page;
 			}
 		}else{
 			page.setResult(null);
-			return page;
 		}
-		sql = sql.substring(0, sql.length()-1).concat(" )");
-		Collection<?> list = genericOrmDao.getGenericJdbcDao().queryByArray(sql, clazz, arrayParams);
-		page.setResult(list);
 		return page;
 	}
 	
@@ -164,10 +158,13 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 	 * @param count
 	 * @return
 	 */
-	private List<PK> getPKList(String text,int count){
+	private List<PK> getPKList(String text){
+		if(text==null || text.trim().isEmpty()){
+			return null;
+		}
 		List<PK> pks = (List<PK>)cache.get(clazz.getName()+"#"+text);
 		if(pks == null){
-			Collection<String> keywords = SearchIndexCreator.searchKeyword(clazz, text,count);
+			Collection<String> keywords = SearchIndexCreator.searchKeyword(clazz, text,256);//设定最多只要256个结果
 			List<Serializable> list = new LinkedList<Serializable>();
 			Class<?> type = EntitySqlParser.getPkType(clazz);
 			for(String keyword : keywords){
