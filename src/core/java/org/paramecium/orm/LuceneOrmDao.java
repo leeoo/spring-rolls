@@ -114,7 +114,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 	 * @return
 	 */
 	public Page select(Page page,String text){
-		if(text == null || text.isEmpty()){
+		if(text == null || text.trim().isEmpty()){
 			page.setResult(null);
 			page.setPageNo(1);
 			return page;
