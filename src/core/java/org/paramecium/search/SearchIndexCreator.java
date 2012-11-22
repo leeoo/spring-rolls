@@ -61,7 +61,7 @@ public class SearchIndexCreator {
 
 	public static String getPath() {
 		if (INDEX_PATH == null) {
-			INDEX_PATH = PathUtils.getClassRootPath().replaceFirst("classes","index");
+			INDEX_PATH = PathUtils.getClassRootPath().replaceFirst("classes","index//");
 		}
 		return INDEX_PATH;
 	}
@@ -146,7 +146,7 @@ public class SearchIndexCreator {
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
+			directory = FSDirectory.open(new File(getPath() + getIndexName(bean.getClass()) + "//"));
 			IndexWriterConfig conf = new IndexWriterConfig(version, getAnalyzer());
 			conf.setMergeScheduler(new ConcurrentMergeScheduler());
 			conf.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
@@ -215,7 +215,7 @@ public class SearchIndexCreator {
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.open(new File(getPath()+ getIndexName(bean.getClass()) + "//"));
+			directory = FSDirectory.open(new File(getPath() + getIndexName(bean.getClass()) + "//"));
 			IndexWriterConfig conf = new IndexWriterConfig(version, getAnalyzer());
 			conf.setMergeScheduler(new ConcurrentMergeScheduler());
 			writer = new IndexWriter(directory, conf);
@@ -283,7 +283,7 @@ public class SearchIndexCreator {
 		IndexSearcher searcher = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.open(new File(getPath()+ getIndexName(clazz) + "//"));
+			directory = FSDirectory.open(new File(getPath() + getIndexName(clazz) + "//"));
 			reader = DirectoryReader.open(directory);
 			searcher = new IndexSearcher(reader);
 			QueryParser queryParser = new MultiFieldQueryParser(version, textPropertyNames, getAnalyzer());
