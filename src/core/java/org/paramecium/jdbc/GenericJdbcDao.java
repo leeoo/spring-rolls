@@ -57,6 +57,14 @@ public class GenericJdbcDao {
 	}
 	
 	/**
+	 * 设置ResultSet参数，如游标，事务等
+	 * @param ResultSetParameters
+	 */
+	public void setResultSetParameters(ResultSetParameters resultSetParameters){
+		this.jdbcTemplate.setResultSetParameters(resultSetParameters);
+	}
+	
+	/**
 	 * 执行无参数selectSQL语句,数据以Map装载
 	 * @param sql
 	 * @return 结果集列表

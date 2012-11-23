@@ -18,6 +18,12 @@ import org.paramecium.jdbc.dialect.Dialect;
 public interface JdbcTemplate extends Dialect{
 	
 	/**
+	 * 设置ResultSet参数，如游标，事务等
+	 * @param resultSetParameters
+	 */
+	public void setResultSetParameters(ResultSetParameters resultSetParameters);
+	
+	/**
 	 * 设置多表查询，MAP结果集将变成[表名/别名].[字段名/别名],默认FALSE
 	 * @param isManyTable
 	 */

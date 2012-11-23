@@ -21,13 +21,6 @@ import org.paramecium.log.system.CollectorFactory;
 /**
  * 功能描述(Description):<br><b>
  * jdbc基础模板
- * 参数 int type 
- * 	ResultSet.TYPE_FORWORD_ONLY 结果集的游标只能向下滚动。 
- * 	ResultSet.TYPE_SCROLL_INSENSITIVE 结果集的游标可以上下移动，当数据库变化时，当前结果集不变。 
- * 	ResultSet.TYPE_SCROLL_SENSITIVE 返回可滚动的结果集，当数据库变化时，当前结果集同步改变。 
- * 参数 int concurrency 
- * 	ResultSet.CONCUR_READ_ONLY 不能用结果集更新数据库中的表。 
- * 	ResultSet.CONCUR_UPDATETABLE 能用结果集更新数据库中的表。 
  * </b><br>作 者(Author): <i><b>曹阳(Cao.Yang)</b></i>
  * <br>建立日期(Create Date): <b>2011-4-3下午09:33:42</b>
  * <br>项目名称(Project Name): <b>paramecium</b>
@@ -38,6 +31,54 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	private final static Log logger = LoggerFactory.getLogger();
 
 	private Boolean isManyTable = new Boolean(false);
+	
+	private ResultSetParameters resultSetParameters;
+	
+	/**
+	 * 设置ResultSet参数，如游标，事务等
+	 * @param ResultSetParameters
+	 */
+	public void setResultSetParameters(ResultSetParameters resultSetParameters){
+		this.resultSetParameters = resultSetParameters;
+	}
+	
+	private Statement createStatement(final Connection connection) throws SQLException{
+		if(resultSetParameters==null){
+			return connection.createStatement();
+		}else{
+			return connection.createStatement(
+					resultSetParameters.getResultSetType(),
+					resultSetParameters.getResultSetConcurrency(),
+					resultSetParameters.getResultSetHoldability());
+		}
+	}
+
+	private PreparedStatement prepareStatement(final Connection connection,final String sql) throws SQLException{
+		if(resultSetParameters==null){
+			return connection.prepareStatement(sql);
+		}else{
+			return connection.prepareStatement(sql,
+					resultSetParameters.getResultSetType(),
+					resultSetParameters.getResultSetConcurrency(),
+					resultSetParameters.getResultSetHoldability());
+		}
+	}
+	
+	private PreparedStatement prepareStatement(final Connection connection,final String sql,int returnGeneratedKeys) throws SQLException{
+		if(resultSetParameters==null){
+			return connection.prepareStatement(sql,returnGeneratedKeys);
+		}else{
+			return connection.prepareStatement(sql,returnGeneratedKeys);
+		}
+	}
+	
+	/**
+	 * 设置多表查询，MAP结果集将变成[表名/别名].[字段名/别名],默认FALSE
+	 * @param isManyTable
+	 */
+	public void setManyTable(Boolean isManyTable) {
+		this.isManyTable = isManyTable;
+	}
 
 	/**
 	 * 执行无参数selectSQL语句,数据以Map装载
@@ -46,7 +87,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public Collection<Map<String, Object>> query(final Connection connection,final String sql) throws SQLException {
-		Statement statement = connection.createStatement();
+		Statement statement = createStatement(connection);
 		ResultSet resultSet = statement.executeQuery(sql);
 		Collection<Map<String, Object>> collection = JdbcUtils.getCollection(resultSet,this.isManyTable);
 		logger.debug(JdbcUtils.getNativeDMLSql(sql));
@@ -63,7 +104,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public Collection<?> query(final Connection connection,final String sql,Class<?> clazz) throws SQLException {
-		Statement statement = connection.createStatement();
+		Statement statement = createStatement(connection);
 		ResultSet resultSet = statement.executeQuery(sql);
 		Collection<?> collection = JdbcUtils.getCollection(resultSet,clazz);
 		logger.debug(JdbcUtils.getNativeDMLSql(sql));
@@ -83,7 +124,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(arrayParams==null||arrayParams.length==0){
 			return query(connection,sql);
 		}
-		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		PreparedStatement preparedStatement = prepareStatement(connection,sql);
 		int i = 1;
 		for(Object param:arrayParams){
 			preparedStatement.setObject((i++), param);
@@ -108,7 +149,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(arrayParams==null||arrayParams.length==0){
 			return query(connection,sql,clazz);
 		}
-		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		PreparedStatement preparedStatement = prepareStatement(connection,sql);
 		int i = 1;
 		for(Object param:arrayParams){
 			preparedStatement.setObject((i++), param);
@@ -135,7 +176,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
+		PreparedStatement preparedStatement = prepareStatement(connection,preparedSql);
 		for(Entry<Integer, Object> entry : value.entrySet()){
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
@@ -162,7 +203,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
+		PreparedStatement preparedStatement = prepareStatement(connection,preparedSql);
 		for(Entry<Integer, Object> entry : value.entrySet()){
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
@@ -190,7 +231,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
+		PreparedStatement preparedStatement = prepareStatement(connection,preparedSql);
 		for(Entry<Integer, Object> entry : value.entrySet()){
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
@@ -318,7 +359,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public boolean executeDDL(final Connection connection,final String sql) throws SQLException {
-		Statement statement = connection.createStatement();
+		Statement statement = createStatement(connection);
 		boolean r = statement.execute(sql);
 		logger.debug(JdbcUtils.getNativeDDLSql(sql));
 		CollectorFactory.getJdbcCollector().put(sql);//放入日志缓存
@@ -333,7 +374,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public int executeDML(final Connection connection,final String sql) throws SQLException {
-		Statement statement = connection.createStatement();
+		Statement statement = createStatement(connection);
 		int result = statement.executeUpdate(sql);
 		logger.debug(JdbcUtils.getNativeDMLSql(sql));
 		CollectorFactory.getJdbcCollector().put(sql);//放入日志缓存
@@ -348,7 +389,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public Number insertGetGeneratedKey(final Connection connection,final String sql) throws SQLException {
-		Statement statement = connection.createStatement();
+		Statement statement = createStatement(connection);
 		statement.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
 		ResultSet resultSet = statement.getGeneratedKeys();
 		resultSet.next();
@@ -369,7 +410,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(arrayParams==null||arrayParams.length==0){
 			return executeDML(connection,sql);
 		}
-		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		PreparedStatement preparedStatement = prepareStatement(connection,sql);
 		int i = 1;
 		for(Object param:arrayParams){
 			preparedStatement.setObject((i++), param);
@@ -391,7 +432,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		if(arrayParams==null||arrayParams.length==0){
 			return insertGetGeneratedKey(connection,sql);
 		}
-		PreparedStatement preparedStatement = connection.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
+		PreparedStatement preparedStatement = prepareStatement(connection,sql,PreparedStatement.RETURN_GENERATED_KEYS);
 		int i = 1;
 		for(Object param:arrayParams){
 			preparedStatement.setObject((i++), param);
@@ -419,7 +460,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
+		PreparedStatement preparedStatement = prepareStatement(connection,preparedSql);
 		for(Entry<Integer, Object> entry : value.entrySet()){
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
@@ -443,7 +484,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql,PreparedStatement.RETURN_GENERATED_KEYS);
+		PreparedStatement preparedStatement = prepareStatement(connection,preparedSql,PreparedStatement.RETURN_GENERATED_KEYS);
 		for(Entry<Integer, Object> entry : value.entrySet()){
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
@@ -471,7 +512,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
+		PreparedStatement preparedStatement = prepareStatement(connection,preparedSql);
 		for(Entry<Integer, Object> entry : value.entrySet()){
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
@@ -496,7 +537,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		Map<Integer, Object> value = JdbcUtils.getPreparedStatementSql(sql,mapParams);
 		String preparedSql = (String) value.get(-19820206);
 		value.remove(-19820206);
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql,PreparedStatement.RETURN_GENERATED_KEYS);
+		PreparedStatement preparedStatement = prepareStatement(connection,preparedSql,PreparedStatement.RETURN_GENERATED_KEYS);
 		for(Entry<Integer, Object> entry : value.entrySet()){
 			preparedStatement.setObject(entry.getKey(), entry.getValue());
 		}
@@ -517,7 +558,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDML(final Connection connection,final String... sqls) throws SQLException {
-		Statement statement = connection.createStatement();
+		Statement statement = createStatement(connection);
 		for(String sql:sqls){
 			statement.addBatch(sql);
 			logger.debug(JdbcUtils.getNativeDMLSql(sql));
@@ -535,7 +576,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	 * @throws SQLException
 	 */
 	public int[] executeBatchDML(final Connection connection,final Collection<String> sqls) throws SQLException {
-		Statement statement = connection.createStatement();
+		Statement statement = createStatement(connection);
 		for(String sql:sqls){
 			statement.addBatch(sql);
 			logger.debug(JdbcUtils.getNativeDMLSql(sql));
@@ -556,7 +597,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 	public int[] executeBatchDMLByMaps(final Connection connection,final String sql,Collection<Map<String, Object>> mapParamsList) throws SQLException {
 		Collection<Map<Integer, Object>> values = JdbcUtils.getPreparedStatementSql(sql, mapParamsList);
 		String preparedSql = (String) (values.iterator().next().get(-19820206));
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
+		PreparedStatement preparedStatement = prepareStatement(connection,preparedSql);
 		for(Map<Integer, Object> value : values){
 			value.remove(-19820206);
 			for(Entry<Integer, Object> entry : value.entrySet()){
@@ -585,7 +626,7 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		}
 		Collection<Map<Integer, Object>> values = JdbcUtils.getPreparedStatementSql(sql, mapParamsList);
 		String preparedSql = (String) (values.iterator().next().get(-19820206));
-		PreparedStatement preparedStatement = connection.prepareStatement(preparedSql);
+		PreparedStatement preparedStatement = prepareStatement(connection,preparedSql);
 		for(Map<Integer, Object> value : values){
 			value.remove(-19820206);
 			for(Entry<Integer, Object> entry : value.entrySet()){
@@ -684,12 +725,5 @@ public abstract class BaseJdbcTemplate implements JdbcTemplate{
 		return returnValues;
 	}
 	
-	/**
-	 * 设置多表查询，MAP结果集将变成[表名/别名].[字段名/别名],默认FALSE
-	 * @param isManyTable
-	 */
-	public void setManyTable(Boolean isManyTable) {
-		this.isManyTable = isManyTable;
-	}
 
 }
