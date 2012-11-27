@@ -2,95 +2,71 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="refresh" content="5">
-<%@ include file="/commons/global.jsp"%>
-<title>${title}——数据源配置——监控器</title>
-<script type="text/javascript" src="${base}/commons/js/chart/chart.js"></script>
-<script type="text/javascript" src="${base}/commons/js/chart/hlight.js"></script>
+<meta http-equiv="refresh" content="8">
+<%@ include file="../../global/head.jsp"%>
+<title>${title}——数据源[${dsName}]监控</title>
 </head>
-<body>
-		<div id="canvas-wrapper1" style="float:left;width:390px;height:250px;"></div>
-		<div id="canvas-wrapper2" style="float:left;width:390px;height:250px;"></div> 
-		<div style="width: 1px;height: 1px;"></div>
-		<div id="canvas-wrapper3" style="float:left;width:390px;height:250px;"></div>
-		<div id="canvas-wrapper4" style="float:left;width:390px;height:250px;"></div> 
+<body class="easyui-layout">
+	<%@ include file="../../global/title.jsp"%>
+	<%@ include file="../../global/menu.jsp"%>
+<div region="center" title="数据源[${dsName}]监控">
+	<div style="padding:10px;">
+		<a class="easyui-linkbutton" href="${baes}/system/ds/list${ext}" iconCls="icon-back">返回</a>
+	</div>
+	<div style="padding: 30px;border: dotted 1px ; border-color :#afafaf;">
+		<font style="font-size: 15px;color: #176fba;"><b>连接池容量</b></font>
+		<div id="conn" class="easyui-progressbar" style="width:700px;" align="left"></div>
+		<div style="width:700px;" align="center">池内连接共:${dataSource.currentPoolMax} / 连接池峰值:${dataSource.poolMax}</div>
 		<script>
-			new Chart.Meter({
-				'title':'连接池容量状态监控',
-			    'degreeStart':180,//起始角度
-			    'degreeMax':180,//最大角度
-			    'valueMax':${dataSource.poolMax},
-			    'valueMin':0,
-			    'valueUnit':1,
-			    'valueHalf':true,
-			    'tip':'mousemove',
-			    'showValue':true,
-			    'area':[
-			        {'value':<fmt:formatNumber type="number" value="${dataSource.poolMax/3.3}" maxFractionDigits="0"/>, 'color':'#31CD31'},     //绿色区域
-			        {'value':<fmt:formatNumber type="number" value="${dataSource.poolMax/1.3}" maxFractionDigits="0"/>, 'color':'#F6D34B'},    //黄色区域
-			        {'value':${dataSource.poolMax}, 'color':'#A10000'}    //红色区域
-			    ],
-			    'item':${dataSource.currentPoolMax}    //指针数值
-			}).render('canvas-wrapper1');
-			new Chart.Meter({
-				'title':'连接池工作状态监控',
-			    'degreeStart':180,//起始角度
-			    'degreeMax':180,//最大角度
-			    'valueMax':${dataSource.poolMax},
-			    'valueMin':0,
-			    'valueUnit':1,
-			    'valueHalf':true,
-			    'tip':'mousemove',
-			    'showValue':true,
-			    'area':[
-			        {'value':<fmt:formatNumber type="number" value="${dataSource.poolMax/3.3}" maxFractionDigits="0"/>, 'color':'#31CD31'},     //绿色区域
-			        {'value':<fmt:formatNumber type="number" value="${dataSource.poolMax/1.3}" maxFractionDigits="0"/>, 'color':'#F6D34B'},    //黄色区域
-			        {'value':${dataSource.poolMax}, 'color':'#A10000'}    //红色区域
-			    ],
-			    'item':${dataSource.busyPoolMax}    //指针数值
-			}).render('canvas-wrapper2');
-			new Chart.Bar({
-				'title':'待释放连接监控',
-			    'item' : [
-					{'text':'','value':[
-					<c:forEach items="${dataSource.idleTimes}" var="conn">
-						${conn},
-					</c:forEach>
-					]}
-			    ],
-			    'categories':[
-					<c:forEach items="${dataSource.idleTimes}" var="conn">
-					${conn},
-					</c:forEach>
-				],
-			    'showValue':true,
-			    'focusEvent':'mousemove',
-			    'grid':'h',
-			    'valueMax' : ${dataSource.connectLife},
-			    'valueMin' : 0,
-			    'valueUnit' : 200
-			}).render('canvas-wrapper3');
-			new Chart.Bar({
-				'title':'待收回连接监控',
-			    'item' : [
-					{'text':'','value':[
-					<c:forEach items="${dataSource.busyTimes}" var="conn">
-						${conn},
-					</c:forEach>
-					]}
-			    ],
-			    'categories':[
-					<c:forEach items="${dataSource.busyTimes}" var="conn">
-					${conn},
-					</c:forEach>
-				],
-			    'showValue':true,
-			    'focusEvent':'mousemove',
-			    'grid':'h',
-			    'valueMax' : ${dataSource.busyConnectTimeOut},
-			    'valueMin' : 0,
-			    'valueUnit' : 200
-			}).render('canvas-wrapper4');
+			$(document).ready(function(){
+				$('#conn').progressbar('setValue', <fmt:formatNumber type="number" value="${dataSource.currentPoolMax/dataSource.poolMax*100}" maxFractionDigits="0"/>);  
+			});
 		</script>
+	</div>
+	
+	<div style="padding: 30px;border: dotted 1px ; border-color :#afafaf;">
+		<font style="font-size: 15px;color: #176fba;"><b>活动链接数量</b></font>
+		<div id="active-conn" class="easyui-progressbar" style="width:700px;" align="left"></div>
+		<div style="width:700px;" align="center">活动连接共:${dataSource.busyPoolMax} / 池内连接共:${dataSource.currentPoolMax}</div>
+		<script>
+			$(document).ready(function(){
+				$('#active-conn').progressbar('setValue', <fmt:formatNumber type="number" value="${dataSource.busyPoolMax/dataSource.currentPoolMax*100}" maxFractionDigits="0"/>);  
+			});
+		</script>
+	</div>
+	
+	<div style="padding: 30px;border: dotted 1px ; border-color :#afafaf;">
+		<font style="font-size: 15px;color: #176fba;"><b>闲置连接释放监控</b></font>
+		<c:forEach items="${dataSource.idleTimes}" var="idle" varStatus="status">
+			<div id="conn-life${status.index}" class="easyui-progressbar" style="width:700px;" align="left"></div>
+			<div style="width:700px;" align="center">累计闲置:${idle}秒 / 生命周期:${dataSource.connectLife}秒</div>
+			<script>
+				$(document).ready(function(){
+					$('#conn-life${status.index}').progressbar('setValue', <fmt:formatNumber type="number" value="${idle/dataSource.connectLife*100}" maxFractionDigits="0"/>);  
+				});
+			</script>
+		</c:forEach>
+	</div>
+	
+	<div style="padding: 30px;border: dotted 1px ; border-color :#afafaf;">
+		<font style="font-size: 15px;color: #176fba;"><b>活动连接超时回收监控</b></font>
+		<c:forEach items="${dataSource.busyTimes}" var="busy" varStatus="status">
+			<div id="conn-busy${status.index}" class="easyui-progressbar" style="width:700px;" align="left"></div>
+			<div style="width:700px;" align="center">累计活动:${busy}秒 / 超时周期:${dataSource.busyConnectTimeOut}秒</div>
+			<script>
+				$(document).ready(function(){
+					$('#conn-busy${status.index}').progressbar('setValue', <fmt:formatNumber type="number" value="${busy/dataSource.busyConnectTimeOut*100}" maxFractionDigits="0"/>);  
+				});
+			</script>
+		</c:forEach>
+	</div>
+	
+</div>
+<script>
+	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';
+	if(message!=''&&message!='null'){
+		$.messager.show({title:'提示',msg:message,timeout:3000,showType:'slide'});
+	}
+</script>
 </body>
 </html>
