@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="dily">
+        <wb-resource deploy-path="/" source-path="/WebRoot" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/demo/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/demo/config"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/core"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/server/webapps"/>
+        <property name="context-root" value="dily"/>
+        <property name="java-output-path" value="/dily/WebRoot/WEB-INF/classes"/>
+    </wb-module>
+</project-modules>

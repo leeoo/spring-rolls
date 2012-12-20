@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//src/demo/config/cache.properties=UTF-8
+encoding//src/demo/config/context.properties=UTF-8
+encoding//src/demo/config/database.properties=UTF-8
+encoding//src/demo/config/logger.properties=UTF-8
+encoding//src/demo/config/mongodb.properties=UTF-8
