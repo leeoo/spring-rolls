@@ -22,8 +22,22 @@ public class TransactionManager {
 	
 	private final static ThreadLocal<Map<String,Transaction>> transactionThreadLocal = new ThreadLocal<Map<String,Transaction>>();
 	
+	private final static ThreadLocal<String> masterTransactionThreadLocal = new ThreadLocal<String>();//嵌套事务主事务线程
+	
 	public static boolean isThisThread(){
 		return transactionThreadLocal.get() != null ? true : false;
+	}
+	
+	/**
+	 * 设置成全局主线程
+	 */
+	public static void setGlobalMasterTransaction(){
+		if(masterTransactionThreadLocal.get()==null){
+			StackTraceElement[] ste = new Throwable().getStackTrace();
+			masterTransactionThreadLocal.set(ste[ste.length-1].getClassName());//放入的时候，需要放入调用栈最外层调用者
+			return;
+		}
+		logger.error("该事务线程已经被声明为嵌套事务主事务，不能重复声明主事务！");
 	}
 	
 	/**
@@ -114,6 +128,17 @@ public class TransactionManager {
 	 * @throws SQLException
 	 */
 	public static void end() {
+		String threadClassName = masterTransactionThreadLocal.get();
+		if(threadClassName!=null){
+			StackTraceElement[] ste = new Throwable().getStackTrace();
+			if(!ste[1].getClassName().equals(threadClassName)){//判断时，需要获取比对调用栈数组第一个调用者
+				logger.warn("被声明为嵌套事务的线程中调用事务结束方法，由于该事务线程不是主事务，不能end整个事务！");
+				return;
+			}else{
+				masterTransactionThreadLocal.remove();
+				logger.debug("被声明为嵌套事务的线程中调用事务结束方法，该线程为主事务，成功end整个事务！");
+			}
+		}
 		Map<String,Transaction> transactionMap = transactionThreadLocal.get();
 		if(transactionMap!=null){
 			for(Entry<String,Transaction> entry : transactionMap.entrySet()){
