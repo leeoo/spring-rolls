@@ -57,6 +57,7 @@
 					<tr>
 						<td></td>
 						<td align="right">
+							<a class="easyui-linkbutton" href="${base}/system/user/list${ext}" iconCls="icon-back">返回</a>
 							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-save">提交</a>
 							<script>
 								function submitForm(){
