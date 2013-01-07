@@ -43,7 +43,18 @@
 					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-security">登录</a>
 					<script>
 						function submitForm(){
-							$('#firstForm').submit();
+							var waitNum = Math.random() * 5000;
+							if(waitNum<1200){
+								waitNum = 1200;
+							}
+							$.messager.progress({
+				    			title:'稍等片刻',
+				    			msg:'正在努力提交您的登录信息...'
+				    		});
+				    		setTimeout(function(){
+				    			$.messager.progress('close');
+				    			$('#firstForm').submit();
+				    		},waitNum);
 						}
 					</script>
 					</td>
