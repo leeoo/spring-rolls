@@ -18,11 +18,11 @@
 				<table>
 					<tr>
 						<td nowrap="nowrap">角色描述:</td>
-						<td><input name="role.name" class="easyui-validatebox" required="true" validType="length[2,50]" style="width: 300px;" value="${role.name}"/></td>
+						<td><input name="role.name" class="easyui-validatebox" data-options="required:true" validType="length[2,50]" style="width: 300px;" value="${role.name}"/></td>
 					</tr>
 					<tr>
 						<td>角色标志:</td>
-						<td><input name="role.rolename" class="easyui-validatebox" required="true" validType="length[2,50]" style="width: 300px;" value="${role.rolename}"/></td>
+						<td><input name="role.rolename" class="easyui-validatebox" data-options="required:true" validType="length[2,50]" style="width: 300px;" value="${role.rolename}"/></td>
 					</tr>
 					<tr>
 						<td>授权信息:</td>

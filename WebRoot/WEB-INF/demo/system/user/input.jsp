@@ -22,15 +22,15 @@
 				<table>
 					<tr>
 						<td nowrap="nowrap">用户姓名:</td>
-						<td><input name="user.name" class="easyui-validatebox" required="true" validType="length[2,50]" style="width: 300px;" value="${user.name}"/></td>
+						<td><input name="user.name" class="easyui-validatebox" data-options="required:true" validType="length[2,50]" style="width: 300px;" value="${user.name}"/></td>
 					</tr>
 					<tr>
 						<td>登录账户:</td>
-						<td><input name="user.username" class="easyui-validatebox" required="true" validType="length[2,50]" style="width: 300px;" value="${user.username}"/></td>
+						<td><input name="user.username" class="easyui-validatebox" data-options="required:true" validType="length[2,50]" style="width: 300px;" value="${user.username}"/></td>
 					</tr>
 					<tr>
 						<td>登录密码:</td>
-						<td><input name="user.password" type="password" class="easyui-validatebox" required="true" validType="length[2,50]" style="width: 300px;" value="${user.password}"/></td>
+						<td><input name="user.password" type="password" class="easyui-validatebox" data-options="required:true" validType="length[2,50]" style="width: 300px;" value="${user.password}"/></td>
 					</tr>
 					<tr>
 						<td>角色分配:</td>

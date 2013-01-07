@@ -18,16 +18,16 @@
 				<table>
 					<tr>
 						<td nowrap="nowrap">标题:</td>
-						<td><input name="news.title" class="easyui-validatebox" required="true" validType="length[2,50]" style="width: 700px;" value="${news.title}"/></td>
+						<td><input name="news.title" class="easyui-validatebox" data-options="required:true" validType="length[2,50]" style="width: 700px;" value="${news.title}"/></td>
 					</tr>
 					<tr>
 						<td>作者:</td>
-						<td><input name="news.auth" class="easyui-validatebox" required="true" validType="length[2,10]" style="width: 300px;" value="${news.auth}"/></td>
+						<td><input name="news.auth" class="easyui-validatebox" data-options="required:true" validType="length[2,10]" style="width: 300px;" value="${news.auth}"/></td>
 					</tr>
 					<tr>
 						<td>正文:</td>
 						<td>
-							<textarea rows="25" cols="90" name="news.content" class="easyui-validatebox" required="true" validType="length[2,999999]">${news.content}</textarea>
+							<textarea rows="25" cols="90" name="news.content" class="easyui-validatebox" data-options="required:true" validType="length[2,999999]">${news.content}</textarea>
 						</td>
 					</tr>
 					<tr>
