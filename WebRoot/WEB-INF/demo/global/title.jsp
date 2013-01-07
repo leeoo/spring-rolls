@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-	<div region="north" border="false" style="height:45px;background-image: url('${base}/commons/images/head.gif');background-color: #EEF9FB;">
+	<div region="north" border="false" style="height:45px;background-image: url('${base}/commons/images/head-${theme}.gif');background-color: #EEF9FB;">
 		<div align="left" style="float: left;">
 			<div style="font-size: 38px;color: #FFF;padding-left: 10px;font-weight: bold;">Paramecium</div>
 		</div>
