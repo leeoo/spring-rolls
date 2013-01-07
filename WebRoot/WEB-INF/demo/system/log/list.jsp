@@ -10,13 +10,13 @@
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="系统日志配置">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
-		<form id="userForm" action="${base}/system/config/log/save${ext}" method="post">
+		<form id="firstForm" action="${base}/system/config/log/save${ext}" method="post">
 			<div>
 				<table>
 					<tr>
 						<td nowrap="nowrap">是否输出到控制台:</td>
 						<td>
-						<select name="isConsole">
+						<select class="easyui-combobox" name="isConsole">
 							<option value="true" <c:if test="${isConsole}">selected="selected"</c:if> >启用</option>
 							<option value="false" <c:if test="${!isConsole}">selected="selected"</c:if> >禁用</option>
 						</select>
@@ -25,7 +25,7 @@
 					<tr>
 						<td nowrap="nowrap">是否输出到文件:</td>
 						<td>
-						<select name="isFile">
+						<select class="easyui-combobox" name="isFile">
 							<option value="true" <c:if test="${isFile}">selected="selected"</c:if> >启用</option>
 							<option value="false" <c:if test="${!isFile}">selected="selected"</c:if> >禁用</option>
 						</select>
@@ -34,7 +34,7 @@
 					<tr>
 						<td nowrap="nowrap">是否输出到数据库:</td>
 						<td>
-						<select name="isDb">
+						<select class="easyui-combobox" name="isDb">
 							<option value="true" <c:if test="${isDb}">selected="selected"</c:if> >启用</option>
 							<option value="false" <c:if test="${!isDb}">selected="selected"</c:if> >禁用</option>
 						</select>
@@ -43,7 +43,7 @@
 					<tr>
 						<td nowrap="nowrap">控制台日志级别:</td>
 						<td>
-						<select name="consoleLoggerLevel">
+						<select class="easyui-combobox" name="consoleLoggerLevel">
 							<c:forEach items="${levels}" var="level">
 								<option value="${level.value}" <c:if test="${consoleLoggerLevel==level.value}">selected="selected"</c:if> >${level.key}</option>
 							</c:forEach>
@@ -53,7 +53,7 @@
 					<tr>
 						<td nowrap="nowrap">文件日志级别:</td>
 						<td>
-						<select name="fileLoggerLevel">
+						<select class="easyui-combobox" name="fileLoggerLevel">
 							<c:forEach items="${levels}" var="level">
 								<option value="${level.value}" <c:if test="${fileLoggerLevel==level.value}">selected="selected"</c:if> >${level.key}</option>
 							</c:forEach>
@@ -63,7 +63,7 @@
 					<tr>
 						<td nowrap="nowrap">数据库日志级别:</td>
 						<td>
-						<select name="dbLoggerLevel">
+						<select class="easyui-combobox" name="dbLoggerLevel">
 							<c:forEach items="${levels}" var="level">
 								<option value="${level.value}" <c:if test="${dbLoggerLevel==level.value}">selected="selected"</c:if> >${level.key}</option>
 							</c:forEach>
@@ -77,7 +77,7 @@
 					<tr>
 						<td nowrap="nowrap">日志文件大小:</td>
 						<td>
-						<select name="loggerFileMax">
+						<select class="easyui-combobox" name="loggerFileMax">
 							<option value="1" <c:if test="${loggerFileMax==1}">selected="selected"</c:if> >1MB</option>
 							<option value="2" <c:if test="${loggerFileMax==2}">selected="selected"</c:if> >2MB</option>
 							<option value="5" <c:if test="${loggerFileMax==5}">selected="selected"</c:if> >5MB</option>
@@ -91,7 +91,7 @@
 					<tr>
 						<td nowrap="nowrap">SQL是否格式化输出:</td>
 						<td>
-						<select name="sqlIsFormat">
+						<select class="easyui-combobox" name="sqlIsFormat">
 							<option value="true" <c:if test="${sqlIsFormat}">selected="selected"</c:if> >启用</option>
 							<option value="false" <c:if test="${!sqlIsFormat}">selected="selected"</c:if> >禁用</option>
 						</select>
@@ -100,7 +100,7 @@
 					<tr>
 						<td nowrap="nowrap">是否记录JDBC执行日志:</td>
 						<td>
-						<select name="jdbcLogCollector">
+						<select class="easyui-combobox" name="jdbcLogCollector">
 							<option value="true" <c:if test="${jdbcLogCollector}">selected="selected"</c:if> >启用</option>
 							<option value="false" <c:if test="${!jdbcLogCollector}">selected="selected"</c:if> >禁用</option>
 						</select>
@@ -109,7 +109,7 @@
 					<tr>
 						<td nowrap="nowrap">是否记录容器调用日志:</td>
 						<td>
-						<select name="beanLogCollector">
+						<select class="easyui-combobox" name="beanLogCollector">
 							<option value="true" <c:if test="${beanLogCollector}">selected="selected"</c:if> >启用</option>
 							<option value="false" <c:if test="${!beanLogCollector}">selected="selected"</c:if> >禁用</option>
 						</select>
@@ -118,7 +118,7 @@
 					<tr>
 						<td nowrap="nowrap">是否记录WEB请求日志:</td>
 						<td>
-						<select name="webLogCollector">
+						<select class="easyui-combobox" name="webLogCollector">
 							<option value="true" <c:if test="${webLogCollector}">selected="selected"</c:if> >启用</option>
 							<option value="false" <c:if test="${!webLogCollector}">selected="selected"</c:if> >禁用</option>
 						</select>
@@ -130,7 +130,14 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
+						<td align="right">
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-save">提交</a>
+							<script>
+								function submitForm(){
+									$('#firstForm').submit();
+								}
+							</script>
+						</td>
 					</tr>
 				</table>
 			</div>

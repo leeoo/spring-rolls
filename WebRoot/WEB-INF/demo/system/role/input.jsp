@@ -10,7 +10,7 @@
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="角色信息维护">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
-		<form id="roleForm" action="${base}/system/role/save${ext}" method="post">
+		<form id="firstForm" action="${base}/system/role/save${ext}" method="post">
 			<c:if test="${role.id!=null}">
 				<input type="hidden" name="role.id" value="${role.id}"/>
 			</c:if>
@@ -66,7 +66,14 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
+						<td align="right">
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-save">提交</a>
+							<script>
+								function submitForm(){
+									$('#firstForm').submit();
+								}
+							</script>
+						</td>
 					</tr>
 				</table>
 			</div>

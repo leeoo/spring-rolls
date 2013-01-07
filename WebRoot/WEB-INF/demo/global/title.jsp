@@ -13,6 +13,8 @@
 					<option value="metro" <c:if test="${theme!=null && theme=='metro'}">selected='selected'</c:if>>都市</option>
 					<option value="pepper-grinder" <c:if test="${theme!=null && theme=='pepper-grinder'}">selected='selected'</c:if>>理石</option>
 					<option value="sunny" <c:if test="${theme!=null && theme=='sunny'}">selected='selected'</c:if>>晴朗</option>
+					<option value="black" <c:if test="${theme!=null && theme=='black'}">selected='selected'</c:if>>黑暗</option>
+					<option value="bootstrap" <c:if test="${theme!=null && theme=='bootstrap'}">selected='selected'</c:if>>流行风</option>
 				</select><span style="color: #FFF;">切换主题</span>
 			</form>
 		</div>

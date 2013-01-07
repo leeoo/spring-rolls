@@ -56,7 +56,12 @@
 							<tr>
 								<td></td>
 								<td align="right">
-								<button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button>
+								<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-save">提交</a>
+								<script>
+									function submitForm(){
+										$('#${dataSource.key}Form').submit();
+									}
+								</script>
 								<a class="easyui-linkbutton" href="${base}/system/ds/monitor${ext}?dsName=${dataSource.key}" iconCls="icon-report">监控</a>
 								</td>
 							</tr>

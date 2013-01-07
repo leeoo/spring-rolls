@@ -10,13 +10,13 @@
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="系统安全配置">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
-		<form id="userForm" action="${base}/system/config/security/save${ext}" method="post">
+		<form id="firstForm" action="${base}/system/config/security/save${ext}" method="post">
 			<div>
 				<table>
 					<tr>
 						<td nowrap="nowrap">是否启用安全验证:</td>
 						<td>
-						<select name="iocSecurity">
+						<select name="iocSecurity" class="easyui-combobox">
 							<option value="true" <c:if test="${iocSecurity}">selected="selected"</c:if> >启用</option>
 							<option value="false" <c:if test="${!iocSecurity}">selected="selected"</c:if> >禁用</option>
 						</select>
@@ -25,7 +25,7 @@
 					<tr>
 						<td nowrap="nowrap">是否启用会话控制:</td>
 						<td>
-						<select name="sessionControl">
+						<select name="sessionControl" class="easyui-combobox">
 							<option value="true" <c:if test="${sessionControl}">selected="selected"</c:if> >启用</option>
 							<option value="false" <c:if test="${!sessionControl}">selected="selected"</c:if> >禁用</option>
 						</select>
@@ -65,7 +65,14 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
+						<td align="right">
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-save">提交</a>
+							<script>
+								function submitForm(){
+									$('#firstForm').submit();
+								}
+							</script>
+						</td>
 					</tr>
 				</table>
 			</div>
