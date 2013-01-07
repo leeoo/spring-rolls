@@ -26,7 +26,7 @@
 <body style="background-image: url('${base}/commons/images/bodybg.png')">
 	<div id="login" class="easyui-dialog" title="请在此登录" style="width:280px;height:160px;padding-top: 10px;"
 			buttons="#dlg-buttons" resizable="false" iconCls="icon-key">
-		<form action="${base}/login${ext}" method="post">
+		<form id="firstForm" action="${base}/login${ext}" method="post">
 		<center>
 			<table>
 				<tr>
@@ -39,7 +39,14 @@
 				</tr>
 				<tr>
 					<td></td>
-					<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-security">登录</button></td>
+					<td align="right">
+					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-security">登录</a>
+					<script>
+						function submitForm(){
+							$('#firstForm').submit();
+						}
+					</script>
+					</td>
 				</tr>
 			</table>
 		</center>
