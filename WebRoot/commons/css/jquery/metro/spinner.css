@@ -1,4 +1,4 @@
-.combo {
+.spinner {
   display: inline-block;
   white-space: nowrap;
   margin: 0;
@@ -8,13 +8,13 @@
   overflow: hidden;
   vertical-align: middle;
 }
-.combo .combo-text {
+.spinner .spinner-text {
   font-size: 12px;
   border: 0px;
   line-height: 20px;
   height: 20px;
   margin: 0;
-  padding: 0px 2px;
+  padding: 0 2px;
   *margin-top: -1px;
   *height: 18px;
   *line-height: 18px;
@@ -22,37 +22,38 @@
   _line-height: 18px;
   vertical-align: baseline;
 }
-.combo-arrow {
-  width: 18px;
-  height: 20px;
-  overflow: hidden;
+.spinner-arrow {
   display: inline-block;
+  overflow: hidden;
   vertical-align: top;
-  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+.spinner-arrow-up,
+.spinner-arrow-down {
   opacity: 0.6;
   filter: alpha(opacity=60);
+  display: block;
+  font-size: 1px;
+  width: 18px;
+  height: 10px;
 }
-.combo-arrow-hover {
+.spinner-arrow-hover {
   opacity: 1.0;
   filter: alpha(opacity=100);
 }
-.combo-panel {
-  overflow: auto;
+.spinner-arrow-up {
+  background: url('images/spinner_arrows.png') no-repeat 1px center;
 }
-.combo-arrow {
-  background: url('images/combo_arrow.png') no-repeat center center;
+.spinner-arrow-down {
+  background: url('images/spinner_arrows.png') no-repeat -15px center;
 }
-.combo,
-.combo-panel {
-  background-color: #fff;
-}
-.combo {
+.spinner {
   border-color: #ddd;
-  background-color: #fff;
 }
-.combo-arrow {
+.spinner-arrow {
   background-color: #ffffff;
 }
-.combo-arrow-hover {
+.spinner-arrow-hover {
   background-color: #E6E6E6;
 }
