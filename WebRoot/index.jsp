@@ -108,7 +108,7 @@
 	                  <tr>
 	                    <td height="164" colspan="2" align="middle">
 	                    	<div style="padding-left: 40px;">
-			                    <form action="${base}/login${ext}" method="post" method="post">
+			                    <form id="firstForm" action="${base}/login${ext}" method="post" method="post">
 			                        <table cellSpacing="0" cellPadding="0" width="100%" border="0" height="143" id="table212">
 			                          <tr>
 			                            <td width="5%" nowrap="nowrap" height="38" class="top_hui_text"><span class="login_txt_bt" style="font-size: 13px;font-weight: bold">登录名：</span></td>
@@ -116,13 +116,37 @@
 			                          </tr>
 			                          <tr>
 			                            <td width="5%" nowrap="nowrap" height="35" class="top_hui_text"><span class="login_txt_bt" style="font-size: 13px;font-weight: bold">密&nbsp;&nbsp;码：</span></td>
-			                            <td height="35" colspan="2" class="top_hui_text" align="left"><input class="editbox4" type="password" style="width: 150px;" name="login.password">
+			                            <td height="35" colspan="2" class="top_hui_text" align="left"><input id='loginpassword' class="editbox4" type="password" style="width: 150px;" name="login.password">
 			                              <img src="${base}/commons/css/login/lock.gif" width="19" height="18"> </td>
 			                          </tr>
 			                          <tr>
 			                            <td height="35" >&nbsp;</td>
-			                            <td width="15%" height="35" ><button type="submit" class="easyui-linkbutton" iconCls="icon-key">登 录</button></td>
-			                            <td width="67%" class="top_hui_text" align="left"><button type="button" class="easyui-linkbutton" iconCls="icon-user" onclick="regOpen();">注 册</button></td>
+			                            <td width="15%" height="35" >
+			                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-security">登 录</a>
+											<script>
+												function submitForm(){
+													if($('#logincode').val()==''||$('#loginpassword').val()==''){
+														$.messager.alert('温馨提示','请填写登录名和密码','warning');
+														return false;
+													}
+													var waitNum = Math.random() * 5000;
+													if(waitNum<1200){
+														waitNum = 1200;
+													}
+													$.messager.progress({
+										    			title:'稍等片刻',
+										    			msg:'正在努力提交您的登录信息...'
+										    		});
+										    		setTimeout(function(){
+										    			$.messager.progress('close');
+										    			$('#firstForm').submit();
+										    		},waitNum);
+												}
+											</script>
+			                            </td>
+			                            <td width="67%" class="top_hui_text" align="left">
+			                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="regOpen()" iconCls="icon-user">注 册</a>
+			                            </td>
 			                          </tr>
 			                        </table>
 			                        <br>
