@@ -22,8 +22,13 @@
 							<c:if test="${question!=null}">
 								<input type="hidden" id="question.id" name="question.id" value="${question.id}"/>
 							</c:if>
-							<button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button>
-							<a href="${base}/exam/question_c/list${ext}" class="easyui-linkbutton" iconCls="icon-redo">返回</a>
+							<a class="easyui-linkbutton" href="${base}/exam/question_c/list${ext}" iconCls="icon-back">返 回</a>
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-save">提 交</a>
+							<script>
+								function submitForm(){
+									$('#questionForm').submit();
+								}
+							</script>
 						</form>
 					</td>
 				</tr>
@@ -49,7 +54,12 @@
 									<input type="hidden" id="question.id" name="question.id" value="${question.id}"/>
 								</c:if>
 								<input type="hidden" id='questionTitleHidden' name="question.title" value="${question.title}"/>
-								<button type="submit" class="easyui-linkbutton" iconCls="icon-add">添加</button>
+								<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm2()" iconCls="icon-save">添 加</a>
+								<script>
+									function submitForm2(){
+										$('#choiceForm').submit();
+									}
+								</script>
 								</td></tr>
 							</table>
 						</form>

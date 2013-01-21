@@ -10,13 +10,13 @@
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="IP地址过滤配置">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
-		<form id="userForm" action="${base}/system/config/ip/save${ext}" method="post">
+		<form id="firstForm" action="${base}/system/config/ip/save${ext}" method="post">
 			<div>
 				<table>
 					<tr>
 						<td nowrap="nowrap">是否启用IP过滤:</td>
 						<td>
-						<select name="enabled">
+						<select name="enabled" class="easyui-combobox">
 							<option value="true" <c:if test="${enabled}">selected="selected"</c:if> >启用</option>
 							<option value="false" <c:if test="${!enabled}">selected="selected"</c:if> >禁用</option>
 						</select>
@@ -25,7 +25,7 @@
 					<tr>
 						<td nowrap="nowrap">IP过滤策略:</td>
 						<td>
-						<select name="include">
+						<select name="include" class="easyui-combobox">
 							<option value="true" <c:if test="${include}">selected="selected"</c:if> >白名单机制</option>
 							<option value="false" <c:if test="${!include}">selected="selected"</c:if> >黑名单机制</option>
 						</select>
@@ -54,7 +54,7 @@
 								</tr>
 								<c:forEach items="${ips}" var="ip">
 									<tr>
-										<td>${ip}</td><td><a href="${base}/system/config/ip/remove${ext}?ip=${ip}">移除</a></td>
+										<td>${ip}</td><td><a class="easyui-linkbutton" href="${base}/system/config/ip/remove${ext}?ip=${ip}">移 除</a></td>
 									</tr>
 								</c:forEach>
 							</table>
@@ -62,7 +62,14 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
+						<td align="right">
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-save">提 交</a>
+							<script>
+								function submitForm(){
+									$('#firstForm').submit();
+								}
+							</script>
+						</td>
 					</tr>
 				</table>
 			</div>

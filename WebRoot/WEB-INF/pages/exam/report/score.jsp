@@ -10,8 +10,8 @@
 <%@ include file="../../global/menu.jsp"%>
 <div region="center" title="考生成绩排名统计">
 	<div style="padding-left: 50px;padding-top: 10px;">
-		<span><a href="${base}/exam/report/list${ext}" class="easyui-linkbutton" iconCls="icon-redo">返回</a></span>
-		<span style="padding-left: 30px;"><a href="${base}/exam/report/export${ext}?id=${id}" class="easyui-linkbutton" iconCls="icon-report">导出报表</a></span>
+		<span><a href="${base}/exam/report/list${ext}" class="easyui-linkbutton" iconCls="icon-back">返 回</a></span>
+		<span style="padding-left: 30px;"><a href="${base}/exam/report/export${ext}?id=${id}" class="easyui-linkbutton" iconCls="icon-zip">导出报表</a></span>
 	</div>
 	<div style="padding-left: 30px;padding-top: 10px;">
 		<table style="font-size: 20px;border-color: #0b335b;" align="left" width="80%" border="1" cellpadding="0" cellspacing="0">

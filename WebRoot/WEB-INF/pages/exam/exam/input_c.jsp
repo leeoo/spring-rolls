@@ -31,7 +31,7 @@
 </script>
 <div region="center" title="理论考试信息维护">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
-		<form id="examForm" action="${base}/exam/exam/save${ext}" method="post">
+		<form id="firstForm" action="${base}/exam/exam/save${ext}" method="post">
 			<c:if test="${exam!=null}">
 				<input type="hidden" name="exam.id" value="${exam.id}"/>
 			</c:if>
@@ -69,7 +69,16 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td align="right"><c:if test="${exam==null||exam.status==0}"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></c:if></td>
+						<td align="right">
+						<a class="easyui-linkbutton" href="${base}/exam/exam/list${ext}" iconCls="icon-back">返 回</a>
+						<c:if test="${exam==null||exam.status==0}">
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-save">提 交</a>
+							<script>
+								function submitForm(){
+									$('#firstForm').submit();
+								}
+							</script>
+						</c:if></td>
 					</tr>
 				</table>
 			</div>

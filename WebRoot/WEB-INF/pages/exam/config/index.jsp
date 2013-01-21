@@ -10,7 +10,7 @@
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="系统配置">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
-		<form id="configForm" action="${base}/exam/config/save${ext}" method="post">
+		<form id="firstForm" action="${base}/exam/config/save${ext}" method="post">
 			<div>
 				<table>
 					<tr>
@@ -22,7 +22,7 @@
 					<tr>
 						<td nowrap="nowrap">系统主题风格:</td>
 						<td>
-						<select name="themeName">
+						<select class="easyui-combobox" name="themeName">
 							<option value="default" <c:if test="${theme!=null && theme=='default'}">selected='selected'</c:if>>浅蓝</option>
 							<option value="gray" <c:if test="${theme!=null && theme=='gray'}">selected='selected'</c:if>>银灰</option>
 							<option value="cupertino" <c:if test="${theme!=null && theme=='cupertino'}">selected='selected'</c:if>>柔兰</option>
@@ -30,6 +30,8 @@
 							<option value="metro" <c:if test="${theme!=null && theme=='metro'}">selected='selected'</c:if>>都市</option>
 							<option value="pepper-grinder" <c:if test="${theme!=null && theme=='pepper-grinder'}">selected='selected'</c:if>>理石</option>
 							<option value="sunny" <c:if test="${theme!=null && theme=='sunny'}">selected='selected'</c:if>>晴朗</option>
+							<option value="black" <c:if test="${theme!=null && theme=='black'}">selected='selected'</c:if>>黑暗</option>
+							<option value="bootstrap" <c:if test="${theme!=null && theme=='bootstrap'}">selected='selected'</c:if>>流行风</option>
 						</select>
 						</td>
 					</tr>
@@ -42,7 +44,14 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td align="right"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
+						<td align="right">
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-save">提 交</a>
+							<script>
+								function submitForm(){
+									$('#firstForm').submit();
+								}
+							</script>
+						</td>
 					</tr>
 				</table>
 			</div>

@@ -11,8 +11,8 @@
 <div region="center" title="考试信息列表">
 	<div title="按条件查询" id="search" icon="icon-search" close="true" style="padding:5px;width:350px;height:210px;">
 			<p>考试描述：<input type="text" name=title id="title"/></p>
-			<p>考试方式：<select name=choice id="choice"><option value="">请选择</option><option value="false">速录(打字)</option><option value="true">理论(选择题)</option></select></p>
-			<p>考试状态：<select name="status" id="status"><option value="">请选择</option><option value="0">未开始</option><option value="1">正在进行</option><option value="-1">已结束</option></select></p>
+			<p>考试方式：<select class="easyui-combobox" name=choice id="choice"><option value="">请选择</option><option value="false">速录(打字)</option><option value="true">理论(选择题)</option></select></p>
+			<p>考试状态：<select class="easyui-combobox" name="status" id="status"><option value="">请选择</option><option value="0">未开始</option><option value="1">正在进行</option><option value="-1">已结束</option></select></p>
 	</div>
 	<table id="list"></table>
 </div>

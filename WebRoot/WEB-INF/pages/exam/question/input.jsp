@@ -57,7 +57,7 @@
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="速录考试题库维护">
 	<div style="border: solid 1px ; border-color :#afafaf; padding: 8px;">
-		<form id="questionForm" action="${base}/exam/question/save${ext}" method="post">
+		<form id="firstForm" action="${base}/exam/question/save${ext}" method="post">
 			<input type="hidden" name="question.choice" value="false"/>
 			<c:if test="${question!=null}">
 				<input type="hidden" name="question.id" value="${question.id}"/>
@@ -116,7 +116,15 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td align="right" colspan="2"><button type="submit" class="easyui-linkbutton" iconCls="icon-save">提交</button></td>
+						<td align="right" colspan="2">
+							<a class="easyui-linkbutton" href="${base}/exam/question/list${ext}" iconCls="icon-back">返 回</a>
+							<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-save">提 交</a>
+							<script>
+								function submitForm(){
+									$('#firstForm').submit();
+								}
+							</script>
+						</td>
 					</tr>
 				</table>
 			</div>

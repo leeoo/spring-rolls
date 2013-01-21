@@ -60,7 +60,7 @@ function getDateTime(value){
 			<span id="time"></span>
 			<a href="#" onclick="getDateTime(${examSession.id})" class="easyui-linkbutton">切换水平布局</a>
 			<a href="#" class="easyui-linkbutton" onclick="isAutoScroll();">自动滚动原文</a>
-			<select id='speed' onchange="changeSpeed();">
+			<select id='speed' class="easyui-combobox" onchange="changeSpeed();">
 				<option value="3000">慢速</option>
 				<option value="1500">中速</option>
 				<option value="800" selected="selected">偏快速</option>

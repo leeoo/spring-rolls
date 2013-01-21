@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-	<div region="north" border="false" style="height:45px;background-image: url('${base}/commons/images/head.gif');overflow-y:hidden;">
+	<div region="north" border="false" style="height:45px;background-image: url('${base}/commons/images/head-${theme}.gif');overflow-y:hidden;">
 		<div align="left" style="float: left;">
 			<div style="font-size: 25px;color: #FFF;padding-left: 10px;padding-top:5px;font-weight: bold;font-family: 微软雅黑">${title}</div>
 		</div>
@@ -14,6 +14,8 @@
 						<option value="metro" <c:if test="${theme!=null && theme=='metro'}">selected='selected'</c:if>>都市</option>
 						<option value="pepper-grinder" <c:if test="${theme!=null && theme=='pepper-grinder'}">selected='selected'</c:if>>理石</option>
 						<option value="sunny" <c:if test="${theme!=null && theme=='sunny'}">selected='selected'</c:if>>晴朗</option>
+						<option value="black" <c:if test="${theme!=null && theme=='black'}">selected='selected'</c:if>>黑暗</option>
+						<option value="bootstrap" <c:if test="${theme!=null && theme=='bootstrap'}">selected='selected'</c:if>>流行风</option>
 					</select><span style="color: #FFF;">切换主题</span>
 				</form>
 			</div>
