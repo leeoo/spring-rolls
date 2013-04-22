@@ -191,6 +191,9 @@ public class ExamController extends BaseController{
 		} catch (Exception e) {
 			mv.addValue("exam", exam);
 			mv.setErrorMessage(e.getMessage());
+			if(exam!=null&&exam.getChoice()){
+				return mv.forward(getExamPage("/exam/input_c.jsp"));
+			}
 			return mv.forward(getExamPage("/exam/input.jsp"));
 		}
 		return mv.redirect(getRedirect("/exam/exam/list"));
