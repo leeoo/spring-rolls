@@ -6,6 +6,14 @@
 	<classpathentry kind="src" path="src/demo/config"/>
 	<classpathentry kind="src" path="src/core/test"/>
 	<classpathentry kind="src" path="src/core/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/h2-1.3.171.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/IKAnalyzer2012FF_u1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jstl-1.1.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-core-4.1.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-queryparser-4.1.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-2.10.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/standard-1.1.2.jar"/>
 	<classpathentry kind="lib" path="server/lib/catalina-optional.jar"/>
 	<classpathentry kind="lib" path="server/lib/catalina.jar"/>
 	<classpathentry kind="lib" path="server/lib/commons-el.jar"/>
@@ -22,13 +30,5 @@
 	<classpathentry kind="lib" path="server/lib/tomcat-coyote.jar"/>
 	<classpathentry kind="lib" path="server/lib/tomcat-http.jar"/>
 	<classpathentry kind="lib" path="server/lib/tomcat-util.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jstl-1.1.2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/standard-1.1.2.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/IKAnalyzer2012FF_u1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-core-4.1.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-queryparser-4.1.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/h2-1.3.171.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-2.10.1.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
