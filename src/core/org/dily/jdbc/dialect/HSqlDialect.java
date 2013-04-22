@@ -2,7 +2,6 @@ package org.dily.jdbc.dialect;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Types;
 /**
  * 功 能 描 述:<br>
  * HSQL数据库方言实现
