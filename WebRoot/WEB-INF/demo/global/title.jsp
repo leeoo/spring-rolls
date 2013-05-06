@@ -11,6 +11,11 @@
 					<option value="cupertino" <c:if test="${theme!=null && theme=='cupertino'}">selected='selected'</c:if>>柔兰</option>
 					<option value="dark-hive" <c:if test="${theme!=null && theme=='dark-hive'}">selected='selected'</c:if>>暗室</option>
 					<option value="metro" <c:if test="${theme!=null && theme=='metro'}">selected='selected'</c:if>>都市</option>
+					<option value="metro-blue" <c:if test="${theme!=null && theme=='metro-blue'}">selected='selected'</c:if>>都市-蓝</option>
+					<option value="metro-gray" <c:if test="${theme!=null && theme=='metro-gray'}">selected='selected'</c:if>>都市-灰</option>
+					<option value="metro-green" <c:if test="${theme!=null && theme=='metro-green'}">selected='selected'</c:if>>都市-绿</option>
+					<option value="metro-orange" <c:if test="${theme!=null && theme=='metro-orange'}">selected='selected'</c:if>>都市-橙</option>
+					<option value="metro-red" <c:if test="${theme!=null && theme=='metro-red'}">selected='selected'</c:if>>都市-红</option>
 					<option value="pepper-grinder" <c:if test="${theme!=null && theme=='pepper-grinder'}">selected='selected'</c:if>>理石</option>
 					<option value="sunny" <c:if test="${theme!=null && theme=='sunny'}">selected='selected'</c:if>>晴朗</option>
 					<option value="black" <c:if test="${theme!=null && theme=='black'}">selected='selected'</c:if>>黑暗</option>
