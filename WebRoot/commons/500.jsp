@@ -7,7 +7,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 	<title>500——您访问的页面出现错误</title>
-	<script type="text/javascript" src="${base}/commons/js/jquery/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="${base}/commons/js/jquery/jquery-1.8.0.min.js"></script>
 	<style type="text/css">
 		<!-- 
 			html,body{height:100%; margin:0px;} 
