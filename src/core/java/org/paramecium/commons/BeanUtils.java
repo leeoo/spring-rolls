@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -333,6 +334,12 @@ public abstract class BeanUtils {
 					}else{
 						value = Boolean.FALSE;
 					}
+				}else if(Byte.class.equals(fieldClazz) || byte.class.equals(fieldClazz)){
+					value = Byte.parseByte(value.toString());
+				}else if(Short.class.equals(fieldClazz) || short.class.equals(fieldClazz)){
+					value = Short.parseShort(value.toString());
+				}else if(Long.class.equals(fieldClazz) || long.class.equals(fieldClazz)){
+					value = Long.parseLong(value.toString());
 				}
 			}else if (value instanceof String) {
 				if(boolean.class.equals(fieldClazz) || Boolean.class.equals(fieldClazz)){
@@ -341,9 +348,26 @@ public abstract class BeanUtils {
 					}else{
 						value = Boolean.FALSE;
 					}
+				}else if(Integer.class.equals(fieldClazz) || int.class.equals(fieldClazz)){
+					value = Integer.parseInt(value.toString());
+				}else if(Byte.class.equals(fieldClazz) || byte.class.equals(fieldClazz)){
+					value = Byte.parseByte(value.toString());
+				}else if(Short.class.equals(fieldClazz) || short.class.equals(fieldClazz)){
+					value = Short.parseShort(value.toString());
+				}else if(Long.class.equals(fieldClazz) || long.class.equals(fieldClazz)){
+					value = Long.parseLong(value.toString());
 				}
 			}else if (value instanceof Long) {
 				value = Long.parseLong(value.toString());
+				if(Integer.class.equals(fieldClazz) || int.class.equals(fieldClazz)){
+					value = Integer.parseInt(value.toString());
+				}else if(Byte.class.equals(fieldClazz) || byte.class.equals(fieldClazz)){
+					value = Byte.parseByte(value.toString());
+				}else if(Short.class.equals(fieldClazz) || short.class.equals(fieldClazz)){
+					value = Short.parseShort(value.toString());
+				}else if(Long.class.equals(fieldClazz) || long.class.equals(fieldClazz)){
+					value = Long.parseLong(value.toString());
+				}
 			}else if (value instanceof Byte) {
 				value = Byte.parseByte(value.toString());
 				if(boolean.class.equals(fieldClazz) || Boolean.class.equals(fieldClazz)){
@@ -352,6 +376,12 @@ public abstract class BeanUtils {
 					}else{
 						value = Boolean.FALSE;
 					}
+				}else if(Integer.class.equals(fieldClazz) || int.class.equals(fieldClazz)){
+					value = Integer.parseInt(value.toString());
+				}else if(Short.class.equals(fieldClazz) || short.class.equals(fieldClazz)){
+					value = Short.parseShort(value.toString());
+				}else if(Long.class.equals(fieldClazz) || long.class.equals(fieldClazz)){
+					value = Long.parseLong(value.toString());
 				}
 			}else if (value instanceof Short) {
 				value = Short.parseShort(value.toString());
@@ -361,6 +391,12 @@ public abstract class BeanUtils {
 					}else{
 						value = Boolean.FALSE;
 					}
+				}else if(Integer.class.equals(fieldClazz) || int.class.equals(fieldClazz)){
+					value = Integer.parseInt(value.toString());
+				}else if(Byte.class.equals(fieldClazz) || byte.class.equals(fieldClazz)){
+					value = Byte.parseByte(value.toString());
+				}else if(Long.class.equals(fieldClazz) || long.class.equals(fieldClazz)){
+					value = Long.parseLong(value.toString());
 				}
 			}else if (value instanceof Boolean) {//如果是数据库的JDBC解析的值类型是boolean
 				value = Boolean.parseBoolean(value.toString());
@@ -399,6 +435,24 @@ public abstract class BeanUtils {
 				value = Long.parseLong(value.toString());
 			}else if (value instanceof java.math.BigDecimal) {
 				value = Double.parseDouble(value.toString());
+			}else if (value instanceof Number) {
+				if(Integer.class.equals(fieldClazz) || int.class.equals(fieldClazz)){
+					value = Integer.parseInt(value.toString());
+				}else if(Byte.class.equals(fieldClazz) || byte.class.equals(fieldClazz)){
+					value = Byte.parseByte(value.toString());
+				}else if(Short.class.equals(fieldClazz) || short.class.equals(fieldClazz)){
+					value = Short.parseShort(value.toString());
+				}else if(Long.class.equals(fieldClazz) || long.class.equals(fieldClazz)){
+					value = Long.parseLong(value.toString());
+				}else if(Double.class.equals(fieldClazz) || double.class.equals(fieldClazz)){
+					value = Double.parseDouble(value.toString());
+				}else if(Float.class.equals(fieldClazz) || float.class.equals(fieldClazz)){
+					value = Float.parseFloat(value.toString());
+				}else if(java.math.BigDecimal.class.equals(fieldClazz)){
+					value = new java.math.BigDecimal(value.toString());
+				}else if(java.math.BigInteger.class.equals(fieldClazz)){
+					value = new BigInteger(value.toString());
+				}
 			}else if (value instanceof java.sql.Clob) {
 				java.sql.Clob clob = (java.sql.Clob)value;
 				try {
