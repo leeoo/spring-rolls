@@ -20,7 +20,7 @@ public class MongoDBManager {
 
 	private final static Log logger = LoggerFactory.getLogger();
 	public static String defaultDBName = null;
-	private static ConcurrentMap<String,DB> pool = new ConcurrentHashMap<String,DB>();
+	private final static ConcurrentMap<String,DB> pool = new ConcurrentHashMap<String,DB>(32);
 	
 	static{
 		Map<String,Map<String,String>> map = PropertiesUitls.getByType("/mongodb.properties");
@@ -30,15 +30,30 @@ public class MongoDBManager {
 				String url = propery.get("url");
 				String portStr = propery.get("port");
 				String dbName = propery.get("dbName");
+				String username = propery.get("username");
+				String password = propery.get("password");
 				if(defaultDBName == null){
-					defaultDBName = dbName;
+					defaultDBName = key;
 				}
 				int port = portStr==null ? 27017 : Integer.parseInt(portStr);
-				MongoConfig config = new MongoConfig(url, port, dbName);
-				pool.put(key, config.getDB());
+				MongoConfig config = null;
+				logger.debug("MongoDB数据源名称:"+key);
+				logger.debug("MongoDB数据源<"+key+"> url:"+url);
+				logger.debug("MongoDB数据源<"+key+"> port:"+port);
+				logger.debug("MongoDB数据源<"+key+"> dbName:"+dbName);
+				if(username!=null && password!=null){
+					logger.debug("MongoDB数据源<"+key+"> username:"+username);
+					logger.debug("MongoDB数据源<"+key+"> password:"+password);
+					config = new MongoConfig(url, port, dbName,username,password);
+				}else{
+					config = new MongoConfig(url, port, dbName); 
+				}
+				DB db = config.getDB();
+				pool.put(key, db);
 			} catch (Throwable e) {
 				logger.error(e);
 			}
+			propery.clear();
 		}
 		map.clear();
 	}

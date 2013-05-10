@@ -6,7 +6,7 @@ import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
 
 import com.mongodb.DB;
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 /**
  * 功 能 描 述:<br>
@@ -46,7 +46,14 @@ public class MongoConfig {
 	
 	private String dbName;
 	
-	private Mongo mongo;
+	private MongoClient mongoClient;
+	
+	private String username;
+	
+	private String password;
+	
+	private boolean isAuth = false;
+
 	
 	public String toString(){
 		return url+":"+port+"/"+dbName;
@@ -67,17 +74,37 @@ public class MongoConfig {
 		this.dbName = dbName;
 	}
 	
+	public MongoConfig(String url,int port,String dbName,String username,String password){
+		this(url,port,dbName);
+		if(username!=null){
+			this.username = username;
+			this.isAuth = true;//需要验证安全
+		}
+		if(password!=null){
+			this.password = password;
+		}
+	}
+	
 	public DB getDB(){
 		try {
-			if(mongo==null){
-				mongo = new Mongo(url, port);
+			if(mongoClient==null){
+				mongoClient = new MongoClient(url, port);
+				logger.debug("当前MongoDB版本为:"+mongoClient.getVersion());
 			}
 		} catch (UnknownHostException e) {
 			logger.error(e);
 		} catch (MongoException e) {
 			logger.error(e);
 		}
- 		return mongo.getDB(dbName);
+		DB db = mongoClient.getDB(dbName);//如果没有会自动创建
+		if(this.isAuth){//如果需要验证
+			boolean auth = db.authenticate(this.username, this.password.toCharArray());
+			if(auth){//查看是否验证通过
+				return db;
+			}
+			throw new MongoException("MongoDB AUTH Fail授权失败！");
+		}
+ 		return db;
 	}
 	
 }

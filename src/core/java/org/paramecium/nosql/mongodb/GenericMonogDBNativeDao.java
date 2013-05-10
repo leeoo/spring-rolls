@@ -57,7 +57,7 @@ public class GenericMonogDBNativeDao {
 	}
 	
 	/**
-	 * 保存
+	 * 保存,save和insert区别就在于，save遇到主键相同会覆盖，insert会报错
 	 * @param collName
 	 * @param object
 	 * @return
@@ -65,6 +65,16 @@ public class GenericMonogDBNativeDao {
 	public WriteResult save(String collName,DBObject object){
 		DBCollection coll = mongoDB.getCollection(collName);
 		return coll.save(object);
+	}
+	
+	/**
+	 * 创建索引
+	 * @param collName
+	 * @param keys
+	 */
+	public void index(String collName,DBObject keys){
+		DBCollection coll = mongoDB.getCollection(collName);
+		coll.createIndex(keys);
 	}
 	
 	/**

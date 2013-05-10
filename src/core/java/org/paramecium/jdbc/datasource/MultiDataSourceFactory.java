@@ -59,6 +59,7 @@ public class MultiDataSourceFactory {
 			} catch (Exception e) {
 				logger.error(e);
 			}
+			propery.clear();
 		}
 		map.clear();
 	}

@@ -1,6 +1,5 @@
 package com.demo.test;
 
-import java.sql.SQLException;
 /**
  * 功 能 描 述:<br>
  * mongo测试
@@ -10,11 +9,17 @@ import java.sql.SQLException;
  */
 public class MongoDaoTest {
 	
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) throws Exception {
 		/*MessageService messageService = (MessageService)ApplicationContext.getNotSecurityBean("messageService");
-		Message where = new Message();
-		where.setAuth("曹阳");
-		where.setTitle("2动车组出现事故");
+		Message msg = new Message();
+		msg.setAuth("不错");
+		msg.setContent("大事发生大时代发生的");
+		msg.setPublishDate(new Date());
+		msg.setTitle("完了，促使了");
+		messageService.save(msg);*/
+		/*Message where = new Message();
+		where.setAuth("不错");
+		where.setTitle("完了，促使了");
 		Page page = messageService.get(new Page(5),where);
 		Collection<Message> beans = (Collection<Message>) page.getResult();
 		for(Message message : beans){
