@@ -327,14 +327,68 @@ public abstract class BeanUtils {
 		if(fieldClazz!=value.getClass()){//如果值的类型与字段类型不同
 			if(value instanceof Integer) {
 				value = Integer.parseInt(value.toString());
+				if(boolean.class.equals(fieldClazz) || Boolean.class.equals(fieldClazz)){
+					if(value.equals(1)){
+						value = Boolean.TRUE;
+					}else{
+						value = Boolean.FALSE;
+					}
+				}
+			}else if (value instanceof String) {
+				if(boolean.class.equals(fieldClazz) || Boolean.class.equals(fieldClazz)){
+					if(value.toString().equalsIgnoreCase("true")){
+						value = Boolean.TRUE;
+					}else{
+						value = Boolean.FALSE;
+					}
+				}
 			}else if (value instanceof Long) {
 				value = Long.parseLong(value.toString());
-			}else if (value instanceof Boolean) {
-				value = Boolean.parseBoolean(value.toString());
 			}else if (value instanceof Byte) {
 				value = Byte.parseByte(value.toString());
+				if(boolean.class.equals(fieldClazz) || Boolean.class.equals(fieldClazz)){
+					if(value.equals(1)){
+						value = Boolean.TRUE;
+					}else{
+						value = Boolean.FALSE;
+					}
+				}
 			}else if (value instanceof Short) {
 				value = Short.parseShort(value.toString());
+				if(boolean.class.equals(fieldClazz) || Boolean.class.equals(fieldClazz)){
+					if(value.equals(1)){
+						value = Boolean.TRUE;
+					}else{
+						value = Boolean.FALSE;
+					}
+				}
+			}else if (value instanceof Boolean) {//如果是数据库的JDBC解析的值类型是boolean
+				value = Boolean.parseBoolean(value.toString());
+				if(int.class.equals(fieldClazz) || Integer.class.equals(fieldClazz)){//但实际实体类属性类型为int
+					if(value.equals(true)){
+						value = 1;
+					}else{
+						value = 0;
+					}
+				}else if(short.class.equals(fieldClazz) || Short.class.equals(fieldClazz)){//但实际实体类属性类型为short
+					if(value.equals(true)){
+						value = Short.parseShort("1");
+					}else{
+						value = Short.parseShort("0");
+					}
+				}else if(byte.class.equals(fieldClazz) || Byte.class.equals(fieldClazz)){//但实际实体类属性类型为byte
+					if(value.equals(true)){
+						value = Byte.parseByte("1");
+					}else{
+						value = Byte.parseByte("0");
+					}
+				}else if(fieldClazz==String.class){
+					if(value.equals(true)){
+						value = Boolean.TRUE.toString();
+					}else{
+						value = Boolean.FALSE.toString();
+					}
+				}
 			}else if (value instanceof Float) {
 				value = Float.parseFloat(value.toString());
 			}else if (value instanceof Double) {
