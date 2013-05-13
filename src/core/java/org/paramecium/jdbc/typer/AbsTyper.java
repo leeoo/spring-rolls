@@ -1,5 +1,8 @@
-package org.paramecium.commons.typer;
-
+package org.paramecium.jdbc.typer;
+/**
+ * 定义实现类需要用带参数的构造方法进行实例化
+ * @author caoyang
+ */
 public abstract class AbsTyper {
 	
 	public Class<?> fieldClazz;

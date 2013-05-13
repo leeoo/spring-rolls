@@ -1,4 +1,4 @@
-package org.paramecium.commons.typer;
+package org.paramecium.jdbc.typer;
 
 import java.io.InputStream;
 import java.sql.SQLException;

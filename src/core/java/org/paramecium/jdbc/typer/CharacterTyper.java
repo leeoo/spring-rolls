@@ -1,4 +1,4 @@
-package org.paramecium.commons.typer;
+package org.paramecium.jdbc.typer;
 
 public class CharacterTyper extends AbsTyper implements JdbcTyper{
 

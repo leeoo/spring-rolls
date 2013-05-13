@@ -1,10 +1,10 @@
-package org.paramecium.commons.typer;
+package org.paramecium.jdbc.typer;
 
 import java.math.BigInteger;
 
-public class FloatTyper extends AbsTyper implements JdbcTyper{
+public class BigDecimalTyper extends AbsTyper implements JdbcTyper{
 
-	public FloatTyper(Class<?> fieldClazz) {
+	public BigDecimalTyper(Class<?> fieldClazz) {
 		super(fieldClazz);
 	}
 

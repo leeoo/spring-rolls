@@ -1,8 +1,9 @@
-package org.paramecium.commons.typer;
+package org.paramecium.jdbc.typer;
 
-public class TimeTyper extends AbsTyper implements JdbcTyper{
 
-	public TimeTyper(Class<?> fieldClazz) {
+public class TimestampTyper extends AbsTyper implements JdbcTyper{
+
+	public TimestampTyper(Class<?> fieldClazz) {
 		super(fieldClazz);
 	}
 

@@ -1,22 +1,16 @@
-package org.paramecium.commons.typer;
+package org.paramecium.jdbc.typer;
 
 import java.math.BigInteger;
 
-public class StringTyper extends AbsTyper implements JdbcTyper{
+public class LongTyper extends AbsTyper implements JdbcTyper{
 
-	public StringTyper(Class<?> fieldClazz) {
+	public LongTyper(Class<?> fieldClazz) {
 		super(fieldClazz);
 	}
 
 	@Override
 	public Object getValue(Object jdbcValue) {
-		if(boolean.class.equals(fieldClazz) || Boolean.class.equals(fieldClazz)){
-			if(jdbcValue.toString().equalsIgnoreCase("true")){
-				jdbcValue = Boolean.TRUE;
-			}else{
-				jdbcValue = Boolean.FALSE;
-			}
-		}else if(Integer.class.equals(fieldClazz) || int.class.equals(fieldClazz)){
+		if(Integer.class.equals(fieldClazz) || int.class.equals(fieldClazz)){
 			jdbcValue = Integer.parseInt(jdbcValue.toString());
 		}else if(Byte.class.equals(fieldClazz) || byte.class.equals(fieldClazz)){
 			jdbcValue = Byte.parseByte(jdbcValue.toString());

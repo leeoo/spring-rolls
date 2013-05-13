@@ -1,23 +1,24 @@
-package org.paramecium.commons.typer;
+package org.paramecium.jdbc.typer;
 
+import java.io.Reader;
 import java.sql.SQLException;
 
-public class NClobTyper extends AbsTyper implements JdbcTyper{
+public class ClobTyper extends AbsTyper implements JdbcTyper{
 
-	public NClobTyper(Class<?> fieldClazz) {
+	public ClobTyper(Class<?> fieldClazz) {
 		super(fieldClazz);
 	}
 
 	@Override
 	public Object getValue(Object jdbcValue) {
-		java.sql.NClob clob = (java.sql.NClob)jdbcValue;
-		if(java.sql.NClob.class.equals(fieldClazz)){
+		java.sql.Clob clob = (java.sql.Clob)jdbcValue;
+		if(String.class.equals(fieldClazz)){
 			try {
 				jdbcValue = clob.getSubString(1l, (int)clob.length());
 			} catch (SQLException e) {
 				logger.error(e);
 			}
-		}else if(java.io.Reader.class.equals(fieldClazz)){
+		}else if(Reader.class.equals(fieldClazz)){
 			try {
 				jdbcValue = clob.getCharacterStream(1l, (int)clob.length());
 			} catch (SQLException e) {
