@@ -379,7 +379,7 @@ public class EntitySqlParser {
 						if(column!=null&&!column.value().isEmpty()){
 							wheres.add(column.logical()+column.value()+column.comparison()+":"+field.getName());
 						}else{
-							wheres.add(VirtualColumn.DYNAMIC_WHERE_LOGIC.AND+BeanUtils.getDbFieldName(field.getName())+"=:"+field.getName());
+							wheres.add(VirtualColumn.DYNAMIC_WHERE_LOGIC.AND+BeanUtils.getDbFieldName(field.getName())+column.comparison()+":"+field.getName());
 						}
 					}else if(virtualColumn!=null){
 						wheres.add(virtualColumn.logical()+":"+field.getName()+virtualColumn.comparison()+virtualColumn.comparisonColumn());
