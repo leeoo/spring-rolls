@@ -49,13 +49,14 @@
 					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" iconCls="icon-security">登录</a>
 					<script>
 						function submitForm(){
-							var waitNum = Math.random() * 5000;
+							var waitNum = Math.random() * 3500;
 							if(waitNum<1200){
 								waitNum = 1200;
 							}
 							$.messager.progress({
 				    			title:'稍等片刻',
-				    			msg:'正在努力提交您的登录信息...'
+				    			msg:'正在努力提交您的登录信息...',
+				    			interval:waitNum/11
 				    		});
 				    		setTimeout(function(){
 				    			$.messager.progress('close');
