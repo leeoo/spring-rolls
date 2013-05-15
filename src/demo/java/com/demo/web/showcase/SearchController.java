@@ -24,7 +24,7 @@ public class SearchController extends ShowCaseBaseController{
 		int pageNo = mv.getValue("pageNo", int.class);
 		Page page = new Page();
 		page.setPageNo(pageNo);
-		page.setPageSize(20);
+		page.setPageSize(10);
 		String text = mv.getValue("text", String.class);
 		page = newsService.getAll(page,text);
 		mv.addValue("page", page);
