@@ -86,6 +86,7 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 	public void delete(PK pk) throws Exception {
 		T oBean = genericOrmDao.select(pk);
 		SearchIndexCreator.removeIndex(oBean);
+		genericOrmDao.delete(pk);
 		cache.clear();
 	}
 	
