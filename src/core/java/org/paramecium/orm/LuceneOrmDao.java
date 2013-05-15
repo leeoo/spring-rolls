@@ -133,10 +133,27 @@ public class LuceneOrmDao <T , PK extends Serializable> {
 				size = page.getTotalCount();
 			}
 			Object[] arrayParams = new Serializable[size];
+			boolean isLastPage = false;//如果是最后一个，只有部分数据，那么会有可能在数组读取时容易出现越界
+			int countor = 0;
 			try{
 				for(int i = 0;i<size;i++){
-					sql = sql.concat("?,");
-					arrayParams[i] = pks.get(page.getFirst()+i);
+					int index = page.getFirst()+i;
+					if(pks.size()>index){//用于最后一页时的判断
+						sql = sql.concat("?,");
+						arrayParams[i] = pks.get(index);
+						countor++;
+					}else{
+						isLastPage = true;
+					}
+				}
+				if(isLastPage && countor>0){//如果最后一页，只有部分数据，数组size与实际参数不符合,需要过滤。
+					Object[] params = new Serializable[countor];
+					for(int i =0;i<countor;i++){
+						params[i] = arrayParams[i];
+					}
+					arrayParams = null;
+					arrayParams = params;
+					params = null;
 				}
 				sql = sql.substring(0, sql.length()-1).concat(" )");
 				Collection<?> list = genericOrmDao.getGenericJdbcDao().queryByArray(sql, clazz, arrayParams);
