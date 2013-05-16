@@ -211,6 +211,9 @@ public class HardwareController extends BaseController{
 			for(String d : disk.split("\n")){
 				if(!d.trim().isEmpty()){
 					s1 = d.indexOf(' ');
+					if(s1<0){
+						s1 = d.length();
+					}
 					String name = d.substring(0,s1).trim();
 					d = d.substring(s1).trim();
 					s1 = d.indexOf(' ');
