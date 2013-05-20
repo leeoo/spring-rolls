@@ -47,12 +47,22 @@ public class DefaultDataSource implements DataSource{
 	 * 刷新连接池的状态,供连接池状使用
 	 */
 	public synchronized void refreshPoolStatus(){
+		init();
 		Map<String,Object> stauts = connectionPool.getPoolStatus();
 		busyPoolMax = (Integer)stauts.get("busyPoolMax");
 		currentPoolMax = (Integer)stauts.get("currentPoolMax");
 		idleTimes = (int[])stauts.get("idleTimes");
 		busyTimes = (int[])stauts.get("busyTimes");
 		connectionPool.cleanPoolStatus();
+	}
+	
+	/**
+	 * 初始化
+	 */
+	public synchronized void init(){
+		if(connectionPool == null){//由于是运行时构建数据源实例，很多属性需要之后填充,之所以不把此处放在构造方法中，是因为当时ds还没有被赋值.
+			connectionPool = new ConnectionPool(poolMax, connectLife, poolThreadTime,busyConnectTimeOut);
+		}
 	}
 	
 	/**
@@ -67,9 +77,7 @@ public class DefaultDataSource implements DataSource{
 	 * 获得连接
 	 */
 	public synchronized Connection getConnection(){
-		if(connectionPool == null){//由于是运行时构建数据源实例，很多属性需要之后填充,之所以不把此处放在构造方法中，是因为当时ds还没有被赋值.
-			connectionPool = new ConnectionPool(poolMax, connectLife, poolThreadTime,busyConnectTimeOut);
-		}
+		init();
 		return getConnectionFromPool();
 	}
 	
