@@ -48,6 +48,12 @@ public class TableInitService {
 		st.close();
 		MultiDataSourceFactory.getDataSource(MultiDataSourceFactory.defaultDataSourceName).replace(connection);
 		logger.debug("DEMO用H2或Mysql数据库内存表创建成功!");
+		try {
+			org.h2.tools.Console console = new org.h2.tools.Console();
+			console.runTool();
+		} catch (Exception e) {
+			logger.error(e);
+		}
 	}
 	
 	public static void createTablesByPostgreSQL() throws Exception{
