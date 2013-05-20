@@ -70,6 +70,7 @@ public class DefaultDataSource implements DataSource{
 	 * @param connection
 	 */
 	public synchronized void replace(Connection connection){
+		init();
 		connectionPool.replace(connection);
 	}
 	
@@ -147,6 +148,7 @@ public class DefaultDataSource implements DataSource{
 	 * @param dataSourceName
 	 */
 	public void clearPool(){
+		init();
 		connectionPool.clear();
 	}
 	
@@ -240,6 +242,7 @@ public class DefaultDataSource implements DataSource{
 
 	public void setPoolMax(int poolMax) {
 		this.poolMax = poolMax;
+		init();
 		connectionPool.setPoolMax(poolMax);
 	}
 
@@ -249,6 +252,7 @@ public class DefaultDataSource implements DataSource{
 
 	public void setPoolThreadTime(int poolThreadTime) {
 		this.poolThreadTime = poolThreadTime;
+		init();
 		connectionPool.setPoolThreadTime(poolThreadTime);
 	}
 
@@ -258,6 +262,7 @@ public class DefaultDataSource implements DataSource{
 	
 	public void setConnectLife(int connectLife) {
 		this.connectLife = connectLife;
+		init();
 		connectionPool.setConnectLife(connectLife);
 	}
 
@@ -269,6 +274,7 @@ public class DefaultDataSource implements DataSource{
 
 	public void setBusyConnectTimeOut(int busyConnectTimeOut) {
 		this.busyConnectTimeOut = busyConnectTimeOut;
+		init();
 		connectionPool.setBusyConnectTimeOut(busyConnectTimeOut);
 	}
 
