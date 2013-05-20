@@ -9,9 +9,9 @@
 	<%@ include file="../../global/title.jsp"%>
 	<%@ include file="../../global/menu.jsp"%>
 <div region="center" title="数据源配置">
+	<div style="padding: 10px;">
 	<c:forEach items="${dataSources}" var="dataSource">
-			<div style=" padding: 8px;">
-				<div style="border: solid 1px ; border-color :#afafaf;width: 450px;float: left;">
+			<div style="border: solid 1px; border-color :#afafaf;width: 450px;float: left;">
 					<form id="${dataSource.key}Form" name="${dataSource.key}Form" action="${base}/system/ds/save${ext}" method="post">
 						<input type="hidden" name="dsName" value="${dataSource.key}"/>
 						<table>
@@ -68,8 +68,8 @@
 						</table>
 					</form>
 				</div>
-			</div>
 	</c:forEach>
+	</div>
 </div>
 <script>
 	var message = '<paramecium:successMessage/><paramecium:errorMessage/>';
