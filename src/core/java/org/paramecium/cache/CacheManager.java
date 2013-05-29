@@ -14,6 +14,8 @@ import org.paramecium.commons.PropertiesUitls;
 import org.paramecium.commons.ThreadUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
+import org.paramecium.thread.RunnableMonitor;
+import org.paramecium.thread.ThreadStatus;
 
 /**
  * 功 能 描 述:<br>
@@ -61,7 +63,9 @@ public class CacheManager {
 		ThreadUtils.add(new CacheHandlerThread(),"缓存监控线程");
 	}
 	
-	static class CacheHandlerThread implements Runnable {
+	static class CacheHandlerThread extends RunnableMonitor {
+		private ThreadStatus threadStatus = ThreadStatus.ACTIVE;
+		private boolean isRun = true;
 		
 		public CacheHandlerThread(){
 			logger.debug("缓存生命周期监控处理线程已启动");
@@ -72,12 +76,14 @@ public class CacheManager {
 		}
 		
 		private void clearCache(){
-			while (true) {
+			while (isRun) {
 				try {
 					if(map==null||map.isEmpty()){
-						Thread.sleep(10*60000);//如果没有信息，睡1分钟
+						threadStatus = ThreadStatus.IDLE;
+						Thread.sleep(10*60000);//如果没有信息，睡10分钟
 						continue;
 					}
+					threadStatus = ThreadStatus.ACTIVE;
 					for(String name : map.keySet()){
 						@SuppressWarnings("unchecked")
 						Cache<Object,Object> cache = (Cache<Object, Object>) map.get(name);
@@ -95,16 +101,31 @@ public class CacheManager {
 							}
 						}
 					}
+					threadStatus = ThreadStatus.IDLE;
 					Thread.sleep(60000);//定时执行
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					logger.error(ex);
 					try {
+						threadStatus = ThreadStatus.ERROR;
 						Thread.sleep(60000);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						logger.error(ex);
 					}//定时执行
 				}
 			}
+		}
+
+		@Override
+		public ThreadStatus getThreadStatus() {
+			return threadStatus;
+		}
+
+		@Override
+		public void shutdown() {
+			super.setChanged();
+			notifyObservers();
+			threadStatus = ThreadStatus.DEAD;
+			this.isRun = false;
 		}
 	}
 	

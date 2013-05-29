@@ -13,6 +13,8 @@ import org.paramecium.commons.EncodeUtils;
 import org.paramecium.commons.ThreadUtils;
 import org.paramecium.log.Log;
 import org.paramecium.log.LoggerFactory;
+import org.paramecium.thread.RunnableMonitor;
+import org.paramecium.thread.ThreadStatus;
 
 /**
  * 连接池
@@ -283,7 +285,9 @@ public class ConnectionPool {
 	/**
 	 * 数据源服务线程
 	 */
-	private class PoolHandlerThread implements Runnable {
+	private class PoolHandlerThread extends RunnableMonitor {
+		private ThreadStatus threadStatus = ThreadStatus.ACTIVE;
+		private boolean isRun = true;
 		
 		public PoolHandlerThread(){
 			logger.debug(this.hashCode()+"数据库连接池连接释放线程监控已启动!");
@@ -298,12 +302,14 @@ public class ConnectionPool {
 		 * 一定时间之内没有人使用连接池，将会把所有连接关闭，并清空连接池
 		 */
 		private void clearPool(){
-			while (true) {
+			while (isRun) {
 				try {
+					threadStatus = ThreadStatus.IDLE;
 					Thread.sleep(poolThreadTime * 1000);// 指定轮询间隔清理使用完毕的Connection
 					if(connectionPool==null||connectionPool.isEmpty()){
 						continue;
 					}
+					threadStatus = ThreadStatus.ACTIVE;
 					logger.debug("##连接池监控"+this.hashCode()+"## 默认数据源连接池当前数量为:"+connectionPool.size() +" 繁忙连接数量:"+busyCount);
 					long currentTime = EncodeUtils.millisTime();
 					for (DefineConnection connection : connectionPool.keySet()) {
@@ -342,12 +348,26 @@ public class ConnectionPool {
 				} catch (Exception ex) {
 					logger.error(ex);
 					try {
+						threadStatus = ThreadStatus.ERROR;
 						Thread.sleep(100000);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						logger.error(e);
 					}
 				}
 			}
+		}
+
+		@Override
+		public ThreadStatus getThreadStatus() {
+			return threadStatus;
+		}
+
+		@Override
+		public void shutdown() {
+			super.setChanged();
+			notifyObservers();
+			threadStatus = ThreadStatus.DEAD;
+			this.isRun = false;
 		}
 		
 	}
