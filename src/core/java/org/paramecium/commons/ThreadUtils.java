@@ -9,16 +9,16 @@ import org.paramecium.log.LoggerFactory;
 public abstract class ThreadUtils {
 	private final static Log logger = LoggerFactory.getLogger();
 	private static int count = 0;
-	private final static ExecutorService execute = Executors.newFixedThreadPool(8);
+	private final static ExecutorService execute = Executors.newFixedThreadPool(32);
 
 	public static void add(Runnable runnable,String name) {
-		if(count<8){
+		if(count<32){
 			execute.execute(runnable);
 			logger.info("["+name+"]线程被放入线程池!");
 			count++;
 			return;
 		}
-		logger.warn("ExecutorService线程池超过峰值8，不能再放入线程!");
+		logger.warn("ExecutorService线程池超过峰值32，不能再放入线程!");
 	}
 	
 	public static void add(Runnable runnable) {
