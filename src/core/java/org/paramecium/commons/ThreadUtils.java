@@ -18,7 +18,7 @@ public abstract class ThreadUtils {
 			count++;
 			return;
 		}
-		logger.warn("ExecutorService线程池超过峰值32，不能再放入线程!");
+		logger.warn("ExecutorService线程池超过峰值32，,可能会影响整体性能，请重新优化设计您的线程!");
 	}
 	
 	public static void add(Runnable runnable) {
