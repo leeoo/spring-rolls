@@ -294,6 +294,8 @@ public class ConnectionPool {
 		}
 		
 		public void run() {
+			this.isRun = true;
+			this.threadStatus = ThreadStatus.ACTIVE;
 			clearPool();
 		}
 		
@@ -304,12 +306,12 @@ public class ConnectionPool {
 		private void clearPool(){
 			while (isRun) {
 				try {
-					threadStatus = ThreadStatus.IDLE;
+					threadStatus = ThreadStatus.DEAD.equals(this.threadStatus)?ThreadStatus.DEAD:ThreadStatus.IDLE;//防止没有及时关闭，状态有问题
 					Thread.sleep(poolThreadTime * 1000);// 指定轮询间隔清理使用完毕的Connection
 					if(connectionPool==null||connectionPool.isEmpty()){
 						continue;
 					}
-					threadStatus = ThreadStatus.ACTIVE;
+					threadStatus = ThreadStatus.DEAD.equals(this.threadStatus)?ThreadStatus.DEAD:ThreadStatus.ACTIVE;//防止没有及时关闭，状态有问题
 					logger.debug("##连接池监控"+this.hashCode()+"## 默认数据源连接池当前数量为:"+connectionPool.size() +" 繁忙连接数量:"+busyCount);
 					long currentTime = EncodeUtils.millisTime();
 					for (DefineConnection connection : connectionPool.keySet()) {
@@ -348,7 +350,7 @@ public class ConnectionPool {
 				} catch (Exception ex) {
 					logger.error(ex);
 					try {
-						threadStatus = ThreadStatus.ERROR;
+						threadStatus = ThreadStatus.DEAD.equals(this.threadStatus)?ThreadStatus.DEAD:ThreadStatus.ERROR;//防止没有及时关闭，状态有问题
 						Thread.sleep(100000);
 					} catch (InterruptedException e) {
 						logger.error(e);
@@ -368,6 +370,11 @@ public class ConnectionPool {
 			notifyObservers();
 			threadStatus = ThreadStatus.DEAD;
 			this.isRun = false;
+		}
+		
+		@Override
+		public int getHashCode() {
+			return this.hashCode();
 		}
 		
 	}

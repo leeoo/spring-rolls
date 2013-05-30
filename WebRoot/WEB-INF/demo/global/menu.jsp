@@ -7,6 +7,7 @@
 				<div><a href="${base}/system/ds/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-db">数据源配置</a></div>
 				<div><a href="${base}/system/config/security/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-tools">安全配置</a></div>
 				<div><a href="${base}/system/cache/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-reload">缓存监控</a></div>
+				<div><a href="${base}/system/thread/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-home">线程监控</a></div>
 				<div><a href="${base}/system/role/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-key">角色设定</a></div>
 				<div><a href="${base}/system/user/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-user">登录账户</a></div>
 				<div><a href="${base}/system/config/ip/list${ext}" class="easyui-linkbutton" plain="true" iconCls="icon-ding">IP限制</a></div>

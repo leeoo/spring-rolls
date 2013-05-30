@@ -28,8 +28,9 @@ public abstract class ThreadUtils {
 	 */
 	public static void add(RunnableMonitor runnable,String name) {
 		if(count<32){
-			runnable.addObserver(new ThreadListener());
-			System.out.println(runnable.hashCode()+"|=============================================================");
+			if(isNotExist(runnable)){
+				runnable.addObserver(new ThreadListener());
+			}
 			execute.execute(runnable);
 			logger.info("["+name+"]线程被放入线程池!");
 			count++;
@@ -68,11 +69,15 @@ public abstract class ThreadUtils {
 	 * @param hashcode
 	 */
 	public static void restart(int hashcode){
+		RunnableMonitor shutdownThread = null;
 		for(RunnableMonitor thread : shutdownThreads){
 			if(thread.hashCode()==hashcode){
 				add(thread);
-				shutdownThreads.remove(thread);
+				shutdownThread = thread;
 			}
+		}
+		if(shutdownThread!=null){//防止java.util.ConcurrentModificationException
+			shutdownThreads.remove(shutdownThread);
 		}
 	}
 	
@@ -81,12 +86,16 @@ public abstract class ThreadUtils {
 	 * @param hashcode
 	 */
 	public static void shutdown(int hashcode) {
+		RunnableMonitor startedThread = null;
 		for(RunnableMonitor thread : startedThreads){
 			if(thread.hashCode()==hashcode){
 				thread.shutdown();
-				startedThreads.remove(thread);
 				shutdownThreads.add(thread);
+				startedThread = thread;
 			}
+		}
+		if(startedThread!=null){//防止java.util.ConcurrentModificationException
+			startedThreads.remove(startedThread);
 		}
 	}
 	
@@ -101,7 +110,6 @@ public abstract class ThreadUtils {
 		}
 		for(RunnableMonitor thread : startedThreads){
 			thread.shutdown();
-			startedThreads.remove(thread);
 			shutdownThreads.add(thread);
 		}
 		startedThreads.clear();
@@ -111,5 +119,24 @@ public abstract class ThreadUtils {
 		}
 	}
 
+	/**
+	 * 判断是否在与线程监听器中
+	 * @param runnable
+	 * @return
+	 */
+	private static boolean isNotExist(RunnableMonitor runnable){
+		boolean isExist = true;
+		for(RunnableMonitor thread : startedThreads){
+			if(thread.hashCode() == runnable.hashCode()){
+				return false;
+			}
+		}
+		for(RunnableMonitor thread : shutdownThreads){
+			if(thread.hashCode() == runnable.hashCode()){
+				return false;
+			}
+		}
+		return isExist;
+	}
 
 }

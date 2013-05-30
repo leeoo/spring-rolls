@@ -72,6 +72,8 @@ public class CacheManager {
 		}
 		
 		public void run() {
+			this.isRun = true;
+			this.threadStatus = ThreadStatus.ACTIVE;
 			clearCache();
 		}
 		
@@ -79,11 +81,11 @@ public class CacheManager {
 			while (isRun) {
 				try {
 					if(map==null||map.isEmpty()){
-						threadStatus = ThreadStatus.IDLE;
+						threadStatus = ThreadStatus.DEAD.equals(this.threadStatus)?ThreadStatus.DEAD:ThreadStatus.IDLE;//防止没有及时关闭，状态有问题
 						Thread.sleep(10*60000);//如果没有信息，睡10分钟
 						continue;
 					}
-					threadStatus = ThreadStatus.ACTIVE;
+					threadStatus = ThreadStatus.DEAD.equals(this.threadStatus)?ThreadStatus.DEAD:ThreadStatus.ACTIVE;//防止没有及时关闭，状态有问题
 					for(String name : map.keySet()){
 						@SuppressWarnings("unchecked")
 						Cache<Object,Object> cache = (Cache<Object, Object>) map.get(name);
@@ -101,12 +103,12 @@ public class CacheManager {
 							}
 						}
 					}
-					threadStatus = ThreadStatus.IDLE;
+					threadStatus = ThreadStatus.DEAD.equals(this.threadStatus)?ThreadStatus.DEAD:ThreadStatus.IDLE;//防止没有及时关闭，状态有问题
 					Thread.sleep(60000);//定时执行
 				} catch (Exception ex) {
 					logger.error(ex);
 					try {
-						threadStatus = ThreadStatus.ERROR;
+						threadStatus = ThreadStatus.DEAD.equals(this.threadStatus)?ThreadStatus.DEAD:ThreadStatus.ERROR;//防止没有及时关闭，状态有问题
 						Thread.sleep(60000);
 					} catch (InterruptedException e) {
 						logger.error(ex);
@@ -126,6 +128,11 @@ public class CacheManager {
 			notifyObservers();
 			threadStatus = ThreadStatus.DEAD;
 			this.isRun = false;
+		}
+
+		@Override
+		public int getHashCode() {
+			return this.hashCode();
 		}
 	}
 	

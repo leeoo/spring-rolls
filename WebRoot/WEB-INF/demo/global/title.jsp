@@ -36,6 +36,7 @@
 			<div iconCls="icon-db" onclick="gotoUrl('${base}/system/ds/list${ext}');">数据源配置</div>
 			<div iconCls="icon-tools" onclick="gotoUrl('${base}/system/config/security/list${ext}');">系统安全配置</div>
 			<div iconCls="icon-reload" onclick="gotoUrl('${base}/system/cache/list${ext}');">缓存监控</div>
+			<div iconCls="icon-home" onclick="gotoUrl('${base}/system/thread/list${ext}');">缓存监控</div>
 			<div iconCls="icon-ding" onclick="gotoUrl('${base}/system/config/ip/list${ext}')">IP地址限制</div>
 			<div class="menu-sep"></div>
 			<div iconCls="icon-key" onclick="gotoUrl('${base}/system/role/list${ext}')">角色设定</div>

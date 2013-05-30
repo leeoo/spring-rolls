@@ -17,4 +17,9 @@ public abstract class RunnableMonitor extends Observable implements Runnable{
 	 * 停止当前线程
 	 */
 	abstract public void shutdown();
+	
+	/**
+	 * 获得线程实例的hashcode
+	 */
+	abstract public int getHashCode();
 }
