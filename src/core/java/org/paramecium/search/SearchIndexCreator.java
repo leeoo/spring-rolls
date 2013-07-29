@@ -57,7 +57,7 @@ public class SearchIndexCreator {
 	
 	public static org.apache.lucene.analysis.Analyzer analyzer = null;
 	
-	private final static Version version = Version.LUCENE_43;
+	private final static Version version = Version.LUCENE_44;
 
 	public static String getPath() {
 		if (INDEX_PATH == null) {
