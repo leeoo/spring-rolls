@@ -57,7 +57,7 @@ public class SearchIndexCreator {
 	
 	public static org.apache.lucene.analysis.Analyzer analyzer = null;
 	
-	private final static Version version = Version.LUCENE_47;
+	private final static Version version = Version.LUCENE_4_10_0;
 
 	public static String getPath() {
 		if (INDEX_PATH == null) {
@@ -286,7 +286,7 @@ public class SearchIndexCreator {
 			directory = FSDirectory.open(new File(getPath() + getIndexName(clazz) + "//"));
 			reader = DirectoryReader.open(directory);
 			searcher = new IndexSearcher(reader);
-			QueryParser queryParser = new MultiFieldQueryParser(version, textPropertyNames, getAnalyzer());
+			QueryParser queryParser = new MultiFieldQueryParser(textPropertyNames, getAnalyzer());
 		    Query query = queryParser.parse(queryText);
 		    TopDocs topDocs = null;
 		    SortField[] sortFields = getSortFields(clazz);
